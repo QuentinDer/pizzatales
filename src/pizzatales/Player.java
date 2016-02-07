@@ -65,8 +65,8 @@ public class Player {
 		if (centerY + speedY <= 150) {
 			centerY = 149;
 			scrollingSpeed = 2*speedY;
-		} else if (centerY + speedY >= 330) {
-			centerY = 329;
+		} else if (centerY + speedY >= 280) {
+			centerY = 279;
 			scrollingSpeed = 2*speedY;
 		}
 

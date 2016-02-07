@@ -8,7 +8,7 @@ public class Tato extends Enemy {
 
 	public Tato(int centerX, int centerY) {
 		super(centerX,centerY);
-		health = 5;
+		health = 3;
 		movementParam = ((int) (Math.random() * 50));
 		rectX = new Rectangle(getCenterX() - 25, getCenterY() - 20, 50, 40);
 		rectY = new Rectangle(getCenterX() - 20, getCenterY() - 25, 40, 50);

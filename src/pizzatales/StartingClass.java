@@ -183,7 +183,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				
 				callEnemiesAIs();
 				checkTileCollisions();
-				//checkEnemiesCollision();
+				checkEnemiesCollision();
 				updateEnemies();
 				
 				
@@ -236,6 +236,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				g.fillRect(p.getR().x, p.getR().y, p.getR().width, p.getR().height);
 			}
 			g.drawImage(currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
+			g.setColor(Color.BLACK);
+			g.fillRect(47, 37, 20, 20);
+			g.setColor(Color.WHITE);
+			g.drawString(Integer.toString(player.getHealth()),50,50);
 		} else if (state == GameState.Dead) {
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, 800, 480);
