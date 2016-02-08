@@ -18,8 +18,7 @@ public class Player {
 	public boolean isColliding = false;
 	public Rectangle rectX = new Rectangle(0, 0, 0, 0);
 	public Rectangle rectY = new Rectangle(0, 0, 0, 0);
-	private int shootingcounter = 0;
-	private int shootingFrequency = 10;
+	private Firearm weapon;
 
 	// 0 = not, 1 = left, 2 = top, 3 = right, 4 = bottom
 	private int isShooting = 0;
@@ -74,47 +73,24 @@ public class Player {
 		rectX.setRect(centerX - 25, centerY - 20, 50, 40);
 		rectY.setRect(centerX - 20, centerY - 25, 40, 50);
 		if (isShooting > 0) {
-			if (shootingcounter % shootingFrequency == 0) {
+			if (weapon.isReady2Fire()) {
 				switch (isShooting) {
 				case 1:
-					shootLeft();
+					weapon.shootLeft(centerX, centerY);
 					break;
 				case 2:
-					shootUp();
+					weapon.shootUp(centerX, centerY);
 					break;
 				case 3:
-					shootRight();
+					weapon.shootRight(centerX, centerY);
 					break;
 				case 4:
-					shootDown();
+					weapon.shootDown(centerX, centerY);
 					break;
 				}
 			}
-			shootingcounter++;
-			if (shootingcounter == 1000)
-				shootingcounter = 0;
 		}
-		
-	}
-
-	public void shootUp() {
-		Projectile p = new Projectile(centerX, centerY, 0, -10);
-		projectiles.add(p);
-	}
-
-	public void shootDown() {
-		Projectile p = new Projectile(centerX, centerY, 0, 10);
-		projectiles.add(p);
-	}
-
-	public void shootLeft() {
-		Projectile p = new Projectile(centerX, centerY, -10, 0);
-		projectiles.add(p);
-	}
-
-	public void shootRight() {
-		Projectile p = new Projectile(centerX, centerY, 10, 0);
-		projectiles.add(p);
+		weapon.increaseShootingCounter();
 	}
 
 	public int isShooting() {
@@ -123,8 +99,6 @@ public class Player {
 
 	public void setShooting(int isShooting) {
 		this.isShooting = isShooting;
-		if (0 == isShooting)
-			shootingcounter = 0;
 	}
 
 	public ArrayList<Projectile> getProjectiles() {
@@ -228,5 +202,13 @@ public class Player {
 
 	public void setHealth(int health) {
 		this.health = health;
+	}
+	
+	public void setWeapon(Firearm weapon) {
+		this.weapon = weapon;
+	}
+	
+	public Firearm getWeapon() {
+		return this.weapon;
 	}
 }

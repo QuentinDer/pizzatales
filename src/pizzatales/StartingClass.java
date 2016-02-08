@@ -80,11 +80,15 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Thread thread = new Thread(this);
 		thread.start();
 		player = new Player();
+		player.setWeapon(new Shotgun());
+		player.getWeapon().setHolderProjectiles(player.getProjectiles());
+		
 		bg1 = new Background(0, -800);
 		bg2 = new Background(0, 800);
+		int difficultylevel = 3;
 		// Initialize Tiles
 		try {
-			loadMap("data/map1.txt");
+			loadMap("data/map1.txt", difficultylevel);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -96,7 +100,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		getEnemyarray().add(new Tato(400, 420));*/
 	}
 
-	private void loadMap(String filename) throws IOException {
+	private void loadMap(String filename, int difficultylevel) throws IOException {
 		ArrayList<String> lines = new ArrayList<String>();
 		int width = 0;
 		int height = 0;
@@ -123,7 +127,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						tilearray.add(t);
 					}
 					if (EnemyFactory.isTileTypeSupported(ch)) {
-						getEnemyarray().add(EnemyFactory.getEnemy(i, j, ch));
+						getEnemyarray().add(EnemyFactory.getEnemy(i, j, ch, difficultylevel));
 					}
 				}
 			}

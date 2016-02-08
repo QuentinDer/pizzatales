@@ -6,9 +6,8 @@ public class Tato extends Enemy {
 
 	protected int movementParam;
 
-	public Tato(int centerX, int centerY) {
-		super(centerX,centerY);
-		health = 3;
+	public Tato(int centerX, int centerY, int difficultylevel) {
+		super(centerX,centerY, new Gun(), 1, difficultylevel);
 		movementParam = ((int) (Math.random() * 50));
 		rectX = new Rectangle(getCenterX() - 25, getCenterY() - 20, 50, 40);
 		rectY = new Rectangle(getCenterX() - 20, getCenterY() - 25, 40, 50);
@@ -69,29 +68,30 @@ public class Tato extends Enemy {
 				if (absdifX < 80 && difY > 0 && difY < 400) {
 					setSpeedX(0);
 					setSpeedY(0);
-					if (movementTime % 50 == 0) {
+					if (weapon.isReady2Fire()) {
 						shootDown();
 					}
 				} else if (absdifX < 80 && difY < 0 && difY > -400) {
 					setSpeedX(0);
 					setSpeedY(0);
-					if (movementTime % 50 == 0) {
+					if (weapon.isReady2Fire()) {
 						shootUp();
 					}
 				} else if (absdifY < 80 && difX > 0 && difX < 400) {
 					setSpeedX(0);
 					setSpeedY(0);
-					if (movementTime % 50 == 0) {
+					if (weapon.isReady2Fire()) {
 						shootRight();
 					}
 				} else if (absdifY < 80 && difX < 0 && difX > -400) {
 					setSpeedX(0);
 					setSpeedY(0);
-					if (movementTime % 50 == 0) {
+					if (weapon.isReady2Fire()) {
 						shootLeft();
 					}
 				}
 			}
+			weapon.increaseShootingCounter();
 		}
 	}
 

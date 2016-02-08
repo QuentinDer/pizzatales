@@ -2,18 +2,21 @@ package pizzatales;
 
 import java.awt.Rectangle;
 
-public class Projectile extends Stuff {
+public abstract class Projectile extends Stuff {
 
 	private boolean visible;
 	private Rectangle rectP;
 	private int initX;
 	private int initY;
+	protected int range;
+	protected int width;
+	protected int height;
 	public int damage = 1;
 
-	public Projectile(int startX, int startY, int speedX, int speedY) {
+	public Projectile(int startX, int startY, float vectorX, float vectorY, int speed) {
 		super(startX, startY);
-		super.setSpeedX(speedX);
-		super.setSpeedY(speedY);
+		speedX = (int)(vectorX * speed);
+		speedY = (int)(vectorY * speed);
 		initX = startX;
 		initY = startY;
 		visible = true;
@@ -23,11 +26,11 @@ public class Projectile extends Stuff {
 	@Override
 	public void update() {
 		super.update();
-		rectP.setBounds(getCenterX() - 2, getCenterY() - 2, 5, 5);
-		if (Math.abs(this.getCenterX() - initX) > 300) {
+		rectP.setBounds(getCenterX() - 2, getCenterY() - 2, width, height);
+		if (Math.abs(this.getCenterX() - initX) > range) {
 			visible = false;
 		}
-		if (Math.abs(this.getCenterY() - initY) > 300) {
+		if (Math.abs(this.getCenterY() - initY) > range) {
 			visible = false;
 		}
 	}

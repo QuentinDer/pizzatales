@@ -27,11 +27,18 @@ public abstract class Enemy extends Stuff {
 	
 	protected Animation anim;
 	
+	protected Firearm weapon;
+	
 	public Image characterStay, characterMove1, characterMove2, characterDie, currentSprite;
 	public String characterStayPath, characterMove1Path, characterMove2Path, characterDiePath, currentSpritePath;
 
-	public Enemy(int centerX, int centerY) {
+	public Enemy(int centerX, int centerY, Firearm weapon, int health, int difficultylevel) {
 		super(centerX, centerY);
+		weapon.setHolderProjectiles(projectiles);
+		this.weapon = weapon;
+		weapon.setFireRate(weapon.getFireRate() * (5 - difficultylevel));
+		this.health = health * difficultylevel;
+		
 	}
 
 	public void checkCollision(Enemy e) {
@@ -157,23 +164,19 @@ public abstract class Enemy extends Stuff {
 	}
 	
 	public void shootUp() {
-		Projectile p = new Projectile(centerX, centerY, 0, -10);
-		projectiles.add(p);
+		weapon.shootUp(centerX, centerY);
 	}
 
 	public void shootDown() {
-		Projectile p = new Projectile(centerX, centerY, 0, 10);
-		projectiles.add(p);
+		weapon.shootDown(centerX, centerY);
 	}
 
 	public void shootLeft() {
-		Projectile p = new Projectile(centerX, centerY, -10, 0);
-		projectiles.add(p);
+		weapon.shootLeft(centerX, centerY);
 	}
 
 	public void shootRight() {
-		Projectile p = new Projectile(centerX, centerY, 10, 0);
-		projectiles.add(p);
+		weapon.shootRight(centerX, centerY);
 	}
 
 	public ArrayList<Projectile> getProjectiles() {

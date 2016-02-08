@@ -10,11 +10,11 @@ public class EnemyFactory {
 		return acceptedEnemyTypes.contains(test);
 	}
 	
-	public static Enemy getEnemy(int x, int y, char c) {
+	public static Enemy getEnemy(int x, int y, char c, int difficultylevel) {
 		Enemy e = null;
 		switch(c) {
 		case 'T':
-			e = new Tato((x * 50) + 25,(y * 50) + 25);
+			e = new Tato((x * 50) + 25,(y * 50) + 25, difficultylevel);
 			break;
 		}
 		return e;
