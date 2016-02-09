@@ -143,7 +143,8 @@ public class Player {
 		}
 		if (0 == isShooting) {
 			weapon.setSpriteUp();
-			isAimingUp = false;
+			isAimingUp = true;
+			
 		}
 	}
 
@@ -154,7 +155,7 @@ public class Player {
 		}
 		if (0 == isShooting) {
 			weapon.setSpriteDown();
-			isAimingUp = true;
+			isAimingUp = false;
 		}
 	}
 

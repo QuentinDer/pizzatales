@@ -28,6 +28,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private Graphics second;
 	private static Background bg1, bg2;
 	private Animation anim;
+	private ArrayList<Firearm> playerweapons;
+	private int weaponindex;
 	
 	enum GameState {
 		Running, Dead, Paused
@@ -67,6 +69,22 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Shotgun.rightSprite = getImage(base, "data/shotgun2.png");
 		Shotgun.upSprite = getImage(base, "data/shotgun4.png");
 		Shotgun.downSprite = getImage(base, "data/shotgun3.png");
+		Rifle.leftSprite = getImage(base, "data/rifle1.png");
+		Rifle.rightSprite = getImage(base, "data/rifle2.png");
+		Rifle.upSprite = getImage(base, "data/rifle4.png");
+		Rifle.downSprite = getImage(base, "data/rifle3.png");
+		Flamer.leftSprite = getImage(base, "data/flamer1.png");
+		Flamer.rightSprite = getImage(base, "data/flamer2.png");
+		Flamer.downSprite = getImage(base, "data/flamer3.png");
+		Flamer.upSprite = getImage(base, "data/flamer4.png");
+		Rocket.leftSprite = getImage(base, "data/rocket1.png");
+		Rocket.rightSprite = getImage(base, "data/rocket2.png");
+		Rocket.downSprite = getImage(base, "data/rocket3.png");
+		Rocket.upSprite = getImage(base, "data/rocket4.png");
+		Smg.leftSprite = getImage(base, "data/smg1.png");
+		Smg.rightSprite = getImage(base, "data/smg2.png");
+		Smg.downSprite = getImage(base, "data/smg3.png");
+		Smg.upSprite = getImage(base, "data/smg4.png");
 
 		anim = new Animation();
 		anim.addFrame(character1, 1250);
@@ -88,8 +106,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Thread thread = new Thread(this);
 		thread.start();
 		player = new Player();
-		player.setWeapon(new Shotgun());
-		player.getWeapon().setHolderProjectiles(player.getProjectiles());
+		playerweapons = new ArrayList<Firearm>();
+		playerweapons.add(new Gun());
+		playerweapons.add(new Shotgun());
+		playerweapons.add(new Smg());
+		playerweapons.add(new Rifle());
+		playerweapons.add(new Flamer());
+		playerweapons.add(new Rocket());
+		for (Firearm firearm : playerweapons)
+			firearm.setHolderProjectiles(player.getProjectiles());
+		player.setWeapon(playerweapons.get(weaponindex));
 		
 		bg1 = new Background(0, -800);
 		bg2 = new Background(0, 800);
@@ -235,12 +261,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			ArrayList<Projectile> projectiles = player.getProjectiles();
 			for (int i = 0; i < getEnemyarray().size(); i++) {
 				Enemy e = getEnemyarray().get(i);
-				if (e.isAimingUp()) {
-					g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
-					g.drawImage(e.currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+				if (e.alive) {
+					if (e.isAimingUp()) {
+						g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+						g.drawImage(e.currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+					} else {
+						g.drawImage(e.currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+						g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+					}
 				} else {
 					g.drawImage(e.currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
-					g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
 				}
 				for (int j = 0;  j < e.getProjectiles().size(); j++) {
 					Projectile p = e.getProjectiles().get(j);
@@ -410,7 +440,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			}
 			break;
 		}
-
 	}
 
 	@Override
@@ -426,6 +455,18 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			break;
 		case KeyEvent.VK_UP: case KeyEvent.VK_DOWN: case KeyEvent.VK_LEFT: case KeyEvent.VK_RIGHT:
 			player.setShooting(0);
+			break;
+		case KeyEvent.VK_E:
+			weaponindex++;
+			if (weaponindex == playerweapons.size())
+				weaponindex = 0;
+			player.setWeapon(playerweapons.get(weaponindex));
+			break;
+		case KeyEvent.VK_R:
+			weaponindex--;
+			if (weaponindex == -1)
+				weaponindex = playerweapons.size() - 1;
+			player.setWeapon(playerweapons.get(weaponindex));
 			break;
 		}
 	}
