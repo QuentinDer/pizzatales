@@ -5,13 +5,14 @@ import java.util.ArrayList;
 
 public abstract class Firearm {
 	
-	public Image leftimage, rightimage, downimage, upimage, currentSprite;
+	public Image currentSprite;
 	protected int shootingCounter;
 	protected int firerate;
 	protected ArrayList<Projectile> holderprojectiles;
 	
 	public void setHolderProjectiles(ArrayList<Projectile> holderprojectiles) {
 		this.holderprojectiles = holderprojectiles;
+		setSpriteDown();
 	}
 	
 	public abstract void shootUp(int x, int y);
@@ -21,6 +22,11 @@ public abstract class Firearm {
 	public abstract void shootLeft(int x, int y);
 	
 	public abstract void shootRight(int x, int y);
+	
+	public abstract void setSpriteLeft();
+	public abstract void setSpriteRight();
+	public abstract void setSpriteUp();
+	public abstract void setSpriteDown();
 	
 	public int getFireRate() {
 		return firerate;

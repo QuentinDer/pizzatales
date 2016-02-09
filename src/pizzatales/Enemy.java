@@ -26,19 +26,21 @@ public abstract class Enemy extends Stuff {
 	private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	
 	protected Animation anim;
+	private int speed;
 	
 	protected Firearm weapon;
+	private boolean isAimingUp = true;
 	
 	public Image characterStay, characterMove1, characterMove2, characterDie, currentSprite;
 	public String characterStayPath, characterMove1Path, characterMove2Path, characterDiePath, currentSpritePath;
 
-	public Enemy(int centerX, int centerY, Firearm weapon, int health, int difficultylevel) {
+	public Enemy(int centerX, int centerY, Firearm weapon, int health, int speed, int difficultylevel) {
 		super(centerX, centerY);
 		weapon.setHolderProjectiles(projectiles);
 		this.weapon = weapon;
 		weapon.setFireRate(weapon.getFireRate() * (5 - difficultylevel));
 		this.health = health * difficultylevel;
-		
+		this.speed = speed;
 	}
 
 	public void checkCollision(Enemy e) {
@@ -163,24 +165,64 @@ public abstract class Enemy extends Stuff {
 		this.health = health;
 	}
 	
+	public boolean isAimingUp() {
+		return isAimingUp;
+	}
+	
 	public void shootUp() {
+		isAimingUp = true;
 		weapon.shootUp(centerX, centerY);
 	}
 
 	public void shootDown() {
+		isAimingUp = false;
 		weapon.shootDown(centerX, centerY);
 	}
 
 	public void shootLeft() {
+		isAimingUp = false;
 		weapon.shootLeft(centerX, centerY);
 	}
 
 	public void shootRight() {
+		isAimingUp = false;
 		weapon.shootRight(centerX, centerY);
 	}
 
 	public ArrayList<Projectile> getProjectiles() {
 		return projectiles;
 	}
+	
+	protected void moveRight() {
+		isAimingUp = false;
+		setSpeedX(speed);
+		setSpeedY(0);
+	}
+	
+	protected void moveLeft() {
+		isAimingUp = false;
+		setSpeedX(-speed);
+		setSpeedY(0);
+	}
+	
+	protected void moveUp() {
+		isAimingUp = true;
+		setSpeedX(0);
+		setSpeedY(-speed);
+	}
 
+	protected void moveDown() {
+		isAimingUp = false;
+		setSpeedX(0);
+		setSpeedY(speed);
+	}
+	
+	protected void stopMoving() {
+		setSpeedX(0);
+		setSpeedY(0);
+	}
+	
+	public Firearm getWeapon() {
+		return weapon;
+	}
 }

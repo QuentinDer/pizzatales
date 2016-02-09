@@ -19,6 +19,7 @@ public class Player {
 	public Rectangle rectX = new Rectangle(0, 0, 0, 0);
 	public Rectangle rectY = new Rectangle(0, 0, 0, 0);
 	private Firearm weapon;
+	private boolean isAimingUp = true;
 
 	// 0 = not, 1 = left, 2 = top, 3 = right, 4 = bottom
 	private int isShooting = 0;
@@ -77,20 +78,28 @@ public class Player {
 				switch (isShooting) {
 				case 1:
 					weapon.shootLeft(centerX, centerY);
+					isAimingUp = false;
 					break;
 				case 2:
 					weapon.shootUp(centerX, centerY);
+					isAimingUp = true;
 					break;
 				case 3:
 					weapon.shootRight(centerX, centerY);
+					isAimingUp = false;
 					break;
 				case 4:
 					weapon.shootDown(centerX, centerY);
+					isAimingUp = false;
 					break;
 				}
 			}
 		}
 		weapon.increaseShootingCounter();
+	}
+	
+	public boolean isAimingUp() {
+		return isAimingUp;
 	}
 
 	public int isShooting() {
@@ -109,6 +118,10 @@ public class Player {
 		if (isColliding == false) {
 			speedX = MOVESPEED;
 			setMovingHor(true);
+			if (0 == isShooting) {
+				weapon.setSpriteRight();
+				isAimingUp = false;
+			}
 		}
 	}
 
@@ -117,6 +130,10 @@ public class Player {
 			speedX = -MOVESPEED;
 			setMovingHor(true);
 		}
+		if (0 == isShooting) {
+			weapon.setSpriteLeft();
+			isAimingUp = false;
+		}
 	}
 
 	public void moveUp() {
@@ -124,12 +141,20 @@ public class Player {
 			this.setSpeedY(-MOVESPEED);
 			setMovingVer(true);
 		}
+		if (0 == isShooting) {
+			weapon.setSpriteUp();
+			isAimingUp = false;
+		}
 	}
 
 	public void moveDown() {
 		if (isColliding == false) {
 			this.setSpeedY(MOVESPEED);
 			setMovingVer(true);
+		}
+		if (0 == isShooting) {
+			weapon.setSpriteDown();
+			isAimingUp = true;
 		}
 	}
 

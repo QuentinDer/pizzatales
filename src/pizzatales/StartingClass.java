@@ -59,6 +59,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		background = getImage(base, "data/background.png");
 		tileTree = getImage(base, "data/tree.png");
 		tileGrass = getImage(base, "data/grass.png");
+		Gun.leftSprite = getImage(base, "data/pistol1.png");
+		Gun.rightSprite = getImage(base, "data/pistol2.png");
+		Gun.upSprite = getImage(base, "data/pistol4.png");
+		Gun.downSprite = getImage(base, "data/pistol3.png");
+		Shotgun.leftSprite = getImage(base, "data/shotgun1.png");
+		Shotgun.rightSprite = getImage(base, "data/shotgun2.png");
+		Shotgun.upSprite = getImage(base, "data/shotgun4.png");
+		Shotgun.downSprite = getImage(base, "data/shotgun3.png");
 
 		anim = new Animation();
 		anim.addFrame(character1, 1250);
@@ -227,7 +235,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			ArrayList<Projectile> projectiles = player.getProjectiles();
 			for (int i = 0; i < getEnemyarray().size(); i++) {
 				Enemy e = getEnemyarray().get(i);
-				g.drawImage(e.currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+				if (e.isAimingUp()) {
+					g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+					g.drawImage(e.currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+				} else {
+					g.drawImage(e.currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+					g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+				}
 				for (int j = 0;  j < e.getProjectiles().size(); j++) {
 					Projectile p = e.getProjectiles().get(j);
 					g.setColor(Color.YELLOW);
@@ -239,7 +253,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				g.setColor(Color.YELLOW);
 				g.fillRect(p.getR().x, p.getR().y, p.getR().width, p.getR().height);
 			}
-			g.drawImage(currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
+			if (player.isAimingUp()) {
+				g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
+				g.drawImage(currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
+			} else {
+				g.drawImage(currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
+				g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
+			}
 			g.setColor(Color.BLACK);
 			g.fillRect(47, 37, 20, 20);
 			g.setColor(Color.WHITE);
