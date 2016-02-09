@@ -287,6 +287,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							if (e.getHealth() < 1) {
 								e.currentSprite = getImage(base, e.characterDiePath);
 								e.die();
+								player.setHealth(player.getHealth()+1);
 								// enemyarray.remove(e);
 							}
 						}
