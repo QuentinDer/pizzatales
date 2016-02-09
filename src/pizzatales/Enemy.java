@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import java.net.URL;
 import java.util.ArrayList;
 
-import pizzatales.framework.Animation;
+//import pizzatales.framework.Animation;
 
 public abstract class Enemy extends Stuff {
 
@@ -25,14 +25,13 @@ public abstract class Enemy extends Stuff {
 	protected Player player = StartingClass.getPlayer();
 	private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	
-	protected Animation anim;
+	//protected Animation anim;
 	private int speed;
 	
 	protected Firearm weapon;
 	private boolean isAimingUp = true;
 	
-	public Image characterStay, characterMove1, characterMove2, characterDie, currentSprite;
-	public String characterStayPath, characterMove1Path, characterMove2Path, characterDiePath, currentSpritePath;
+	public Image currentSprite;
 
 	public Enemy(int centerX, int centerY, Firearm weapon, int health, int speed, int difficultylevel) {
 		super(centerX, centerY);
@@ -41,6 +40,7 @@ public abstract class Enemy extends Stuff {
 		weapon.setFireRate(weapon.getFireRate() * (5 - difficultylevel));
 		this.health = health * difficultylevel;
 		this.speed = speed;
+		setStaySprite();
 	}
 
 	public void checkCollision(Enemy e) {
@@ -87,13 +87,17 @@ public abstract class Enemy extends Stuff {
 				setSpeedX(-2);
 			}
 			
-			if (getSpeedX() != 0 || getSpeedY() !=0){
-				isMoving = true;
-			} else {
-				isMoving = false;
+			if (isMoving) {
+				walkCounter++;
+				if (walkCounter == 1000)
+					walkCounter = 0;
+				if (walkCounter % 30 == 0) {
+					setMove1Sprite();
+				} else if (walkCounter % 15 == 0) {
+					setMove2Sprite();
+				}
 			}
-			
-			walkCounter++;
+				
 
 			// Collision
 			// rectX.setRect(getCenterX() - 55, getCenterY() - 55, 50, 40);
@@ -111,8 +115,8 @@ public abstract class Enemy extends Stuff {
 	
 	public void die() {
 		alive = false;
-		setSpeedX(0);
-		setSpeedY(0);
+		stopMoving();
+		setDieSprite();
 	}
 
 	public void attack() {
@@ -197,32 +201,43 @@ public abstract class Enemy extends Stuff {
 		isAimingUp = false;
 		setSpeedX(speed);
 		setSpeedY(0);
+		isMoving = true;
 	}
 	
 	protected void moveLeft() {
 		isAimingUp = false;
 		setSpeedX(-speed);
 		setSpeedY(0);
+		isMoving = true;
 	}
 	
 	protected void moveUp() {
 		isAimingUp = true;
 		setSpeedX(0);
 		setSpeedY(-speed);
+		isMoving = true;
 	}
 
 	protected void moveDown() {
 		isAimingUp = false;
 		setSpeedX(0);
 		setSpeedY(speed);
+		isMoving = true;
 	}
 	
 	protected void stopMoving() {
 		setSpeedX(0);
 		setSpeedY(0);
+		isMoving = false;
+		setStaySprite();
 	}
 	
 	public Firearm getWeapon() {
 		return weapon;
 	}
+	
+	public abstract void setStaySprite();
+	public abstract void setMove1Sprite();
+	public abstract void setMove2Sprite();
+	public abstract void setDieSprite();
 }

@@ -3,14 +3,14 @@ package pizzatales;
 import java.awt.Image;
 import java.awt.Rectangle;
 
-public class Tato extends Enemy {
+public class Pepper extends Enemy {
 
 	protected int movementParam;
 	protected boolean isShooting;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
 
-	public Tato(int centerX, int centerY, int difficultylevel) {
-		super(centerX,centerY, new Gun(), 2, 2, difficultylevel);
+	public Pepper(int centerX, int centerY, int difficultylevel) {
+		super(centerX,centerY, new Flamer(), 6, 3, difficultylevel);
 		movementParam = ((int) (Math.random() * 50));
 		rectX = new Rectangle(getCenterX() - 25, getCenterY() - 20, 50, 40);
 		rectY = new Rectangle(getCenterX() - 20, getCenterY() - 25, 40, 50);

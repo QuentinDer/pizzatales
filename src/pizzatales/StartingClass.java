@@ -85,19 +85,31 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Smg.rightSprite = getImage(base, "data/smg2.png");
 		Smg.downSprite = getImage(base, "data/smg3.png");
 		Smg.upSprite = getImage(base, "data/smg4.png");
+		
+		Tato.staySprite = getImage(base, "data/tato1.png");
+		Tato.move1Sprite = getImage(base, "data/tato2.png");
+		Tato.move2Sprite = getImage(base, "data/tato3.png");
+		Tato.dieSprite = getImage(base, "data/tatoDie.png");
+		Aubergine.staySprite = getImage(base, "data/aubergine1.png");
+		Aubergine.move1Sprite = getImage(base, "data/aubergine2.png");
+		Aubergine.move2Sprite = getImage(base, "data/aubergine3.png");
+		Aubergine.dieSprite = getImage(base, "data/auberginedead.png");
+		Broccoli.staySprite = getImage(base, "data/broccoli1.png");
+		Broccoli.move1Sprite = getImage(base, "data/broccoli2.png");
+		Broccoli.move2Sprite = getImage(base, "data/broccoli3.png");
+		Broccoli.dieSprite = getImage(base, "data/broccolidead.png");
+		Pepper.staySprite = getImage(base, "data/pepper1.png");
+		Pepper.move1Sprite = getImage(base, "data/pepper2.png");
+		Pepper.move2Sprite = getImage(base, "data/pepper3.png");
+		Pepper.dieSprite = getImage(base, "data/pepperdead.png");
+		Mushroom.staySprite = getImage(base, "data/shroom1.png");
+		Mushroom.move1Sprite = getImage(base, "data/shroom2.png");
+		Mushroom.move2Sprite = getImage(base, "data/shroom3.png");
+		Mushroom.dieSprite = getImage(base, "data/shroomdead.png");
 
 		anim = new Animation();
 		anim.addFrame(character1, 1250);
 		anim.addFrame(character2, 50);
-		for (int i = 0; i < getEnemyarray().size(); i++) {
-			Enemy e = getEnemyarray().get(i);
-			e.characterStay = getImage(base, e.characterStayPath);
-			e.characterMove1 = getImage(base, e.characterMove1Path);
-			e.characterMove2 = getImage(base, e.characterMove2Path);
-			e.anim.addFrame(e.characterStay, 100);
-			e.currentSprite = e.anim.getImage();
-		}
-
 		currentSprite = anim.getImage();
 	}
 
@@ -119,7 +131,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		
 		bg1 = new Background(0, -800);
 		bg2 = new Background(0, 800);
-		int difficultylevel = 3;
+		int difficultylevel = 1;
 		// Initialize Tiles
 		try {
 			loadMap("data/map1.txt", difficultylevel);
@@ -198,7 +210,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				} else if (player.isMovingVer() == false && player.isMovingHor() == false) {
 					currentSprite = anim.getImage();
 				}
-
+/*
 				for (int i = 0; i < getEnemyarray().size(); i++) {
 					Enemy e = getEnemyarray().get(i);
 
@@ -216,7 +228,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							e.walkCounter = 0;
 						}
 					}
-				}
+				}*/
 				updatePlayer();
 				
 				callEnemiesAIs();
@@ -335,7 +347,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						if (p.checkCollision(e) == true) {
 							e.setHealth(e.getHealth() - p.damage);
 							if (e.getHealth() < 1) {
-								e.currentSprite = getImage(base, e.characterDiePath);
 								e.die();
 								player.setHealth(player.getHealth()+1);
 								// enemyarray.remove(e);
