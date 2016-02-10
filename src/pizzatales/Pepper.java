@@ -6,7 +6,8 @@ public class Pepper extends Enemy {
 
 	protected int movementParam;
 	protected boolean isShooting;
-	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
+	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, staySpriteRight, move1SpriteRight,
+	move2SpriteRight;
 	private final static int maxmp = 8;
 
 	public Pepper(int centerX, int centerY, int difficultylevel) {
@@ -88,6 +89,43 @@ public class Pepper extends Enemy {
 	@Override
 	public void setDieSprite() {
 		currentSprite = dieSprite;
+	}
+	
+	@Override
+	public void setStaySpriteAlt() {
+		currentSprite = staySpriteRight;
+	}
+
+	@Override
+	public void setMove1SpriteAlt() {
+		currentSprite = move1SpriteRight;
+	}
+
+	@Override
+	public void setMove2SpriteAlt() {
+		currentSprite = move2SpriteRight;
+	}
+
+	@Override
+	public void animate() {
+		walkCounter++;
+		if (getSpeedX() < 0) {
+			if (walkCounter == 1000)
+				walkCounter = 0;
+			if (walkCounter % 30 == 0) {
+				setMove1Sprite();
+			} else if (walkCounter % 15 == 0) {
+				setMove2Sprite();
+			}
+		} else if (getSpeedX() >= 0){
+			if (walkCounter == 1000)
+				walkCounter = 0;
+			if (walkCounter % 30 == 0) {
+				setMove1SpriteAlt();
+			} else if (walkCounter % 15 == 0) {
+				setMove2SpriteAlt();
+			}
+		}
 	}
 	
 }

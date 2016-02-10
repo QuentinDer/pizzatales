@@ -99,16 +99,7 @@ public abstract class Enemy extends Stuff {
 				setSpeedX(-2);
 			}
 			
-			if (isMoving) {
-				walkCounter++;
-				if (walkCounter == 1000)
-					walkCounter = 0;
-				if (walkCounter % 30 == 0) {
-					setMove1Sprite();
-				} else if (walkCounter % 15 == 0) {
-					setMove2Sprite();
-				}
-			}
+			animate();
 				
 
 			// Collision
@@ -124,6 +115,20 @@ public abstract class Enemy extends Stuff {
 			setSpeedX(2);
 		}
 	}*/
+	
+	public void animate(){
+		if (isMoving) {
+			walkCounter++;
+			if (walkCounter == 1000)
+				walkCounter = 0;
+			if (walkCounter % 30 == 0) {
+				setMove1Sprite();
+			} else if (walkCounter % 15 == 0) {
+				setMove2Sprite();
+			}
+		}
+		
+	}
 	
 	public void die() {
 		alive = false;
@@ -253,4 +258,7 @@ public abstract class Enemy extends Stuff {
 	public abstract void setMove1Sprite();
 	public abstract void setMove2Sprite();
 	public abstract void setDieSprite();
+	public abstract void setStaySpriteAlt();
+	public abstract void setMove1SpriteAlt();
+	public abstract void setMove2SpriteAlt();
 }

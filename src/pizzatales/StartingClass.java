@@ -100,9 +100,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Broccoli.move1Sprite = getImage(base, "data/broccoli2.png");
 		Broccoli.move2Sprite = getImage(base, "data/broccoli3.png");
 		Broccoli.dieSprite = getImage(base, "data/broccolidead.png");
-		Pepper.staySprite = getImage(base, "data/pepper1.png");
-		Pepper.move1Sprite = getImage(base, "data/pepper2.png");
-		Pepper.move2Sprite = getImage(base, "data/pepper3.png");
+		Pepper.staySprite = getImage(base, "data/pepperLeft1.png");
+		Pepper.move1Sprite = getImage(base, "data/pepperLeft2.png");
+		Pepper.move2Sprite = getImage(base, "data/pepperLeft3.png");
+		Pepper.move1SpriteRight = getImage(base, "data/pepperRight2.png");
+		Pepper.move2SpriteRight = getImage(base, "data/pepperRight3.png");
 		Pepper.dieSprite = getImage(base, "data/pepperdead.png");
 		Mushroom.staySprite = getImage(base, "data/shroom1.png");
 		Mushroom.move1Sprite = getImage(base, "data/shroom2.png");
