@@ -8,15 +8,10 @@ public class Pepper extends Enemy {
 	protected boolean isShooting;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
 	private final static int maxmp = 8;
-	private PathFinder pathfinder = new PathFinder();
-	private Background bg = StartingClass.getBg1();
-	private int bginitx, bginity;
 
 	public Pepper(int centerX, int centerY, int difficultylevel) {
 		super(centerX,centerY, new Flamer(), 6, 3, difficultylevel);
 		movementParam = ((int) (Math.random() * 50));
-		bginitx = bg.getCenterX();
-		bginity = bg.getCenterY();
 	}
 
 	// Behavioral Methods
@@ -25,12 +20,10 @@ public class Pepper extends Enemy {
 
 		if (alive == true) {
 			// AI
-			int posx = (getCenterX() - bg.getCenterX() + bginitx) / 50;
-			int posy = (getCenterY() - bg.getCenterY() + bginity) / 50;
 			int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
 			int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
 			if (movementParam % 10 == 0) {
-				int pathresult = pathfinder.getDirection(posx, posy, posplayerx, posplayery, maxmp);
+				int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, maxmp);
 				switch (pathresult) {
 				case 0:
 					stopMoving();

@@ -16,12 +16,16 @@ public abstract class Enemy extends Stuff {
 	protected boolean isMoving = false;
 	protected int walkCounter = 1;
 
-	private Background bg = StartingClass.getBg1();
 	public Rectangle R;
 	protected int movementTime = ((int) Math.random() * 100) + 50;
 
 	protected Player player = StartingClass.getPlayer();
 	private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
+	protected PathFinder pf = StartingClass.getPathFinder();
+	protected int posx;
+	protected int posy;
+	protected Background bg = StartingClass.getBg1();
+	protected int bginitx, bginity;
 	
 	//protected Animation anim;
 	private int speed;
@@ -38,24 +42,24 @@ public abstract class Enemy extends Stuff {
 		weapon.setFireRate(weapon.getFireRate() * (5 - difficultylevel));
 		this.health = health * difficultylevel;
 		this.speed = speed;
+		bginitx = bg.getCenterX();
+		bginity = bg.getCenterY();
+		posx = centerX / 50;
+		posy = centerY / 50;
 		setStaySprite();
 		R = new Rectangle(getCenterX() - 25, getCenterY() - 25, 50, 50);
 	}
 
 	public void checkCollision(Enemy e) {
 		if (R.intersects(e.R)) {
-			if (e.getCenterX() - getCenterX() >= 0 && getSpeedX() > 0) {
-				setSpeedX(0);
-			}
-			if (e.getCenterX() - getCenterX() <= 0 && getSpeedX() < 0) {
-				setSpeedX(0);
-			}
-			if (e.getCenterY() - getCenterY() >= 0 && getSpeedY() > 0) {
-				setSpeedY(0);
-			}
-			if (e.getCenterY() - getCenterY() <= 0 && getSpeedY() < 0) {
-				setSpeedY(0);
-			}
+			if (e.getCenterX() - getCenterX() >= 0)
+				setCenterX(getCenterX()-2);
+			else
+				setCenterX(getCenterX()+2);
+			if (e.getCenterY() - getCenterY() >= 0)
+				setCenterY(getCenterY()-2);
+			else
+				setCenterY(getCenterY()+2);
 		}
 	}
 
@@ -72,6 +76,15 @@ public abstract class Enemy extends Stuff {
 	public void update() {
 
 		super.update();
+		
+		int currentposx = (getCenterX() - bg.getCenterX() + bginitx) / 50;
+		int currentposy = (getCenterY() - bg.getCenterY() + bginity) / 50;
+		if (currentposx != posx || currentposy != posy) {
+			pf.map[posx][posy] = true;
+			pf.map[currentposx][currentposy] = false;
+			posx = currentposx;
+			posy = currentposy;
+		}
 		
 		R.setBounds(getCenterX() - 25, getCenterY() - 25, 50, 50);
 		
@@ -116,6 +129,7 @@ public abstract class Enemy extends Stuff {
 		alive = false;
 		stopMoving();
 		setDieSprite();
+		pf.map[posx][posy] = true;
 	}
 
 	public void attack() {

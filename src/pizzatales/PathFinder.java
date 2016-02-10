@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 public class PathFinder {
+	
+	public boolean[][] map;
 
 	public int getDirection(int fromx, int fromy, int tox, int toy, int maxmp) {
 		if (Math.abs(fromx-tox)+Math.abs(fromy-toy)>maxmp)
 			return 0;
-		boolean [][] map = StartingClass.mapmatrix;
 		int width = map.length;
 		int height = map[0].length;
 		HashMap<Integer,Integer> g_score = new HashMap<Integer,Integer>();

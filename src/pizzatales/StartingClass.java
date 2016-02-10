@@ -27,9 +27,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private URL base;
 	private Graphics second;
 	private static Background bg1, bg2;
+	private static PathFinder pf;
 	private Animation anim;
 	private ArrayList<Firearm> playerweapons;
-	public static boolean[][] mapmatrix;
 	
 	private int weaponindex;
 	
@@ -120,6 +120,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Thread thread = new Thread(this);
 		thread.start();
 		player = new Player();
+		pf = new PathFinder();
 		playerweapons = new ArrayList<Firearm>();
 		playerweapons.add(new Gun());
 		playerweapons.add(new Shotgun());
@@ -165,18 +166,19 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		reader.close();
 		height = lines.size();
 		
-		mapmatrix = new boolean[width][height];
+		pf.map = new boolean[width][height];
 
 		for (int j = 0; j < height; j++) {
 			line = lines.get(j);
 			for (int i = 0; i < width; i++) {
 				if (i < line.length()) {
 					char ch = line.charAt(i);
+					if (ch == '0')
+						pf.map[i][j] = true;
 					if (Tile.isTileTypeSupported(ch)) {
 						Tile t = new Tile(i, j, ch);
 						tilearray.add(t);
-					} else
-						mapmatrix[i][j] = true;
+					}
 					if (EnemyFactory.isTileTypeSupported(ch)) {
 						getEnemyarray().add(EnemyFactory.getEnemy(i, j, ch, difficultylevel));
 					}
@@ -236,9 +238,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				}*/
 				updatePlayer();
 				
-				callEnemiesAIs();
-				checkTileCollisions();
 				checkEnemiesCollision();
+				checkTileCollisions();
+				callEnemiesAIs();
 				updateEnemies();
 				
 				
@@ -278,6 +280,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			ArrayList<Projectile> projectiles = player.getProjectiles();
 			for (int i = 0; i < getEnemyarray().size(); i++) {
 				Enemy e = getEnemyarray().get(i);
+				if (!e.alive) {
+					g.drawImage(e.currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+				}
+			}
+			for (int i = 0; i < getEnemyarray().size(); i++) {
+				Enemy e = getEnemyarray().get(i);
 				if (e.alive) {
 					if (e.isAimingUp()) {
 						g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
@@ -286,8 +294,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						g.drawImage(e.currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
 						g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
 					}
-				} else {
-					g.drawImage(e.currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
 				}
 				for (int j = 0;  j < e.getProjectiles().size(); j++) {
 					Projectile p = e.getProjectiles().get(j);
@@ -512,6 +518,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	public static Player getPlayer() {
 		return player;
+	}
+	
+	public static PathFinder getPathFinder() {
+		return pf;
 	}
 
 	/*
