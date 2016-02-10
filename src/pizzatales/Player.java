@@ -16,8 +16,7 @@ public class Player {
 	private boolean isMovingVer = false;
 	private boolean isMovingHor = false;
 	public boolean isColliding = false;
-	public Rectangle rectX = new Rectangle(0, 0, 0, 0);
-	public Rectangle rectY = new Rectangle(0, 0, 0, 0);
+	public Rectangle R = new Rectangle(0,0,0,0);
 	private Firearm weapon;
 	private boolean isAimingUp = true;
 
@@ -71,8 +70,7 @@ public class Player {
 		}
 
 		// Collision
-		rectX.setRect(centerX - 25, centerY - 20, 50, 40);
-		rectY.setRect(centerX - 20, centerY - 25, 40, 50);
+		R.setRect(centerX - 25, centerY - 25, 50, 50);
 		if (isShooting > 0) {
 			if (weapon.isReady2Fire()) {
 				switch (isShooting) {

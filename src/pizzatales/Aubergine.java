@@ -1,7 +1,6 @@
 package pizzatales;
 
 import java.awt.Image;
-import java.awt.Rectangle;
 
 public class Aubergine extends Enemy {
 
@@ -12,9 +11,6 @@ public class Aubergine extends Enemy {
 	public Aubergine(int centerX, int centerY, int difficultylevel) {
 		super(centerX,centerY, new Smg(), 4, 2, difficultylevel);
 		movementParam = ((int) (Math.random() * 50));
-		rectX = new Rectangle(getCenterX() - 25, getCenterY() - 20, 50, 40);
-		rectY = new Rectangle(getCenterX() - 20, getCenterY() - 25, 40, 50);
-		R = new Rectangle(getCenterX()-20, getCenterY()-20,40,40);
 	}
 
 	// Behavioral Methods
@@ -25,10 +21,6 @@ public class Aubergine extends Enemy {
 		// centerY += speedY;
 
 		if (alive == true) {
-			// Collision
-			rectX.setBounds(getCenterX() - 25, getCenterY() - 20, 50, 40);
-			rectY.setBounds(getCenterX() - 20, getCenterY() - 25, 40, 50);
-			R.setBounds(getCenterX()-20, getCenterY()-20,40,40);
 			// AI
 			if (!isShooting) {
 				if (movementTime % 400 == movementParam) {

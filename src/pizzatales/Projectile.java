@@ -55,7 +55,7 @@ public abstract class Projectile extends Stuff {
 	}
 	
 	boolean checkCollision(Player p) {
-		if(rectP.intersects(p.rectX) || rectP.intersects(p.rectY)){
+		if(rectP.intersects(p.R)){
 			visible = false;
 			return true;
 		}

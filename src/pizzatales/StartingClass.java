@@ -29,6 +29,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private static Background bg1, bg2;
 	private Animation anim;
 	private ArrayList<Firearm> playerweapons;
+	public static boolean[][] mapmatrix;
+	
 	private int weaponindex;
 	
 	enum GameState {
@@ -162,6 +164,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 		reader.close();
 		height = lines.size();
+		
+		mapmatrix = new boolean[width][height];
 
 		for (int j = 0; j < height; j++) {
 			line = lines.get(j);
@@ -171,7 +175,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					if (Tile.isTileTypeSupported(ch)) {
 						Tile t = new Tile(i, j, ch);
 						tilearray.add(t);
-					}
+					} else
+						mapmatrix[i][j] = true;
 					if (EnemyFactory.isTileTypeSupported(ch)) {
 						getEnemyarray().add(EnemyFactory.getEnemy(i, j, ch, difficultylevel));
 					}
@@ -323,7 +328,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	
 	private void checkEnemiesCollision() {
 		for (Enemy e : getEnemyarray()) {
-			e.checkEnemyCollisions();
+			if (e.alive)
+				e.checkEnemyCollisions();
 		}
 	}
 	

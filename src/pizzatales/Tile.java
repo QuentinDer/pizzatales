@@ -33,11 +33,11 @@ public class Tile extends Stuff {
 	}
 
 	public void checkHorizontalCollision(Player player) {
-		if (player.rectX.intersects(r)) {
+		if (player.R.intersects(r) && Math.abs(player.getCenterY()-getCenterY())<50) {
 			if (player.getCenterX() <= this.getCenterX()) {
 				player.setCenterX(player.getCenterX() - 2);
 				player.setSpeedX(0);
-			} else if (player.getCenterX() >= this.getCenterX()) {
+			} else {
 				player.setCenterX(player.getCenterX() + 2);
 				player.setSpeedX(0);
 			}
@@ -45,12 +45,12 @@ public class Tile extends Stuff {
 	}
 
 	public void checkVerticalCollision(Player player) {
-		if (player.rectY.intersects(r)) {
+		if (player.R.intersects(r) && Math.abs(player.getCenterX()-getCenterX())<50) {
 			if (player.getCenterY() <= this.getCenterY()) {
 				player.setCenterY(player.getCenterY() - 2);
 				player.setSpeedY(0);
 				player.isColliding = true;
-			} else if (player.getCenterY() >= this.getCenterY()) {
+			} else {
 				player.setCenterY(player.getCenterY() + 2);
 				player.setSpeedY(0);
 				player.isColliding = true;
@@ -59,7 +59,7 @@ public class Tile extends Stuff {
 	}
 
 	public void checkHorizontalCollision(Enemy enemy) {
-		if (enemy.alive == true && enemy.rectX.intersects(r)) {
+		if (enemy.alive == true && enemy.R.intersects(r) && Math.abs(enemy.getCenterY()-getCenterY())<50) {
 			if (enemy.getCenterX() <= this.getCenterX()) {
 				enemy.setCenterX(enemy.getCenterX() - 2);
 				enemy.setSpeedX(0);
@@ -71,7 +71,7 @@ public class Tile extends Stuff {
 	}
 
 	public void checkVerticalCollision(Enemy enemy) {
-		if (enemy.alive == true && enemy.rectY.intersects(r)) {
+		if (enemy.alive == true && enemy.R.intersects(r) && Math.abs(enemy.getCenterX()-getCenterX())<50) {
 			if (enemy.getCenterY() <= this.getCenterY()) {
 				enemy.setCenterY(enemy.getCenterY() - 2);
 				enemy.setSpeedY(0);

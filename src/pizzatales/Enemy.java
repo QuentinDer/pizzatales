@@ -17,8 +17,6 @@ public abstract class Enemy extends Stuff {
 	protected int walkCounter = 1;
 
 	private Background bg = StartingClass.getBg1();
-	public Rectangle rectX;
-	public Rectangle rectY;
 	public Rectangle R;
 	protected int movementTime = ((int) Math.random() * 100) + 50;
 
@@ -41,18 +39,17 @@ public abstract class Enemy extends Stuff {
 		this.health = health * difficultylevel;
 		this.speed = speed;
 		setStaySprite();
+		R = new Rectangle(getCenterX() - 25, getCenterY() - 25, 50, 50);
 	}
 
 	public void checkCollision(Enemy e) {
-		if (rectX.intersects(e.R)) {
+		if (R.intersects(e.R)) {
 			if (e.getCenterX() - getCenterX() >= 0 && getSpeedX() > 0) {
 				setSpeedX(0);
 			}
 			if (e.getCenterX() - getCenterX() <= 0 && getSpeedX() < 0) {
 				setSpeedX(0);
 			}
-		}
-		if (rectY.intersects(e.R)) {
 			if (e.getCenterY() - getCenterY() >= 0 && getSpeedY() > 0) {
 				setSpeedY(0);
 			}
@@ -65,7 +62,7 @@ public abstract class Enemy extends Stuff {
 	
 	public void checkEnemyCollisions() {
 		for (Enemy e : StartingClass.getEnemyarray()) {
-			if (!e.equals(this))
+			if (!e.equals(this) && e.alive)
 				checkCollision(e);
 		}
 	}
@@ -75,6 +72,8 @@ public abstract class Enemy extends Stuff {
 	public void update() {
 
 		super.update();
+		
+		R.setBounds(getCenterX() - 25, getCenterY() - 25, 50, 50);
 		
 		if (alive == true) {
 			
