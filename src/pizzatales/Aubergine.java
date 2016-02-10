@@ -100,5 +100,20 @@ public class Aubergine extends Enemy {
 	public void setDieSprite() {
 		currentSprite = dieSprite;
 	}
+	
+	@Override
+	public void setStaySpriteAlt() {
+		currentSprite = staySprite;
+	}
+
+	@Override
+	public void setMove1SpriteAlt() {
+		currentSprite = move1Sprite;
+	}
+
+	@Override
+	public void setMove2SpriteAlt() {
+		currentSprite = move2Sprite;
+	}
 
 }
