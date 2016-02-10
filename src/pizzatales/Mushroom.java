@@ -100,7 +100,7 @@ public class Mushroom extends Enemy {
 	public void setDieSprite() {
 		currentSprite = dieSprite;
 	}
-	
+	/*
 	@Override
 	public void setStaySpriteAlt() {
 		currentSprite = staySprite;
@@ -115,5 +115,5 @@ public class Mushroom extends Enemy {
 	public void setMove2SpriteAlt() {
 		currentSprite = move2Sprite;
 	}
-
+*/
 }

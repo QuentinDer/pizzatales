@@ -100,7 +100,7 @@ public class Broccoli extends Enemy {
 	public void setDieSprite() {
 		currentSprite = dieSprite;
 	}
-	
+	/*
 	@Override
 	public void setStaySpriteAlt() {
 		currentSprite = staySprite;
@@ -114,6 +114,6 @@ public class Broccoli extends Enemy {
 	@Override
 	public void setMove2SpriteAlt() {
 		currentSprite = move2Sprite;
-	}
+	}*/
 
 }
