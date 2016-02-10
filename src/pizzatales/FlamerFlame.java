@@ -6,6 +6,6 @@ public class FlamerFlame extends Projectile {
 		this.range = 100;
 		this.width = 5;
 		this.height = 5;
-		this.damage = 2;
+		this.damage = 1;
 	}
 }

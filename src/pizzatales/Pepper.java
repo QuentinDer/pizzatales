@@ -30,40 +30,44 @@ public class Pepper extends Enemy {
 			int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
 			int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
 			if (movementParam % 10 == 0) {
-				switch (pathfinder.getDirection(posx, posy, posplayerx, posplayery, maxmp)) {
+				int pathresult = pathfinder.getDirection(posx, posy, posplayerx, posplayery, maxmp);
+				switch (pathresult) {
 				case 0:
 					stopMoving();
 					isShooting = false;
 					break;
 				case 1:
-					isShooting = true;
-					if (weapon.isReady2Fire()) {
-						shootLeft();
-					}
 					moveLeft();
 					break;
 				case 2:
-					isShooting = true;
-					if (weapon.isReady2Fire()) {
-						shootUp();
-					}
 					moveUp();
 					break;
 				case 3:
-					isShooting = true;
-					if (weapon.isReady2Fire()) {
-						shootRight();
-					}
 					moveRight();
 					break;
 				case 4:
-					isShooting = true;
-					if (weapon.isReady2Fire()) {
-						shootDown();
-					}
 					moveDown();
 					break;
 				}
+				if (0 != pathresult) {
+					isShooting = true;
+					if (weapon.isReady2Fire()) {
+						int diffx = Math.abs(getCenterX() - player.getCenterX());
+						int diffy = Math.abs(getCenterY() - player.getCenterY());
+						if (diffx > diffy) {
+							if (player.getCenterX() > getCenterX())
+								shootRight();
+							else
+								shootLeft();
+						} else {
+							if (player.getCenterY() > getCenterY())
+								shootDown();
+							else
+								shootUp();
+						}
+					}
+				}
+				
 			}
 			weapon.increaseShootingCounter();
 			movementParam++;
@@ -92,5 +96,5 @@ public class Pepper extends Enemy {
 	public void setDieSprite() {
 		currentSprite = dieSprite;
 	}
-
+	
 }

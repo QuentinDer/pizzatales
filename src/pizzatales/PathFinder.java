@@ -15,25 +15,25 @@ public class PathFinder {
 		HashMap<Integer,Integer> f_score = new HashMap<Integer,Integer>();
 		HashMap<Integer,Integer> direction = new HashMap<Integer,Integer>();
 		int goal = tox*height + toy;
-		if (0 != fromx) {
+		if (0 != fromx && map[fromx-1][fromy]) {
 			int left = height*(fromx-1) + fromy;
 			g_score.put(left, 1);
 			f_score.put(left, Math.abs(fromy-toy)+Math.abs(fromx-1-tox)+1);
 			direction.put(left, 1);
 		}
-		if (width - 1 != fromx) {
+		if (width - 1 != fromx && map[fromx+1][fromy]) {
 			int right = height*(fromx+1) + fromy;
 			g_score.put(right, 1);
 			f_score.put(right, Math.abs(fromy-toy)+Math.abs(fromx+1-tox)+1);
 			direction.put(right, 3);
 		}
-		if (0 != fromy) {
+		if (0 != fromy && map[fromx][fromy-1]) {
 			int up = height*fromx + fromy-1;
 			f_score.put(up, Math.abs(fromy-1-toy)+Math.abs(fromx-tox)+1);
 			g_score.put(up, 1);
 			direction.put(up, 2);
 		}
-		if (height -1 != fromy) {
+		if (height -1 != fromy && map[fromx][fromy+1]) {
 			int down = height*fromx + fromy+1;
 			f_score.put(down, Math.abs(fromy+1-toy)+Math.abs(fromx-tox)+1);
 			g_score.put(down, 1);
@@ -108,7 +108,7 @@ public class PathFinder {
 		}
 		return ans;
 	}
-	
+	/*
 	public static void main(String[] args) {
 		StartingClass.mapmatrix = new boolean[8][16];
 		StartingClass.mapmatrix[3][5] = true;
@@ -117,5 +117,5 @@ public class PathFinder {
 		StartingClass.mapmatrix[6][5] = true;
 		PathFinder pathfinder = new PathFinder();
 		System.out.println(pathfinder.getDirection(5, 6, 5, 3, 20));
-	}
+	}*/
 }
