@@ -91,12 +91,10 @@ public abstract class Enemy extends Stuff {
 		if (alive == true) {
 			
 			// Prevents going beyond X coordinate of 0 or 800
-			if (centerX + speedX <= 60) {
+			if (centerX + speedX <= 30) {
 				centerX = 61;
-				setSpeedX(2);
-			} else if (centerX + speedX >= 800) {
-				centerX = 799;
-				setSpeedX(-2);
+			} else if (centerX + speedX >= 769) {
+				centerX = 768;
 			}
 			
 			animate();

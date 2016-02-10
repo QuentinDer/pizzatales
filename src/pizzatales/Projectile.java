@@ -10,8 +10,8 @@ public abstract class Projectile extends Stuff {
 	private int initX;
 	private int initY;
 	protected int range;
-	protected int width;
-	protected int height;
+	protected int size;
+	protected int halfsize;
 	public int damage = 1;
 
 	public Projectile(int startX, int startY, float vectorX, float vectorY, int speed) {
@@ -27,7 +27,7 @@ public abstract class Projectile extends Stuff {
 	@Override
 	public void update() {
 		super.update();
-		rectP.setBounds(getCenterX() - 2, getCenterY() - 2, width, height);
+		rectP.setBounds(getCenterX() - halfsize, getCenterY() - halfsize, size, size);
 		if (Math.abs(this.getCenterX() - initX) > range) {
 			visible = false;
 		}
