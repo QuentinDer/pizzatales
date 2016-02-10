@@ -13,7 +13,6 @@ public abstract class Projectile extends Stuff {
 	protected int width;
 	protected int height;
 	public int damage = 1;
-	public static Image bulletSprite;
 
 	public Projectile(int startX, int startY, float vectorX, float vectorY, int speed) {
 		super(startX, startY);
@@ -75,4 +74,7 @@ public abstract class Projectile extends Stuff {
 	public Rectangle getR() {
 		return rectP;
 	}
+	
+	public abstract Image getSprite();
+
 }

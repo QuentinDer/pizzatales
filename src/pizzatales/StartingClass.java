@@ -67,32 +67,32 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Gun.rightSprite = getImage(base, "data/pistol2.png");
 		Gun.upSprite = getImage(base, "data/pistol4.png");
 		Gun.downSprite = getImage(base, "data/pistol3.png");
-		Bullet.bulletSprite = getImage(base, "data/pistolprojectile.png");
+		Bullet.bulletsprite = getImage(base, "data/pistolprojectile.png");
 		Shotgun.leftSprite = getImage(base, "data/shotgun1.png");
 		Shotgun.rightSprite = getImage(base, "data/shotgun2.png");
 		Shotgun.upSprite = getImage(base, "data/shotgun4.png");
 		Shotgun.downSprite = getImage(base, "data/shotgun3.png");
-		ShotgunBullet.bulletSprite = getImage(base, "data/shotgunprojectile.png");
+		ShotgunBullet.bulletsprite = getImage(base, "data/shotgunprojectile.png");
 		Rifle.leftSprite = getImage(base, "data/rifle1.png");
 		Rifle.rightSprite = getImage(base, "data/rifle2.png");
 		Rifle.upSprite = getImage(base, "data/rifle4.png");
 		Rifle.downSprite = getImage(base, "data/rifle3.png");
-		RifleBullet.bulletSprite = getImage(base, "data/rifleprojectile.png");
+		RifleBullet.bulletsprite = getImage(base, "data/rifleprojectile.png");
 		Flamer.leftSprite = getImage(base, "data/flamer1.png");
 		Flamer.rightSprite = getImage(base, "data/flamer2.png");
 		Flamer.downSprite = getImage(base, "data/flamer3.png");
 		Flamer.upSprite = getImage(base, "data/flamer4.png");
-		FlamerFlame.bulletSprite = getImage(base, "data/flamerprojectile.png");
+		FlamerFlame.bulletsprite = getImage(base, "data/flamerprojectile.png");
 		Rocket.leftSprite = getImage(base, "data/rocket1.png");
 		Rocket.rightSprite = getImage(base, "data/rocket2.png");
 		Rocket.downSprite = getImage(base, "data/rocket3.png");
 		Rocket.upSprite = getImage(base, "data/rocket4.png");
-		BazookaBullet.bulletSprite = getImage(base, "data/rocketnprojectile.png");
+		BazookaBullet.bulletsprite = getImage(base, "data/rocketprojectile.png");
 		Smg.leftSprite = getImage(base, "data/smg1.png");
 		Smg.rightSprite = getImage(base, "data/smg2.png");
 		Smg.downSprite = getImage(base, "data/smg3.png");
 		Smg.upSprite = getImage(base, "data/smg4.png");
-		SmgBullet.bulletSprite = getImage(base, "data/smgprojectile.png");
+		SmgBullet.bulletsprite = getImage(base, "data/smgprojectile.png");
 		
 		Tato.staySprite = getImage(base, "data/tato1.png");
 		Tato.move1Sprite = getImage(base, "data/tato2.png");
@@ -307,14 +307,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					Projectile p = e.getProjectiles().get(j);
 					//g.setColor(Color.YELLOW);
 					//g.fillRect(p.getR().x, p.getR().y, p.getR().width, p.getR().height);
-					g.drawImage(p.bulletSprite, p.getR().x, p.getR().y, this);
+					g.drawImage(p.getSprite(), p.getR().x, p.getR().y, this);
 				}
 			}
 			for (int i = 0; i < projectiles.size(); i++) {
 				Projectile p = projectiles.get(i);
 				//g.setColor(Color.YELLOW);
 				//g.fillRect(p.getR().x, p.getR().y, p.getR().width, p.getR().height);
-				g.drawImage(p.bulletSprite, p.getR().x, p.getR().y, this);
+				g.drawImage(p.getSprite(), p.getR().x, p.getR().y, this);
 			}
 			if (player.isAimingUp()) {
 				g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);

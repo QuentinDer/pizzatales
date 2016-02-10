@@ -1,11 +1,21 @@
 package pizzatales;
 
+import java.awt.Image;
+
 public class BazookaBullet extends Projectile {
+
+	public static Image bulletsprite;
+	
 	public BazookaBullet(int startX, int startY, int vectorX, int vectorY) {
 		super(startX, startY, vectorX, vectorY, 10);
 		this.range = 450;
 		this.width = 5;
 		this.height = 5;
-		this.damage = 12;
+		this.damage = 12;	
+	}
+	
+	@Override
+	public Image getSprite(){
+		return bulletsprite;
 	}
 }
