@@ -76,7 +76,4 @@ public abstract class Projectile extends Stuff {
 	}
 	
 	public abstract Image getSprite();
-
-	public abstract void setSprite(Image sprite);
-
 }

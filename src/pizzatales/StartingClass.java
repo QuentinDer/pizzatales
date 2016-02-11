@@ -303,22 +303,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				}
 				for (int j = 0;  j < e.getProjectiles().size(); j++) {
 					Projectile p = e.getProjectiles().get(j);
-					if(p instanceof BazookaBullet){
-						if (p.getSpeedX() < 0){
-							p.setSprite(BazookaBullet.bulletspriteLeft);
-							//g.drawImage(BazookaBullet.getSpriteLeft(), p.getR().x, p.getR().y, this);
-						} else if (p.getSpeedX() > 0){
-							p.setSprite(BazookaBullet.getSpriteRight());
-							//g.drawImage(p.getSprite(), p.getR().x, p.getR().y, this);
-						} else if (p.getSpeedY() < 0){
-							p.setSprite(BazookaBullet.getSpriteUp());
-							//g.drawImage(BazookaBullet.bulletspriteUp, p.getR().x, p.getR().y, this);
-						} else if (p.getSpeedY() > 0){
-							p.setSprite(BazookaBullet.getSpriteDown());
-							//g.drawImage(BazookaBullet.bulletspriteDown, p.getR().x, p.getR().y, this);
-						}
-					}
-					
 					g.drawImage(p.getSprite(), p.getR().x, p.getR().y, this);
 				}
 			}
