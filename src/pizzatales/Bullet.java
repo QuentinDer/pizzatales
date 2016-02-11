@@ -18,4 +18,8 @@ public class Bullet extends Projectile {
 	public Image getSprite(){
 		return bulletsprite;
 	}
+	
+	public void setSprite (Image image){
+		bulletsprite = image;
+	}
 }

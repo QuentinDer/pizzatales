@@ -87,6 +87,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Rocket.rightSprite = getImage(base, "data/rocket2.png");
 		Rocket.downSprite = getImage(base, "data/rocket3.png");
 		Rocket.upSprite = getImage(base, "data/rocket4.png");
+		BazookaBullet.bulletspriteLeft = getImage(base, "data/rocketprojectileleft.png");
+		BazookaBullet.bulletspriteRight = getImage(base, "data/rocketprojectileright.png");
+		BazookaBullet.bulletspriteUp = getImage(base, "data/rocketprojectileup.png");
+		BazookaBullet.bulletspriteDown = getImage(base, "data/rocketprojectiledown.png");
 		BazookaBullet.bulletsprite = getImage(base, "data/rocketprojectile.png");
 		Smg.leftSprite = getImage(base, "data/smg1.png");
 		Smg.rightSprite = getImage(base, "data/smg2.png");
@@ -149,12 +153,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		/*getEnemyarray().add(new Tato(200, 360));
-		getEnemyarray().add(new Tato(600, 360));
-		getEnemyarray().add(new Tato(300, 250));
-		getEnemyarray().add(new Tato(500, 250));
-		getEnemyarray().add(new Tato(100, 420));
-		getEnemyarray().add(new Tato(400, 420));*/
 	}
 
 	private void loadMap(String filename, int difficultylevel) throws IOException {
@@ -305,8 +303,22 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				}
 				for (int j = 0;  j < e.getProjectiles().size(); j++) {
 					Projectile p = e.getProjectiles().get(j);
-					//g.setColor(Color.YELLOW);
-					//g.fillRect(p.getR().x, p.getR().y, p.getR().width, p.getR().height);
+					if(p instanceof BazookaBullet){
+						if (p.getSpeedX() < 0){
+							p.setSprite(BazookaBullet.bulletspriteLeft);
+							//g.drawImage(BazookaBullet.getSpriteLeft(), p.getR().x, p.getR().y, this);
+						} else if (p.getSpeedX() > 0){
+							p.setSprite(BazookaBullet.getSpriteRight());
+							//g.drawImage(p.getSprite(), p.getR().x, p.getR().y, this);
+						} else if (p.getSpeedY() < 0){
+							p.setSprite(BazookaBullet.getSpriteUp());
+							//g.drawImage(BazookaBullet.bulletspriteUp, p.getR().x, p.getR().y, this);
+						} else if (p.getSpeedY() > 0){
+							p.setSprite(BazookaBullet.getSpriteDown());
+							//g.drawImage(BazookaBullet.bulletspriteDown, p.getR().x, p.getR().y, this);
+						}
+					}
+					
 					g.drawImage(p.getSprite(), p.getR().x, p.getR().y, this);
 				}
 			}
