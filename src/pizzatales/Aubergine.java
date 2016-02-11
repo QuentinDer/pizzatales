@@ -17,9 +17,6 @@ public class Aubergine extends Enemy {
 	@Override
 	public void callAI() {
 
-		// centerX += speedX;
-		// centerY += speedY;
-
 		if (alive == true) {
 			// AI
 			if (!isShooting) {
