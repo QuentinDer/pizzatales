@@ -1,7 +1,6 @@
 package pizzatales;
 
 import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 
 public class PathFinder {
@@ -107,6 +106,9 @@ public class PathFinder {
 		HashMap<Integer,Integer> g_score = new HashMap<Integer,Integer>();
 		TreeMap<Integer,Integer> f_score = new TreeMap<Integer,Integer>();
 		HashMap<Integer,Integer> direction = new HashMap<Integer,Integer>();
+		TreeMap<Integer,Integer> f_score_final = new TreeMap<Integer,Integer>();
+		int goal1 = tox1*height + toy1;
+		int goal2 = tox2*height + toy2;
 		if (0 != fromx && map[fromx-1][fromy]) {
 			int left = height*(fromx-1) + fromy;
 			g_score.put(left, 1);
@@ -133,11 +135,13 @@ public class PathFinder {
 		}
 		while (!f_score.isEmpty()) {
 			int current = f_score.firstEntry().getValue();
-			if (current / height == tox1 || current % height == toy1 || current / height == tox2 || current % height == toy2)
+			if (current == goal1 || current == goal2)
 				return direction.get(current);
 			f_score.remove(f_score.firstKey());
-			if (g_score.get(current) == maxmp)
+			if (!f_score.isEmpty() && g_score.get(current) == maxmp) {
+				f_score_final.put(f_score.firstKey(),f_score.firstEntry().getValue());
 				continue;
+			}
 			int currentx = current/height;
 			int currenty = current % height;
 			//System.out.println("Current: " + currentx+"-"+currenty);
@@ -174,9 +178,12 @@ public class PathFinder {
 				}
 			}
 		}
-		return 0;
+		if (!f_score_final.isEmpty())
+			return direction.get(f_score_final.firstEntry().getValue());
+		else
+			return 0;
 	}
-	
+	/*
 	private int getMin(HashMap<Integer,Integer> map) {
 		int min = 100;
 		int ans = 0;
@@ -187,7 +194,7 @@ public class PathFinder {
 			}
 		}
 		return ans;
-	}
+	}*/
 	
 	/*
 	private Entry<Integer,Integer> getMinEntry(HashMap<Integer,Integer> map) {
