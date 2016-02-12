@@ -20,7 +20,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
-	public static final int difficultylevel = 2;
+	public static final int difficultylevel = 3;
 	private static Player player;
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
 	public static Image tileTree, tileGrass;
@@ -151,7 +151,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		playerarmor.add(new HawaiiArmor());
 		playerarmor.add(new MargheritaArmor());
 		
-		player.setArmor(playerarmor.get(1));
+		player.setArmor(playerarmor.get(armorindex));
 		loadArmor();
 
 		bg1 = new Background(0, -800);
@@ -410,8 +410,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				if (p.isVisible() == true) {
 					p.update();
 					if (p.checkCollision(player)) {
-						if (player.getArmor().defense < 1) {
-							player.setHealth(player.getHealth() - p.damage);
+						if (player.getArmor().defense - p.damage < 0) {
+							player.setHealth(player.getHealth() - p.damage + player.getArmor().defense);
+							player.getArmor().setDefense(0);
 							if (player.getHealth() < 1)
 								state = GameState.Dead;
 						} else {

@@ -16,11 +16,12 @@ public abstract class Armor {
 		}
 	}
 	
+	/*
 	public void damageArmor(){
 		if(defense > 0){
 			defense--;
 		}
-	}
+	}*/
 	
 	/*public abstract void setSpriteStay1();
 	public abstract void setSpriteStay2();
