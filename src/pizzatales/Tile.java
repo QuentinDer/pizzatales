@@ -84,7 +84,6 @@ public class Tile extends Stuff {
 			}
 		}
 	}
-
 	public void checkVerticalCollision(Enemy enemy) {
 		if (enemy.alive == true && enemy.R.intersects(r) && Math.abs(enemy.getCenterX()-getCenterX())<50) {
 			if (enemy.getCenterY() <= this.getCenterY()) {
