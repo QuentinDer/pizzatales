@@ -95,7 +95,6 @@ public class Tato extends Enemy {
 							switch (pathresult) {
 							case 0:
 								stopMoving();
-								isShooting = false;
 								break;
 							case 1:
 								moveLeft();
@@ -112,26 +111,22 @@ public class Tato extends Enemy {
 							}
 						} else {
 							stopMoving();
-							isShooting = false;
 						}
-						if (0 != pathresult) {
-							isShooting = true;
-							if (weapon.isReady2Fire()) {
-								int diffx = Math.abs(getCenterX() - player.getCenterX());
-								int diffy = Math.abs(getCenterY() - player.getCenterY());
-								if (diffx > diffy && diffy < 80 && diffx < 400) {
-									if (player.getCenterX() > getCenterX())
-										shootRight();
-									else
-										shootLeft();
-								} else if (diffx < 40 && diffy < 400){
-									if (player.getCenterY() > getCenterY())
-										shootDown();
-									else
-										shootUp();
-								}
-							}
-						}
+					}
+				}
+				if (weapon.isReady2Fire()) {
+					int diffx = Math.abs(getCenterX() - player.getCenterX());
+					int diffy = Math.abs(getCenterY() - player.getCenterY());
+					if (diffx > diffy && diffy < 80 && diffx < 400) {
+						if (player.getCenterX() > getCenterX())
+							shootRight();
+						else
+							shootLeft();
+					} else if (diffx < 40 && diffy < 400){
+						if (player.getCenterY() > getCenterY())
+							shootDown();
+						else
+							shootUp();
 					}
 				}
 				break;
@@ -152,7 +147,6 @@ public class Tato extends Enemy {
 							switch (pathresult) {
 							case 0:
 								stopMoving();
-								isShooting = false;
 								break;
 							case 1:
 								moveLeft();
@@ -169,31 +163,26 @@ public class Tato extends Enemy {
 							}
 						} else {
 							stopMoving();
-							isShooting = false;
 						}
-						if (0 != pathresult) {
-							isShooting = true;
-							if (weapon.isReady2Fire()) {
-								int diffx = Math.abs(getCenterX() - player.getCenterX());
-								int diffy = Math.abs(getCenterY() - player.getCenterY());
-								if (diffx > diffy && diffy < 80 && diffx < 400) {
-									if (player.getCenterX() > getCenterX())
-										shootRight();
-									else
-										shootLeft();
-								} else if (diffx < 40 && diffy < 400){
-									if (player.getCenterY() > getCenterY())
-										shootDown();
-									else
-										shootUp();
-								}
-							}
-						}
+					}
+				}
+				if (weapon.isReady2Fire()) {
+					int diffx = Math.abs(getCenterX() - player.getCenterX());
+					int diffy = Math.abs(getCenterY() - player.getCenterY());
+					if (diffx > diffy && diffy < 80 && diffx < 400) {
+						if (player.getCenterX() > getCenterX())
+							shootRight();
+						else
+							shootLeft();
+					} else if (diffx < 40 && diffy < 400){
+						if (player.getCenterY() > getCenterY())
+							shootDown();
+						else
+							shootUp();
 					}
 				}
 				break;
 			}
-			
 			movementTime++;
 			if (movementTime == 1000) {
 				movementTime = 0;

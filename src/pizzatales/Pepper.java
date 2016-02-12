@@ -8,10 +8,9 @@ public class Pepper extends Enemy {
 	protected boolean isShooting;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, staySpriteRight, move1SpriteRight,
 	move2SpriteRight;
-	private final static int maxmp = 8;
 
 	public Pepper(int centerX, int centerY) {
-		super(centerX,centerY, new Flamer(), 6, 3);
+		super(centerX,centerY, new Flamer(), 5, (StartingClass.difficultylevel == 1)?2:((StartingClass.difficultylevel == 3)?4:3));
 		movementTime = ((int) (Math.random() * 50));
 	}
 
@@ -20,49 +19,142 @@ public class Pepper extends Enemy {
 	public void callAI() {
 
 		if (alive == true) {
-			// AI
-			if (movementTime % 10 == 0) {
-				int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
-				int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
-				int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, maxmp);
-				switch (pathresult) {
-				case 0:
-					stopMoving();
-					isShooting = false;
-					break;
-				case 1:
-					moveLeft();
-					break;
-				case 2:
-					moveUp();
-					break;
-				case 3:
-					moveRight();
-					break;
-				case 4:
-					moveDown();
-					break;
-				}
-				if (0 != pathresult) {
-					isShooting = true;
-					if (weapon.isReady2Fire()) {
-						int diffx = Math.abs(getCenterX() - player.getCenterX());
-						int diffy = Math.abs(getCenterY() - player.getCenterY());
-						if (diffx > diffy) {
-							if (player.getCenterX() > getCenterX())
-								shootRight();
-							else
-								shootLeft();
-						} else {
-							if (player.getCenterY() > getCenterY())
-								shootDown();
-							else
-								shootUp();
+			switch(StartingClass.difficultylevel) {
+			case 1:
+				if (movementTime % 50 == 0) {
+					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
+					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
+					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 7);
+					switch (pathresult) {
+					case 0:
+						stopMoving();
+						isShooting = false;
+						break;
+					case 1:
+						moveLeft();
+						break;
+					case 2:
+						moveUp();
+						break;
+					case 3:
+						moveRight();
+						break;
+					case 4:
+						moveDown();
+						break;
+					}
+					if (0 != pathresult) {
+						isShooting = true;
+						if (weapon.isReady2Fire()) {
+							int diffx = Math.abs(getCenterX() - player.getCenterX());
+							int diffy = Math.abs(getCenterY() - player.getCenterY());
+							if (diffx > diffy) {
+								if (player.getCenterX() > getCenterX())
+									shootRight();
+								else
+									shootLeft();
+							} else {
+								if (player.getCenterY() > getCenterY())
+									shootDown();
+								else
+									shootUp();
+							}
 						}
 					}
+					
 				}
-				
+				break;
+			case 2:
+				if (movementTime % 30 == 0) {
+					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
+					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
+					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 9);
+					switch (pathresult) {
+					case 0:
+						stopMoving();
+						isShooting = false;
+						break;
+					case 1:
+						moveLeft();
+						break;
+					case 2:
+						moveUp();
+						break;
+					case 3:
+						moveRight();
+						break;
+					case 4:
+						moveDown();
+						break;
+					}
+					if (0 != pathresult) {
+						isShooting = true;
+						if (weapon.isReady2Fire()) {
+							int diffx = Math.abs(getCenterX() - player.getCenterX());
+							int diffy = Math.abs(getCenterY() - player.getCenterY());
+							if (diffx > diffy) {
+								if (player.getCenterX() > getCenterX())
+									shootRight();
+								else
+									shootLeft();
+							} else {
+								if (player.getCenterY() > getCenterY())
+									shootDown();
+								else
+									shootUp();
+							}
+						}
+					}
+					
+				}
+				break;
+			case 3:
+				if (movementTime % 10 == 0) {
+					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
+					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
+					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 11);
+					switch (pathresult) {
+					case 0:
+						stopMoving();
+						isShooting = false;
+						break;
+					case 1:
+						moveLeft();
+						break;
+					case 2:
+						moveUp();
+						break;
+					case 3:
+						moveRight();
+						break;
+					case 4:
+						moveDown();
+						break;
+					}
+					if (0 != pathresult) {
+						isShooting = true;
+						if (weapon.isReady2Fire()) {
+							int diffx = Math.abs(getCenterX() - player.getCenterX());
+							int diffy = Math.abs(getCenterY() - player.getCenterY());
+							if (diffx > diffy) {
+								if (player.getCenterX() > getCenterX())
+									shootRight();
+								else
+									shootLeft();
+							} else {
+								if (player.getCenterY() > getCenterY())
+									shootDown();
+								else
+									shootUp();
+							}
+						}
+					}
+					
+				}
+				break;
 			}
+			// AI
+
 			weapon.increaseShootingCounter();
 			movementTime++;
 			if (movementTime == 1000) {
