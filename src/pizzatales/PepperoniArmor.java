@@ -1,7 +1,5 @@
 package pizzatales;
 
-import java.awt.Image;
-
 public class PepperoniArmor extends Armor {
 	
 	public PepperoniArmor() {
@@ -14,22 +12,4 @@ public class PepperoniArmor extends Armor {
 		armor3 = "data/pepperoni3.png";
 		armor4 = "data/pepperoni4.png";
 	}
-	
-	/*
-	public void setSpriteStay1(){
-		currentSprite = armor1;
-	}
-	
-	public void setSpriteStay2(){
-		currentSprite = armor2;
-	}
-	
-	public void setSpriteWalk1(){
-		currentSprite = armor3;
-	}
-	
-	public void setSpriteWalk2(){
-		currentSprite = armor4;
-	}
-	*/
 }

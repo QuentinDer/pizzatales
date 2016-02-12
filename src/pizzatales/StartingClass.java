@@ -60,22 +60,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 
 		// Image Setups
-		/*
-		 * character1 = getImage(base, "data/character1.png"); character2 =
-		 * getImage(base, "data/character2.png"); characterMove1 =
-		 * getImage(base, "data/characterwalk1.png"); characterMove2 =
-		 * getImage(base, "data/characterwalk2.png");
-		 * 
-		 * PepperoniArmor.armor1 = getImage(base, "data/pepperoni1.png");
-		 * PepperoniArmor.armor2 = getImage(base, "data/pepperoni2.png");
-		 * PepperoniArmor.armor3 = getImage(base, "data/pepperoni3.png");
-		 * PepperoniArmor.armor4 = getImage(base, "data/pepperoni4.png");
-		 * CheeseArmor.armor1 = getImage(base, "data/cheese1.png");
-		 * CheeseArmor.armor2 = getImage(base, "data/cheese2.png");
-		 * CheeseArmor.armor3 = getImage(base, "data/cheese3.png");
-		 * CheeseArmor.armor4 = getImage(base, "data/cheese4.png");
-		 */
-
 		background = getImage(base, "data/background.png");
 		tileTree = getImage(base, "data/tree.png");
 		tileGrass = getImage(base, "data/grass.png");
@@ -163,7 +147,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		playerarmor = new ArrayList<Armor>();
 		playerarmor.add(new PepperoniArmor());
 		playerarmor.add(new CheeseArmor());
-
+		playerarmor.add(new ChicagoArmor());
+		playerarmor.add(new HawaiiArmor());
+		playerarmor.add(new MargheritaArmor());
+		
 		player.setArmor(playerarmor.get(1));
 		loadArmor();
 

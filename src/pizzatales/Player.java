@@ -100,6 +100,9 @@ public class Player {
 			}
 		}
 		weapon.increaseShootingCounter();
+		if(armor.defense < 0){
+			armor.defense = 0;
+		}
 		//animate();
 	}
 	
