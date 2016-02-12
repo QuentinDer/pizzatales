@@ -28,7 +28,6 @@ public class Pepper extends Enemy {
 					switch (pathresult) {
 					case 0:
 						stopMoving();
-						isShooting = false;
 						break;
 					case 1:
 						moveLeft();
@@ -43,25 +42,6 @@ public class Pepper extends Enemy {
 						moveDown();
 						break;
 					}
-					if (0 != pathresult) {
-						isShooting = true;
-						if (weapon.isReady2Fire()) {
-							int diffx = Math.abs(getCenterX() - player.getCenterX());
-							int diffy = Math.abs(getCenterY() - player.getCenterY());
-							if (diffx > diffy) {
-								if (player.getCenterX() > getCenterX())
-									shootRight();
-								else
-									shootLeft();
-							} else {
-								if (player.getCenterY() > getCenterY())
-									shootDown();
-								else
-									shootUp();
-							}
-						}
-					}
-					
 				}
 				break;
 			case 2:
@@ -72,7 +52,6 @@ public class Pepper extends Enemy {
 					switch (pathresult) {
 					case 0:
 						stopMoving();
-						isShooting = false;
 						break;
 					case 1:
 						moveLeft();
@@ -87,25 +66,6 @@ public class Pepper extends Enemy {
 						moveDown();
 						break;
 					}
-					if (0 != pathresult) {
-						isShooting = true;
-						if (weapon.isReady2Fire()) {
-							int diffx = Math.abs(getCenterX() - player.getCenterX());
-							int diffy = Math.abs(getCenterY() - player.getCenterY());
-							if (diffx > diffy) {
-								if (player.getCenterX() > getCenterX())
-									shootRight();
-								else
-									shootLeft();
-							} else {
-								if (player.getCenterY() > getCenterY())
-									shootDown();
-								else
-									shootUp();
-							}
-						}
-					}
-					
 				}
 				break;
 			case 3:
@@ -116,7 +76,6 @@ public class Pepper extends Enemy {
 					switch (pathresult) {
 					case 0:
 						stopMoving();
-						isShooting = false;
 						break;
 					case 1:
 						moveLeft();
@@ -131,27 +90,25 @@ public class Pepper extends Enemy {
 						moveDown();
 						break;
 					}
-					if (0 != pathresult) {
-						isShooting = true;
-						if (weapon.isReady2Fire()) {
-							int diffx = Math.abs(getCenterX() - player.getCenterX());
-							int diffy = Math.abs(getCenterY() - player.getCenterY());
-							if (diffx > diffy) {
-								if (player.getCenterX() > getCenterX())
-									shootRight();
-								else
-									shootLeft();
-							} else {
-								if (player.getCenterY() > getCenterY())
-									shootDown();
-								else
-									shootUp();
-							}
-						}
-					}
-					
 				}
 				break;
+			}
+			if (movementTime % 5 == 0 && weapon.isReady2Fire()) {
+				int diffx = Math.abs(getCenterX() - player.getCenterX());
+				int diffy = Math.abs(getCenterY() - player.getCenterY());
+				if (diffx + diffy < 100) {
+					if (diffx > diffy) {
+						if (player.getCenterX() > getCenterX())
+							shootRight();
+						else
+							shootLeft();
+					} else {
+						if (player.getCenterY() > getCenterY())
+							shootDown();
+						else
+							shootUp();
+					}
+				}
 			}
 			// AI
 
