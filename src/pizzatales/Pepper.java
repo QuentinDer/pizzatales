@@ -4,15 +4,15 @@ import java.awt.Image;
 
 public class Pepper extends Enemy {
 
-	protected int movementParam;
+	protected int movementTime;
 	protected boolean isShooting;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, staySpriteRight, move1SpriteRight,
 	move2SpriteRight;
 	private final static int maxmp = 8;
 
-	public Pepper(int centerX, int centerY, int difficultylevel) {
-		super(centerX,centerY, new Flamer(), 6, 3, difficultylevel);
-		movementParam = ((int) (Math.random() * 50));
+	public Pepper(int centerX, int centerY) {
+		super(centerX,centerY, new Flamer(), 6, 3);
+		movementTime = ((int) (Math.random() * 50));
 	}
 
 	// Behavioral Methods
@@ -21,9 +21,9 @@ public class Pepper extends Enemy {
 
 		if (alive == true) {
 			// AI
-			int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
-			int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
-			if (movementParam % 10 == 0) {
+			if (movementTime % 10 == 0) {
+				int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
+				int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
 				int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, maxmp);
 				switch (pathresult) {
 				case 0:
@@ -64,9 +64,9 @@ public class Pepper extends Enemy {
 				
 			}
 			weapon.increaseShootingCounter();
-			movementParam++;
-			if (movementParam == 1000) {
-				movementParam = 0;
+			movementTime++;
+			if (movementTime == 1000) {
+				movementTime = 0;
 			}
 		}
 	}

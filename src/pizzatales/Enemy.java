@@ -35,12 +35,12 @@ public abstract class Enemy extends Stuff {
 	
 	public Image currentSprite;
 
-	public Enemy(int centerX, int centerY, Firearm weapon, int health, int speed, int difficultylevel) {
+	public Enemy(int centerX, int centerY, Firearm weapon, int health, int speed) {
 		super(centerX, centerY);
 		weapon.setHolderProjectiles(projectiles);
 		this.weapon = weapon;
-		weapon.setFireRate(weapon.getFireRate() * (5 - difficultylevel));
-		this.health = health * difficultylevel;
+		weapon.setFireRate(weapon.getFireRate() * (5 - StartingClass.difficultylevel));
+		this.health = health * StartingClass.difficultylevel;
 		this.speed = speed;
 		bginitx = bg.getCenterX();
 		bginity = bg.getCenterY();

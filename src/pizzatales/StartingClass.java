@@ -20,6 +20,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
+	public static final int difficultylevel = 2;
 	private static Player player;
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
 	public static Image tileTree, tileGrass;
@@ -32,6 +33,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private ArrayList<Firearm> playerweapons;
 	
 	private int weaponindex;
+	private long clock = System.currentTimeMillis();
 	
 	enum GameState {
 		Running, Dead, Paused
@@ -146,16 +148,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		
 		bg1 = new Background(0, -800);
 		bg2 = new Background(0, 800);
-		int difficultylevel = 1;
+		
 		// Initialize Tiles
 		try {
-			loadMap("data/map1.txt", difficultylevel);
+			loadMap("data/map1.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void loadMap(String filename, int difficultylevel) throws IOException {
+	private void loadMap(String filename) throws IOException {
 		ArrayList<String> lines = new ArrayList<String>();
 		int width = 0;
 		int height = 0;
@@ -186,7 +188,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						tilearray.add(t);
 					}
 					if (EnemyFactory.isTileTypeSupported(ch)) {
-						getEnemyarray().add(EnemyFactory.getEnemy(i, j, ch, difficultylevel));
+						getEnemyarray().add(EnemyFactory.getEnemy(i, j, ch));
 					}
 				}
 			}
@@ -208,10 +210,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		if (state == GameState.Running) {
 			while (true) {
 				try {
-					Thread.sleep(17);
+					Thread.sleep(Math.abs(17-System.currentTimeMillis()+clock));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				clock = System.currentTimeMillis();
 
 				// Animation
 				if (player.isMovingHor() == true || player.isMovingVer() == true) {
