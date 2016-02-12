@@ -1,27 +1,33 @@
 package pizzatales;
 
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class Player {
 
-	final int MOVESPEED = 4;
+	private int MOVESPEED = 4;
 
 	private int centerX = 400;
 	private int centerY = 100;
 	private int speedX = 0;
 	private int speedY = 0;
 	private int scrollingSpeed = 0;
-	private int health = 10;
+	private int health = 20;
 	private boolean isMovingVer = false;
 	private boolean isMovingHor = false;
 	public boolean isColliding = false;
 	public Rectangle R = new Rectangle(0,0,0,0);
 	private Firearm weapon;
+	private Armor armor;
+
 	private boolean isAimingUp = true;
+	
+	public Image currentSprite;
 
 	// 0 = not, 1 = left, 2 = top, 3 = right, 4 = bottom
 	private int isShooting = 0;
+	public int walkCounter = 0;
 
 	/*
 	private static Background bg1 = StartingClass.getBg1();
@@ -94,7 +100,30 @@ public class Player {
 			}
 		}
 		weapon.increaseShootingCounter();
+		//animate();
 	}
+	
+	/*
+	public void animate(){
+		walkCounter++;
+		if (walkCounter == 1000)
+			walkCounter = 0;
+		if (isMovingHor() == true || isMovingVer() == true) {
+			if (walkCounter % 30 == 0) {
+				armor.setSpriteWalk1();
+				currentSprite = armor.currentSprite;
+				//currentSprite = characterMove1;
+			} else if (walkCounter % 15 == 0) {
+				armor.setSpriteWalk2();
+				currentSprite = armor.currentSprite;
+				//currentSprite = characterMove2;
+			}
+		} else if (isMovingVer() == false && isMovingHor() == false) {
+			armor.setSpriteStay1();
+			currentSprite = armor.currentSprite;
+			//currentSprite = anim.getImage();
+		}
+	}*/
 	
 	public boolean isAimingUp() {
 		return isAimingUp;
@@ -191,6 +220,14 @@ public class Player {
 		return speedY;
 	}
 	
+	public int getMOVESPEED() {
+		return MOVESPEED;
+	}
+
+	public void setMOVESPEED(int mOVESPEED) {
+		MOVESPEED = mOVESPEED;
+	}
+	
 	public int getScrollingSpeed() {
 		return this.scrollingSpeed;
 	}
@@ -234,5 +271,13 @@ public class Player {
 	
 	public Firearm getWeapon() {
 		return this.weapon;
+	}
+
+	public Armor getArmor() {
+		return armor;
+	}
+
+	public void setArmor(Armor armor) {
+		this.armor = armor;
 	}
 }

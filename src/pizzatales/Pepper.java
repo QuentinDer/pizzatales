@@ -8,7 +8,7 @@ public class Pepper extends Enemy {
 	protected boolean isShooting;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, staySpriteRight, move1SpriteRight,
 	move2SpriteRight;
-	private final static int maxmp = 8;
+	private final static int maxmp = 5;
 
 	public Pepper(int centerX, int centerY) {
 		super(centerX,centerY, new Flamer(), 6, 3);

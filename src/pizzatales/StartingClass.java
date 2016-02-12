@@ -31,10 +31,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private static PathFinder pf;
 	private Animation anim;
 	private ArrayList<Firearm> playerweapons;
-	
+	private ArrayList<Armor> playerarmor;
+
 	private int weaponindex;
+	private int armorindex;
 	private long clock = System.currentTimeMillis();
-	
+
 	enum GameState {
 		Running, Dead, Paused
 	}
@@ -58,10 +60,22 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 
 		// Image Setups
-		character1 = getImage(base, "data/character1.png");
-		character2 = getImage(base, "data/character2.png");
-		characterMove1 = getImage(base, "data/characterwalk1.png");
-		characterMove2 = getImage(base, "data/characterwalk2.png");
+		/*
+		 * character1 = getImage(base, "data/character1.png"); character2 =
+		 * getImage(base, "data/character2.png"); characterMove1 =
+		 * getImage(base, "data/characterwalk1.png"); characterMove2 =
+		 * getImage(base, "data/characterwalk2.png");
+		 * 
+		 * PepperoniArmor.armor1 = getImage(base, "data/pepperoni1.png");
+		 * PepperoniArmor.armor2 = getImage(base, "data/pepperoni2.png");
+		 * PepperoniArmor.armor3 = getImage(base, "data/pepperoni3.png");
+		 * PepperoniArmor.armor4 = getImage(base, "data/pepperoni4.png");
+		 * CheeseArmor.armor1 = getImage(base, "data/cheese1.png");
+		 * CheeseArmor.armor2 = getImage(base, "data/cheese2.png");
+		 * CheeseArmor.armor3 = getImage(base, "data/cheese3.png");
+		 * CheeseArmor.armor4 = getImage(base, "data/cheese4.png");
+		 */
+
 		background = getImage(base, "data/background.png");
 		tileTree = getImage(base, "data/tree.png");
 		tileGrass = getImage(base, "data/grass.png");
@@ -99,7 +113,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Smg.downSprite = getImage(base, "data/smg3.png");
 		Smg.upSprite = getImage(base, "data/smg4.png");
 		SmgBullet.bulletsprite = getImage(base, "data/smgprojectile.png");
-		
+
 		Tato.staySprite = getImage(base, "data/tato1.png");
 		Tato.move1Sprite = getImage(base, "data/tato2.png");
 		Tato.move2Sprite = getImage(base, "data/tato3.png");
@@ -123,10 +137,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Mushroom.move2Sprite = getImage(base, "data/shroom3.png");
 		Mushroom.dieSprite = getImage(base, "data/shroomdead.png");
 
-		anim = new Animation();
-		anim.addFrame(character1, 1250);
-		anim.addFrame(character2, 50);
-		currentSprite = anim.getImage();
+		/*
+		 * anim = new Animation(); anim.addFrame(character1, 1250);
+		 * anim.addFrame(character2, 50); currentSprite = anim.getImage();
+		 */
 	}
 
 	@Override
@@ -145,10 +159,17 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		for (Firearm firearm : playerweapons)
 			firearm.setHolderProjectiles(player.getProjectiles());
 		player.setWeapon(playerweapons.get(weaponindex));
-		
+
+		playerarmor = new ArrayList<Armor>();
+		playerarmor.add(new PepperoniArmor());
+		playerarmor.add(new CheeseArmor());
+
+		player.setArmor(playerarmor.get(1));
+		loadArmor();
+
 		bg1 = new Background(0, -800);
 		bg2 = new Background(0, 800);
-		
+
 		// Initialize Tiles
 		try {
 			loadMap("data/map1.txt");
@@ -173,7 +194,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 		reader.close();
 		height = lines.size();
-		
+
 		pf.map = new boolean[width][height];
 
 		for (int j = 0; j < height; j++) {
@@ -210,58 +231,58 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		if (state == GameState.Running) {
 			while (true) {
 				try {
-					Thread.sleep(Math.abs(17-System.currentTimeMillis()+clock));
+					Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				clock = System.currentTimeMillis();
 
 				// Animation
+
 				if (player.isMovingHor() == true || player.isMovingVer() == true) {
 					if (walkCounter % 30 == 0) {
-						currentSprite = characterMove2;
-					} else if (walkCounter % 15 == 0) {
+						// player.getArmor().setSpriteWalk1();
+						// currentSprite = player.getArmor().currentSprite;
 						currentSprite = characterMove1;
+					} else if (walkCounter % 15 == 0) {
+						// player.getArmor().setSpriteWalk2();
+						// currentSprite = player.getArmor().currentSprite;
+						currentSprite = characterMove2;
 					}
 				} else if (player.isMovingVer() == false && player.isMovingHor() == false) {
-					currentSprite = anim.getImage();
+					currentSprite = character1;
 				}
-/*
-				for (int i = 0; i < getEnemyarray().size(); i++) {
-					Enemy e = getEnemyarray().get(i);
 
-					if (e.alive == true) {
-						if (e.isMoving == true) {
-							if (walkCounter % 30 == 0) {
-								e.currentSprite = getImage(base, e.characterMove1Path);
-							} else if (walkCounter % 15 == 0) {
-								e.currentSprite = getImage(base, e.characterMove2Path);
-							}
-						} else if (e.isMoving == false) {
-							e.currentSprite = getImage(base, e.characterStayPath);
-						}
-						if (e.walkCounter > 1000) {
-							e.walkCounter = 0;
-						}
-					}
-				}*/
+				/*
+				 * for (int i = 0; i < getEnemyarray().size(); i++) { Enemy e =
+				 * getEnemyarray().get(i);
+				 * 
+				 * if (e.alive == true) { if (e.isMoving == true) { if
+				 * (walkCounter % 30 == 0) { e.currentSprite = getImage(base,
+				 * e.characterMove1Path); } else if (walkCounter % 15 == 0) {
+				 * e.currentSprite = getImage(base, e.characterMove2Path); } }
+				 * else if (e.isMoving == false) { e.currentSprite =
+				 * getImage(base, e.characterStayPath); } if (e.walkCounter >
+				 * 1000) { e.walkCounter = 0; } } }
+				 */
 				updatePlayer();
-				
+
 				checkEnemiesCollision();
 				checkTileCollisions();
 				callEnemiesAIs();
 				updateEnemies();
-				
-				
+
 				bg1.update();
 				bg2.update();
-				animate();
+				// animate();
 				updateTiles();
 				repaint(); // this calls paint
-				if (walkCounter > 1000) {
+
+				if (walkCounter == 1000) {
 					walkCounter = 0;
 				}
 				walkCounter++;
+
 			}
 		}
 	}
@@ -304,15 +325,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
 					}
 				}
-				for (int j = 0;  j < e.getProjectiles().size(); j++) {
+				for (int j = 0; j < e.getProjectiles().size(); j++) {
 					Projectile p = e.getProjectiles().get(j);
 					g.drawImage(p.getSprite(), p.getR().x, p.getR().y, this);
 				}
 			}
 			for (int i = 0; i < projectiles.size(); i++) {
 				Projectile p = projectiles.get(i);
-				//g.setColor(Color.YELLOW);
-				//g.fillRect(p.getR().x, p.getR().y, p.getR().width, p.getR().height);
+				// g.setColor(Color.YELLOW);
+				// g.fillRect(p.getR().x, p.getR().y, p.getR().width,
+				// p.getR().height);
 				g.drawImage(p.getSprite(), p.getR().x, p.getR().y, this);
 			}
 			if (player.isAimingUp()) {
@@ -322,10 +344,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				g.drawImage(currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
 				g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
 			}
-			g.setColor(Color.BLACK);
+			g.setColor(Color.RED);
 			g.fillRect(47, 37, 20, 20);
 			g.setColor(Color.WHITE);
-			g.drawString(Integer.toString(player.getHealth()),50,50);
+			g.drawString(Integer.toString(player.getHealth()), 50, 50);
+			g.setColor(Color.BLUE);
+			g.fillRect(72, 37, 20, 20);
+			g.setColor(Color.WHITE);
+			g.drawString(Integer.toString(player.getArmor().defense), 75, 50);
 		} else if (state == GameState.Dead) {
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, 800, 480);
@@ -333,28 +359,28 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			g.drawString("Dead", 360, 240);
 		}
 
-	} 
-	
+	}
+
 	private void callEnemiesAIs() {
 		for (Enemy e : getEnemyarray()) {
 			e.callAI();
 		}
 	}
-	
+
 	private void checkEnemiesCollision() {
 		for (Enemy e : getEnemyarray()) {
 			if (e.alive)
 				e.checkEnemyCollisions();
 		}
 	}
-	
+
 	private void checkTileCollisions() {
 		for (int i = 0; i < tilearray.size(); i++) {
 			Tile t = tilearray.get(i);
 			t.checkCollisions();
 		}
 	}
-	
+
 	private void updatePlayer() {
 		ArrayList<Projectile> projectiles = player.getProjectiles();
 		int i = 0;
@@ -369,7 +395,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							e.setHealth(e.getHealth() - p.damage);
 							if (e.getHealth() < 1) {
 								e.die();
-								player.setHealth(player.getHealth()+1);
+								player.setHealth(player.getHealth() + 1);
 								// enemyarray.remove(e);
 							}
 						}
@@ -385,20 +411,24 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 		player.update();
 	}
-	
+
 	private void updateEnemies() {
 		for (int j = 0; j < getEnemyarray().size(); j++) {
 			Enemy e = getEnemyarray().get(j);
 			e.update();
 			int i = 0;
-			while (i<e.getProjectiles().size()) {
+			while (i < e.getProjectiles().size()) {
 				Projectile p = e.getProjectiles().get(i);
 				if (p.isVisible() == true) {
 					p.update();
 					if (p.checkCollision(player)) {
-						player.setHealth(player.getHealth() - p.damage);
-						if (player.getHealth() < 1)
-							state = GameState.Dead;
+						if (player.getArmor().defense < 1) {
+							player.setHealth(player.getHealth() - p.damage);
+							if (player.getHealth() < 1)
+								state = GameState.Dead;
+						} else {
+							player.getArmor().setDefense(player.getArmor().getDefense() - p.damage);
+						}
 					}
 					for (int k = 0; k < tilearray.size(); k++) {
 						p.checkCollision(tilearray.get(k));
@@ -421,12 +451,21 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private void paintTiles(Graphics g) {
 		for (int i = 0; i < tilearray.size(); i++) {
 			Tile t = tilearray.get(i);
-			g.drawImage(t.getTileImage(), t.getCenterX()-31, t.getCenterY()-31, this);
+			g.drawImage(t.getTileImage(), t.getCenterX() - 31, t.getCenterY() - 31, this);
 		}
 	}
 
 	public void animate() {
 		anim.update(10);
+	}
+
+	public void loadArmor() {
+		player.getArmor();
+		character1 = getImage(base, player.getArmor().armor1);
+		character2 = getImage(base, player.getArmor().armor2);
+		characterMove1 = getImage(base, player.getArmor().armor3);
+		characterMove2 = getImage(base, player.getArmor().armor4);
+		player.setMOVESPEED(player.getArmor().getSpeed());
 	}
 
 	@Override
@@ -477,15 +516,20 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		switch (e.getKeyCode()) {
-		case KeyEvent.VK_Z: case KeyEvent.VK_S:
+		case KeyEvent.VK_Z:
+		case KeyEvent.VK_S:
 			player.stopVer();
 			player.isColliding = false;
 			break;
-		case KeyEvent.VK_Q: case KeyEvent.VK_D:
+		case KeyEvent.VK_Q:
+		case KeyEvent.VK_D:
 			player.stopHor();
 			player.isColliding = false;
 			break;
-		case KeyEvent.VK_UP: case KeyEvent.VK_DOWN: case KeyEvent.VK_LEFT: case KeyEvent.VK_RIGHT:
+		case KeyEvent.VK_UP:
+		case KeyEvent.VK_DOWN:
+		case KeyEvent.VK_LEFT:
+		case KeyEvent.VK_RIGHT:
 			player.setShooting(0);
 			break;
 		case KeyEvent.VK_E:
@@ -499,6 +543,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			if (weaponindex == -1)
 				weaponindex = playerweapons.size() - 1;
 			player.setWeapon(playerweapons.get(weaponindex));
+			break;
+		case KeyEvent.VK_A:
+			armorindex++;
+			if (armorindex == playerarmor.size())
+				armorindex = 0;
+			player.setArmor(playerarmor.get(armorindex));
+			loadArmor();
 			break;
 		}
 	}
@@ -528,23 +579,22 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public static Player getPlayer() {
 		return player;
 	}
-	
+
 	public static PathFinder getPathFinder() {
 		return pf;
 	}
 
 	/*
-	public void setPlayer(Player player) {
-		this.player = player;
-	}*/
+	 * public void setPlayer(Player player) { this.player = player; }
+	 */
 
 	public static ArrayList<Enemy> getEnemyarray() {
 		return enemyarray;
 	}
-/*
-	public void setEnemyarray(ArrayList<Enemy> enemyarray) {
-		this.enemyarray = enemyarray;
-	}*/
+	/*
+	 * public void setEnemyarray(ArrayList<Enemy> enemyarray) { this.enemyarray
+	 * = enemyarray; }
+	 */
 
 	public ArrayList<Tile> getTilearray() {
 		return tilearray;
