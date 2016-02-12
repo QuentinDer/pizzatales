@@ -20,10 +20,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
-	public static final int difficultylevel = 3;
+	public static final int difficultylevel = 2;
 	private static Player player;
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
-	public static Image tileTree, tileGrass;
+	public static Image tileTree, tileGrass, tileWall;
 	private int walkCounter = 1;
 	private URL base;
 	private Graphics second;
@@ -63,6 +63,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		background = getImage(base, "data/background.png");
 		tileTree = getImage(base, "data/tree.png");
 		tileGrass = getImage(base, "data/grass.png");
+		tileWall = getImage(base, "data/wall.png");
 		Gun.leftSprite = getImage(base, "data/pistol1.png");
 		Gun.rightSprite = getImage(base, "data/pistol2.png");
 		Gun.upSprite = getImage(base, "data/pistol4.png");
@@ -159,7 +160,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		// Initialize Tiles
 		try {
-			loadMap("data/map1.txt");
+			loadMap("data/L11.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

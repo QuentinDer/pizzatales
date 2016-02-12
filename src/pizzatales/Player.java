@@ -8,8 +8,8 @@ public class Player {
 
 	private int MOVESPEED = 4;
 
-	private int centerX = 400;
-	private int centerY = 200;
+	private int centerX = 640;
+	private int centerY = 100;
 	private int speedX = 0;
 	private int speedY = 0;
 	private int scrollingSpeed = 0;
