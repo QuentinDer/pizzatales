@@ -455,6 +455,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		characterMove1 = getImage(base, player.getArmor().armor3);
 		characterMove2 = getImage(base, player.getArmor().armor4);
 		player.setMOVESPEED(player.getArmor().getSpeed());
+		if (player.getSpeedX() > 0)
+			player.setSpeedX(player.getArmor().getSpeed());
+		if (player.getSpeedX() < 0)
+			player.setSpeedX(-player.getArmor().getSpeed());
+		if (player.getSpeedY() > 0)
+			player.setSpeedY(player.getArmor().getSpeed());
+		if (player.getSpeedY() < 0)
+			player.setSpeedY(-player.getArmor().getSpeed());
 	}
 
 	@Override
