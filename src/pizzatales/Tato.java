@@ -84,34 +84,32 @@ public class Tato extends Enemy {
 					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
 					if (Math.abs(posplayery-posy)+Math.abs(posplayerx-posx) < 15) {
 						int pathresult = 1;
-						if (posx != posplayerx && posy != posplayery) {
-							int difX = player.getCenterX() - getCenterX();
-							int difY = player.getCenterY() - getCenterY();
-							int absdifX = Math.abs(difX);
-							int absdifY = Math.abs(difY);
-							int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + bginity) / 50));
-							int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + bginitx) / 50));
-							pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1, toshootx2, posplayery, 8);
-							switch (pathresult) {
-							case 0:
-								stopMoving();
-								break;
-							case 1:
-								moveLeft();
-								break;
-							case 2:
-								moveUp();
-								break;
-							case 3:
-								moveRight();
-								break;
-							case 4:
-								moveDown();
-								break;
-							}
-						} else {
+						int difX = player.getCenterX() - getCenterX();
+						int difY = player.getCenterY() - getCenterY();
+						int absdifX = Math.abs(difX);
+						int absdifY = Math.abs(difY);
+						int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + bginity) / 50));
+						int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + bginitx) / 50));
+						pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1, toshootx2, posplayery, 8);
+						switch (pathresult) {
+						case 0:
 							stopMoving();
+							break;
+						case 1:
+							moveLeft();
+							break;
+						case 2:
+							moveUp();
+							break;
+						case 3:
+							moveRight();
+							break;
+						case 4:
+							moveDown();
+							break;
 						}
+					} else {
+						stopMoving();
 					}
 				}
 				if (weapon.isReady2Fire()) {
@@ -136,34 +134,32 @@ public class Tato extends Enemy {
 					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
 					if (Math.abs(posplayery-posy)+Math.abs(posplayerx-posx) < 15) {
 						int pathresult = 1;
-						if (posx != posplayerx && posy != posplayery) {
-							int difX = player.getCenterX() - getCenterX();
-							int difY = player.getCenterY() - getCenterY();
-							int absdifX = Math.abs(difX);
-							int absdifY = Math.abs(difY);
-							int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + bginity) / 50));
-							int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + bginitx) / 50));
-							pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1, toshootx2, posplayery, 12);
-							switch (pathresult) {
-							case 0:
-								stopMoving();
-								break;
-							case 1:
-								moveLeft();
-								break;
-							case 2:
-								moveUp();
-								break;
-							case 3:
-								moveRight();
-								break;
-							case 4:
-								moveDown();
-								break;
-							}
-						} else {
+						int difX = player.getCenterX() - getCenterX();
+						int difY = player.getCenterY() - getCenterY();
+						int absdifX = Math.abs(difX);
+						int absdifY = Math.abs(difY);
+						int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + bginity) / 50));
+						int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + bginitx) / 50));
+						pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1, toshootx2, posplayery, 12);
+						switch (pathresult) {
+						case 0:
 							stopMoving();
+							break;
+						case 1:
+							moveLeft();
+							break;
+						case 2:
+							moveUp();
+							break;
+						case 3:
+							moveRight();
+							break;
+						case 4:
+							moveDown();
+							break;
 						}
+					} else {
+						stopMoving();
 					}
 				}
 				if (weapon.isReady2Fire()) {

@@ -166,7 +166,7 @@ public class Pepper extends Enemy {
 			} else if (walkCounter % 15 == 0) {
 				setMove2Sprite();
 			}
-		} else if (getSpeedX() >= 0){
+		} else if (getSpeedX() > 0){
 			if (walkCounter == 1000)
 				walkCounter = 0;
 			if (walkCounter % 30 == 0) {

@@ -101,6 +101,8 @@ public class PathFinder {
 	public int getDirectionToShoot(int fromx, int fromy, int tox1, int toy1, int tox2, int toy2, int maxmp) {
 		if (Math.abs(fromx-tox1)+Math.abs(fromy-toy1)>maxmp || Math.abs(fromx-tox2)+Math.abs(fromy-toy2)>maxmp)
 			return 0;
+		if ((fromx == tox1 && fromy == toy1) || (fromx == tox2 && fromy == toy2))
+			return 0;
 		int width = map.length;
 		int height = map[0].length;
 		HashMap<Integer,Integer> g_score = new HashMap<Integer,Integer>();

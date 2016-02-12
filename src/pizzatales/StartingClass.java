@@ -48,7 +48,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	@Override
 	public void init() {
-		setSize(800, 480);
+		setSize(1280, 800);
 		setBackground(Color.BLACK);
 		setFocusable(true);
 		addKeyListener(this);
