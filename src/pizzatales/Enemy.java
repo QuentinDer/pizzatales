@@ -42,10 +42,10 @@ public abstract class Enemy extends Stuff {
 		weapon.setFireRate(weapon.getFireRate() * (5 - StartingClass.difficultylevel));
 		this.health = health * StartingClass.difficultylevel;
 		this.speed = speed;
-		bginitx = bg.getCenterX();
-		bginity = bg.getCenterY();
-		posx = centerX / 50;
-		posy = centerY / 50;
+		bginitx = bg.getCenterX() - 15;
+		bginity = bg.getCenterY() - 15;
+		posx = (centerX-15) / 50;
+		posy = (centerY-15) / 50;
 		setStaySprite();
 		R = new Rectangle(getCenterX() - 25, getCenterY() - 25, 50, 50);
 	}
@@ -90,11 +90,11 @@ public abstract class Enemy extends Stuff {
 		
 		if (alive == true) {
 			
-			// Prevents going beyond X coordinate of 0 or 800
+			// Prevents going beyond X coordinate of 0 or 1280
 			if (centerX + speedX <= 30) {
 				centerX = 61;
-			} else if (centerX + speedX >= 769) {
-				centerX = 768;
+			} else if (centerX + speedX >= 1250) {
+				centerX = 1249;
 			}
 			
 			animate();

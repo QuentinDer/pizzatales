@@ -9,7 +9,7 @@ public class Player {
 	private int MOVESPEED = 4;
 
 	private int centerX = 400;
-	private int centerY = 100;
+	private int centerY = 200;
 	private int speedX = 0;
 	private int speedY = 0;
 	private int scrollingSpeed = 0;
@@ -59,19 +59,19 @@ public class Player {
 			setCenterY(getCenterY() + 2);
 		}*/
 
-		// Prevents going beyond X coordinate of 0 or 800
+		// Prevents going beyond X coordinate of 0 or 1250
 		if (centerX + speedX <= 30) {
 			centerX = 31;
-		} else if (centerX + speedX >= 769) {
-			centerX = 768;
+		} else if (centerX + speedX >= 1249) {
+			centerX = 1248;
 		}
 
-		// Prevents going beyond Y coordinate of 150 and 330
-		if (centerY + speedY <= 150) {
-			centerY = 149;
+		// Prevents going beyond Y coordinate of 250 and 550
+		if (centerY + speedY <= 249) {
+			centerY = 250;
 			scrollingSpeed = 2*speedY;
-		} else if (centerY + speedY >= 280) {
-			centerY = 279;
+		} else if (centerY + speedY >= 550) {
+			centerY = 549;
 			scrollingSpeed = 2*speedY;
 		}
 

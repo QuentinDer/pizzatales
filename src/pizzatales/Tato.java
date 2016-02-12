@@ -44,38 +44,36 @@ public class Tato extends Enemy {
 						stopMoving();
 					}
 				}
-				if (getCenterY() > 30 && getCenterY() < 450) {
-					int difX = player.getCenterX() - getCenterX();
-					int difY = player.getCenterY() - getCenterY();
-					int absdifX = Math.abs(difX);
-					int absdifY = Math.abs(difY);
-					if (absdifX < 80 && difY > 0 && difY < 400) {
-						stopMoving();
-						isShooting = true;
-						if (weapon.isReady2Fire()) {
-							shootDown();
-						}
-					} else if (absdifX < 80 && difY < 0 && difY > -400) {
-						stopMoving();
-						isShooting = true;
-						if (weapon.isReady2Fire()) {
-							shootUp();
-						}
-					} else if (absdifY < 80 && difX > 0 && difX < 400) {
-						stopMoving();
-						isShooting = true;
-						if (weapon.isReady2Fire()) {
-							shootRight();
-						}
-					} else if (absdifY < 80 && difX < 0 && difX > -400) {
-						stopMoving();
-						isShooting = true;
-						if (weapon.isReady2Fire()) {
-							shootLeft();
-						}
-					} else {
-						isShooting = false;
+				int difXu = player.getCenterX() - getCenterX();
+				int difYu = player.getCenterY() - getCenterY();
+				int absdifXu = Math.abs(difXu);
+				int absdifYu = Math.abs(difYu);
+				if (absdifXu < 80 && difYu > 0 && difYu < 400) {
+					stopMoving();
+					isShooting = true;
+					if (weapon.isReady2Fire()) {
+						shootDown();
 					}
+				} else if (absdifXu < 80 && difYu < 0 && difYu > -400) {
+					stopMoving();
+					isShooting = true;
+					if (weapon.isReady2Fire()) {
+						shootUp();
+					}
+				} else if (absdifYu < 80 && difXu > 0 && difXu < 400) {
+					stopMoving();
+					isShooting = true;
+					if (weapon.isReady2Fire()) {
+						shootRight();
+					}
+				} else if (absdifYu < 80 && difXu < 0 && difXu > -400) {
+					stopMoving();
+					isShooting = true;
+					if (weapon.isReady2Fire()) {
+						shootLeft();
+					}
+				} else {
+					isShooting = false;
 				}
 				break;
 			case 2:
