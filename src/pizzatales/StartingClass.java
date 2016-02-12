@@ -332,13 +332,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
 			}
 			g.setColor(Color.RED);
-			g.fillRect(47, 37, 20, 20);
+			g.fillRect(32, 37, 20, 20);
 			g.setColor(Color.WHITE);
-			g.drawString(Integer.toString(player.getHealth()), 50, 50);
+			g.drawString(Integer.toString(player.getHealth()), 35, 51);
 			g.setColor(Color.BLUE);
-			g.fillRect(72, 37, 20, 20);
+			g.fillRect(52, 37, 20, 20);
 			g.setColor(Color.WHITE);
-			g.drawString(Integer.toString(player.getArmor().defense), 75, 50);
+			g.drawString(Integer.toString(player.getArmor().defense),55, 51);
 		} else if (state == GameState.Dead) {
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, 800, 480);
@@ -382,8 +382,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							e.setHealth(e.getHealth() - p.damage);
 							if (e.getHealth() < 1) {
 								e.die();
-								player.setHealth(player.getHealth() + 1);
-								// enemyarray.remove(e);
+								if(player.getHealth() < 20){
+									player.setHealth(player.getHealth() + 1);
+								}
 							}
 						}
 					}
