@@ -21,7 +21,7 @@ public class Pepper extends Enemy {
 		if (alive == true) {
 			switch(StartingClass.difficultylevel) {
 			case 1:
-				if (movementTime % 50 == 0) {
+				if (movementTime % 30 == 0) {
 					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
 					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
 					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 7);
@@ -45,7 +45,7 @@ public class Pepper extends Enemy {
 				}
 				break;
 			case 2:
-				if (movementTime % 30 == 0) {
+				if (movementTime % 20 == 0) {
 					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
 					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
 					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 9);

@@ -20,27 +20,18 @@ public class ShotgunBullet extends Projectile {
 	}
 
 	@Override
-	public boolean hasEffect() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public void doOnCollision(Player p) {
-		// TODO Auto-generated method stub
-		
+		visible = false;
 	}
 
 	@Override
 	public void doOnCollision(Enemy e) {
-		// TODO Auto-generated method stub
-		
+		visible = false;
 	}
 
 	@Override
 	public void doOnCollision(Tile t) {
-		// TODO Auto-generated method stub
-		
+		visible = false;
 	}
 
 }

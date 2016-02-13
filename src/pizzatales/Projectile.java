@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 
 public abstract class Projectile extends Stuff {
 
-	private boolean visible;
+	protected boolean visible;
 	private Rectangle rectP;
 	private int initX;
 	private int initY;
@@ -42,7 +42,6 @@ public abstract class Projectile extends Stuff {
 
 	boolean checkCollision(Enemy e) {
 		if(rectP.intersects(e.R) /*|| rectP.intersects(e.rectY)*/){
-			visible = false;
 			return true;
 		}
 		return false;
@@ -51,7 +50,6 @@ public abstract class Projectile extends Stuff {
 	boolean checkCollision(Tile t) {
 		if (t.getType() != '0') {
 			if(rectP.intersects(t.getR())){
-				visible = false;
 				return true;
 			}
 			return false;
@@ -61,7 +59,6 @@ public abstract class Projectile extends Stuff {
 	
 	boolean checkCollision(Player p) {
 		if(rectP.intersects(p.R)){
-			visible = false;
 			return true;
 		}
 		return false;
@@ -80,8 +77,6 @@ public abstract class Projectile extends Stuff {
 	}
 	
 	public abstract Image getSprite();
-	
-	public abstract boolean hasEffect();
 	
 	public abstract void doOnCollision(Player p);
 	public abstract void doOnCollision(Enemy e);

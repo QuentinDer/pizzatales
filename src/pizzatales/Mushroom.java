@@ -22,7 +22,7 @@ public class Mushroom extends Enemy {
 
 			switch (StartingClass.difficultylevel) {
 			case 1:
-				if (movementTime % 50 == 0) {
+				if (movementTime % 40 == 0) {
 					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
 					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
 					if (Math.abs(posplayery-posy)+Math.abs(posplayerx-posx) < 15) {
@@ -92,7 +92,7 @@ public class Mushroom extends Enemy {
 				}
 				break;
 			case 3:
-				if (movementTime % 10 == 0) {
+				if (movementTime % 20 == 0) {
 					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
 					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
 					if (Math.abs(posplayery-posy)+Math.abs(posplayerx-posx) < 15) {

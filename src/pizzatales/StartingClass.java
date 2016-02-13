@@ -401,9 +401,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					Enemy e = getEnemyarray().get(j);
 					if (e.alive == true) {
 						if (p.checkCollision(e) == true) {
-							if (p.hasEffect()) {
-								p.doOnCollision(e);
-							}
+							p.doOnCollision(e);
 							e.setHealth(e.getHealth() - p.damage);
 							if (e.getHealth() < 1) {
 								e.die();
@@ -415,7 +413,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					}
 				}
 				for (int j = 0; j < tilearray.size(); j++) {
-					if (true == p.checkCollision(tilearray.get(j)) && p.hasEffect()) {
+					if (true == p.checkCollision(tilearray.get(j))) {
 						p.doOnCollision(tilearray.get(j));
 					}
 				}
@@ -449,8 +447,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				if (p.isVisible() == true) {
 					p.update();
 					if (p.checkCollision(player)) {
-						if (p.hasEffect())
-							p.doOnCollision(player);
+						p.doOnCollision(player);
 						if (player.getArmor().defense - p.damage < 0) {
 							player.setHealth(player.getHealth() - p.damage + player.getArmor().defense);
 							player.getArmor().setDefense(0);
@@ -461,7 +458,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						}
 					}
 					for (int k = 0; k < tilearray.size(); k++) {
-						p.checkCollision(tilearray.get(k));
+						if (true == p.checkCollision(tilearray.get(k))) {
+							p.doOnCollision(tilearray.get(j));
+						}
 					}
 					i++;
 				} else {

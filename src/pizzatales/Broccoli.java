@@ -166,15 +166,31 @@ public class Broccoli extends Enemy {
 				int diffx = Math.abs(getCenterX() - player.getCenterX());
 				int diffy = Math.abs(getCenterY() - player.getCenterY());
 				if (diffx > diffy && diffy < 80 && diffx < 460) {
-					if (player.getCenterX() > getCenterX())
-						shootRight();
-					else
-						shootLeft();
+					if (player.getCenterX() > getCenterX()) {
+						if ((posx == pf.map.length - 2) ||
+						(posx == pf.map.length - 3 && pf.map[posx+1][posy]) ||
+						(posx < pf.map.length - 3 && pf.map[posx+1][posy] && pf.map[posx+2][posy]))
+							shootRight();
+					}
+					else {
+						if ((posx == 1) ||
+							(posx == 2 && pf.map[1][posy]) ||
+							(posx > 2 && pf.map[posx-1][posy] && pf.map[posx-2][posy]))
+							shootLeft();
+					}
 				} else if (diffx < 80 && diffy < 460){
-					if (player.getCenterY() > getCenterY())
-						shootDown();
-					else
-						shootUp();
+					if (player.getCenterY() > getCenterY()) {
+						if ((posy == pf.map[0].length - 2) ||
+								(posy == pf.map[0].length - 3 && pf.map[posx][posy+1]) ||
+								(posy < pf.map[0].length - 3 && pf.map[posx][posy+1] && pf.map[posx][posy+2]))
+									shootDown();
+					}
+					else {
+						if ((posy == 1) ||
+								(posy == 2 && pf.map[posx][1]) ||
+								(posy > 2 && pf.map[posx][posy-1] && pf.map[posx][posy-2]))
+								shootUp();
+					}
 				}
 			}
 			movementTime++;

@@ -37,22 +37,26 @@ public class BazookaBullet extends Projectile {
 	}
 
 	@Override
-	public boolean hasEffect() {
-		return true;
-	}
-
-	@Override
 	public void doOnCollision(Player p) {
-		StartingClass.getExplosions().add(new BazookaBulletExplosion(this.centerX,this.centerY));
+		if (visible) {
+			visible = false;
+			StartingClass.getExplosions().add(new BazookaBulletExplosion(this.centerX,this.centerY));
+		}
 	}
 
 	@Override
 	public void doOnCollision(Enemy e) {
-		StartingClass.getExplosions().add(new BazookaBulletExplosion(this.centerX,this.centerY));
+		if (visible) {
+			visible = false;
+			StartingClass.getExplosions().add(new BazookaBulletExplosion(this.centerX,this.centerY));
+		}
 	}
 
 	@Override
 	public void doOnCollision(Tile t) {
-		StartingClass.getExplosions().add(new BazookaBulletExplosion(this.centerX,this.centerY));
+		if (visible) {
+			visible = false;
+			StartingClass.getExplosions().add(new BazookaBulletExplosion(this.centerX,this.centerY));
+		}
 	}
 }
