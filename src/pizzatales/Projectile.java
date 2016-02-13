@@ -14,14 +14,18 @@ public abstract class Projectile extends Stuff {
 	protected int halfsize;
 	public int damage = 1;
 
-	public Projectile(int startX, int startY, float vectorX, float vectorY, int speed) {
+	public Projectile(int startX, int startY, float vectorX, float vectorY, int speed, int damage, int size, int halfsize, int range) {
 		super(startX, startY);
 		speedX = (int)(vectorX * speed);
 		speedY = (int)(vectorY * speed);
 		initX = startX;
 		initY = startY;
 		visible = true;
-		rectP = new Rectangle(0, 0, 0, 0);
+		this.damage = damage;
+		this.size = size;
+		this.halfsize = halfsize;
+		this.range = range;
+		rectP = new Rectangle(getCenterX() - halfsize, getCenterY() - halfsize, size, size);
 	}
 
 	@Override
@@ -76,4 +80,10 @@ public abstract class Projectile extends Stuff {
 	}
 	
 	public abstract Image getSprite();
+	
+	public abstract boolean hasEffect();
+	
+	public abstract void doOnCollision(Player p);
+	public abstract void doOnCollision(Enemy e);
+	public abstract void doOnCollision(Tile t);
 }

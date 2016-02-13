@@ -20,7 +20,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
-	public static final int difficultylevel = 4;
+	public static final int difficultylevel = 2;
 	private static Player player;
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
 	public static Image tileTree, tileGrass, tileWall;
@@ -30,8 +30,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private static Background bg1, bg2;
 	private static PathFinder pf;
 	private Animation anim;
-	private ArrayList<Firearm> playerweapons;
+	ArrayList<Firearm> playerweapons;
 	private ArrayList<Armor> playerarmor;
+	private static ArrayList<Explosion> explosions;
 
 	private int weaponindex;
 	private int armorindex;
@@ -121,6 +122,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Mushroom.move1Sprite = getImage(base, "data/shroom2.png");
 		Mushroom.move2Sprite = getImage(base, "data/shroom3.png");
 		Mushroom.dieSprite = getImage(base, "data/shroomdead.png");
+		
+		BazookaBulletExplosion.bazookaexplosionsprite = getImage(base, "data/bazookaexplosion.png");
 
 		/*
 		 * anim = new Animation(); anim.addFrame(character1, 1250);
@@ -134,6 +137,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		thread.start();
 		player = new Player();
 		pf = new PathFinder();
+		explosions = new ArrayList<Explosion>();
 		playerweapons = new ArrayList<Firearm>();
 		playerweapons.add(new Gun());
 		playerweapons.add(new Shotgun());
@@ -253,6 +257,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				 * getImage(base, e.characterStayPath); } if (e.walkCounter >
 				 * 1000) { e.walkCounter = 0; } } }
 				 */
+				updateExplosions();
 				updatePlayer();
 
 				checkEnemiesCollision();
@@ -295,6 +300,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			g.drawImage(background, bg1.getCenterX(), bg1.getCenterY(), this);
 			g.drawImage(background, bg2.getCenterX(), bg2.getCenterY(), this);
 			paintTiles(g);
+			for (Explosion e : explosions) {
+				g.drawImage(e.getSprite(), e.getR().x, e.getR().y, this);
+			}
 			ArrayList<Projectile> projectiles = player.getProjectiles();
 			for (int i = 0; i < getEnemyarray().size(); i++) {
 				Enemy e = getEnemyarray().get(i);
@@ -368,6 +376,19 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			t.checkCollisions();
 		}
 	}
+	
+	private void updateExplosions() {
+		int i = 0;
+		while (i < explosions.size()) {
+			Explosion e = explosions.get(i);
+			e.update();
+			if (e.isVisible()) {
+				i++;
+			} else {
+				explosions.remove(i);
+			}
+		}
+	}
 
 	private void updatePlayer() {
 		ArrayList<Projectile> projectiles = player.getProjectiles();
@@ -380,6 +401,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					Enemy e = getEnemyarray().get(j);
 					if (e.alive == true) {
 						if (p.checkCollision(e) == true) {
+							if (p.hasEffect()) {
+								p.doOnCollision(e);
+							}
 							e.setHealth(e.getHealth() - p.damage);
 							if (e.getHealth() < 1) {
 								e.die();
@@ -391,11 +415,25 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					}
 				}
 				for (int j = 0; j < tilearray.size(); j++) {
-					p.checkCollision(tilearray.get(j));
+					if (true == p.checkCollision(tilearray.get(j)) && p.hasEffect()) {
+						p.doOnCollision(tilearray.get(j));
+					}
 				}
 				i++;
 			} else {
 				projectiles.remove(i);
+			}
+		}
+		for (Explosion e : explosions) {
+			if (e.isProcing() && player.R.intersects(e.getR())) {
+				if (player.getArmor().defense - e.damage < 0) {
+					player.setHealth(player.getHealth() - e.damage + player.getArmor().defense);
+					player.getArmor().setDefense(0);
+					if (player.getHealth() < 1)
+						state = GameState.Dead;
+				} else {
+					player.getArmor().setDefense(player.getArmor().getDefense() - e.damage);
+				}
 			}
 		}
 		player.update();
@@ -411,6 +449,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				if (p.isVisible() == true) {
 					p.update();
 					if (p.checkCollision(player)) {
+						if (p.hasEffect())
+							p.doOnCollision(player);
 						if (player.getArmor().defense - p.damage < 0) {
 							player.setHealth(player.getHealth() - p.damage + player.getArmor().defense);
 							player.getArmor().setDefense(0);
@@ -426,6 +466,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					i++;
 				} else {
 					e.getProjectiles().remove(i);
+				}
+			}
+			for (Explosion ex : explosions) {
+				if (ex.isProcing() && e.alive && e.R.intersects(ex.getR())) {
+					e.setHealth(e.getHealth() - ex.damage);
+					if (e.getHealth() < 1) {
+						e.die();
+					}
 				}
 			}
 		}
@@ -580,6 +628,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	public static PathFinder getPathFinder() {
 		return pf;
+	}
+	
+	public static ArrayList<Explosion> getExplosions() {
+		return explosions;
 	}
 
 	/*

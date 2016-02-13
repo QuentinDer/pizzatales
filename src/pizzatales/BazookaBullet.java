@@ -8,11 +8,7 @@ public class BazookaBullet extends Projectile {
 	private int aiming;
 	
 	public BazookaBullet(int startX, int startY, int vectorX, int vectorY) {
-		super(startX, startY, vectorX, vectorY, 5);
-		this.range = 450;
-		this.size = 30;
-		this.halfsize = 15;
-		this.damage = 12;
+		super(startX, startY, vectorX, vectorY, 5 , 4, 30, 15, 450);
 		if (vectorX > 0) {
 			aiming = 3;
 		} else if (vectorX < 0) {
@@ -38,5 +34,25 @@ public class BazookaBullet extends Projectile {
 		default:
 			return null;
 		}
+	}
+
+	@Override
+	public boolean hasEffect() {
+		return true;
+	}
+
+	@Override
+	public void doOnCollision(Player p) {
+		StartingClass.getExplosions().add(new BazookaBulletExplosion(this.centerX,this.centerY));
+	}
+
+	@Override
+	public void doOnCollision(Enemy e) {
+		StartingClass.getExplosions().add(new BazookaBulletExplosion(this.centerX,this.centerY));
+	}
+
+	@Override
+	public void doOnCollision(Tile t) {
+		StartingClass.getExplosions().add(new BazookaBulletExplosion(this.centerX,this.centerY));
 	}
 }
