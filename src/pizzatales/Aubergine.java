@@ -126,16 +126,51 @@ public class Aubergine extends Enemy {
 					}
 				}
 				break;
+			case 4:
+				if (movementTime % 15 == 0) {
+					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
+					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
+					if (Math.abs(posplayery-posy)+Math.abs(posplayerx-posx) < 15) {
+						int pathresult = 1;
+						int difX = player.getCenterX() - getCenterX();
+						int difY = player.getCenterY() - getCenterY();
+						int absdifX = Math.abs(difX);
+						int absdifY = Math.abs(difY);
+						int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + bginity) / 50));
+						int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + bginitx) / 50));
+						pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1, toshootx2, posplayery, 12);
+						switch (pathresult) {
+						case 0:
+							stopMoving();
+							break;
+						case 1:
+							moveLeft();
+							break;
+						case 2:
+							moveUp();
+							break;
+						case 3:
+							moveRight();
+							break;
+						case 4:
+							moveDown();
+							break;
+						}
+					} else {
+						stopMoving();
+					}
+				}
+				break;
 			}
 			if (weapon.isReady2Fire()) {
 				int diffx = Math.abs(getCenterX() - player.getCenterX());
 				int diffy = Math.abs(getCenterY() - player.getCenterY());
-				if (diffx > diffy && diffy < 80 && diffx < 500) {
+				if (diffx > diffy && diffy < 80 && diffx < 250) {
 					if (player.getCenterX() > getCenterX())
 						shootRight();
 					else
 						shootLeft();
-				} else if (diffx < 40 && diffy < 500){
+				} else if (diffx < 80 && diffy < 250){
 					if (player.getCenterY() > getCenterY())
 						shootDown();
 					else

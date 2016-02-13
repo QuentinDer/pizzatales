@@ -92,6 +92,30 @@ public class Pepper extends Enemy {
 					}
 				}
 				break;
+			case 4:
+				if (movementTime % 10 == 0) {
+					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
+					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
+					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 11);
+					switch (pathresult) {
+					case 0:
+						stopMoving();
+						break;
+					case 1:
+						moveLeft();
+						break;
+					case 2:
+						moveUp();
+						break;
+					case 3:
+						moveRight();
+						break;
+					case 4:
+						moveDown();
+						break;
+					}
+				}
+				break;
 			}
 			if (movementTime % 5 == 0 && weapon.isReady2Fire()) {
 				int diffx = Math.abs(getCenterX() - player.getCenterX());

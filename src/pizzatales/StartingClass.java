@@ -20,7 +20,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
-	public static final int difficultylevel = 3;
+	public static final int difficultylevel = 4;
 	private static Player player;
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
 	public static Image tileTree, tileGrass, tileWall;
