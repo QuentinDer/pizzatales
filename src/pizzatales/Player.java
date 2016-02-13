@@ -7,13 +7,13 @@ import java.util.ArrayList;
 public class Player {
 
 	private int MOVESPEED = 4;
-	private final static float MAXSCROLLINGPROPORTION = (float)0.5;
-	private final static int SCROLLINGRANGE = 150;
+	//private final static double MAXSCROLLINGPROPORTION = 0.5;
+	//private final static int SCROLLINGRANGE = 150;
 	private int centerX = 640;
 	private int centerY = 100;
-	private float speedX = 0;
-	private float speedY = 0;
-	private float scrollingSpeed = 0;
+	private int speedX = 0;
+	private int speedY = 0;
+	private int scrollingSpeed = 0;
 	private int health = 20;
 	private boolean isMovingVer = false;
 	private boolean isMovingHor = false;
@@ -213,11 +213,11 @@ public class Player {
 		this.isMovingHor = isMovingHor;
 	}
 
-	public float getSpeedX() {
+	public double getSpeedX() {
 		return speedX;
 	}
 
-	public float getSpeedY() {
+	public double getSpeedY() {
 		return speedY;
 	}
 	
@@ -229,7 +229,7 @@ public class Player {
 		MOVESPEED = mOVESPEED;
 	}
 	
-	public float getScrollingSpeed() {
+	public double getScrollingSpeed() {
 		return this.scrollingSpeed;
 	}
 
@@ -246,8 +246,8 @@ public class Player {
 	}
 
 	public void setSpeedY(int speedY) {
-		this.speedY = speedY /((float)2);
-		this.scrollingSpeed = speedY/((float)2); 
+		this.speedY = speedY /2;
+		this.scrollingSpeed = speedY/2; 
 	}
 
 
