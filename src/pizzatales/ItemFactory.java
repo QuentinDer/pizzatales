@@ -15,10 +15,10 @@ public class ItemFactory {
 		case 'p':
 			
 			break;
-		case 'a':
+		case 'h':
 			i = new HealthPotion(x,y);
 			break;
-		case 'h':
+		case 'a':
 			i = new ArmorPotion(x,y);
 			break;
 		}

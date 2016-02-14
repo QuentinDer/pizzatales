@@ -12,7 +12,7 @@ public class HealthPotion extends Item {
 
 	@Override
 	protected void doEffect() {
-		if (player.getHealth() + 5 < 20) {
+		if (player.getHealth() + 5 > 20) {
 			player.setHealth(20);
 		} else
 			player.setHealth(player.getHealth() + 5);
