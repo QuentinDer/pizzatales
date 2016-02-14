@@ -33,10 +33,10 @@ public abstract class Projectile extends Stuff {
 		super.update();
 		rectP.setBounds(getCenterX() - halfsize, getCenterY() - halfsize, size, size);
 		if (Math.abs(this.getCenterX() - initX) > range) {
-			visible = false;
+			doOnLimitRange();
 		}
 		if (Math.abs(this.getCenterY() - initY) > range) {
-			visible = false;
+			doOnLimitRange();
 		}
 	}
 
@@ -81,4 +81,5 @@ public abstract class Projectile extends Stuff {
 	public abstract void doOnCollision(Player p);
 	public abstract void doOnCollision(Enemy e);
 	public abstract void doOnCollision(Tile t);
+	public abstract void doOnLimitRange();
 }

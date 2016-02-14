@@ -59,4 +59,12 @@ public class BazookaBullet extends Projectile {
 			StartingClass.getExplosions().add(new BazookaBulletExplosion(this.centerX,this.centerY));
 		}
 	}
+
+	@Override
+	public void doOnLimitRange() {
+		if (visible) {
+			visible = false;
+			StartingClass.getExplosions().add(new BazookaBulletExplosion(this.centerX,this.centerY));
+		}
+	}
 }

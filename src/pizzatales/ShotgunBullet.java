@@ -34,4 +34,9 @@ public class ShotgunBullet extends Projectile {
 		visible = false;
 	}
 
+	@Override
+	public void doOnLimitRange() {
+		visible = false;
+	}
+
 }

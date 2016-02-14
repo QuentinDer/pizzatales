@@ -7,7 +7,7 @@ public class Aubergine extends Enemy {
 	protected int movementParam;
 	protected boolean isShooting;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
-	private final static int range = 150;
+	private final static int range = 420;
 
 	public Aubergine(int centerX, int centerY) {
 		super(centerX,centerY, new Smg(), 4, 2);
@@ -165,12 +165,12 @@ public class Aubergine extends Enemy {
 			if (weapon.isReady2Fire()) {
 				int diffx = Math.abs(getCenterX() - player.getCenterX());
 				int diffy = Math.abs(getCenterY() - player.getCenterY());
-				if (diffx > diffy && diffy < 80 && diffx < 250) {
+				if (diffx > diffy && diffy < 80 && diffx < 480) {
 					if (player.getCenterX() > getCenterX())
 						shootRight();
 					else
 						shootLeft();
-				} else if (diffx < 80 && diffy < 250){
+				} else if (diffx < 80 && diffy < 480){
 					if (player.getCenterY() > getCenterY())
 						shootDown();
 					else

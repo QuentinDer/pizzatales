@@ -33,4 +33,9 @@ public class RifleBullet extends Projectile {
 	public void doOnCollision(Tile t) {
 		visible = false;
 	}
+
+	@Override
+	public void doOnLimitRange() {
+		visible = false;
+	}
 }
