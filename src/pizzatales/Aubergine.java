@@ -165,12 +165,12 @@ public class Aubergine extends Enemy {
 			if (weapon.isReady2Fire()) {
 				int diffx = Math.abs(getCenterX() - player.getCenterX());
 				int diffy = Math.abs(getCenterY() - player.getCenterY());
-				if (diffx > diffy && diffy < 80 && diffx < 480) {
+				if (diffx > diffy && diffy < 120 && diffx < 480) {
 					if (player.getCenterX() > getCenterX())
 						shootRight();
 					else
 						shootLeft();
-				} else if (diffx < 80 && diffy < 480){
+				} else if (diffx < 120 && diffy < 480){
 					if (player.getCenterY() > getCenterY())
 						shootDown();
 					else

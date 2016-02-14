@@ -10,7 +10,7 @@ public class Pepper extends Enemy {
 	move2SpriteRight;
 
 	public Pepper(int centerX, int centerY) {
-		super(centerX,centerY, new Flamer(), 5, (StartingClass.difficultylevel == 1)?2:((StartingClass.difficultylevel == 3)?4:3));
+		super(centerX,centerY, new Flamer(), 5, (StartingClass.difficultylevel == 1)?2:((StartingClass.difficultylevel == 2)?3:4));
 		movementTime = ((int) (Math.random() * 50));
 	}
 
@@ -120,7 +120,7 @@ public class Pepper extends Enemy {
 			if (movementTime % 5 == 0 && weapon.isReady2Fire()) {
 				int diffx = Math.abs(getCenterX() - player.getCenterX());
 				int diffy = Math.abs(getCenterY() - player.getCenterY());
-				if (diffx + diffy < 100) {
+				if (diffx + diffy < 150) {
 					if (diffx > diffy) {
 						if (player.getCenterX() > getCenterX())
 							shootRight();

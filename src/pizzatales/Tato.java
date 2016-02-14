@@ -113,12 +113,12 @@ public class Tato extends Enemy {
 				if (weapon.isReady2Fire()) {
 					int diffx = Math.abs(getCenterX() - player.getCenterX());
 					int diffy = Math.abs(getCenterY() - player.getCenterY());
-					if (diffx > diffy && diffy < 80 && diffx < 530) {
+					if (diffx > diffy && diffy < 120 && diffx < 530) {
 						if (player.getCenterX() > getCenterX())
 							shootRight();
 						else
 							shootLeft();
-					} else if (diffx < 80 && diffy < 530){
+					} else if (diffx < 120 && diffy < 530){
 						if (player.getCenterY() > getCenterY())
 							shootDown();
 						else
@@ -163,12 +163,12 @@ public class Tato extends Enemy {
 				if (weapon.isReady2Fire()) {
 					int diffx = Math.abs(getCenterX() - player.getCenterX());
 					int diffy = Math.abs(getCenterY() - player.getCenterY());
-					if (diffx > diffy && diffy < 80 && diffx < 530) {
+					if (diffx > diffy && diffy < 120 && diffx < 530) {
 						if (player.getCenterX() > getCenterX())
 							shootRight();
 						else
 							shootLeft();
-					} else if (diffx < 80 && diffy < 530){
+					} else if (diffx < 120 && diffy < 530){
 						if (player.getCenterY() > getCenterY())
 							shootDown();
 						else
@@ -213,12 +213,12 @@ public class Tato extends Enemy {
 				if (weapon.isReady2Fire()) {
 					int diffx = Math.abs(getCenterX() - player.getCenterX());
 					int diffy = Math.abs(getCenterY() - player.getCenterY());
-					if (diffx > diffy && diffy < 80 && diffx < 530) {
+					if (diffx > diffy && diffy < 120 && diffx < 530) {
 						if (player.getCenterX() > getCenterX())
 							shootRight();
 						else
 							shootLeft();
-					} else if (diffx < 80 && diffy < 530){
+					} else if (diffx < 120 && diffy < 530){
 						if (player.getCenterY() > getCenterY())
 							shootDown();
 						else
