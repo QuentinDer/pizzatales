@@ -159,8 +159,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		player.setArmor(playerarmor.get(armorindex));
 		loadArmor();
 
-		bg1 = new Background(0, -800);
-		bg2 = new Background(0, 800);
+		bg1 = new Background(0, -200);
+		bg2 = new Background(0, 1400);
 
 		// Initialize Tiles
 		try {
