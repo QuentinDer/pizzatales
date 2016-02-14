@@ -12,7 +12,7 @@ public class Tile extends Stuff {
 
 	private Rectangle r;
 	
-	private static String acceptedTileTypes = "tw";
+	private final static String acceptedTileTypes = "tw";
 
 	public static boolean isTileTypeSupported(char type) {
 		String test = "";

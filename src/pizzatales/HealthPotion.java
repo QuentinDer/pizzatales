@@ -1,37 +1,25 @@
 package pizzatales;
 
-import java.awt.Rectangle;
+import java.awt.Image;
 
-public class HealthPotion extends Stuff {
+public class HealthPotion extends Item {
 
-	public Rectangle r;
-
+	public static Image healthpotionsprite;
+	
 	public HealthPotion(int centerX, int centerY) {
 		super(centerX, centerY);
 	}
 
-	public void checkHorizontalCollision(Player player) {
-		if (player.R.intersects(r) && Math.abs(player.getCenterY() - getCenterY()) < 50) {
-			if (player.getHealth() < 20) {
-				if (player.getCenterX() <= this.getCenterX()) {
-					player.setHealth(player.getHealth() + 5);
-				} else {
-					player.setHealth(player.getHealth() + 5);
-				}
-			}
-		}
+	@Override
+	protected void doEffect() {
+		if (player.getHealth() + 5 < 20) {
+			player.setHealth(20);
+		} else
+			player.setHealth(player.getHealth() + 5);
 	}
 
-	public void checkVerticalCollision(Player player) {
-		if (player.R.intersects(r) && Math.abs(player.getCenterX() - getCenterX()) < 50) {
-			if (player.getHealth() < 20) {
-				if (player.getCenterY() <= this.getCenterY()) {
-					player.setHealth(player.getHealth() + 5);
-				} else {
-					player.setHealth(player.getHealth() + 5);
-				}
-			}
-		}
+	@Override
+	protected Image getSprite() {
+		return healthpotionsprite;
 	}
-
 }

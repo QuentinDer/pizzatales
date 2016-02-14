@@ -33,6 +33,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	ArrayList<Firearm> playerweapons;
 	private ArrayList<Armor> playerarmor;
 	private static ArrayList<Explosion> explosions;
+	
 
 	private int weaponindex;
 	private int armorindex;
@@ -45,6 +46,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	GameState state = GameState.Running;
 
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();
+	private ArrayList<Item> items = new ArrayList<Item>();
 	public static ArrayList<Enemy> enemyarray = new ArrayList<Enemy>();
 
 	@Override
@@ -125,6 +127,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		
 		BazookaBulletExplosion.bazookaexplosionsprite = getImage(base, "data/bazookaexplosion.png");
 
+		ArmorPotion.armorpotionsprite = getImage(base, "data/armor.png");
+		HealthPotion.healthpotionsprite = getImage(base, "data/health.png");
+		
 		/*
 		 * anim = new Animation(); anim.addFrame(character1, 1250);
 		 * anim.addFrame(character2, 50); currentSprite = anim.getImage();
@@ -194,8 +199,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			for (int i = 0; i < width; i++) {
 				if (i < line.length()) {
 					char ch = line.charAt(i);
-					if (ch == '0')
+					if (ch == '0' || ItemFactory.isItemSupported(ch))
 						pf.map[i][j] = true;
+					if (ItemFactory.isItemSupported(ch)) {
+						items.add(ItemFactory.getItem(i, j, ch));
+					}
 					if (Tile.isTileTypeSupported(ch)) {
 						Tile t = new Tile(i, j, ch);
 						tilearray.add(t);
@@ -264,6 +272,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				player.canmoveup = true;
 				checkEnemiesCollision();
 				checkTileCollisions();
+				checkItemsCollision();
 				updatePlayer();
 				callEnemiesAIs();
 				updateEnemies();
@@ -272,6 +281,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				bg2.update();
 				// animate();
 				updateTiles();
+				updateItems();
 				repaint(); // this calls paint
 
 				if (walkCounter == 1000) {
@@ -303,6 +313,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			g.drawImage(background, bg1.getCenterX(), bg1.getCenterY(), this);
 			g.drawImage(background, bg2.getCenterX(), bg2.getCenterY(), this);
 			paintTiles(g);
+			paintItems(g);
 			for (Explosion e : explosions) {
 				g.drawImage(e.getSprite(), e.getR().x, e.getR().y, this);
 			}
@@ -370,6 +381,17 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		for (Enemy e : getEnemyarray()) {
 			if (e.alive)
 				e.checkEnemyCollisions();
+		}
+	}
+	
+	private void checkItemsCollision() {
+		int i = 0;
+		while (i < items.size()) {
+			if (items.get(i).checkCollisionPlayer(player)) {
+				items.remove(i);
+			} else {
+				i++;
+			}
 		}
 	}
 
@@ -487,11 +509,23 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			t.update();
 		}
 	}
+	
+	private void updateItems() {
+		for (Item i : items)
+			i.update();
+	}
 
 	private void paintTiles(Graphics g) {
 		for (int i = 0; i < tilearray.size(); i++) {
 			Tile t = tilearray.get(i);
 			g.drawImage(t.getTileImage(), t.getCenterX() - 31, t.getCenterY() - 31, this);
+		}
+	}
+	
+	private void paintItems(Graphics g) {
+		for (int i = 0; i < items.size(); i++) {
+			Item it = items.get(i);
+			g.drawImage(it.getSprite(), it.getCenterX() - 31, it.getCenterY() - 31, this);
 		}
 	}
 

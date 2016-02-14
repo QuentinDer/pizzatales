@@ -1,37 +1,26 @@
 package pizzatales;
 
-import java.awt.Rectangle;
+import java.awt.Image;
 
-public class ArmorPotion extends Stuff {
+public class ArmorPotion extends Item {
 
-	public Rectangle r;
-
+	public static Image armorpotionsprite;
+	
 	public ArmorPotion(int centerX, int centerY) {
 		super(centerX, centerY);
 	}
 
-	public void checkHorizontalCollision(Player player) {
-		if (player.R.intersects(r) && Math.abs(player.getCenterY() - getCenterY()) < 50) {
-			if (player.getArmor().getDefense() < player.getArmor().MAXDEF) {
-				if (player.getCenterX() <= this.getCenterX()) {
-					player.getArmor().setDefense((player.getArmor().getDefense() + 5));
-				} else {
-					player.getArmor().setDefense((player.getArmor().getDefense() + 5));
-				}
-			}
-		}
+	@Override
+	protected void doEffect() {
+		if (player.getArmor().defense + 5 < player.getArmor().MAXDEF) {
+			player.getArmor().setDefense(player.getArmor().getDefense()+5);
+		} else
+			player.getArmor().setDefense(player.getArmor().MAXDEF);
 	}
 
-	public void checkVerticalCollision(Player player) {
-		if (player.R.intersects(r) && Math.abs(player.getCenterX() - getCenterX()) < 50) {
-			if (player.getArmor().getDefense() < player.getArmor().MAXDEF) {
-				if (player.getCenterY() <= this.getCenterY()) {
-					player.getArmor().setDefense((player.getArmor().getDefense() + 5));
-				} else {
-					player.getArmor().setDefense((player.getArmor().getDefense() + 5));
-				}
-			}
-		}
+	@Override
+	protected Image getSprite() {
+		return armorpotionsprite;
 	}
 
 }
