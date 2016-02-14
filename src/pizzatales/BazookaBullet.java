@@ -8,7 +8,7 @@ public class BazookaBullet extends Projectile {
 	private int aiming;
 	
 	public BazookaBullet(int startX, int startY, int vectorX, int vectorY) {
-		super(startX, startY, vectorX, vectorY, 5 , 4, 30, 15, 450);
+		super(startX, startY, vectorX, vectorY, 5 , 4, 30, 15, 750);
 		if (vectorX > 0) {
 			aiming = 3;
 		} else if (vectorX < 0) {
