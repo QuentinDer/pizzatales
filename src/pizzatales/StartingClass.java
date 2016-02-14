@@ -169,7 +169,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		// Initialize Tiles
 		try {
-			loadMap("data/L12.txt");
+			loadMap("data/L13.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
