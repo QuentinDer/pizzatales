@@ -21,7 +21,7 @@ public class Tile extends Stuff {
 	}
 	
 	public Tile(int x, int y, char typeInt) {
-		super((x * 50) + 40,(y * 50) + 40);
+		super((x * 50) + 25,(y * 50) + 40);
 
 		type = typeInt;
 

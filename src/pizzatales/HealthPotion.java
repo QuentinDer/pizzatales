@@ -5,7 +5,7 @@ import java.awt.Image;
 public class HealthPotion extends Item {
 
 	public static Image healthpotionsprite;
-	
+
 	public HealthPotion(int centerX, int centerY) {
 		super(centerX, centerY);
 	}
@@ -14,8 +14,12 @@ public class HealthPotion extends Item {
 	protected void doEffect() {
 		if (player.getHealth() + 5 > 20) {
 			player.setHealth(20);
-		} else
-			player.setHealth(player.getHealth() + 5);
+		} else if (player.getHealth() < 20) {
+			if (player.getHealth() + 5 > 20) {
+				player.setHealth(20);
+			} else
+				player.setHealth(player.getHealth() + 5);
+		} 
 	}
 
 	@Override
