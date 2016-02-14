@@ -258,9 +258,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				 * 1000) { e.walkCounter = 0; } } }
 				 */
 				updateExplosions();
-				updatePlayer();
+				player.canmovedown = true;
+				player.canmoveleft = true;
+				player.canmoveright = true;
+				player.canmoveup = true;
 				checkEnemiesCollision();
 				checkTileCollisions();
+				updatePlayer();
 				callEnemiesAIs();
 				updateEnemies();
 

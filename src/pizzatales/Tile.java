@@ -35,29 +35,21 @@ public class Tile extends Stuff {
 	}
 
 	public void checkHorizontalCollision(Player player) {
-		if (player.R.intersects(r) && Math.abs(player.getCenterY()-getCenterY())<25) {
+		if (player.R.intersects(r) && Math.abs(player.getCenterY()-getCenterY())<26) {
 			if (player.getCenterX() <= this.getCenterX()) {
-				player.setCenterX(player.getCenterX() - 2);
-				player.setSpeedX(0);
-				player.isColliding = true;
+				player.canmoveright = false;;
 			} else {
-				player.setCenterX(player.getCenterX() + 2);
-				player.setSpeedX(0);
-				player.isColliding = true;
+				player.canmoveleft = false;
 			}
 		}
 	}
 
 	public void checkVerticalCollision(Player player) {
-		if (player.R.intersects(r) && Math.abs(player.getCenterX()-getCenterX())<25) {
+		if (player.R.intersects(r) && Math.abs(player.getCenterX()-getCenterX())<26) {
 			if (player.getCenterY() <= this.getCenterY()) {
-				player.setCenterY(player.getCenterY() - 2);
-				player.setSpeedY(0);
-				player.isColliding = true;
+				player.canmovedown = false;
 			} else {
-				player.setCenterY(player.getCenterY() + 2);
-				player.setSpeedY(0);
-				player.isColliding = true;
+				player.canmoveup = false;
 			}
 		}
 	}

@@ -25,6 +25,10 @@ public class Player {
 	private boolean ismovingdown;
 	private boolean ismovingleft;
 	private boolean ismovingright;
+	public boolean canmoveright = true;
+	public boolean canmoveleft = true;
+	public boolean canmoveup = true;
+	public boolean canmovedown = true;
 
 	private boolean isAimingUp = true;
 	
@@ -43,26 +47,25 @@ public class Player {
 	public void update() {
 
 		// Moves Character or Scrolls Background accordingly.
-		centerY += speedY;
 
 		// Updates X Position
-		centerX += speedX;
+		
 		
 		speedY = 0;
 		speedX = 0;
 		scrollingSpeed = 0;
-		if (ismovingup) {
+		if (ismovingup && canmoveup) {
 			speedY += -MOVESPEED/2;
 			scrollingSpeed += -MOVESPEED/2;
 		}
-		if (ismovingdown) {
+		if (ismovingdown && canmovedown) {
 			speedY += MOVESPEED/2;
 			scrollingSpeed += MOVESPEED/2;
 		}
-		if (ismovingleft) {
+		if (ismovingleft && canmoveleft) {
 			speedX += -MOVESPEED;
 		}
-		if (ismovingright) {
+		if (ismovingright && canmoveright) {
 			speedX += MOVESPEED;
 		}
 		if (0 == isShooting) {
@@ -114,6 +117,8 @@ public class Player {
 			centerY = 549;
 			scrollingSpeed = 2*speedY;
 		}
+		centerY += speedY;
+		centerX += speedX;
 
 		// Collision
 		R.setRect(centerX - 22, centerY - 22, 45, 45);
