@@ -40,6 +40,36 @@ public class PathFinder {
 			g_score.put(down, 1);
 			direction.put(down, 4);
 		}
+		if (StartingClass.difficultylevel == 4) {
+			if (0 != fromy) {
+				if (0 != fromx && map[fromx-1][fromy-1]) {
+					int upleft = height*(fromx-1) + fromy-1;
+					f_score.put(Math.abs(fromy-1-toy)+Math.abs(fromx-1-tox), upleft);
+					g_score.put(upleft, 1);
+					direction.put(upleft, 5);
+				}
+				if (width -1 != fromx && map[fromx+1][fromy-1]) {
+					int upright = height*(fromx+1) + fromy-1;
+					f_score.put(Math.abs(fromy-1-toy)+Math.abs(fromx+1-tox), upright);
+					g_score.put(upright, 1);
+					direction.put(upright, 6);
+				}
+			}
+			if (height -1 != fromy) {
+				if (0 != fromx && map[fromx-1][fromy+1]) {
+					int downleft = height*(fromx-1) + fromy+1;
+					f_score.put(Math.abs(fromy+1-toy)+Math.abs(fromx-1-tox), downleft);
+					g_score.put(downleft, 1);
+					direction.put(downleft, 8);
+				}
+				if (width -1 != fromx && map[fromx+1][fromy+1]) {
+					int downright = height*(fromx+1)+fromy+1;
+					f_score.put(Math.abs(fromy+1-toy)+Math.abs(fromx+1-tox), downright);
+					g_score.put(downright, 1);
+					direction.put(downright, 7);
+				}
+			}
+		}
 		while (!f_score.isEmpty()) {
 			/*String f = "f_score:";
 			for (Entry<Integer,Integer> entry : f_score.entrySet())
@@ -134,6 +164,36 @@ public class PathFinder {
 			f_score.put(Math.min(Math.abs(fromy+1-toy1)+Math.abs(fromx-tox1)+1,Math.abs(fromy+1-toy2)+Math.abs(fromx-tox2)+1), down);
 			g_score.put(down, 1);
 			direction.put(down, 4);
+		}
+		if (StartingClass.difficultylevel == 4) {
+			if (0 != fromy) {
+				if (0 != fromx && map[fromx-1][fromy-1]) {
+					int upleft = height*(fromx-1) + fromy-1;
+					f_score.put(Math.min(Math.abs(fromy-1-toy1)+Math.abs(fromx-1-tox1)+1,Math.abs(fromy-1-toy2)+Math.abs(fromx-1-tox2)+1), upleft);
+					g_score.put(upleft, 1);
+					direction.put(upleft, 5);
+				}
+				if (width -1 != fromx && map[fromx+1][fromy-1]) {
+					int upright = height*(fromx+1) + fromy-1;
+					f_score.put(Math.min(Math.abs(fromy-1-toy1)+Math.abs(fromx+1-tox1)+1,Math.abs(fromy-1-toy2)+Math.abs(fromx+1-tox2)+1), upright);
+					g_score.put(upright, 1);
+					direction.put(upright, 6);
+				}
+			}
+			if (height -1 != fromy) {
+				if (0 != fromx && map[fromx-1][fromy+1]) {
+					int downleft = height*(fromx-1) + fromy+1;
+					f_score.put(Math.min(Math.abs(fromy+1-toy1)+Math.abs(fromx-1-tox1)+1,Math.abs(fromy+1-toy2)+Math.abs(fromx-1-tox2)+1), downleft);
+					g_score.put(downleft, 1);
+					direction.put(downleft, 8);
+				}
+				if (width -1 != fromx && map[fromx+1][fromy+1]) {
+					int downright = height*(fromx+1)+fromy+1;
+					f_score.put(Math.min(Math.abs(fromy+1-toy1)+Math.abs(fromx+1-tox1)+1,Math.abs(fromy+1-toy2)+Math.abs(fromx+1-tox2)+1), downright);
+					g_score.put(downright, 1);
+					direction.put(downright, 7);
+				}
+			}
 		}
 		while (!f_score.isEmpty()) {
 			int current = f_score.firstEntry().getValue();

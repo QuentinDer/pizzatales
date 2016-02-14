@@ -241,6 +241,34 @@ public abstract class Enemy extends Stuff {
 		isMoving = true;
 	}
 	
+	protected void moveLeftUp() {
+		isAimingUp = false;
+		setSpeedX(-speed);
+		setSpeedY(-speed);
+		isMoving = true;
+	}
+	
+	protected void moveRightUp() {
+		isAimingUp = false;
+		setSpeedX(speed);
+		setSpeedY(-speed);
+		isMoving = true;
+	}
+	
+	protected void moveLeftDown() {
+		isAimingUp = false;
+		setSpeedX(-speed);
+		setSpeedY(speed);
+		isMoving = true;
+	}
+	
+	protected void moveRightDown() {
+		isAimingUp = false;
+		setSpeedX(speed);
+		setSpeedY(speed);
+		isMoving = true;
+	}
+	
 	protected void stopMoving() {
 		setSpeedX(0);
 		setSpeedY(0);

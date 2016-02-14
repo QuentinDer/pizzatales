@@ -155,6 +155,18 @@ public class Aubergine extends Enemy {
 						case 4:
 							moveDown();
 							break;
+						case 5:
+							moveLeftUp();
+							break;
+						case 6:
+							moveRightUp();
+							break;
+						case 7:
+							moveRightDown();
+							break;
+						case 8:
+							moveLeftDown();
+							break;
 						}
 					} else {
 						stopMoving();
