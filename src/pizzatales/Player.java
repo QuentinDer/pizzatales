@@ -21,6 +21,10 @@ public class Player {
 	public Rectangle R = new Rectangle(0,0,0,0);
 	private Firearm weapon;
 	private Armor armor;
+	private boolean ismovingup;
+	private boolean ismovingdown;
+	private boolean ismovingleft;
+	private boolean ismovingright;
 
 	private boolean isAimingUp = true;
 	
@@ -39,12 +43,47 @@ public class Player {
 	public void update() {
 
 		// Moves Character or Scrolls Background accordingly.
-		if (speedY != 0) {
-			centerY += speedY;
-		}
+		centerY += speedY;
 
 		// Updates X Position
 		centerX += speedX;
+		
+		speedY = 0;
+		speedX = 0;
+		scrollingSpeed = 0;
+		if (ismovingup) {
+			speedY += -MOVESPEED/2;
+			scrollingSpeed += -MOVESPEED/2;
+		}
+		if (ismovingdown) {
+			speedY += MOVESPEED/2;
+			scrollingSpeed += MOVESPEED/2;
+		}
+		if (ismovingleft) {
+			speedX += -MOVESPEED;
+		}
+		if (ismovingright) {
+			speedX += MOVESPEED;
+		}
+		if (0 == isShooting) {
+			if (speedX > 0) {
+				weapon.setSpriteRight();
+				isAimingUp = false;
+			}
+			if (speedX < 0) {
+				weapon.setSpriteLeft();
+				isAimingUp = false;
+			}
+			if (speedY > 0) {
+				weapon.setSpriteDown();
+				isAimingUp = false;
+			}
+			if (speedY < 0) {
+				weapon.setSpriteUp();
+				isAimingUp = true;
+			}
+		}
+			
 		
 		/*
 		if (speedY > 0 && centerY > 200) {
@@ -77,7 +116,7 @@ public class Player {
 		}
 
 		// Collision
-		R.setRect(centerX - 25, centerY - 25, 50, 50);
+		R.setRect(centerX - 22, centerY - 22, 45, 45);
 		if (isShooting > 0) {
 			if (weapon.isReady2Fire()) {
 				switch (isShooting) {
@@ -143,50 +182,37 @@ public class Player {
 	}
 
 	public void moveRight() {
-		if (isColliding == false) {
-			speedX = MOVESPEED;
-			setMovingHor(true);
-			if (0 == isShooting) {
-				weapon.setSpriteRight();
-				isAimingUp = false;
-			}
-		}
+		ismovingright = true;
 	}
 
 	public void moveLeft() {
-		if (isColliding == false) {
-			speedX = -MOVESPEED;
-			setMovingHor(true);
-		}
-		if (0 == isShooting) {
-			weapon.setSpriteLeft();
-			isAimingUp = false;
-		}
+		ismovingleft = true;
 	}
 
 	public void moveUp() {
-		if (isColliding == false) {
-			this.setSpeedY(-MOVESPEED);
-			setMovingVer(true);
-		}
-		if (0 == isShooting) {
-			weapon.setSpriteUp();
-			isAimingUp = true;
-			
-		}
+		ismovingup = true;
 	}
 
 	public void moveDown() {
-		if (isColliding == false) {
-			this.setSpeedY(MOVESPEED);
-			setMovingVer(true);
-		}
-		if (0 == isShooting) {
-			weapon.setSpriteDown();
-			isAimingUp = false;
-		}
+		ismovingdown = true;
 	}
-
+	
+	public void stopMovingRight() {
+		ismovingright = false;
+	}
+	
+	public void stopMovingLeft() {
+		ismovingleft = false;
+	}
+	
+	public void stopMovingUp() {
+		ismovingup = false;
+	}
+	
+	public void stopMovingDown() {
+		ismovingdown = false;
+	}
+/*
 	public void stopHor() {
 		speedX = 0;
 		setMovingHor(false);
@@ -195,8 +221,8 @@ public class Player {
 	public void stopVer() {
 		this.setSpeedY(0);
 		setMovingVer(false);
-	}
-
+	}*/
+/*
 	public boolean isMovingVer() {
 		return isMovingVer;
 	}
@@ -212,7 +238,7 @@ public class Player {
 	public void setMovingHor(boolean isMovingHor) {
 		this.isMovingHor = isMovingHor;
 	}
-
+*/
 	public double getSpeedX() {
 		return speedX;
 	}
@@ -243,6 +269,11 @@ public class Player {
 
 	public void setSpeedX(int speedX) {
 		this.speedX = speedX;
+	}
+	
+	public void addSpeedY(int speedY) {
+		this.speedY += speedY /2;
+		this.scrollingSpeed += speedY/2;
 	}
 
 	public void setSpeedY(int speedY) {

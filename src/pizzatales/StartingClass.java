@@ -20,7 +20,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
-	public static final int difficultylevel = 2;
+	public static final int difficultylevel = 1;
 	private static Player player;
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
 	public static Image tileTree, tileGrass, tileWall;
@@ -231,7 +231,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 				// Animation
 
-				if (player.isMovingHor() == true || player.isMovingVer() == true) {
+				if (player.getSpeedX() != 0 || player.getSpeedY() != 0) {
 					if (walkCounter % 30 == 0) {
 						// player.getArmor().setSpriteWalk1();
 						// currentSprite = player.getArmor().currentSprite;
@@ -241,7 +241,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						// currentSprite = player.getArmor().currentSprite;
 						currentSprite = characterMove2;
 					}
-				} else if (player.isMovingVer() == false && player.isMovingHor() == false) {
+				} else {
 					currentSprite = character1;
 				}
 
@@ -259,7 +259,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				 */
 				updateExplosions();
 				updatePlayer();
-
 				checkEnemiesCollision();
 				checkTileCollisions();
 				callEnemiesAIs();
@@ -562,14 +561,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public void keyReleased(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_Z:
+			player.stopMovingUp();
+			break;
 		case KeyEvent.VK_S:
-			player.stopVer();
-			player.isColliding = false;
+			player.stopMovingDown();
 			break;
 		case KeyEvent.VK_Q:
+			player.stopMovingLeft();
+			break;
 		case KeyEvent.VK_D:
-			player.stopHor();
-			player.isColliding = false;
+			player.stopMovingRight();
 			break;
 		case KeyEvent.VK_UP:
 		case KeyEvent.VK_DOWN:

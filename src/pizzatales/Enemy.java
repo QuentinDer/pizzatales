@@ -47,7 +47,7 @@ public abstract class Enemy extends Stuff {
 		posx = (centerX-15) / 50;
 		posy = (centerY-15) / 50;
 		setStaySprite();
-		R = new Rectangle(getCenterX() - 25, getCenterY() - 25, 50, 50);
+		R = new Rectangle(getCenterX() - 22, getCenterY() - 22, 45, 45);
 	}
 
 	public void checkCollision(Enemy e) {
@@ -86,7 +86,7 @@ public abstract class Enemy extends Stuff {
 			posy = currentposy;
 		}
 		
-		R.setBounds(getCenterX() - 25, getCenterY() - 25, 50, 50);
+		R.setBounds(getCenterX() - 22, getCenterY() - 22, 45, 45);
 		
 		if (alive == true) {
 			
