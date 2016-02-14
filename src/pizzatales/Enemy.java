@@ -27,6 +27,15 @@ public abstract class Enemy extends Stuff {
 	protected Background bg = StartingClass.getBg1();
 	protected int bginitx, bginity;
 	
+	public boolean canmoveup = true;
+	public boolean canmovedown = true;
+	public boolean canmoveright = true;
+	public boolean canmoveleft = true;
+	private boolean ismovingright;
+	private boolean ismovingleft;
+	private boolean ismovingup;
+	private boolean ismovingdown;
+	
 	//protected Animation anim;
 	private int speed;
 	
@@ -52,14 +61,17 @@ public abstract class Enemy extends Stuff {
 
 	public void checkCollision(Enemy e) {
 		if (R.intersects(e.R)) {
-			if (e.getCenterX() - getCenterX() >= 0)
-				setCenterX(getCenterX()-2);
-			else
-				setCenterX(getCenterX()+2);
-			if (e.getCenterY() - getCenterY() >= 0)
-				setCenterY(getCenterY()-2);
-			else
-				setCenterY(getCenterY()+2);
+			if (Math.abs(e.getCenterX() - getCenterX()) > Math.abs(e.getCenterY() - getCenterY())) {
+				if (e.getCenterX() - getCenterX() > 0)
+					canmoveright = false;
+				else
+					canmoveleft = false;
+			} else {
+				if (e.getCenterY() - getCenterY() > 0)
+					canmovedown = false;
+				else
+					canmoveup = false;
+			}
 		}
 	}
 
@@ -75,6 +87,21 @@ public abstract class Enemy extends Stuff {
 	@Override
 	public void update() {
 
+		setSpeedX(0);
+		setSpeedY(0);
+		if (ismovingright && canmoveright) {
+			setSpeedX(speed);
+		}
+		if (ismovingleft && canmoveleft) {
+			setSpeedX(-speed);
+		}
+		if (ismovingup && canmoveup) {
+			setSpeedY(-speed);
+		}
+		if (ismovingdown && canmovedown) {
+			setSpeedY(speed);
+		}
+		
 		super.update();
 		
 		int currentposx = (getCenterX() - bg.getCenterX() + bginitx) / 50;
@@ -215,63 +242,81 @@ public abstract class Enemy extends Stuff {
 	
 	protected void moveRight() {
 		isAimingUp = false;
-		setSpeedX(speed);
-		setSpeedY(0);
+		ismovingright = true;
+		ismovingleft = false;
+		ismovingup = false;
+		ismovingdown = false;
 		isMoving = true;
 	}
 	
 	protected void moveLeft() {
 		isAimingUp = false;
-		setSpeedX(-speed);
-		setSpeedY(0);
+		ismovingright = false;
+		ismovingleft = true;
+		ismovingup = false;
+		ismovingdown = false;
 		isMoving = true;
 	}
 	
 	protected void moveUp() {
 		isAimingUp = true;
-		setSpeedX(0);
-		setSpeedY(-speed);
+		ismovingright = false;
+		ismovingleft = false;
+		ismovingup = true;
+		ismovingdown = false;
 		isMoving = true;
 	}
 
 	protected void moveDown() {
 		isAimingUp = false;
-		setSpeedX(0);
-		setSpeedY(speed);
+		ismovingright = false;
+		ismovingleft = false;
+		ismovingup = false;
+		ismovingdown = true;
 		isMoving = true;
 	}
 	
 	protected void moveLeftUp() {
 		isAimingUp = false;
-		setSpeedX(-speed);
-		setSpeedY(-speed);
+		ismovingright = false;
+		ismovingleft = true;
+		ismovingup = true;
+		ismovingdown = false;
 		isMoving = true;
 	}
 	
 	protected void moveRightUp() {
 		isAimingUp = false;
-		setSpeedX(speed);
-		setSpeedY(-speed);
+		ismovingright = true;
+		ismovingleft = false;
+		ismovingup = true;
+		ismovingdown = false;
 		isMoving = true;
 	}
 	
 	protected void moveLeftDown() {
 		isAimingUp = false;
-		setSpeedX(-speed);
-		setSpeedY(speed);
+		ismovingright = false;
+		ismovingleft = true;
+		ismovingup = false;
+		ismovingdown = true;
 		isMoving = true;
 	}
 	
 	protected void moveRightDown() {
 		isAimingUp = false;
-		setSpeedX(speed);
-		setSpeedY(speed);
+		ismovingright = true;
+		ismovingleft = false;
+		ismovingup = false;
+		ismovingdown = true;
 		isMoving = true;
 	}
 	
 	protected void stopMoving() {
-		setSpeedX(0);
-		setSpeedY(0);
+		ismovingright = false;
+		ismovingleft = false;
+		ismovingup = false;
+		ismovingdown = false;
 		isMoving = false;
 		setStaySprite();
 	}

@@ -56,14 +56,17 @@ public class Tile extends Stuff {
 	
 	public void checkCollision(Enemy enemy) {
 		if (enemy.alive == true && r.intersects(enemy.R)) {
-			if (enemy.getCenterX() - getCenterX() >= 0)
-				enemy.setCenterX(enemy.getCenterX()+2);
-			else
-				enemy.setCenterX(enemy.getCenterX()-2);
-			if (enemy.getCenterY() - getCenterY() >= 0)
-				enemy.setCenterY(enemy.getCenterY()+2);
-			else
-				enemy.setCenterY(enemy.getCenterY()-2);
+			if (Math.abs(enemy.getCenterX() - getCenterX()) > Math.abs(enemy.getCenterY() - getCenterY())) {
+				if (enemy.getCenterX() - getCenterX() > 0)
+					enemy.canmoveleft = false;
+				else
+					enemy.canmoveright = false;
+			} else {
+				if (enemy.getCenterY() - getCenterY() > 0)
+					enemy.canmoveup = false;
+				else
+					enemy.canmovedown = false;
+			}
 		}
 	}
 /*

@@ -10,7 +10,7 @@ public class Pepper extends Enemy {
 	move2SpriteRight;
 
 	public Pepper(int centerX, int centerY) {
-		super(centerX,centerY, new Flamer(), 5, (StartingClass.difficultylevel == 1)?2:((StartingClass.difficultylevel == 2)?3:4));
+		super(centerX,centerY, new Flamer(), 5, (StartingClass.difficultylevel == 1)?2:((StartingClass.difficultylevel == 3)?4:3));
 		movementTime = ((int) (Math.random() * 50));
 	}
 

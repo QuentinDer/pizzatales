@@ -138,7 +138,31 @@ public class Aubergine extends Enemy {
 						int absdifY = Math.abs(difY);
 						int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + bginity) / 50));
 						int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + bginitx) / 50));
-						pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1, toshootx2, posplayery, 12);
+						int toshootx2R = posplayerx;
+						int toshooty1R = posplayery;
+						if (difX > 0) {
+							toshootx2R--;
+							while (toshootx2R >= toshootx2 && pf.map[toshootx2R][posplayery])
+								toshootx2R--;
+							toshootx2R++;
+						} else {
+							toshootx2R++;
+							while (toshootx2R <= toshootx2 && pf.map[toshootx2R][posplayery])
+								toshootx2R++;
+							toshootx2R--;
+						}
+						if (difY > 0) {
+							toshooty1R--;
+							while (toshooty1R >= toshooty1 && pf.map[posplayerx][toshooty1R])
+								toshooty1R--;
+							toshooty1R++;
+						} else {
+							toshooty1R++;
+							while (toshooty1R <= toshooty1 && pf.map[posplayerx][toshooty1R])
+								toshooty1R++;
+							toshooty1R--;
+						}
+						pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1R, toshootx2R, posplayery, 12);
 						switch (pathresult) {
 						case 0:
 							stopMoving();

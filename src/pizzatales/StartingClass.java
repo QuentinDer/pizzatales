@@ -270,6 +270,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				player.canmoveleft = true;
 				player.canmoveright = true;
 				player.canmoveup = true;
+				for (Enemy e : enemyarray) {
+					e.canmovedown = true;
+					e.canmoveleft = true;
+					e.canmoveright = true;
+					e.canmoveup = true;
+				}
 				checkEnemiesCollision();
 				checkTileCollisions();
 				checkItemsCollision();
