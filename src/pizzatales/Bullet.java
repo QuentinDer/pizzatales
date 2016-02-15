@@ -22,11 +22,17 @@ public class Bullet extends Projectile {
 	@Override
 	public void doOnCollision(Player p) {
 		visible = false;
+		StartingClass.blooddropx.add((p.getCenterX()+getCenterX())/2);
+		StartingClass.blooddropy.add((p.getCenterY()+getCenterY())/2);
+		StartingClass.bloodtimer.add(10);
 	}
 
 	@Override
 	public void doOnCollision(Enemy e) {
 		visible = false;
+		StartingClass.blooddropx.add((e.getCenterX()+getCenterX())/2);
+		StartingClass.blooddropy.add((e.getCenterY()+getCenterY())/2);
+		StartingClass.bloodtimer.add(10);
 	}
 
 	@Override
