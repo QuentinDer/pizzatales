@@ -23,4 +23,9 @@ public class ArmorPotion extends Item {
 		return armorpotionsprite;
 	}
 
+	@Override
+	protected boolean canDoEffect() {
+		return player.getArmor().defense != player.getArmor().MAXDEF;
+	}
+
 }

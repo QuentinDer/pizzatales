@@ -19,13 +19,14 @@ public abstract class Item extends Stuff {
 	}
 	
 	public boolean checkCollisionPlayer(Player p) {
-		if (p.R.intersects(r)) {
+		if (p.R.intersects(r) && canDoEffect()) {
 			doEffect();
 			return true;
 		} else
 			return false;
 	}
 
+	protected abstract boolean canDoEffect();
 	protected abstract void doEffect();
 	
 	protected abstract Image getSprite();

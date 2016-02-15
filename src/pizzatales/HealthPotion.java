@@ -23,4 +23,9 @@ public class HealthPotion extends Item {
 	protected Image getSprite() {
 		return healthpotionsprite;
 	}
+
+	@Override
+	protected boolean canDoEffect() {
+		return player.getHealth() != 20;
+	}
 }
