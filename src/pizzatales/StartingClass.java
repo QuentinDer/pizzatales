@@ -69,6 +69,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		tileTree = getImage(base, "data/tree.png");
 		tileGrass = getImage(base, "data/grass.png");
 		tileWall = getImage(base, "data/wall.png");
+		tileCave = getImage(base, "data/cave.png");
 		blooddrop = getImage(base, "data/blooddrop.png");
 		Gun.leftSprite = getImage(base, "data/pistol1.png");
 		Gun.rightSprite = getImage(base, "data/pistol2.png");
