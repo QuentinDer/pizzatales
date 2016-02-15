@@ -49,9 +49,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();
 	private ArrayList<Item> items = new ArrayList<Item>();
 	public static ArrayList<Enemy> enemyarray = new ArrayList<Enemy>();
-	public static ArrayList<Integer> blooddropx = new ArrayList<Integer>();
-	public static ArrayList<Integer> blooddropy = new ArrayList<Integer>();
-	public static ArrayList<Integer> bloodtimer = new ArrayList<Integer>();
+	public static ArrayList<HitPoint> hitpoints = new ArrayList<HitPoint>();
 
 	@Override
 	public void init() {
@@ -71,7 +69,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		tileTree = getImage(base, "data/tree.png");
 		tileGrass = getImage(base, "data/grass.png");
 		tileWall = getImage(base, "data/wall.png");
-		tileCave = getImage(base, "data/cave.png");
 		blooddrop = getImage(base, "data/blooddrop.png");
 		Gun.leftSprite = getImage(base, "data/pistol1.png");
 		Gun.rightSprite = getImage(base, "data/pistol2.png");
@@ -272,14 +269,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				 * 1000) { e.walkCounter = 0; } } }
 				 */
 				int i = 0;
-				while (i < bloodtimer.size()) {
-					bloodtimer.set(i, bloodtimer.get(i) - 1);
-					if (bloodtimer.get(i) == 0) {
-						bloodtimer.remove(i);
-						blooddropx.remove(i);
-						blooddropy.remove(i);
-					} else
+				while (i < hitpoints.size()) {
+					if (hitpoints.get(i).timer == 0)
+						hitpoints.remove(i);
+					else {
+						hitpoints.get(i).timer--;
 						i++;
+					}	
 				}
 				updateExplosions();
 				player.canmovedown = true;
@@ -376,8 +372,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				g.drawImage(currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
 				g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
 			}
-			for (int i = 0; i < blooddropx.size(); i++) {
-				g.drawImage(blooddrop, blooddropx.get(i)-7, blooddropy.get(i)-7, this);
+			for (int i = 0; i < hitpoints.size(); i++) {
+				g.drawImage(blooddrop, hitpoints.get(i).getCenterX()-7, hitpoints.get(i).getCenterY()-7, this);
 			}
 			g.setColor(Color.RED);
 			g.fillRect(32, 37, 20, 20);

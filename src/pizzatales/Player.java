@@ -4,19 +4,15 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-public class Player {
+public class Player extends Point {
 
 	private int MOVESPEED = 4;
 	//private final static double MAXSCROLLINGPROPORTION = 0.5;
 	//private final static int SCROLLINGRANGE = 150;
-	private int centerX = 640;
-	private int centerY = 100;
 	private int speedX = 0;
 	private int speedY = 0;
 	private int scrollingSpeed = 0;
 	private int health = 20;
-	private boolean isMovingVer = false;
-	private boolean isMovingHor = false;
 	public boolean isColliding = false;
 	public Rectangle R = new Rectangle(0,0,0,0);
 	private Firearm weapon;
@@ -37,6 +33,10 @@ public class Player {
 	// 0 = not, 1 = left, 2 = top, 3 = right, 4 = bottom
 	private int isShooting = 0;
 	public int walkCounter = 0;
+	
+	public Player() {
+		super(640,100);
+	}
 
 	/*
 	private static Background bg1 = StartingClass.getBg1();
@@ -264,14 +264,6 @@ public class Player {
 		return this.scrollingSpeed;
 	}
 
-	public void setCenterX(int centerX) {
-		this.centerX = centerX;
-	}
-
-	public void setCenterY(int centerY) {
-		this.centerY = centerY;
-	}
-
 	public void setSpeedX(int speedX) {
 		this.speedX = speedX;
 	}
@@ -284,15 +276,6 @@ public class Player {
 	public void setSpeedY(int speedY) {
 		this.speedY = speedY /2;
 		this.scrollingSpeed = speedY/2; 
-	}
-
-
-	public int getCenterX() {
-		return centerX;
-	}
-
-	public int getCenterY() {
-		return centerY;
 	}
 	
 	public int getHealth() {

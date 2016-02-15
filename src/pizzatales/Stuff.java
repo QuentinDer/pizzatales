@@ -1,16 +1,13 @@
 package pizzatales;
 
-public abstract class Stuff {
+public abstract class Stuff extends Point {
 
 	int speedX = 0;
 	int speedY = 0;
-	int centerX;
-	int centerY;
 	Player player = StartingClass.getPlayer();
 	
 	public Stuff(int centerX, int centerY) {
-		this.centerX = centerX;
-		this.centerY = centerY;
+		super(centerX, centerY);
 	}
 	
 	public int getSpeedX() {
@@ -32,21 +29,5 @@ public abstract class Stuff {
 	public void update() {
 		centerX += speedX;
 		centerY += speedY - player.getScrollingSpeed();
-	}
-	
-	public int getCenterX() {
-		return centerX;
-	}
-	
-	public int getCenterY() {
-		return centerY;
-	}
-	
-	public void setCenterX(int centerX) {
-		this.centerX = centerX;
-	}
-	
-	public void setCenterY(int centerY) {
-		this.centerY = centerY;
 	}
 }
