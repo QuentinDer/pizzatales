@@ -121,7 +121,7 @@ public class Player {
 		centerX += speedX;
 
 		// Collision
-		R.setRect(centerX - 22, centerY - 22, 45, 45);
+		R.setRect(centerX - 25, centerY - 25, 50, 50);
 		if (isShooting > 0) {
 			if (weapon.isReady2Fire()) {
 				switch (isShooting) {

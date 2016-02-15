@@ -104,18 +104,19 @@ public abstract class Enemy extends Stuff {
 		
 		super.update();
 		
-		int currentposx = (getCenterX() - bg.getCenterX() + bginitx) / 50;
-		int currentposy = (getCenterY() - bg.getCenterY() + bginity) / 50;
-		if (currentposx != posx || currentposy != posy) {
-			pf.map[posx][posy] = true;
-			pf.map[currentposx][currentposy] = false;
-			posx = currentposx;
-			posy = currentposy;
-		}
-		
 		R.setBounds(getCenterX() - 22, getCenterY() - 22, 45, 45);
 		
 		if (alive == true) {
+			
+			int currentposx = (getCenterX() - bg.getCenterX() + bginitx) / 50;
+			int currentposy = (getCenterY() - bg.getCenterY() + bginity) / 50;
+			
+			if (currentposx != posx || currentposy != posy) {
+				pf.map[posx][posy] = true;
+				pf.map[currentposx][currentposy] = false;
+				posx = currentposx;
+				posy = currentposy;
+			}
 			
 			// Prevents going beyond X coordinate of 0 or 1280
 			if (centerX + speedX <= 30) {

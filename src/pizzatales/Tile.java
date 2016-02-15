@@ -33,27 +33,27 @@ public class Tile extends Stuff {
 			tileImage = StartingClass.tileWall;
 		}
 	}
-
-	public void checkHorizontalCollision(Player player) {
-		if (player.R.intersects(r) && Math.abs(player.getCenterY()-getCenterY())<26) {
-			if (player.getCenterX() <= this.getCenterX()) {
-				player.canmoveright = false;;
-			} else {
-				player.canmoveleft = false;
-			}
-		}
-	}
-
-	public void checkVerticalCollision(Player player) {
-		if (player.R.intersects(r) && Math.abs(player.getCenterX()-getCenterX())<26) {
-			if (player.getCenterY() <= this.getCenterY()) {
-				player.canmovedown = false;
-			} else {
-				player.canmoveup = false;
-			}
-		}
-	}
 	
+	public void checkCollision(Player player) {
+		int diffX = Math.abs(getCenterX() - player.getCenterX());
+		int diffY = Math.abs(getCenterY() - player.getCenterY());
+		if (diffX < 50 && diffY < 50) {
+			if (diffX > diffY && diffY < 45) {
+				if (player.getCenterX() <= this.getCenterX()) {
+					player.canmoveright = false;;
+				} else {
+					player.canmoveleft = false;
+				}
+			} else if (diffX < diffY && diffX < 45) {
+				if (player.getCenterY() <= this.getCenterY()) {
+					player.canmovedown = false;
+				} else {
+					player.canmoveup = false;
+				}
+			}
+		}
+	}
+
 	public void checkCollision(Enemy enemy) {
 		if (enemy.alive == true && r.intersects(enemy.R)) {
 			if (Math.abs(enemy.getCenterX() - getCenterX()) > Math.abs(enemy.getCenterY() - getCenterY())) {
@@ -94,8 +94,7 @@ public class Tile extends Stuff {
 	}*/
 	
 	public void checkCollisions() {
-		checkHorizontalCollision(player);
-		checkVerticalCollision(player);
+		checkCollision(player);
 		for (int i = 0; i < StartingClass.getEnemyarray().size(); i++) {
 			Enemy e = StartingClass.getEnemyarray().get(i);
 			checkCollision(e);

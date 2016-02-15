@@ -9,10 +9,13 @@ public abstract class Projectile extends Stuff {
 	private Rectangle rectP;
 	private int initX;
 	private int initY;
+	private int initbgx;
+	private int initbgy;
 	protected int range;
 	protected int size;
 	protected int halfsize;
 	public int damage = 1;
+	private Background bg = StartingClass.getBg1();
 
 	public Projectile(int startX, int startY, float vectorX, float vectorY, int speed, int damage, int size, int halfsize, int range) {
 		super(startX, startY);
@@ -20,6 +23,8 @@ public abstract class Projectile extends Stuff {
 		speedY = (int)(vectorY * speed);
 		initX = startX;
 		initY = startY;
+		initbgx = bg.getCenterX();
+		initbgy = bg.getCenterY();
 		visible = true;
 		this.damage = damage;
 		this.size = size;
@@ -32,10 +37,10 @@ public abstract class Projectile extends Stuff {
 	public void update() {
 		super.update();
 		rectP.setBounds(getCenterX() - halfsize, getCenterY() - halfsize, size, size);
-		if (Math.abs(this.getCenterX() - initX) > range) {
+		if (Math.abs(this.getCenterX() - bg.getCenterX() + initbgx - initX) > range) {
 			doOnLimitRange();
 		}
-		if (Math.abs(this.getCenterY() - initY) > range) {
+		if (Math.abs(this.getCenterY() - bg.getCenterY() + initbgy - initY) > range) {
 			doOnLimitRange();
 		}
 	}

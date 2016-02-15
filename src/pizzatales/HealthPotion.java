@@ -14,11 +14,8 @@ public class HealthPotion extends Item {
 	protected void doEffect() {
 		if (player.getHealth() + 5 > 20) {
 			player.setHealth(20);
-		} else if (player.getHealth() < 20) {
-			if (player.getHealth() + 5 > 20) {
-				player.setHealth(20);
-			} else
-				player.setHealth(player.getHealth() + 5);
+		} else {
+			player.setHealth(player.getHealth() + 5);
 		} 
 	}
 

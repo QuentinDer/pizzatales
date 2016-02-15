@@ -88,7 +88,7 @@ public class Tato extends Enemy {
 						int absdifY = Math.abs(difY);
 						int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + bginity) / 50));
 						int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + bginitx) / 50));
-						pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1, toshootx2, posplayery, 8);
+						pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1, toshootx2, posplayery, 8, canmoveleft, canmoveup, canmoveright, canmovedown);
 						switch (pathresult) {
 						case 0:
 							stopMoving();
@@ -138,7 +138,7 @@ public class Tato extends Enemy {
 						int absdifY = Math.abs(difY);
 						int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + bginity) / 50));
 						int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + bginitx) / 50));
-						pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1, toshootx2, posplayery, 12);
+						pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1, toshootx2, posplayery, 12, canmoveleft, canmoveup, canmoveright, canmovedown);
 						switch (pathresult) {
 						case 0:
 							stopMoving();
@@ -212,7 +212,7 @@ public class Tato extends Enemy {
 								toshooty1R++;
 							toshooty1R--;
 						}
-						pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1R, toshootx2R, posplayery, 12);
+						pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1R, toshootx2R, posplayery, 12, canmoveleft, canmoveup, canmoveright, canmovedown);
 						switch (pathresult) {
 						case 0:
 							stopMoving();
