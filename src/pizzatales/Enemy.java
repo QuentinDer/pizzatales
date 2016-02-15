@@ -51,7 +51,7 @@ public abstract class Enemy extends Stuff {
 		weapon.setFireRate(weapon.getFireRate() * (5 - StartingClass.difficultylevel));
 		this.health = health * StartingClass.difficultylevel;
 		this.speed = speed;
-		bginitx = bg.getCenterX() - 15;
+		bginitx = bg.getCenterX();
 		bginity = bg.getCenterY() - 15;
 		posx = (centerX-15) / 50;
 		posy = (centerY-15) / 50;

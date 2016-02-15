@@ -8,7 +8,7 @@ public abstract class Item extends Stuff {
 	protected Rectangle r;
 	
 	public Item(int x, int y) {
-		super((x * 50) + 40,(y * 50) + 40);
+		super((x * 50) + 25,(y * 50) + 40);
 		r = new Rectangle(getCenterX() - 22, getCenterY() - 22, 45, 45);
 	}
 	

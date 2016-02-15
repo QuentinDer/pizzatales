@@ -14,19 +14,19 @@ public class EnemyFactory {
 		Enemy e = null;
 		switch(c) {
 		case 'T':
-			e = new Tato((x * 50) + 40,(y * 50) + 40);
+			e = new Tato((x * 50) + 25,(y * 50) + 40);
 			break;
 		case 'A':
-			e = new Aubergine((x * 50) + 40,(y * 50) + 40);
+			e = new Aubergine((x * 50) + 25,(y * 50) + 40);
 			break;
 		case 'B':
-			e = new Broccoli((x * 50) + 40,(y * 50) + 40);
+			e = new Broccoli((x * 50) + 25,(y * 50) + 40);
 			break;
 		case 'P':
-			e = new Pepper((x * 50) + 40,(y * 50) + 40);
+			e = new Pepper((x * 50) + 25,(y * 50) + 40);
 			break;
 		case 'M':
-			e = new Mushroom((x * 50) + 40,(y * 50) + 40);
+			e = new Mushroom((x * 50) + 25,(y * 50) + 40);
 			break;
 		}
 		return e;
