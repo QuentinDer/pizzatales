@@ -8,10 +8,10 @@ public class Tile extends Stuff {
 	private char type;
 	public Image tileImage;
 
-	//private Background bg = StartingClass.getBg1();
+	// private Background bg = StartingClass.getBg1();
 
 	private Rectangle r;
-	
+
 	private final static String acceptedTileTypes = "twcusr";
 
 	public static boolean isTileTypeSupported(char type) {
@@ -19,14 +19,14 @@ public class Tile extends Stuff {
 		test += type;
 		return acceptedTileTypes.contains(test);
 	}
-	
+
 	public Tile(int x, int y, char typeInt) {
-		super((x * 50) + 25,(y * 50) + 40);
+		super((x * 50) + 25, (y * 50) + 40);
 
 		type = typeInt;
 
-		r = new Rectangle(getCenterX()-25,getCenterY()-25,50,50);
-		
+		r = new Rectangle(getCenterX() - 25, getCenterY() - 25, 50, 50);
+
 		if (type == 't') {
 			tileImage = StartingClass.tileTree;
 		} else if (type == 'w') {
@@ -41,22 +41,25 @@ public class Tile extends Stuff {
 			tileImage = StartingClass.tileCaveRock;
 		}
 	}
-	
+
 	public void checkCollision(Player player) {
 		int diffX = Math.abs(getCenterX() - player.getCenterX());
 		int diffY = Math.abs(getCenterY() - player.getCenterY());
-		if (diffX < 50 && diffY < 50) {
-			if (diffX > diffY && diffY < 45) {
-				if (player.getCenterX() <= this.getCenterX()) {
-					player.canmoveright = false;;
-				} else {
-					player.canmoveleft = false;
-				}
-			} else if (diffX < diffY && diffX < 45) {
-				if (player.getCenterY() <= this.getCenterY()) {
-					player.canmovedown = false;
-				} else {
-					player.canmoveup = false;
+		if (type != 'u') {
+			if (diffX < 50 && diffY < 50) {
+				if (diffX > diffY && diffY < 45) {
+					if (player.getCenterX() <= this.getCenterX()) {
+						player.canmoveright = false;
+						;
+					} else {
+						player.canmoveleft = false;
+					}
+				} else if (diffX < diffY && diffX < 45) {
+					if (player.getCenterY() <= this.getCenterY()) {
+						player.canmovedown = false;
+					} else {
+						player.canmoveup = false;
+					}
 				}
 			}
 		}
@@ -77,44 +80,36 @@ public class Tile extends Stuff {
 			}
 		}
 	}
-/*
-	public void checkHorizontalCollision(Enemy enemy) {
-		if (enemy.alive == true && enemy.R.intersects(r) && Math.abs(enemy.getCenterY()-getCenterY())<50) {
-			if (enemy.getCenterX() <= this.getCenterX()) {
-				enemy.setCenterX(enemy.getCenterX() - 2);
-				enemy.setSpeedX(0);
-			} else if (enemy.getCenterX() >= this.getCenterX()) {
-				enemy.setCenterX(enemy.getCenterX() + 2);
-				enemy.setSpeedX(0);
-			}
-		}
-	}
-	public void checkVerticalCollision(Enemy enemy) {
-		if (enemy.alive == true && enemy.R.intersects(r) && Math.abs(enemy.getCenterX()-getCenterX())<50) {
-			if (enemy.getCenterY() <= this.getCenterY()) {
-				enemy.setCenterY(enemy.getCenterY() - 2);
-				enemy.setSpeedY(0);
-			} else if (enemy.getCenterY() >= this.getCenterY()) {
-				enemy.setCenterY(enemy.getCenterY() + 2);
-				enemy.setSpeedY(0);
-			}
-		}
-	}*/
-	
+	/*
+	 * public void checkHorizontalCollision(Enemy enemy) { if (enemy.alive ==
+	 * true && enemy.R.intersects(r) &&
+	 * Math.abs(enemy.getCenterY()-getCenterY())<50) { if (enemy.getCenterX() <=
+	 * this.getCenterX()) { enemy.setCenterX(enemy.getCenterX() - 2);
+	 * enemy.setSpeedX(0); } else if (enemy.getCenterX() >= this.getCenterX()) {
+	 * enemy.setCenterX(enemy.getCenterX() + 2); enemy.setSpeedX(0); } } }
+	 * public void checkVerticalCollision(Enemy enemy) { if (enemy.alive == true
+	 * && enemy.R.intersects(r) && Math.abs(enemy.getCenterX()-getCenterX())<50)
+	 * { if (enemy.getCenterY() <= this.getCenterY()) {
+	 * enemy.setCenterY(enemy.getCenterY() - 2); enemy.setSpeedY(0); } else if
+	 * (enemy.getCenterY() >= this.getCenterY()) {
+	 * enemy.setCenterY(enemy.getCenterY() + 2); enemy.setSpeedY(0); } } }
+	 */
+
 	public void checkCollisions() {
 		checkCollision(player);
 		for (int i = 0; i < StartingClass.getEnemyarray().size(); i++) {
 			Enemy e = StartingClass.getEnemyarray().get(i);
 			checkCollision(e);
-			/*checkHorizontalCollision(e);
-			checkVerticalCollision(e);*/
+			/*
+			 * checkHorizontalCollision(e); checkVerticalCollision(e);
+			 */
 		}
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		r.setBounds(getCenterX()-25, getCenterY()-25, 50, 50);
+		r.setBounds(getCenterX() - 25, getCenterY() - 25, 50, 50);
 	}
 
 	public Rectangle getR() {
