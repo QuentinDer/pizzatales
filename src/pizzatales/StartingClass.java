@@ -23,7 +23,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
-	public static int difficultylevel = 1;
+	public static int difficultylevel = 2;
 	private static Player player;
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
 	private Image blooddrop;
@@ -71,7 +71,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 
 		// Image Setups
-		background = getImage(base, "data/background1.png");
+		background = getImage(base, "data/background.png");
 		tileTree = getImage(base, "data/tree.png");
 		tileGrass = getImage(base, "data/grass.png");
 		tileWall = getImage(base, "data/wall.png");
@@ -193,7 +193,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		// Initialize Tiles
 		try {
-			loadMap("data/L14.txt");
+			loadMap("data/L22.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
