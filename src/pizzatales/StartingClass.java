@@ -371,7 +371,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				updateTiles();
 				updateItems();
 				repaint(); // this calls paint
-				
+			
 				if (activatedentry != null) {
 					for (Enemy e : enemyarray) {
 						if (arenaenemies.get(activatedentry.isGoingIn()).contains(e))

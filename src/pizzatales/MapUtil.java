@@ -9,24 +9,21 @@ public class MapUtil {
 		nonobstacles.clear();
 		int width = map.length;
 		int height = map[0].length;
-		ArrayList<Integer> todiscoverx = new ArrayList<Integer>();
-		ArrayList<Integer> todiscovery = new ArrayList<Integer>();
-		todiscoverx.add(x);
-		todiscovery.add(y);
+		ArrayList<Integer> todiscover = new ArrayList<Integer>();
+		todiscover.add(height*x+y);
 		int i = 0;
 		int j = 0;
 		int size;
-		while (i < mp && !todiscoverx.isEmpty()) {
+		while (i < mp && !todiscover.isEmpty()) {
 			j = 0;
-			size = todiscoverx.size();
+			size = todiscover.size();
 			while (j < size) {
-				int xj = todiscoverx.get(0);
-				int yj = todiscovery.get(0);
-				int current = height*xj + yj;
-				if (!nonobstacles.contains(current-height) && 0 != xj) {
+				int current = todiscover.get(0);
+				int xj = current / height;
+				int yj = current % height;
+				if (!nonobstacles.contains(current-height) && !todiscover.contains(current-height) && 0 != xj) {
 					if (!Tile.isTileBlocking(map[xj-1][yj])) {
-						todiscoverx.add(xj-1);
-						todiscovery.add(yj);
+						todiscover.add(current-height);
 					} else {
 						if (1 != xj && entrydoors.containsKey(current) && entrydoors.containsKey(current - height - height) && doors.containsKey(current - height)) {
 							entrydoors.get(current).setEntryOut(entrydoors.get(current - height - height));
@@ -47,10 +44,9 @@ public class MapUtil {
 						}
 					}
 				}
-				if (!nonobstacles.contains(current+height) && width -1 != xj) {
+				if (!nonobstacles.contains(current+height) && !todiscover.contains(current+height) && width -1 != xj) {
 					if (!Tile.isTileBlocking(map[xj+1][yj])) {
-						todiscoverx.add(xj+1);
-						todiscovery.add(yj);
+						todiscover.add(current+height);
 					} else {
 						if (width - 2 != xj && entrydoors.containsKey(current) && entrydoors.containsKey(current + height + height) && doors.containsKey(current + height)) {
 							entrydoors.get(current).setEntryOut(entrydoors.get(current + height + height));
@@ -71,10 +67,9 @@ public class MapUtil {
 						}
 					}
 				}
-				if (!nonobstacles.contains(current-1) && 0 != yj) {
+				if (!nonobstacles.contains(current-1) && !todiscover.contains(current-1) && 0 != yj) {
 					if (!Tile.isTileBlocking(map[xj][yj-1])) {
-						todiscoverx.add(xj);
-						todiscovery.add(yj-1);
+						todiscover.add(current-1);
 					} else {
 						if (1 != yj && entrydoors.containsKey(current) && entrydoors.containsKey(current - 2) && doors.containsKey(current - 1)) {
 							entrydoors.get(current).setEntryOut(entrydoors.get(current - 2));
@@ -83,22 +78,25 @@ public class MapUtil {
 							entrydoors.get(current - 2).setIn(arenanumber);
 							entrydoors.get(current - 2).addDoor(doors.get(current - 1));
 							int k = 1;
-							while(xj + k != width && doors.containsKey(current - height + k)) {
+							/*String ss = "doors: ";
+							for (Integer intt : doors.keySet())
+								ss += intt + " ";*/
+							
+							while(xj + k != width && doors.containsKey(current - 1 + k*height)) {
 								entrydoors.get(current - 2).addDoor(doors.get(current - 1 + height*k));
 								k++;
 							}
 							k = -1;
-							while(xj + k != -1 && doors.containsKey(current - height + k)) {
+							while(xj + k != -1 && doors.containsKey(current - 1 + k*height)) {
 								entrydoors.get(current - 2).addDoor(doors.get(current - 1 + height*k));
 								k--;
 							}
 						}
 					}
 				}
-				if (!nonobstacles.contains(current+1) && height-1 != yj) {
+				if (!nonobstacles.contains(current+1) && !todiscover.contains(current+1) && height-1 != yj) {
 					if (!Tile.isTileBlocking(map[xj][yj+1])) {
-						todiscoverx.add(xj);
-						todiscovery.add(yj+1);
+						todiscover.add(current+1);
 					} else {
 						if (height - 2 != yj && entrydoors.containsKey(current) && entrydoors.containsKey(current + 2) && doors.containsKey(current + 1)) {
 							entrydoors.get(current).setEntryOut(entrydoors.get(current + 2));
@@ -107,23 +105,23 @@ public class MapUtil {
 							entrydoors.get(current + 2).setIn(arenanumber);
 							entrydoors.get(current + 2).addDoor(doors.get(current + 1));
 							int k = 1;
-							while(xj + k != width && doors.containsKey(current - height + k)) {
+							while(xj + k != width && doors.containsKey(current + 1 + k * height)) {
 								entrydoors.get(current + 2).addDoor(doors.get(current + 1 + height*k));
 								k++;
 							}
 							k = -1;
-							while(xj + k != -1 && doors.containsKey(current - height + k)) {
+							while(xj + k != -1 && doors.containsKey(current + 1 + k * height)) {
 								entrydoors.get(current + 2).addDoor(doors.get(current + 1 + height*k));
 								k--;
 							}
 						}
 					}
 				}
-				todiscoverx.remove(0);
-				todiscovery.remove(0);
+				todiscover.remove(0);
 				nonobstacles.add(current);
 				j++;
 			}
+			i++;
 		}
 		if (i == mp) {
 			nonobstacles.clear();
