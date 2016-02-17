@@ -146,7 +146,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		SirTomato.staySpriteRight = getImage(base, "data/sirtomatoright1.png");
 		SirTomato.move1SpriteRight = getImage(base, "data/sirtomatoright2.png");
 		SirTomato.move2SpriteRight = getImage(base, "data/sirtomatoright3.png");
-		//TODO SirTomato.dieSprite = getImage(base, "data/pepperdead.png");
+		SirTomato.dieSprite = getImage(base, "data/sirtomatodead.png");
 		
 		BazookaBulletExplosion.bazookaexplosionsprite = getImage(base, "data/bazookaexplosion.png");
 
@@ -192,7 +192,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		// Initialize Tiles
 		try {
-			loadMap("data/L13.txt");
+			loadMap("data/L14.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
