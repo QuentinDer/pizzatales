@@ -353,6 +353,7 @@ public abstract class Enemy extends Stuff {
 	
 	public void sleep() {
 		sleepy = true;
+		stopMoving();
 	}
 	
 	public void wakeup() {

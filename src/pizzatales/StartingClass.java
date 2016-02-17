@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.AbstractMap.SimpleEntry;
 
@@ -23,11 +24,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
-	public static int difficultylevel = 2;
+	public static int difficultylevel = 1;
 	private static Player player;
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
 	private Image blooddrop;
-	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, tilePuddle, tileCaveRock, tileGate, tileCaveExit;;
+	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, tilePuddle, tileCaveRock, tileGate, tileCaveExit;
 	private int walkCounter = 1;
 	private URL base;
 	private Graphics second;
@@ -41,6 +42,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	private int weaponindex;
 	private int armorindex;
+	private int bginitx;
+	private int bginity;
 	private long clock = System.currentTimeMillis();
 
 	enum GameState {
@@ -53,9 +56,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private ArrayList<Item> items = new ArrayList<Item>();
 	public static ArrayList<Enemy> enemyarray = new ArrayList<Enemy>();
 	public static ArrayList<ArrayList<Enemy>> arenaenemies = new ArrayList<ArrayList<Enemy>>();
-	public static ArrayList<ArrayList<Tile>> arenadoors = new ArrayList<ArrayList<Tile>>();
+	public static ArrayList<ArrayList<EntryDoor>> arenaentrydoors = new ArrayList<ArrayList<EntryDoor>>();
 	public static ArrayList<Entry<Integer,Integer>> arenacenters = new ArrayList<Entry<Integer,Integer>>();
 	public static ArrayList<HitPoint> hitpoints = new ArrayList<HitPoint>();
+	public ArrayList<EntryDoor> entrydoors = new ArrayList<EntryDoor>();
+	public static EntryDoor activatedentry = null;
+	
 
 	@Override
 	public void init() {
@@ -71,7 +77,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 
 		// Image Setups
-		background = getImage(base, "data/background.png");
+		background = getImage(base, "data/background1.png");
 		tileTree = getImage(base, "data/tree.png");
 		tileGrass = getImage(base, "data/grass.png");
 		tileWall = getImage(base, "data/wall.png");
@@ -190,10 +196,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		bg1 = new Background(0, -200);
 		bg2 = new Background(0, 1400);
+		bginitx = bg1.getCenterX();
+		bginity = bg1.getCenterY() - 15;
 
 		// Initialize Tiles
 		try {
-			loadMap("data/L22.txt");
+			loadMap("data/L14.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -218,8 +226,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		pf.map = new boolean[width][height];
 		char [][] charmap = new char[width][height];
-		ArrayList<Entry<Integer,EntryDoor>> entrydoors = new ArrayList<Entry<Integer,EntryDoor>>();
-		ArrayList<Tile> doors = new ArrayList<Tile>();
+		HashMap<Integer,EntryDoor> mentrydoors = new HashMap<Integer,EntryDoor>();
+		HashMap<Integer, Tile> doors = new HashMap<Integer, Tile>();
 		
 		for (int j = 0; j < height; j++) {
 			line = lines.get(j);
@@ -232,14 +240,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						Item it = ItemFactory.getItem(i, j, ch);
 						items.add(it);
 						if (ch == 'i') {
-							entrydoors.add(new SimpleEntry<Integer,EntryDoor>(height*i+j,(EntryDoor)it));
+							mentrydoors.put(height*i+j,(EntryDoor)it);
 						}
 					}
 					if (Tile.isTileTypeSupported(ch)) {
 						Tile t = new Tile(i, j, ch);
 						tilearray.add(t);
 						if (ch == 'd')
-							doors.add(t);
+							doors.put(height*i+j,t);
 					}
 					if (EnemyFactory.isTileTypeSupported(ch)) {
 						getEnemyarray().add(EnemyFactory.getEnemy(i, j, ch));
@@ -249,13 +257,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			}
 		}
 		ArrayList<Integer> nonobstacles = new ArrayList<Integer>();
-		ArrayList<Integer> obstacles = new ArrayList<Integer>();
 		int k = 0;
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				if (charmap[i][j] == 'f') {
-					MapUtil.getAccessibleArea(i,j,100,charmap,nonobstacles,obstacles);
-					if (!obstacles.isEmpty()) {
+					MapUtil.getAccessibleArea(i,j,100,charmap,nonobstacles,mentrydoors, doors, k);
+					if (!nonobstacles.isEmpty()) {
 						int l = 0;
 						ArrayList<Enemy> lenemies = new ArrayList<Enemy>();
 						while (l < enemyarray.size()) {
@@ -266,14 +273,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							l++;
 						}
 						l = 0;
-						ArrayList<Tile> ldoors = new ArrayList<Tile>();
-						while (l < doors.size()) {
-							if (obstacles.contains(height*(doors.get(l).getCenterX()/50)+(doors.get(l).getCenterY()-15)/50)) {
-								ldoors.add(doors.get(l));
-							}
-							doors.remove(l);
-						}
-						arenadoors.add(ldoors);
 						arenaenemies.add(lenemies);
 						arenacenters.add(new SimpleEntry<Integer,Integer>(i,j));
 						k++;
@@ -281,8 +280,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				}
 			}
 		}
-		for (Tile t : doors)
-			tilearray.remove(t);
+		k = 0;
+		for (EntryDoor e : mentrydoors.values()) {
+			if (e.isGoingIn() < 0)
+				items.remove(e);
+			else
+				entrydoors.add(e);
+		}
 	}
 
 	@Override
@@ -367,7 +371,29 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				updateTiles();
 				updateItems();
 				repaint(); // this calls paint
-
+				
+				if (activatedentry != null) {
+					for (Enemy e : enemyarray) {
+						if (arenaenemies.get(activatedentry.isGoingIn()).contains(e))
+							e.wakeup();
+						else
+							e.sleep();
+					}
+					int l = 0;
+					while (l < entrydoors.size()) {
+						if (entrydoors.get(l).isGoingIn() == activatedentry.isGoingIn()) {
+							items.remove(entrydoors.get(l));
+							entrydoors.remove(l);
+						} else
+							l++;
+					}
+					for (Tile t : activatedentry.getDoors()) {
+						tilearray.remove(t);
+						pf.map[(t.getCenterX()-bg1.getCenterX()+bginitx)/50][(t.getCenterY()-bg1.getCenterY()+bginity)/50] = true;
+					}
+					activatedentry = null;
+				}
+				
 				if (walkCounter == 1000) {
 					walkCounter = 0;
 				}

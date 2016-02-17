@@ -22,7 +22,7 @@ public class ItemFactory {
 			i = new ArmorPotion(x,y, true);
 			break;
 		case 'i':
-			i = new EntryDoor(x,y, false);
+			i = new EntryDoor(x,y, true);
 			break;
 		}
 		return i;
