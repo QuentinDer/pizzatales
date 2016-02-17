@@ -27,7 +27,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private static Player player;
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
 	private Image blooddrop;
-	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, tilePuddle, tileCaveRock, tileGate, tileCaveExit;
+	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, tilePuddle, tileCaveRock, tileGate, tileCaveExit;;
 	private int walkCounter = 1;
 	private URL base;
 	private Graphics second;
@@ -54,6 +54,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public static ArrayList<Enemy> enemyarray = new ArrayList<Enemy>();
 	public static ArrayList<ArrayList<Enemy>> arenaenemies = new ArrayList<ArrayList<Enemy>>();
 	public static ArrayList<ArrayList<Tile>> arenadoors = new ArrayList<ArrayList<Tile>>();
+	public static ArrayList<Entry<Integer,Integer>> arenacenters = new ArrayList<Entry<Integer,Integer>>();
 	public static ArrayList<HitPoint> hitpoints = new ArrayList<HitPoint>();
 
 	@Override
@@ -188,7 +189,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		loadArmor();
 
 		bg1 = new Background(0, -200);
-		bg2 = new Background(0, 3000);
+		bg2 = new Background(0, 1400);
 
 		// Initialize Tiles
 		try {
@@ -217,7 +218,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		pf.map = new boolean[width][height];
 		char [][] charmap = new char[width][height];
-		ArrayList<Entry<Entry<Integer,Integer>,EntryDoor>> entrydoors = new ArrayList<Entry<Entry<Integer,Integer>,EntryDoor>>();
+		ArrayList<Entry<Integer,EntryDoor>> entrydoors = new ArrayList<Entry<Integer,EntryDoor>>();
 		ArrayList<Tile> doors = new ArrayList<Tile>();
 		
 		for (int j = 0; j < height; j++) {
@@ -231,13 +232,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						Item it = ItemFactory.getItem(i, j, ch);
 						items.add(it);
 						if (ch == 'i') {
-							entrydoors.add(new SimpleEntry<Entry<Integer,Integer>,EntryDoor>(new SimpleEntry<Integer,Integer>(i,j),(EntryDoor)it));
+							entrydoors.add(new SimpleEntry<Integer,EntryDoor>(height*i+j,(EntryDoor)it));
 						}
 					}
-					if (ch == 'd')
-						doors.add(new Tile(i, j, ch));
-					else if (Tile.isTileTypeSupported(ch)) {
-						tilearray.add(new Tile(i, j, ch));
+					if (Tile.isTileTypeSupported(ch)) {
+						Tile t = new Tile(i, j, ch);
+						tilearray.add(t);
+						if (ch == 'd')
+							doors.add(t);
 					}
 					if (EnemyFactory.isTileTypeSupported(ch)) {
 						getEnemyarray().add(EnemyFactory.getEnemy(i, j, ch));
@@ -245,10 +247,42 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					charmap[i][j] = ch;
 				}
 			}
-		}/*
-		while (!entrydoors.isEmpty()) {
-			
-		}*/
+		}
+		ArrayList<Integer> nonobstacles = new ArrayList<Integer>();
+		ArrayList<Integer> obstacles = new ArrayList<Integer>();
+		int k = 0;
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				if (charmap[i][j] == 'f') {
+					MapUtil.getAccessibleArea(i,j,100,charmap,nonobstacles,obstacles);
+					if (!obstacles.isEmpty()) {
+						int l = 0;
+						ArrayList<Enemy> lenemies = new ArrayList<Enemy>();
+						while (l < enemyarray.size()) {
+							if (nonobstacles.contains(height*enemyarray.get(l).posx + enemyarray.get(l).posy)) {
+								lenemies.add(enemyarray.get(l));
+								enemyarray.get(l).sleep();
+							}
+							l++;
+						}
+						l = 0;
+						ArrayList<Tile> ldoors = new ArrayList<Tile>();
+						while (l < doors.size()) {
+							if (obstacles.contains(height*(doors.get(l).getCenterX()/50)+(doors.get(l).getCenterY()-15)/50)) {
+								ldoors.add(doors.get(l));
+							}
+							doors.remove(l);
+						}
+						arenadoors.add(ldoors);
+						arenaenemies.add(lenemies);
+						arenacenters.add(new SimpleEntry<Integer,Integer>(i,j));
+						k++;
+					}
+				}
+			}
+		}
+		for (Tile t : doors)
+			tilearray.remove(t);
 	}
 
 	@Override
@@ -370,12 +404,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			ArrayList<Projectile> projectiles = player.getProjectiles();
 			for (int i = 0; i < getEnemyarray().size(); i++) {
 				Enemy e = getEnemyarray().get(i);
-				if (!e.alive) {
-					g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
-				}
-			}
-			for (int i = 0; i < getEnemyarray().size(); i++) {
-				Enemy e = getEnemyarray().get(i);
 				if (e.alive) {
 					if (null != e.getWeapon()) {
 						if (e.isAimingUp()) {
@@ -388,6 +416,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					} else {
 						g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
 					}
+				} else {
+					g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
 				}
 				for (int j = 0; j < e.getProjectiles().size(); j++) {
 					Projectile p = e.getProjectiles().get(j);
@@ -430,7 +460,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	private void callEnemiesAIs() {
 		for (Enemy e : getEnemyarray()) {
-			e.callAI();
+			e.launchAI();
 		}
 	}
 

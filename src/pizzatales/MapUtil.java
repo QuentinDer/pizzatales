@@ -4,8 +4,9 @@ import java.util.ArrayList;
 
 public class MapUtil {
 
-	public ArrayList<Integer> getAccessibleArea(int x, int y, int mp, char[][] map) {
-		ArrayList<Integer> ans = new ArrayList<Integer>();
+	public static void getAccessibleArea(int x, int y, int mp, char[][] map, ArrayList<Integer> nonobstacles, ArrayList<Integer> obstacles) {
+		obstacles.clear();
+		nonobstacles.clear();
 		int width = map.length;
 		int height = map[0].length;
 		ArrayList<Integer> todiscoverx = new ArrayList<Integer>();
@@ -19,31 +20,47 @@ public class MapUtil {
 			j = 0;
 			size = todiscoverx.size();
 			while (j < size) {
-				int xj = todiscoverx.get(j);
-				int yj = todiscovery.get(j);
+				int xj = todiscoverx.get(0);
+				int yj = todiscovery.get(0);
 				int current = height*xj + yj;
-				if (!ans.contains(current-height) && 0 != xj && !Tile.isTileBlocking(map[xj-1][yj])) {
-					todiscoverx.add(xj-1);
-					todiscovery.add(yj);
+				if (!nonobstacles.contains(current-height) && 0 != xj) {
+					if (!Tile.isTileBlocking(map[xj-1][yj])) {
+						todiscoverx.add(xj-1);
+						todiscovery.add(yj);
+					} else
+						obstacles.add(current-height);
 				}
-				if (!ans.contains(current+height) && width -1 != xj && !Tile.isTileBlocking(map[xj-1][yj])) {
-					todiscoverx.add(xj+1);
-					todiscovery.add(yj);
+				if (!nonobstacles.contains(current+height) && width -1 != xj) {
+					if (!Tile.isTileBlocking(map[xj+1][yj])) {
+						todiscoverx.add(xj+1);
+						todiscovery.add(yj);
+					} else
+						obstacles.add(current+height);
 				}
-				if (!ans.contains(current-1) && 0 != yj && !Tile.isTileBlocking(map[xj-1][yj])) {
-					todiscoverx.add(xj);
-					todiscovery.add(yj-1);
+				if (!nonobstacles.contains(current-1) && 0 != yj) {
+					if (!Tile.isTileBlocking(map[xj][yj-1])) {
+						todiscoverx.add(xj);
+						todiscovery.add(yj-1);
+					} else
+						obstacles.add(current-1);
 				}
-				if (!ans.contains(current+1) && height-1 != yj && !Tile.isTileBlocking(map[xj-1][yj])) {
-					todiscoverx.add(xj);
-					todiscovery.add(yj+1);
+				if (!nonobstacles.contains(current+1) && height-1 != yj) {
+					if (!Tile.isTileBlocking(map[xj][yj+1])) {
+						todiscoverx.add(xj);
+						todiscovery.add(yj+1);
+					} else
+						obstacles.add(current+1);
 				}
 				todiscoverx.remove(0);
 				todiscovery.remove(0);
-				ans.add(current);
+				nonobstacles.add(current);
+				j++;
 			}
 		}
-		return ans;
+		if (i == mp) {
+			nonobstacles.clear();
+			obstacles.clear();
+		}
 	}
 	
 }

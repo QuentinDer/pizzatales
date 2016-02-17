@@ -35,6 +35,7 @@ public abstract class Enemy extends Stuff {
 	private boolean ismovingleft;
 	private boolean ismovingup;
 	private boolean ismovingdown;
+	private boolean sleepy = false;
 	public int halfsizex;
 	public int halfsizey;
 	
@@ -142,6 +143,11 @@ public abstract class Enemy extends Stuff {
 		}
 	}
 
+	public void launchAI() {
+		if (!sleepy)
+			callAI();
+	}
+	
 	public abstract void callAI();/* {
 		if (alive == true){
 			setSpeedX(2);
@@ -343,6 +349,14 @@ public abstract class Enemy extends Stuff {
 	
 	public Firearm getWeapon() {
 		return weapon;
+	}
+	
+	public void sleep() {
+		sleepy = true;
+	}
+	
+	public void wakeup() {
+		sleepy = false;
 	}
 	
 	public abstract void setStaySprite();
