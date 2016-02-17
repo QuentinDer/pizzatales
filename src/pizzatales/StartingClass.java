@@ -27,7 +27,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private static Player player;
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
 	private Image blooddrop;
-	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, tilePuddle, tileCaveRock, tileGate;
+	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, tilePuddle, tileCaveRock, tileGate, tileCaveExit;
 	private int walkCounter = 1;
 	private URL base;
 	private Graphics second;
@@ -70,7 +70,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 
 		// Image Setups
-		background = getImage(base, "data/background1.png");
+		background = getImage(base, "data/background.png");
 		tileTree = getImage(base, "data/tree.png");
 		tileGrass = getImage(base, "data/grass.png");
 		tileWall = getImage(base, "data/wall.png");
@@ -79,6 +79,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		tilePuddle = getImage(base, "data/puddle.png");
 		tileCaveRock = getImage(base, "data/caverock.png");
 		tileGate = getImage(base, "data/gate.png");
+		tileCaveExit = getImage(base, "data/caveexit.png");
 		
 		blooddrop = getImage(base, "data/blooddrop.png");
 		Gun.leftSprite = getImage(base, "data/pistol1.png");
@@ -191,7 +192,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		// Initialize Tiles
 		try {
-			loadMap("data/L14.txt");
+			loadMap("data/L21.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

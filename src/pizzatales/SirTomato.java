@@ -9,7 +9,7 @@ public class SirTomato extends Enemy {
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, staySpriteRight, move1SpriteRight, move2SpriteRight;
 
 	public SirTomato(int centerX, int centerY) {
-		super(centerX, centerY, null, 30, 2, 50, 50);
+		super(centerX, centerY, null, 75 * StartingClass.difficultylevel, 2, 50, 50);
 		movementTime = ((int) (Math.random() * 50));
 		R = new Rectangle(getCenterX() - 45, getCenterY() - 45, 90, 90);
 	}
