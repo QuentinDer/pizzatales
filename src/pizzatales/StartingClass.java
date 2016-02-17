@@ -70,7 +70,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 
 		// Image Setups
-		background = getImage(base, "data/background.png");
+		background = getImage(base, "data/background1.png");
 		tileTree = getImage(base, "data/tree.png");
 		tileGrass = getImage(base, "data/grass.png");
 		tileWall = getImage(base, "data/wall.png");
@@ -192,7 +192,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		// Initialize Tiles
 		try {
-			loadMap("data/L21.txt");
+			loadMap("data/L13.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
