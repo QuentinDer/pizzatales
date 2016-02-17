@@ -12,6 +12,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Map.Entry;
+import java.util.AbstractMap.SimpleEntry;
+
 import pizzatales.framework.Animation;
 
 public class StartingClass extends Applet implements Runnable, KeyListener {
@@ -20,7 +23,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
-	public static int difficultylevel = 3;
+	public static int difficultylevel = 1;
 	private static Player player;
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
 	private Image blooddrop;
@@ -49,6 +52,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();
 	private ArrayList<Item> items = new ArrayList<Item>();
 	public static ArrayList<Enemy> enemyarray = new ArrayList<Enemy>();
+	public static ArrayList<ArrayList<Enemy>> arenaenemies = new ArrayList<ArrayList<Enemy>>();
+	public static ArrayList<ArrayList<Tile>> arenadoors = new ArrayList<ArrayList<Tile>>();
 	public static ArrayList<HitPoint> hitpoints = new ArrayList<HitPoint>();
 
 	@Override
@@ -65,7 +70,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 
 		// Image Setups
-		background = getImage(base, "data/background.png");
+		background = getImage(base, "data/background1.png");
 		tileTree = getImage(base, "data/tree.png");
 		tileGrass = getImage(base, "data/grass.png");
 		tileWall = getImage(base, "data/wall.png");
@@ -125,6 +130,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Pepper.staySprite = getImage(base, "data/pepperLeft1.png");
 		Pepper.move1Sprite = getImage(base, "data/pepperLeft2.png");
 		Pepper.move2Sprite = getImage(base, "data/pepperLeft3.png");
+		Pepper.staySpriteRight = getImage(base, "data/pepperRight1.png");
 		Pepper.move1SpriteRight = getImage(base, "data/pepperRight2.png");
 		Pepper.move2SpriteRight = getImage(base, "data/pepperRight3.png");
 		Pepper.dieSprite = getImage(base, "data/pepperdead.png");
@@ -132,6 +138,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Mushroom.move1Sprite = getImage(base, "data/shroom2.png");
 		Mushroom.move2Sprite = getImage(base, "data/shroom3.png");
 		Mushroom.dieSprite = getImage(base, "data/shroomdead.png");
+		SirTomato.staySprite = getImage(base, "data/sirtomatoleft1.png");
+		SirTomato.move1Sprite = getImage(base, "data/sirtomatoleft2.png");
+		SirTomato.move2Sprite = getImage(base, "data/sirtomatoleft3.png");
+		SirTomato.staySpriteRight = getImage(base, "data/sirtomatoright1.png");
+		SirTomato.move1SpriteRight = getImage(base, "data/sirtomatoright2.png");
+		SirTomato.move2SpriteRight = getImage(base, "data/sirtomatoright3.png");
+		//TODO SirTomato.dieSprite = getImage(base, "data/pepperdead.png");
 		
 		BazookaBulletExplosion.bazookaexplosionsprite = getImage(base, "data/bazookaexplosion.png");
 
@@ -177,7 +190,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		// Initialize Tiles
 		try {
-			loadMap("data/L21.txt");
+			loadMap("data/L14.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -201,7 +214,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		height = lines.size();
 
 		pf.map = new boolean[width][height];
-
+		char [][] charmap = new char[width][height];
+		ArrayList<Entry<Entry<Integer,Integer>,EntryDoor>> entrydoors = new ArrayList<Entry<Entry<Integer,Integer>,EntryDoor>>();
+		ArrayList<Tile> doors = new ArrayList<Tile>();
+		
 		for (int j = 0; j < height; j++) {
 			line = lines.get(j);
 			for (int i = 0; i < width; i++) {
@@ -210,18 +226,27 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					if (ch == '0' || ItemFactory.isItemSupported(ch))
 						pf.map[i][j] = true;
 					if (ItemFactory.isItemSupported(ch)) {
-						items.add(ItemFactory.getItem(i, j, ch));
+						Item it = ItemFactory.getItem(i, j, ch);
+						items.add(it);
+						if (ch == 'i') {
+							entrydoors.add(new SimpleEntry<Entry<Integer,Integer>,EntryDoor>(new SimpleEntry<Integer,Integer>(i,j),(EntryDoor)it));
+						}
 					}
-					if (Tile.isTileTypeSupported(ch)) {
-						Tile t = new Tile(i, j, ch);
-						tilearray.add(t);
+					if (ch == 'd')
+						doors.add(new Tile(i, j, ch));
+					else if (Tile.isTileTypeSupported(ch)) {
+						tilearray.add(new Tile(i, j, ch));
 					}
 					if (EnemyFactory.isTileTypeSupported(ch)) {
 						getEnemyarray().add(EnemyFactory.getEnemy(i, j, ch));
 					}
+					charmap[i][j] = ch;
 				}
 			}
-		}
+		}/*
+		while (!entrydoors.isEmpty()) {
+			
+		}*/
 	}
 
 	@Override
@@ -344,18 +369,22 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			for (int i = 0; i < getEnemyarray().size(); i++) {
 				Enemy e = getEnemyarray().get(i);
 				if (!e.alive) {
-					g.drawImage(e.currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+					g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
 				}
 			}
 			for (int i = 0; i < getEnemyarray().size(); i++) {
 				Enemy e = getEnemyarray().get(i);
 				if (e.alive) {
-					if (e.isAimingUp()) {
-						g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
-						g.drawImage(e.currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+					if (null != e.getWeapon()) {
+						if (e.isAimingUp()) {
+							g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+							g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
+						} else {
+							g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
+							g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+						}
 					} else {
-						g.drawImage(e.currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
-						g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+						g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
 					}
 				}
 				for (int j = 0; j < e.getProjectiles().size(); j++) {

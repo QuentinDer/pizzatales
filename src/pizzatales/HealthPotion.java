@@ -4,11 +4,12 @@ import java.awt.Image;
 
 public class HealthPotion extends Item {
 
+	public HealthPotion(int x, int y, boolean onetimeeffect) {
+		super(x, y, onetimeeffect);
+	}
+
 	public static Image healthpotionsprite;
 
-	public HealthPotion(int centerX, int centerY) {
-		super(centerX, centerY);
-	}
 
 	@Override
 	protected void doEffect() {

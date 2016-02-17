@@ -2,7 +2,7 @@ package pizzatales;
 
 public class EnemyFactory {
 
-	private static String acceptedEnemyTypes = "TABPM";
+	private static String acceptedEnemyTypes = "TABPMS";
 	
 	public static boolean isTileTypeSupported(char type) {
 		String test = "";
@@ -28,6 +28,8 @@ public class EnemyFactory {
 		case 'M':
 			e = new Mushroom((x * 50) + 25,(y * 50) + 40);
 			break;
+		case 'S':
+			e = new SirTomato((x * 50) + 25,(y*50) + 40);
 		}
 		return e;
 	}

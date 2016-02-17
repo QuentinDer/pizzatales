@@ -53,7 +53,7 @@ public abstract class Projectile extends Stuff {
 	}
 	
 	boolean checkCollision(Tile t) {
-		if (t.getType() != '0' && t.getType() != 'u') {
+		if (Tile.isTileBlocking(t.getType())) {
 			if(rectP.intersects(t.getR())){
 				return true;
 			}

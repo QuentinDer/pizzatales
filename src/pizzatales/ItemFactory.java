@@ -1,7 +1,7 @@
 package pizzatales;
 
 public class ItemFactory {
-	private final static String itemslist = "pha";
+	private final static String itemslist = "phai";
 	
 	public static boolean isItemSupported(char type) {
 		String test = "";
@@ -16,10 +16,13 @@ public class ItemFactory {
 			
 			break;
 		case 'h':
-			i = new HealthPotion(x,y);
+			i = new HealthPotion(x,y, true);
 			break;
 		case 'a':
-			i = new ArmorPotion(x,y);
+			i = new ArmorPotion(x,y, true);
+			break;
+		case 'i':
+			i = new EntryDoor(x,y, false);
 			break;
 		}
 		return i;

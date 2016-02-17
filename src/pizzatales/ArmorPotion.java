@@ -4,11 +4,11 @@ import java.awt.Image;
 
 public class ArmorPotion extends Item {
 
-	public static Image armorpotionsprite;
-	
-	public ArmorPotion(int centerX, int centerY) {
-		super(centerX, centerY);
+	public ArmorPotion(int x, int y, boolean onetimeeffect) {
+		super(x, y, onetimeeffect);
 	}
+
+	public static Image armorpotionsprite;
 
 	@Override
 	protected void doEffect() {

@@ -12,12 +12,19 @@ public class Tile extends Stuff {
 
 	private Rectangle r;
 
-	private final static String acceptedTileTypes = "twcusr";
+	private final static String acceptedTileTypes = "twcusrd";
+	private final static String blockingTileTypes = "twcsrd";
 
 	public static boolean isTileTypeSupported(char type) {
 		String test = "";
 		test += type;
 		return acceptedTileTypes.contains(test);
+	}
+	
+	public static boolean isTileBlocking(char type) {
+		String test = "";
+		test += type;
+		return blockingTileTypes.contains(test);
 	}
 
 	public Tile(int x, int y, char typeInt) {
@@ -45,7 +52,7 @@ public class Tile extends Stuff {
 	public void checkCollision(Player player) {
 		int diffX = Math.abs(getCenterX() - player.getCenterX());
 		int diffY = Math.abs(getCenterY() - player.getCenterY());
-		if (type != 'u') {
+		if (isTileBlocking(type)) {
 			if (diffX < 50 && diffY < 50) {
 				if (diffX > diffY && diffY < 45) {
 					if (player.getCenterX() <= this.getCenterX()) {
@@ -66,17 +73,19 @@ public class Tile extends Stuff {
 	}
 
 	public void checkCollision(Enemy enemy) {
-		if (enemy.alive == true && r.intersects(enemy.R)) {
-			if (Math.abs(enemy.getCenterX() - getCenterX()) > Math.abs(enemy.getCenterY() - getCenterY())) {
-				if (enemy.getCenterX() - getCenterX() > 0)
-					enemy.canmoveleft = false;
-				else
-					enemy.canmoveright = false;
-			} else {
-				if (enemy.getCenterY() - getCenterY() > 0)
-					enemy.canmoveup = false;
-				else
-					enemy.canmovedown = false;
+		if (isTileBlocking(type)) {
+			if (enemy.alive == true && r.intersects(enemy.R)) {
+				if (Math.abs(enemy.getCenterX() - getCenterX()) > Math.abs(enemy.getCenterY() - getCenterY())) {
+					if (enemy.getCenterX() - getCenterX() > 0)
+						enemy.canmoveleft = false;
+					else
+						enemy.canmoveright = false;
+				} else {
+					if (enemy.getCenterY() - getCenterY() > 0)
+						enemy.canmoveup = false;
+					else
+						enemy.canmovedown = false;
+				}
 			}
 		}
 	}

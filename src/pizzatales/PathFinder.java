@@ -7,7 +7,7 @@ public class PathFinder {
 	
 	public boolean[][] map;
 
-	public int getDirection(int fromx, int fromy, int tox, int toy, int maxmp, boolean canmoveleft, boolean canmoveup, boolean canmoveright, boolean canmovedown) {
+	public int getDirection(int fromx, int fromy, int tox, int toy, int maxmp, boolean canmoveleft, boolean canmoveup, boolean canmoveright, boolean canmovedown, boolean allowdiag) {
 		if (Math.abs(fromx-tox)+Math.abs(fromy-toy)>maxmp)
 			return 0;
 		int width = map.length;
@@ -40,7 +40,7 @@ public class PathFinder {
 			g_score.put(down, 1);
 			direction.put(down, 4);
 		}
-		if (StartingClass.difficultylevel == 4) {
+		if (allowdiag) {
 			if (0 != fromy) {
 				if (0 != fromx && map[fromx-1][fromy-1] && (canmoveup || canmoveleft)) {
 					int upleft = height*(fromx-1) + fromy-1;
@@ -128,7 +128,7 @@ public class PathFinder {
 		return 0;
 	}
 	
-	public int getDirectionToShoot(int fromx, int fromy, int tox1, int toy1, int tox2, int toy2, int maxmp, boolean canmoveleft, boolean canmoveup, boolean canmoveright, boolean canmovedown) {
+	public int getDirectionToShoot(int fromx, int fromy, int tox1, int toy1, int tox2, int toy2, int maxmp, boolean canmoveleft, boolean canmoveup, boolean canmoveright, boolean canmovedown, boolean allowdiag) {
 		if (Math.abs(fromx-tox1)+Math.abs(fromy-toy1)>maxmp || Math.abs(fromx-tox2)+Math.abs(fromy-toy2)>maxmp)
 			return 0;
 		if ((fromx == tox1 && fromy == toy1) || (fromx == tox2 && fromy == toy2))
@@ -166,7 +166,7 @@ public class PathFinder {
 			g_score.put(down, 1);
 			direction.put(down, 4);
 		}
-		if (StartingClass.difficultylevel == 4) {
+		if (allowdiag) {
 			if (0 != fromy) {
 				if (0 != fromx && map[fromx-1][fromy-1] && (canmoveup || canmoveleft)) {
 					int upleft = height*(fromx-1) + fromy-1;
@@ -274,6 +274,8 @@ public class PathFinder {
 		}
 		return ans;
 	}
+	
+	
 	/*
 	public static void main(String[] args) {
 		PathFinder pf = new PathFinder();

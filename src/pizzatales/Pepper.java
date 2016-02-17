@@ -4,13 +4,12 @@ import java.awt.Image;
 
 public class Pepper extends Enemy {
 
-	protected int movementTime;
 	protected boolean isShooting;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, staySpriteRight, move1SpriteRight,
 	move2SpriteRight;
 
 	public Pepper(int centerX, int centerY) {
-		super(centerX,centerY, new Flamer(), 5, (StartingClass.difficultylevel == 1)?2:((StartingClass.difficultylevel == 3)?4:3));
+		super(centerX,centerY, new Flamer(), 5, (StartingClass.difficultylevel == 1)?2:((StartingClass.difficultylevel == 3)?4:3), 31, 31);
 		movementTime = ((int) (Math.random() * 50));
 	}
 
@@ -24,7 +23,7 @@ public class Pepper extends Enemy {
 				if (movementTime % 30 == 0) {
 					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
 					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
-					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 7, canmoveleft, canmoveup, canmoveright, canmovedown);
+					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 7, canmoveleft, canmoveup, canmoveright, canmovedown, false);
 					switch (pathresult) {
 					case 0:
 						stopMoving();
@@ -48,7 +47,7 @@ public class Pepper extends Enemy {
 				if (movementTime % 20 == 0) {
 					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
 					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
-					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 9, canmoveleft, canmoveup, canmoveright, canmovedown);
+					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 9, canmoveleft, canmoveup, canmoveright, canmovedown, false);
 					switch (pathresult) {
 					case 0:
 						stopMoving();
@@ -72,7 +71,7 @@ public class Pepper extends Enemy {
 				if (movementTime % 10 == 0) {
 					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
 					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
-					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 11, canmoveleft, canmoveup, canmoveright, canmovedown);
+					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 11, canmoveleft, canmoveup, canmoveright, canmovedown, false);
 					switch (pathresult) {
 					case 0:
 						stopMoving();
@@ -96,7 +95,7 @@ public class Pepper extends Enemy {
 				if (movementTime % 10 == 0) {
 					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
 					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
-					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 11, canmoveleft, canmoveup, canmoveright, canmovedown);
+					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 11, canmoveleft, canmoveup, canmoveright, canmovedown, true);
 					switch (pathresult) {
 					case 0:
 						stopMoving();
@@ -188,28 +187,6 @@ public class Pepper extends Enemy {
 	@Override
 	public void setMove2SpriteAlt() {
 		currentSprite = move2SpriteRight;
-	}
-
-	@Override
-	public void animate() {
-		walkCounter++;
-		if (getSpeedX() < 0) {
-			if (walkCounter == 1000)
-				walkCounter = 0;
-			if (walkCounter % 30 == 0) {
-				setMove1Sprite();
-			} else if (walkCounter % 15 == 0) {
-				setMove2Sprite();
-			}
-		} else if (getSpeedX() > 0){
-			if (walkCounter == 1000)
-				walkCounter = 0;
-			if (walkCounter % 30 == 0) {
-				setMove1SpriteAlt();
-			} else if (walkCounter % 15 == 0) {
-				setMove2SpriteAlt();
-			}
-		}
 	}
 	
 }

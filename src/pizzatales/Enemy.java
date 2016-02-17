@@ -35,6 +35,8 @@ public abstract class Enemy extends Stuff {
 	private boolean ismovingleft;
 	private boolean ismovingup;
 	private boolean ismovingdown;
+	public int halfsizex;
+	public int halfsizey;
 	
 	//protected Animation anim;
 	private int speed;
@@ -44,11 +46,13 @@ public abstract class Enemy extends Stuff {
 	
 	public Image currentSprite;
 
-	public Enemy(int centerX, int centerY, Firearm weapon, int health, int speed) {
+	public Enemy(int centerX, int centerY, Firearm weapon, int health, int speed, int halfsizex, int halfsizey) {
 		super(centerX, centerY);
-		weapon.setHolderProjectiles(projectiles);
 		this.weapon = weapon;
-		weapon.setFireRate(weapon.getFireRate() * (5 - StartingClass.difficultylevel));
+		if (weapon != null) {
+			weapon.setFireRate(weapon.getFireRate() * (5 - StartingClass.difficultylevel));
+			weapon.setHolderProjectiles(projectiles);
+		}
 		this.health = health * StartingClass.difficultylevel;
 		this.speed = speed;
 		bginitx = bg.getCenterX();
@@ -57,6 +61,8 @@ public abstract class Enemy extends Stuff {
 		posy = (centerY-15) / 50;
 		setStaySprite();
 		R = new Rectangle(getCenterX() - 22, getCenterY() - 22, 45, 45);
+		this.halfsizex = halfsizex;
+		this.halfsizey = halfsizey;
 	}
 
 	public void checkCollision(Enemy e) {
@@ -145,15 +151,24 @@ public abstract class Enemy extends Stuff {
 	public void animate(){
 		if (isMoving) {
 			walkCounter++;
-			if (walkCounter == 1000)
-				walkCounter = 0;
-			if (walkCounter % 30 == 0) {
-				setMove1Sprite();
-			} else if (walkCounter % 15 == 0) {
-				setMove2Sprite();
+			if (getSpeedX() <= 0) {
+				if (walkCounter == 1000)
+					walkCounter = 0;
+				if (walkCounter % 30 == 0) {
+					setMove1Sprite();
+				} else if (walkCounter % 15 == 0) {
+					setMove2Sprite();
+				}
+			} else {
+				if (walkCounter == 1000)
+					walkCounter = 0;
+				if (walkCounter % 30 == 0) {
+					setMove1SpriteAlt();
+				} else if (walkCounter % 15 == 0) {
+					setMove2SpriteAlt();
+				}
 			}
 		}
-		
 	}
 	
 	public void die() {
@@ -314,12 +329,16 @@ public abstract class Enemy extends Stuff {
 	}
 	
 	protected void stopMoving() {
+		if (ismovingright)
+			setStaySpriteAlt();
+		else
+			setStaySprite();
 		ismovingright = false;
 		ismovingleft = false;
 		ismovingup = false;
 		ismovingdown = false;
 		isMoving = false;
-		setStaySprite();
+		
 	}
 	
 	public Firearm getWeapon() {
