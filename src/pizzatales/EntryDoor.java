@@ -9,11 +9,15 @@ public class EntryDoor extends Item {
 	private int isGoingIn;
 	private int isGoingOut;
 	private ArrayList<Tile> doors;
+	private int posx;
+	private int posy;
 	
 	public EntryDoor(int x, int y, boolean onetimeeffect) {
 		super(x, y, onetimeeffect);
 		isGoingIn = -1;
 		isGoingOut = -1;
+		posx = x;
+		posy = y;
 	}
 
 	@Override
@@ -64,5 +68,13 @@ public class EntryDoor extends Item {
 	
 	public ArrayList<Tile> getDoors() {
 		return doors;
+	}
+	
+	public int getPosX() {
+		return posx;
+	}
+	
+	public int getPosY() {
+		return posy;
 	}
 }

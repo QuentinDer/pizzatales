@@ -46,6 +46,7 @@ public abstract class Enemy extends Stuff {
 	private boolean isAimingUp = true;
 	
 	public Image currentSprite;
+	private boolean isArenaEnemy;
 
 	public Enemy(int centerX, int centerY, Firearm weapon, int health, int speed, int halfsizex, int halfsizey) {
 		super(centerX, centerY);
@@ -358,6 +359,14 @@ public abstract class Enemy extends Stuff {
 	
 	public void wakeup() {
 		sleepy = false;
+	}
+	
+	public void setIsInArena(boolean isInArena) {
+		this.isArenaEnemy = isInArena;
+	}
+	
+	public boolean isInArena() {
+		return isArenaEnemy;
 	}
 	
 	public abstract void setStaySprite();

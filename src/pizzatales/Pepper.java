@@ -123,6 +123,7 @@ public class Pepper extends Enemy {
 						break;
 					case 8:
 						moveLeftDown();
+						break;
 					}
 				}
 				break;

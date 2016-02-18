@@ -21,10 +21,16 @@ public class Player extends Point {
 	private boolean ismovingdown;
 	private boolean ismovingleft;
 	private boolean ismovingright;
+	private boolean controlledismovingup;
+	private boolean controlledismovingdown;
+	private boolean controlledismovingleft;
+	private boolean controlledismovingright;
 	public boolean canmoveright = true;
 	public boolean canmoveleft = true;
 	public boolean canmoveup = true;
 	public boolean canmovedown = true;
+	public int posx;
+	public int posy;
 
 	private boolean isAimingUp = true;
 	
@@ -55,12 +61,20 @@ public class Player extends Point {
 		speedX = 0;
 		scrollingSpeed = 0;
 		if (ismovingup && canmoveup) {
-			speedY += -MOVESPEED/2;
-			scrollingSpeed += -MOVESPEED/2;
+			if (StartingClass.isInArena >= 0) {
+				speedY += -MOVESPEED;
+			} else {
+				speedY += -MOVESPEED/2;
+				scrollingSpeed += -MOVESPEED/2;
+			}
 		}
 		if (ismovingdown && canmovedown) {
-			speedY += MOVESPEED/2;
-			scrollingSpeed += MOVESPEED/2;
+			if (StartingClass.isInArena >= 0) {
+				speedY += MOVESPEED;
+			} else {
+				speedY += MOVESPEED/2;
+				scrollingSpeed += MOVESPEED/2;
+			}
 		}
 		if (ismovingleft && canmoveleft) {
 			speedX += -MOVESPEED;
@@ -110,12 +124,14 @@ public class Player extends Point {
 		}
 
 		// Prevents going beyond Y coordinate of 250 and 550
-		if (centerY + speedY <= 249) {
-			centerY = 250;
-			scrollingSpeed = 2*speedY;
-		} else if (centerY + speedY >= 550) {
-			centerY = 549;
-			scrollingSpeed = 2*speedY;
+		if (StartingClass.isInArena < 0) {
+			if (centerY + speedY <= 249) {
+				centerY = 250;
+				scrollingSpeed = 2*speedY;
+			} else if (centerY + speedY >= 550) {
+				centerY = 549;
+				scrollingSpeed = 2*speedY;
+			}
 		}
 		centerY += speedY;
 		centerX += speedX;
@@ -146,6 +162,28 @@ public class Player extends Point {
 		}
 		weapon.increaseShootingCounter();
 		//animate();
+	}
+	
+	public void controlledupdate() {
+		speedY = 0;
+		speedX = 0;
+		if (controlledismovingright && canmoveright) {
+			speedX = MOVESPEED;
+		}
+		if (controlledismovingleft && canmoveleft) {
+			speedX = -MOVESPEED;
+		}
+		if (controlledismovingup && canmoveup) {
+			speedY = -MOVESPEED;
+		}
+		if (controlledismovingdown && canmovedown) {
+			speedY = MOVESPEED;
+		}
+		speedY -= scrollingSpeed;
+		centerY += speedY;
+		centerX += speedX;
+		R.setRect(centerX - 25, centerY - 25, 50, 50);
+		weapon.increaseShootingCounter();
 	}
 	
 	/*
@@ -200,6 +238,79 @@ public class Player extends Point {
 
 	public void moveDown() {
 		ismovingdown = true;
+	}
+	
+	
+	protected void controlledmoveRight() {
+		isAimingUp = false;
+		controlledismovingright = true;
+		controlledismovingleft = false;
+		controlledismovingup = false;
+		controlledismovingdown = false;
+	}
+	
+	public void controlledmoveLeft() {
+		isAimingUp = false;
+		controlledismovingright = false;
+		controlledismovingleft = true;
+		controlledismovingup = false;
+		controlledismovingdown = false;
+	}
+	
+	public void controlledmoveUp() {
+		isAimingUp = true;
+		controlledismovingright = false;
+		controlledismovingleft = false;
+		controlledismovingup = true;
+		controlledismovingdown = false;
+	}
+
+	public void controlledmoveDown() {
+		isAimingUp = false;
+		controlledismovingright = false;
+		controlledismovingleft = false;
+		controlledismovingup = false;
+		controlledismovingdown = true;
+	}
+	
+	public void controlledmoveLeftUp() {
+		isAimingUp = false;
+		controlledismovingright = false;
+		controlledismovingleft = true;
+		controlledismovingup = true;
+		controlledismovingdown = false;
+	}
+	
+	public void controlledmoveRightUp() {
+		isAimingUp = false;
+		controlledismovingright = true;
+		controlledismovingleft = false;
+		controlledismovingup = true;
+		controlledismovingdown = false;
+	}
+	
+	public void controlledmoveLeftDown() {
+		isAimingUp = false;
+		controlledismovingright = false;
+		controlledismovingleft = true;
+		controlledismovingup = false;
+		controlledismovingdown = true;
+	}
+	
+	public void controlledmoveRightDown() {
+		isAimingUp = false;
+		controlledismovingright = true;
+		controlledismovingleft = false;
+		controlledismovingup = false;
+		controlledismovingdown = true;
+	}
+	
+	public void controlledstopMoving() {
+		isAimingUp = false;
+		controlledismovingright = false;
+		controlledismovingleft = false;
+		controlledismovingup = false;
+		controlledismovingdown = false;
 	}
 	
 	public void stopMovingRight() {
@@ -260,8 +371,12 @@ public class Player extends Point {
 		MOVESPEED = mOVESPEED;
 	}
 	
-	public double getScrollingSpeed() {
+	public int getScrollingSpeed() {
 		return this.scrollingSpeed;
+	}
+	
+	public void setScrollingSpeed(int scrollingspeed) {
+		this.scrollingSpeed = scrollingspeed;
 	}
 
 	public void setSpeedX(int speedX) {
@@ -271,11 +386,6 @@ public class Player extends Point {
 	public void addSpeedY(int speedY) {
 		this.speedY += speedY /2;
 		this.scrollingSpeed += speedY/2;
-	}
-
-	public void setSpeedY(int speedY) {
-		this.speedY = speedY /2;
-		this.scrollingSpeed = speedY/2; 
 	}
 	
 	public int getHealth() {

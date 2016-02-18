@@ -10,6 +10,8 @@ public class PathFinder {
 	public int getDirection(int fromx, int fromy, int tox, int toy, int maxmp, boolean canmoveleft, boolean canmoveup, boolean canmoveright, boolean canmovedown, boolean allowdiag) {
 		if (Math.abs(fromx-tox)+Math.abs(fromy-toy)>maxmp)
 			return 0;
+		if (fromx == tox && fromy == toy)
+			return 0;
 		int width = map.length;
 		int height = map[0].length;
 		HashMap<Integer,Integer> g_score = new HashMap<Integer,Integer>();

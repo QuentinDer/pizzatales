@@ -61,6 +61,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public static ArrayList<HitPoint> hitpoints = new ArrayList<HitPoint>();
 	public ArrayList<EntryDoor> entrydoors = new ArrayList<EntryDoor>();
 	public static EntryDoor activatedentry = null;
+	public static int isInArena = -1;
 	
 
 	@Override
@@ -77,7 +78,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 
 		// Image Setups
-		background = getImage(base, "data/background.png");
+		background = getImage(base, "data/background1.png");
 		tileTree = getImage(base, "data/tree.png");
 		tileGrass = getImage(base, "data/grass.png");
 		tileWall = getImage(base, "data/wall.png");
@@ -196,13 +197,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		loadArmor();
 
 		bg1 = new Background(0, -200);
-		bg2 = new Background(0, 3000);
+		bg2 = new Background(0, 1400);
 		bginitx = bg1.getCenterX();
 		bginity = bg1.getCenterY() - 15;
 
 		// Initialize Tiles
 		try {
-			loadMap("data/L23.txt");
+			loadMap("data/L14.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -270,6 +271,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							if (nonobstacles.contains(height*enemyarray.get(l).posx + enemyarray.get(l).posy)) {
 								lenemies.add(enemyarray.get(l));
 								enemyarray.get(l).sleep();
+								enemyarray.get(l).setIsInArena(true);
 							}
 							l++;
 						}
@@ -326,19 +328,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				} else {
 					currentSprite = character1;
 				}
-
-				/*
-				 * for (int i = 0; i < getEnemyarray().size(); i++) { Enemy e =
-				 * getEnemyarray().get(i);
-				 * 
-				 * if (e.alive == true) { if (e.isMoving == true) { if
-				 * (walkCounter % 30 == 0) { e.currentSprite = getImage(base,
-				 * e.characterMove1Path); } else if (walkCounter % 15 == 0) {
-				 * e.currentSprite = getImage(base, e.characterMove2Path); } }
-				 * else if (e.isMoving == false) { e.currentSprite =
-				 * getImage(base, e.characterStayPath); } if (e.walkCounter >
-				 * 1000) { e.walkCounter = 0; } } }
-				 */
 				int i = 0;
 				while (i < hitpoints.size()) {
 					if (hitpoints.get(i).timer == 0)
@@ -373,26 +362,205 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				updateItems();
 				repaint(); // this calls paint
 			
-				if (activatedentry != null) {
-					for (Enemy e : enemyarray) {
-						if (arenaenemies.get(activatedentry.isGoingIn()).contains(e))
-							e.wakeup();
-						else
-							e.sleep();
-					}
-					int l = 0;
-					while (l < entrydoors.size()) {
-						if (entrydoors.get(l).isGoingIn() == activatedentry.isGoingIn()) {
-							items.remove(entrydoors.get(l));
-							entrydoors.remove(l);
-						} else
-							l++;
-					}
+				if (isInArena < 0 && activatedentry != null) {
+					int playerposx = (player.getCenterX()-bg1.getCenterX()+bginitx)/50;
+					int playerposy = (player.getCenterY()-bg1.getCenterY()+bginity)/50;
 					for (Tile t : activatedentry.getDoors()) {
-						tilearray.remove(t);
 						pf.map[(t.getCenterX()-bg1.getCenterX()+bginitx)/50][(t.getCenterY()-bg1.getCenterY()+bginity)/50] = true;
 					}
+					if (pf.getDirection(playerposx, playerposy, activatedentry.getOut().getPosX(), activatedentry.getOut().getPosY(),10, player.canmoveleft, player.canmoveup, player.canmoveright, player.canmovedown, true) > 0) {
+						for (Enemy e : enemyarray) {
+							e.sleep();
+						}
+						int l = 0;
+						while (l < entrydoors.size()) {
+							if (entrydoors.get(l).isGoingIn() == activatedentry.isGoingIn()) {
+								items.remove(entrydoors.get(l));
+							}
+							l++;
+						}
+						for (Tile t : activatedentry.getDoors()) {
+							tilearray.remove(t);
+						}
+						isInArena = activatedentry.isGoingIn();
+						
+						int arenacentery = arenacenters.get(isInArena).getValue() * 50 + bg1.getCenterY() - bginity;
+						if (arenacentery > 400)
+							player.setScrollingSpeed(player.getMOVESPEED());
+						else
+							player.setScrollingSpeed(-player.getMOVESPEED());
+						boolean foundposition = false;
+						int deltapx = 0;
+						int deltapy = 0;
+						if (activatedentry.getPosX() > activatedentry.getOut().getPosX())
+							deltapx = -30;
+						if (activatedentry.getPosX() < activatedentry.getOut().getPosX())
+							deltapx = 30;
+						if (activatedentry.getPosY() < activatedentry.getOut().getPosY())
+							deltapy = -30;
+						if (activatedentry.getPosY() > activatedentry.getOut().getPosY())
+							deltapy = 30;
+						while (Math.abs(arenacentery-400) > 20 || !foundposition) {
+							try {
+								Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							clock = System.currentTimeMillis();
+							if (player.getSpeedX() != 0 || player.getSpeedY() != 0) {
+								if (walkCounter % 30 == 0) {
+									// player.getArmor().setSpriteWalk1();
+									// currentSprite = player.getArmor().currentSprite;
+									currentSprite = characterMove1;
+								} else if (walkCounter % 15 == 0) {
+									// player.getArmor().setSpriteWalk2();
+									// currentSprite = player.getArmor().currentSprite;
+									currentSprite = characterMove2;
+								}
+							} else {
+								currentSprite = character1;
+							}
+							i = 0;
+							while (i < hitpoints.size()) {
+								if (hitpoints.get(i).timer == 0)
+									hitpoints.remove(i);
+								else {
+									hitpoints.get(i).timer--;
+									i++;
+								}	
+							}
+							updateExplosions();
+							player.canmovedown = true;
+							player.canmoveleft = true;
+							player.canmoveright = true;
+							player.canmoveup = true;
+							checkEnemiesCollision();
+							checkTileCollisions();
+							checkItemsCollision();
+							ArrayList<Projectile> projectiles = player.getProjectiles();
+							i = 0;
+							while (i < projectiles.size()) {
+								Projectile p = projectiles.get(i);
+								if (p.isVisible() == true) {
+									p.update();
+									for (int j = 0; j < getEnemyarray().size(); j++) {
+										Enemy e = getEnemyarray().get(j);
+										if (e.alive == true) {
+											if (p.checkCollision(e) == true) {
+												p.doOnCollision(e);
+												e.setHealth(e.getHealth() - p.damage);
+												if (e.getHealth() < 1) {
+													e.die();
+													if(player.getHealth() < 20){
+														player.setHealth(player.getHealth() + 1);
+													}
+												}
+											}
+										}
+									}
+									for (int j = 0; j < tilearray.size(); j++) {
+										if (true == p.checkCollision(tilearray.get(j))) {
+											p.doOnCollision(tilearray.get(j));
+										}
+									}
+									i++;
+								} else {
+									projectiles.remove(i);
+								}
+							}
+							for (Explosion e : explosions) {
+								if (e.isProcing() && player.R.intersects(e.getR())) {
+									if (player.getArmor().defense - e.damage < 0) {
+										player.setHealth(player.getHealth() - e.damage + player.getArmor().defense);
+										player.getArmor().setDefense(0);
+										if (player.getHealth() < 1)
+											state = GameState.Dead;
+									} else {
+										player.getArmor().setDefense(player.getArmor().getDefense() - e.damage);
+									}
+								}
+							}
+							playerposx = (player.getCenterX()-bg1.getCenterX()+bginitx+deltapx)/50;
+							playerposy = (player.getCenterY()-bg1.getCenterY()+bginity+deltapy)/50;
+							if (!foundposition) {
+								switch (pf.getDirection(playerposx, playerposy, activatedentry.getOut().getPosX(), activatedentry.getOut().getPosY(),10, player.canmoveleft, player.canmoveup, player.canmoveright, player.canmovedown, true)) {
+								case 0:
+									player.controlledstopMoving();
+									foundposition = true;
+									break;
+								case 1:
+									player.controlledmoveLeft();
+									break;
+								case 2:
+									player.controlledmoveUp();
+									break;
+								case 3:
+									player.controlledmoveRight();
+									break;
+								case 4:
+									player.controlledmoveDown();
+									break;
+								case 5:
+									player.controlledmoveLeftUp();
+									break;
+								case 6:
+									player.controlledmoveRightUp();
+									break;
+								case 7:
+									player.controlledmoveRightDown();
+									break;
+								case 8:
+									player.controlledmoveLeftDown();
+									break;
+								}
+							}
+							player.controlledupdate();
+							updateEnemies();
+							bg1.update();
+							bg2.update();
+							updateTiles();
+							for (Tile t : activatedentry.getDoors())
+								t.update();
+							updateItems();
+							repaint();
+							arenacentery = arenacenters.get(isInArena).getValue() * 50 + bg1.getCenterY() - bginity;
+							if (Math.abs(arenacentery-400) < 20)
+								player.setScrollingSpeed(0);
+							
+						}
+						for (Enemy e : enemyarray) {
+							if (arenaenemies.get(activatedentry.isGoingIn()).contains(e))
+								e.wakeup();
+						}
+						for (Tile t : activatedentry.getDoors()) {
+							pf.map[(t.getCenterX()-bg1.getCenterX()+bginitx)/50][(t.getCenterY()-bg1.getCenterY()+bginity)/50] = false;
+							tilearray.add(t);
+						}
+					} else {
+						for (Tile t : activatedentry.getDoors()) {
+							pf.map[(t.getCenterX()-bg1.getCenterX()+bginitx)/50][(t.getCenterY()-bg1.getCenterY()+bginity)/50] = false;
+						}
+					}
 					activatedentry = null;
+				}
+				if (isInArena >= 0) {
+					boolean stillgoing = false;
+					for (Enemy e : arenaenemies.get(isInArena))
+						stillgoing = stillgoing || e.alive;
+					if (!stillgoing) {
+						for (Enemy e : enemyarray) {
+							if (!e.isInArena())
+								e.wakeup();
+						}
+						for (EntryDoor ed : entrydoors) {
+							if (ed.isGoingIn() == isInArena) {
+								for (Tile t : ed.getDoors())
+									tilearray.remove(t);
+							}
+						}
+						//TODO add other stuff
+						isInArena = -1;
+					}
 				}
 				
 				if (walkCounter == 1000) {
@@ -654,14 +822,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		characterMove1 = getImage(base, player.getArmor().armor3);
 		characterMove2 = getImage(base, player.getArmor().armor4);
 		player.setMOVESPEED(player.getArmor().getSpeed());
-		if (player.getSpeedX() > 0)
-			player.setSpeedX(player.getArmor().getSpeed());
-		if (player.getSpeedX() < 0)
-			player.setSpeedX(-player.getArmor().getSpeed());
-		if (player.getSpeedY() > 0)
-			player.setSpeedY(player.getArmor().getSpeed());
-		if (player.getSpeedY() < 0)
-			player.setSpeedY(-player.getArmor().getSpeed());
 	}
 
 	@Override
