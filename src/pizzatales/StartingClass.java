@@ -801,7 +801,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private void paintBelowTiles(Graphics g) {
 		for (int i = 0; i < tilearray.size(); i++) {
 			Tile t = tilearray.get(i);
-			if (t.getCenterY() <= player.getCenterY())
+			if (t.getCenterY() <= player.getCenterY() || !Tile.isTileBlocking(t.getType()))
 				g.drawImage(t.getTileImage(), t.getCenterX() - 31, t.getCenterY() - 31, this);
 		}
 	}
@@ -809,8 +809,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private void paintAboveTiles(Graphics g) {
 		for (int i = 0; i < tilearray.size(); i++) {
 			Tile t = tilearray.get(i);
-			if (t.getCenterY() > player.getCenterY())
-			g.drawImage(t.getTileImage(), t.getCenterX() - 31, t.getCenterY() - 31, this);
+			if (t.getCenterY() > player.getCenterY() && Tile.isTileBlocking(t.getType()))
+				g.drawImage(t.getTileImage(), t.getCenterX() - 31, t.getCenterY() - 31, this);
 		}
 	}
 	
