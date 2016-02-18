@@ -197,7 +197,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		loadArmor();
 
 		bg1 = new Background(0, -200);
-		bg2 = new Background(0, 1400);
+		bg2 = new Background(0, 3000);
 		bginitx = bg1.getCenterX();
 		bginity = bg1.getCenterY() - 15;
 
