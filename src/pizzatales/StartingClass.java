@@ -591,7 +591,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		if (state == GameState.Running) {
 			g.drawImage(background, bg1.getCenterX(), bg1.getCenterY(), this);
 			g.drawImage(background, bg2.getCenterX(), bg2.getCenterY(), this);
-			paintTiles(g);
+			paintBelowTiles(g);
 			paintItems(g);
 			for (Explosion e : explosions) {
 				g.drawImage(e.getSprite(), e.getR().x, e.getR().y, this);
@@ -636,6 +636,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			for (int i = 0; i < hitpoints.size(); i++) {
 				g.drawImage(blooddrop, hitpoints.get(i).getCenterX()-7, hitpoints.get(i).getCenterY()-7, this);
 			}
+			paintAboveTiles(g);
 			g.setColor(Color.RED);
 			g.fillRect(32, 37, 20, 20);
 			g.setColor(Color.WHITE);
@@ -797,9 +798,18 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			i.update();
 	}
 
-	private void paintTiles(Graphics g) {
+	private void paintBelowTiles(Graphics g) {
 		for (int i = 0; i < tilearray.size(); i++) {
 			Tile t = tilearray.get(i);
+			if (t.getCenterY() <= player.getCenterY())
+				g.drawImage(t.getTileImage(), t.getCenterX() - 31, t.getCenterY() - 31, this);
+		}
+	}
+	
+	private void paintAboveTiles(Graphics g) {
+		for (int i = 0; i < tilearray.size(); i++) {
+			Tile t = tilearray.get(i);
+			if (t.getCenterY() > player.getCenterY())
 			g.drawImage(t.getTileImage(), t.getCenterX() - 31, t.getCenterY() - 31, this);
 		}
 	}
