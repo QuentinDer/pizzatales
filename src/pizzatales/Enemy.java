@@ -112,7 +112,7 @@ public abstract class Enemy extends Stuff {
 		
 		super.update();
 		
-		R.setBounds(getCenterX() - 22, getCenterY() - 22, 45, 45);
+		R.setBounds(getCenterX() - 22 + speedX, getCenterY() - 22 + speedY, 45, 45);
 		
 		if (alive == true) {
 			

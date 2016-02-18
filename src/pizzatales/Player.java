@@ -137,7 +137,7 @@ public class Player extends Point {
 		centerX += speedX;
 
 		// Collision
-		R.setRect(centerX - 25, centerY - 25, 50, 50);
+		R.setRect(centerX + speedX - 25, centerY + speedY - 25, 50, 50);
 		if (isShooting > 0) {
 			if (weapon.isReady2Fire()) {
 				switch (isShooting) {
@@ -182,7 +182,7 @@ public class Player extends Point {
 		speedY -= scrollingSpeed;
 		centerY += speedY;
 		centerX += speedX;
-		R.setRect(centerX - 25, centerY - 25, 50, 50);
+		R.setRect(centerX +speedX- 25, centerY +speedY- 25, 50, 50);
 		weapon.increaseShootingCounter();
 	}
 	

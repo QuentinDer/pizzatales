@@ -56,6 +56,25 @@ public class Tile extends Stuff {
 	}
 
 	public void checkCollision(Player player) {
+		if (isTileBlocking(type)) {
+			if (r.intersects(player.R)) {
+				int diffX = Math.abs(getCenterX() - player.getCenterX());
+				int diffY = Math.abs(getCenterY() - player.getCenterY());
+				if (diffX > diffY && diffY < 45) {
+					if (player.getCenterX() <= this.getCenterX()) {
+						player.canmoveright = false;
+					} else {
+						player.canmoveleft = false;
+					}
+				} else if (diffX < diffY && diffX < 45) {
+					if (player.getCenterY() <= this.getCenterY()) {
+						player.canmovedown = false;
+					} else {
+						player.canmoveup = false;
+					}
+				}
+			}
+		}/*
 		int diffX = Math.abs(getCenterX() - player.getCenterX());
 		int diffY = Math.abs(getCenterY() - player.getCenterY());
 		if (isTileBlocking(type)) {
@@ -75,7 +94,7 @@ public class Tile extends Stuff {
 					}
 				}
 			}
-		}
+		}*/
 	}
 
 	public void checkCollision(Enemy enemy) {
