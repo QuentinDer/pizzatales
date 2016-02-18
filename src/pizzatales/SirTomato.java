@@ -29,6 +29,9 @@ public class SirTomato extends Enemy {
 				if (movementTime % 10 == 0) {
 					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
 					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
+					if (posx < posplayerx) {
+						
+					}
 					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 11, canmoveleft, canmoveup, canmoveright, canmovedown, true);
 					switch (pathresult) {
 					case 0:

@@ -67,7 +67,7 @@ public abstract class Enemy extends Stuff {
 		this.halfsizey = halfsizey;
 	}
 
-	public void checkCollision(Enemy e) {
+	private void checkCollision(Enemy e) {
 		if (R.intersects(e.R)) {
 			if (Math.abs(e.getCenterX() - getCenterX()) > Math.abs(e.getCenterY() - getCenterY())) {
 				if (e.getCenterX() - getCenterX() > 0)
@@ -82,6 +82,28 @@ public abstract class Enemy extends Stuff {
 			}
 		}
 	}
+	
+	private void checkCollisionPlayer() {
+		if (R.intersects(player.R)) {
+			if (Math.abs(player.getCenterX() - getCenterX()) > Math.abs(player.getCenterY() - getCenterY())) {
+				if (player.getCenterX() - getCenterX() > 0) {
+					canmoveright = false;
+					player.canmoveleft = false;
+				} else {
+					canmoveleft = false;
+					player.canmoveright = false;
+				}
+			} else {
+				if (player.getCenterY() - getCenterY() > 0) {
+					canmovedown = false;
+					player.canmoveup = false;
+				} else {
+					canmoveup = false;
+					player.canmovedown = false;
+				}
+			}
+		}
+	}
 
 	
 	public void checkEnemyCollisions() {
@@ -89,6 +111,7 @@ public abstract class Enemy extends Stuff {
 			if (!e.equals(this) && e.alive)
 				checkCollision(e);
 		}
+		checkCollisionPlayer();
 	}
 	
 	// Behavioral Methods

@@ -24,7 +24,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
-	public static int difficultylevel = 1;
+	public static int difficultylevel = 4;
 	private static Player player;
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
 	private Image blooddrop;
@@ -554,11 +554,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						}
 						for (EntryDoor ed : entrydoors) {
 							if (ed.isGoingIn() == isInArena) {
-								for (Tile t : ed.getDoors())
+								for (Tile t : ed.getDoors()) {
 									tilearray.remove(t);
+									pf.map[(t.getCenterX()-bg1.getCenterX()+bginitx)/50][(t.getCenterY()-bg1.getCenterY()+bginity)/50] = true;
+								}
 							}
 						}
-						//TODO add other stuff
 						isInArena = -1;
 					}
 				}
