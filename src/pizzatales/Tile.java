@@ -12,7 +12,7 @@ public class Tile extends Stuff {
 
 	private Rectangle r;
 
-	private final static String acceptedTileTypes = "twcusrde";
+	private final static String acceptedTileTypes = "twcusrdel";
 	private final static String blockingTileTypes = "twcsrde";
 
 	public static boolean isTileTypeSupported(char type) {
@@ -50,6 +50,8 @@ public class Tile extends Stuff {
 			tileImage = StartingClass.tileGate;
 		} else if (type == 'e') {
 			tileImage = StartingClass.tileCaveExit;
+  		} else if (type == 'l') {
+			tileImage = StartingClass.tileLavaPuddle;
   		}
 	}
 
