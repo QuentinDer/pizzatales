@@ -161,7 +161,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		ArmorPotion.armorpotionsprite = getImage(base, "data/armor.png");
 		HealthPotion.healthpotionsprite = getImage(base, "data/health.png");
 		Lava.lavasprite = getImage(base, "data/puddlelava.png");
-		Lava.lavaeffectsprite = getImage(base, "data/flamerprojectile.png");
+		Lava.lavaeffectsprite = getImage(base, "data/lavaeffect.png");
 		WaterFlow.waterflowsprite = getImage(base, "data/waterflow.png");
 		
 		/*
@@ -832,7 +832,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		for (int i =0; i < items.size(); i++){
 			Item it = items.get(i);
 			if(it.effectactive == true){
-				g.drawImage(it.getEffectSprite(), player.getCenterX(), player.getCenterY()-30, this);
+				g.drawImage(it.getEffectSprite(), it.getCenterX()-31, it.getCenterY()-31, this);
 			}
 		}
 		}
