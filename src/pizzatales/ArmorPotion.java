@@ -18,6 +18,7 @@ public class ArmorPotion extends Item {
 		} else
 			player.getArmor().setDefense(player.getArmor().MAXDEF);
 		effectactive = true;
+		effectTimer = 30;
 	}
 
 	@Override

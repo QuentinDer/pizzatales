@@ -20,6 +20,7 @@ public class HealthPotion extends Item {
 			player.setHealth(player.getHealth() + 5);
 		} 
 		effectactive = true;
+		effectTimer = 30;
 	}
 
 	@Override
