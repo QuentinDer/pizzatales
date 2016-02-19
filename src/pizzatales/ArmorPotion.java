@@ -10,6 +10,7 @@ public class ArmorPotion extends Item {
 	}
 
 	public static Image armorpotionsprite;
+	public static Image armorpotioneffectsprite;
 
 	@Override
 	protected void doEffect() {
@@ -17,11 +18,17 @@ public class ArmorPotion extends Item {
 			player.getArmor().setDefense(player.getArmor().getDefense()+5);
 		} else
 			player.getArmor().setDefense(player.getArmor().MAXDEF);
+		effectactive = true;
 	}
 
 	@Override
 	protected Image getSprite() {
 		return armorpotionsprite;
+	}
+	
+	@Override
+	protected Image getEffectSprite(){
+		return armorpotioneffectsprite;
 	}
 
 	@Override

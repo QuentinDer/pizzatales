@@ -12,6 +12,8 @@ public class EntryDoor extends Item {
 	private int posx;
 	private int posy;
 	
+	public static Image gateeffectsprite;
+	
 	public EntryDoor(int x, int y, boolean onetimeeffect) {
 		super(x, y, onetimeeffect);
 		isGoingIn = -1;
@@ -33,6 +35,11 @@ public class EntryDoor extends Item {
 	@Override
 	protected Image getSprite() {
 		return null;
+	}
+	
+	@Override
+	protected Image getEffectSprite(){
+		return gateeffectsprite;
 	}
 	
 	public void setEntryOut(EntryDoor out) {

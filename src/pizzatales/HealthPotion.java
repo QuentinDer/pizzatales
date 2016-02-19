@@ -10,6 +10,7 @@ public class HealthPotion extends Item {
 	}
 
 	public static Image healthpotionsprite;
+	public static Image healthpotioneffectsprite;
 
 
 	@Override
@@ -19,11 +20,17 @@ public class HealthPotion extends Item {
 		} else {
 			player.setHealth(player.getHealth() + 5);
 		} 
+		effectactive = true;
 	}
 
 	@Override
 	protected Image getSprite() {
 		return healthpotionsprite;
+	}
+	
+	@Override
+	protected Image getEffectSprite(){
+		return healthpotioneffectsprite;
 	}
 
 	@Override

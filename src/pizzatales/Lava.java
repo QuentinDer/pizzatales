@@ -13,6 +13,7 @@ public class Lava extends Item {
 	}
 
 	public static Image lavasprite;
+	public static Image lavaeffectsprite;
 
 	@Override
 	protected void doEffect() {
@@ -20,16 +21,23 @@ public class Lava extends Item {
 			player.setHealth(player.getHealth()-1);
 		}
 		timer++;
+		effectactive = true;
+		effectTimer = 30;
 	}
 
 	@Override
 	protected Image getSprite() {
 		return lavasprite;
 	}
+	
+	@Override
+	protected Image getEffectSprite(){
+		return lavaeffectsprite;
+	}
 
 	@Override
 	protected boolean canDoEffect() {
-		return player.getArmor().defense != player.getArmor().MAXDEF;
+		return true;
 	}
 
 }

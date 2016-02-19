@@ -88,7 +88,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		tileCaveRock = getImage(base, "data/caverock.png");
 		tileGate = getImage(base, "data/gate.png");
 		tileCaveExit = getImage(base, "data/caveexit.png");
-		tileWaterFlow = getImage(base, "data/waterflow.png");
 		
 		blooddrop = getImage(base, "data/blooddrop.png");
 		Gun.leftSprite = getImage(base, "data/pistol1.png");
@@ -162,6 +161,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		ArmorPotion.armorpotionsprite = getImage(base, "data/armor.png");
 		HealthPotion.healthpotionsprite = getImage(base, "data/health.png");
 		Lava.lavasprite = getImage(base, "data/puddlelava.png");
+		Lava.lavaeffectsprite = getImage(base, "data/flamerprojectile.png");
+		WaterFlow.waterflowsprite = getImage(base, "data/waterflow.png");
 		
 		/*
 		 * anim = new Animation(); anim.addFrame(character1, 1250);
@@ -642,6 +643,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				g.drawImage(blooddrop, hitpoints.get(i).getCenterX()-7, hitpoints.get(i).getCenterY()-7, this);
 			}
 			paintAboveTiles(g);
+			paintItemEffect(g);
 			g.setColor(Color.RED);
 			g.fillRect(32, 37, 20, 20);
 			g.setColor(Color.WHITE);
@@ -825,6 +827,15 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			g.drawImage(it.getSprite(), it.getCenterX() - 31, it.getCenterY() - 31, this);
 		}
 	}
+	
+	private void paintItemEffect(Graphics g){
+		for (int i =0; i < items.size(); i++){
+			Item it = items.get(i);
+			if(it.effectactive == true){
+				g.drawImage(it.getEffectSprite(), player.getCenterX(), player.getCenterY()-30, this);
+			}
+		}
+		}
 
 	public void animate() {
 		anim.update(10);
