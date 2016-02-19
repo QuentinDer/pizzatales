@@ -163,6 +163,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Lava.lavasprite = getImage(base, "data/puddlelava.png");
 		Lava.lavaeffectsprite = getImage(base, "data/lavaeffect.png");
 		WaterFlow.waterflowsprite = getImage(base, "data/waterflow.png");
+		WaterFlow.watereffectsprite = getImage(base, "data/watereffect.png");
 		
 		/*
 		 * anim = new Animation(); anim.addFrame(character1, 1250);
@@ -597,8 +598,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		if (state == GameState.Running) {
 			g.drawImage(background, bg1.getCenterX(), bg1.getCenterY(), this);
 			g.drawImage(background, bg2.getCenterX(), bg2.getCenterY(), this);
-			paintBelowTiles(g);
 			paintItems(g);
+			paintBelowTiles(g);
 			for (Explosion e : explosions) {
 				g.drawImage(e.getSprite(), e.getR().x, e.getR().y, this);
 			}
@@ -832,7 +833,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		for (int i =0; i < items.size(); i++){
 			Item it = items.get(i);
 			if(it.effectactive == true){
-				g.drawImage(it.getEffectSprite(), it.getCenterX()-31, it.getCenterY()-31, this);
+				g.drawImage(it.getEffectSprite(), player.getCenterX()-31, player.getCenterY()-31, this);
 			}
 		}
 		}
