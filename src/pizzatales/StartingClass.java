@@ -54,6 +54,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();
 	private ArrayList<Item> items = new ArrayList<Item>();
+	private ArrayList<Item> leavingitems = new ArrayList<Item>();
 	public static ArrayList<Enemy> enemyarray = new ArrayList<Enemy>();
 	public static ArrayList<ArrayList<Enemy>> arenaenemies = new ArrayList<ArrayList<Enemy>>();
 	public static ArrayList<ArrayList<EntryDoor>> arenaentrydoors = new ArrayList<ArrayList<EntryDoor>>();
@@ -679,6 +680,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		int i = 0;
 		while (i < items.size()) {
 			if (items.get(i).checkCollisionPlayer(player)) {
+				leavingitems.add(items.get(i));
 				items.remove(i);
 			} else {
 				i++;
@@ -804,6 +806,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private void updateItems() {
 		for (Item i : items)
 			i.update();
+		for (Item i : leavingitems)
+			i.update();
 	}
 
 	private void paintBelowTiles(Graphics g) {
@@ -836,7 +840,15 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				g.drawImage(it.getEffectSprite(), player.getCenterX()-31, player.getCenterY()-31, this);
 			}
 		}
+		int i = 0;
+		while (i < leavingitems.size()) {
+			if (leavingitems.get(i).effectactive) {
+				g.drawImage(leavingitems.get(i).getEffectSprite(), player.getCenterX()-31, player.getCenterY()-31, this);
+				i++;
+			} else
+				leavingitems.remove(i);
 		}
+	}
 
 	public void animate() {
 		anim.update(10);
