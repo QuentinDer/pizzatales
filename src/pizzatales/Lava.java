@@ -9,7 +9,6 @@ public class Lava extends Item {
 	
 	public Lava(int x, int y, boolean onetimeeffect) {
 		super(x, y, onetimeeffect);
-		removable = false;
 	}
 
 	public static Image lavasprite;

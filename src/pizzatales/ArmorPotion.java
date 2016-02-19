@@ -6,7 +6,6 @@ public class ArmorPotion extends Item {
 
 	public ArmorPotion(int x, int y, boolean onetimeeffect) {
 		super(x, y, onetimeeffect);
-		removable = true;
 	}
 
 	public static Image armorpotionsprite;

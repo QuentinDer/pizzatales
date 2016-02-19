@@ -7,7 +7,6 @@ public abstract class Item extends Stuff {
 
 	protected Rectangle r;
 	private boolean onetimeeffect;
-	public boolean removable;
 	public boolean effectactive;
 	protected int effectTimer;
 	

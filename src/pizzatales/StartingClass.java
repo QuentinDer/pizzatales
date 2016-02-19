@@ -678,7 +678,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private void checkItemsCollision() {
 		int i = 0;
 		while (i < items.size()) {
-			if (items.get(i).checkCollisionPlayer(player) && items.get(i).removable == true) {
+			if (items.get(i).checkCollisionPlayer(player)) {
 				items.remove(i);
 			} else {
 				i++;

@@ -6,7 +6,6 @@ public class WaterFlow extends Item {
 	
 	public WaterFlow(int x, int y, boolean onetimeeffect) {
 		super(x, y, onetimeeffect);
-		removable = false;
 	}
 
 	public static Image waterflowsprite;

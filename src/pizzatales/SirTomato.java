@@ -29,10 +29,19 @@ public class SirTomato extends Enemy {
 				if (movementTime % 10 == 0) {
 					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
 					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
+					int tox = posplayerx;
 					if (posx < posplayerx) {
-						
+						if (pf.map[posplayerx-1][posplayery])
+							tox = posplayerx-1;
+						else 
+							tox = posplayerx+1;
+					} else {
+						if (pf.map[posplayerx+1][posplayery])
+							tox = posplayerx+1;
+						else
+							tox = posplayerx-1;
 					}
-					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 11, canmoveleft, canmoveup, canmoveright, canmovedown, true);
+					int pathresult = pf.getDirectionToShoot(posx, posy, tox, posplayery, 11, canmoveleft, canmoveup, canmoveright, canmovedown, true);
 					switch (pathresult) {
 					case 0:
 						stopMoving();

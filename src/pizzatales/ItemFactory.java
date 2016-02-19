@@ -25,10 +25,10 @@ public class ItemFactory {
 			i = new EntryDoor(x,y, true);
 			break;
 		case 'l':
-			i = new Lava(x, y, true);
+			i = new Lava(x, y, false);
 			break;
 		case 'o':
-			i = new WaterFlow(x, y, true);
+			i = new WaterFlow(x, y, false);
 			break;
 		}
 		return i;
