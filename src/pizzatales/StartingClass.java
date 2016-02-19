@@ -1,6 +1,7 @@
 package pizzatales;
 
 import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -38,6 +39,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	ArrayList<Firearm> playerweapons;
 	private ArrayList<Armor> playerarmor;
 	private static ArrayList<Explosion> explosions;
+	private AudioClip soundtrack;
 	
 
 	private int weaponindex;
@@ -73,13 +75,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		addKeyListener(this);
 		Frame frame = (Frame) this.getParent().getParent();
 		frame.setTitle("Pizza Tales");
+		
 		try {
 			base = getDocumentBase();
 		} catch (Exception e) {
 		}
 
+		soundtrack = getAudioClip(base, "data/Soundtrack.wav");
+		
 		// Image Setups
-		background = getImage(base, "data/background.png");
+		background = getImage(base, "data/background1.png");
 		tileTree = getImage(base, "data/tree.png");
 		tileGrass = getImage(base, "data/grass.png");
 		tileWall = getImage(base, "data/wall.png");
@@ -207,7 +212,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		// Initialize Tiles
 		try {
-			loadMap("data/L24.txt");
+			loadMap("data/L14.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -309,6 +314,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	@Override
 	public void run() {
 		if (state == GameState.Running) {
+			soundtrack.loop();
 			while (true) {
 				try {
 					Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
@@ -317,6 +323,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				}
 				clock = System.currentTimeMillis();
 
+				if (state != GameState.Running)
+					soundtrack.stop();
+				
 				// Animation
 
 				if (player.getSpeedX() != 0 || player.getSpeedY() != 0) {
