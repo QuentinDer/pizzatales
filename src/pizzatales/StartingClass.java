@@ -24,11 +24,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
-	public static int difficultylevel = 4;
+	public static int difficultylevel = 1;
 	private static Player player;
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
 	private Image blooddrop;
-	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, tilePuddle, tileCaveRock, tileGate, tileCaveExit, tileLavaPuddle;
+	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, tilePuddle, tileCaveRock, tileGate, tileCaveExit, tileLavaPuddle, tileWaterFlow;
 	private int walkCounter = 1;
 	private URL base;
 	private Graphics second;
@@ -78,7 +78,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 
 		// Image Setups
-		background = getImage(base, "data/background1.png");
+		background = getImage(base, "data/background.png");
 		tileTree = getImage(base, "data/tree.png");
 		tileGrass = getImage(base, "data/grass.png");
 		tileWall = getImage(base, "data/wall.png");
@@ -88,7 +88,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		tileCaveRock = getImage(base, "data/caverock.png");
 		tileGate = getImage(base, "data/gate.png");
 		tileCaveExit = getImage(base, "data/caveexit.png");
-		tileLavaPuddle = getImage(base, "data/puddlelava.png");
+		tileWaterFlow = getImage(base, "data/waterflow.png");
 		
 		blooddrop = getImage(base, "data/blooddrop.png");
 		Gun.leftSprite = getImage(base, "data/pistol1.png");
@@ -161,6 +161,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		ArmorPotion.armorpotionsprite = getImage(base, "data/armor.png");
 		HealthPotion.healthpotionsprite = getImage(base, "data/health.png");
+		Lava.lavasprite = getImage(base, "data/puddlelava.png");
 		
 		/*
 		 * anim = new Animation(); anim.addFrame(character1, 1250);
@@ -203,7 +204,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		// Initialize Tiles
 		try {
-			loadMap("data/L14.txt");
+			loadMap("data/L24.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -568,6 +569,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					walkCounter = 0;
 				}
 				walkCounter++;
+				if(player.getHealth() <= 0){
+					state = GameState.Dead;
+				}
 
 			}
 		}
@@ -671,7 +675,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private void checkItemsCollision() {
 		int i = 0;
 		while (i < items.size()) {
-			if (items.get(i).checkCollisionPlayer(player)) {
+			if (items.get(i).checkCollisionPlayer(player) && items.get(i).removable == true) {
 				items.remove(i);
 			} else {
 				i++;
@@ -975,6 +979,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	public void setTilearray(ArrayList<Tile> tilearray) {
 		this.tilearray = tilearray;
+	}
+
+	public GameState getState() {
+		return state;
+	}
+
+	public void setState(GameState state) {
+		this.state = state;
 	}
 
 }

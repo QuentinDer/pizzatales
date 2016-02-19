@@ -1,7 +1,7 @@
 package pizzatales;
 
 public class ItemFactory {
-	private final static String itemslist = "phai";
+	private final static String itemslist = "phail";
 	
 	public static boolean isItemSupported(char type) {
 		String test = "";
@@ -23,6 +23,9 @@ public class ItemFactory {
 			break;
 		case 'i':
 			i = new EntryDoor(x,y, true);
+			break;
+		case 'l':
+			i = new Lava(x, y, true);
 			break;
 		}
 		return i;

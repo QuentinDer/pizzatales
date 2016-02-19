@@ -6,6 +6,7 @@ public class HealthPotion extends Item {
 
 	public HealthPotion(int x, int y, boolean onetimeeffect) {
 		super(x, y, onetimeeffect);
+		removable = true;
 	}
 
 	public static Image healthpotionsprite;

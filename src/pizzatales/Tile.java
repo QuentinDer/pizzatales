@@ -12,7 +12,7 @@ public class Tile extends Stuff {
 
 	private Rectangle r;
 
-	private final static String acceptedTileTypes = "twcusrdel";
+	private final static String acceptedTileTypes = "twcusrdeo";
 	private final static String blockingTileTypes = "twcsrde";
 
 	public static boolean isTileTypeSupported(char type) {
@@ -42,6 +42,8 @@ public class Tile extends Stuff {
 			tileImage = StartingClass.tileCave;
 		} else if (type == 'u') {
 			tileImage = StartingClass.tilePuddle;
+		} else if (type == 'o') {
+			tileImage = StartingClass.tileWaterFlow;
 		} else if (type == 's') {
 			tileImage = StartingClass.tileStalag;
 		} else if (type == 'r') {
@@ -50,9 +52,7 @@ public class Tile extends Stuff {
 			tileImage = StartingClass.tileGate;
 		} else if (type == 'e') {
 			tileImage = StartingClass.tileCaveExit;
-  		} else if (type == 'l') {
-			tileImage = StartingClass.tileLavaPuddle;
-  		}
+  		} 
 	}
 
 	public void checkCollision(Player player) {

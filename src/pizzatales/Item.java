@@ -7,6 +7,7 @@ public abstract class Item extends Stuff {
 
 	protected Rectangle r;
 	private boolean onetimeeffect;
+	public boolean removable;
 	
 	public Item(int x, int y, boolean onetimeeffect) {
 		super((x * 50) + 25,(y * 50) + 40);
