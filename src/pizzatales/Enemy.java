@@ -38,6 +38,8 @@ public abstract class Enemy extends Stuff {
 	private boolean sleepy = false;
 	public int halfsizex;
 	public int halfsizey;
+	protected int halfrsizex = 22;
+	protected int halfrsizey = 22;
 	protected int range;
 	
 	//protected Animation anim;
@@ -64,7 +66,7 @@ public abstract class Enemy extends Stuff {
 		posy = (centerY-15) / 50;
 		pf.map[posx][posy] = false;
 		setStaySprite();
-		R = new Rectangle(getCenterX() - 22, getCenterY() - 22, 45, 45);
+		R = new Rectangle(getCenterX() - halfrsizex, getCenterY() - halfrsizey, 2 * halfrsizex, 2 * halfrsizey);
 		this.halfsizex = halfsizex;
 		this.halfsizey = halfsizey;
 	}
@@ -120,6 +122,13 @@ public abstract class Enemy extends Stuff {
 	@Override
 	public void update() {
 
+		// Prevents going beyond X coordinate of 0 or 1280
+		if (centerX + speedX <= 30) {
+			canmoveleft = false;
+		} else if (centerX + speedX >= 1250) {
+			canmoveright = false;
+		}
+		
 		setSpeedX(0);
 		setSpeedY(0);
 		if (ismovingright && canmoveright) {
@@ -137,7 +146,7 @@ public abstract class Enemy extends Stuff {
 		
 		super.update();
 		
-		R.setBounds(getCenterX() - 22 + speedX, getCenterY() - 22 + speedY, 45, 45);
+		R.setBounds(getCenterX() - halfrsizex + speedX, getCenterY() - halfrsizey + speedY, 2*halfrsizex, 2*halfrsizey);
 		
 		if (alive == true) {
 			
@@ -151,12 +160,6 @@ public abstract class Enemy extends Stuff {
 				posy = currentposy;
 			}
 			
-			// Prevents going beyond X coordinate of 0 or 1280
-			if (centerX + speedX <= 30) {
-				centerX = 61;
-			} else if (centerX + speedX >= 1250) {
-				centerX = 1249;
-			}
 			
 			animate();
 				

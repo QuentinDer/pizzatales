@@ -16,11 +16,11 @@ public class SirTomato extends Enemy {
 	private int dashSpeedX;
 	
 	public SirTomato(int centerX, int centerY) {
-		super(centerX, centerY, null, 75, 3, 50, 50);
+		super(centerX, centerY, null, 100, 3, 50, 50);
 		movementTime = ((int) (Math.random() * 50));
 		R = new Rectangle(getCenterX() - 45, getCenterY() - 45, 90, 90);
 		slashdmg = 4;
-		dashdmg = 8;
+		dashdmg = 5;
 		switch (StartingClass.difficultylevel) {
 		case 1:
 			maxInAnimation = 60;
@@ -37,14 +37,14 @@ public class SirTomato extends Enemy {
 		case 3:
 			maxInAnimation = 40;
 			tatocd = 200;
-			dashcd = 400;
-			dashspeed = 5;
+			dashcd = 180;
+			dashspeed = 6;
 			break;
 		case 4:
 			maxInAnimation = 30;
-			tatocd = 150;
-			dashcd = 200;
-			dashspeed = 7;
+			tatocd = 120;
+			dashcd = 120;
+			dashspeed = 8;
 			break;
 		}
 	}
@@ -63,6 +63,8 @@ public class SirTomato extends Enemy {
 				if (inAnimation == 0) {
 					halfsizex = 50;
 					halfsizey = 50;
+					halfrsizex = 45;
+					halfrsizey = 45;
 					isDashing = false;
 					speed = 3;
 				}
@@ -70,9 +72,12 @@ public class SirTomato extends Enemy {
 			if (isDashing && speedX != dashSpeedX) {
 				halfsizex = 50;
 				halfsizey = 50;
+				halfrsizex = 45;
+				halfrsizey = 45;
 				isDashing = false;
 				currentSprite = staySprite;
 				speed = 3;
+				inAnimation = 0;
 			}
 				
 			
@@ -144,7 +149,7 @@ public class SirTomato extends Enemy {
 						tcd = tatocd;
 					}
 				}
-				if (dcd == 0 && Math.abs(player.getCenterX() - getCenterX()) > 150 && Math.abs(player.getCenterX() - getCenterX()) < 300 && Math.abs(posplayery-posy)<=1) {
+				if (dcd == 0 && Math.abs(player.getCenterX() - getCenterX()) > 100 && Math.abs(posplayery-posy)<=1) {
 					if (player.getCenterX() > getCenterX()) {
 						currentSprite = dashSpriteRight;
 						moveRight();
@@ -156,8 +161,9 @@ public class SirTomato extends Enemy {
 					}
 					speed = dashspeed;
 					halfsizex = 100;
-					inAnimation = 50;
+					halfrsizex = 90;
 					isDashing = true;
+					inAnimation = 50;
 					dcd = dashcd;
 				}
 			}
@@ -231,8 +237,11 @@ public class SirTomato extends Enemy {
 				}
 				halfsizex = 50;
 				halfsizey = 50;
+				halfrsizex = 45;
+				halfrsizey = 45;
 				isDashing = false;
 				currentSprite = staySprite;
+				inAnimation = 0;
 				speed = 3;
 			}
 		}
@@ -240,7 +249,7 @@ public class SirTomato extends Enemy {
 	
 	@Override
 	public void animate(){
-		if (isMoving && inAnimation == 0) {
+		if (isMoving && inAnimation == 0 && !isDashing) {
 			walkCounter++;
 			if (getSpeedX() <= 0) {
 				if (walkCounter == 1000)
