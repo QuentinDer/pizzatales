@@ -4,14 +4,12 @@ import java.awt.Image;
 
 public class Tato extends Enemy {
 
-	protected int movementParam;
-	protected boolean isShooting;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
-	private final static int range = 470;
+	public int range = 470;
 
 	public Tato(int centerX, int centerY) {
 		super(centerX,centerY, new Gun(), 2, 2, 31, 31);
-		movementParam = ((int) (Math.random() * 50));
+		movementTime = ((int) (Math.random() * 50));
 	}
 
 	// Behavioral Methods
@@ -25,59 +23,57 @@ public class Tato extends Enemy {
 
 			switch (StartingClass.difficultylevel) {
 			case 1:
-				if (!isShooting) {
-					if (movementTime % 400 == movementParam) {
-						moveRight();
-					} else if (movementTime % 400 == movementParam + 75) {
-						stopMoving();
-					} else if (movementTime % 400 == movementParam + 100) {
-						moveLeft();
-					} else if (movementTime % 400 == movementParam + 175) {
-						stopMoving();
-					} else if (movementTime % 400 == movementParam + 200) {
-						moveUp();
-					} else if (movementTime % 400 == movementParam + 275) {
-						stopMoving();
-					} else if (movementTime % 400 == movementParam + 300) {
-						moveDown();
-					} else if (movementTime % 400 == movementParam + 375) {
+				if (movementTime % 45 == 0) {
+					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
+					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
+					if (Math.abs(posplayery-posy)+Math.abs(posplayerx-posx) < 15) {
+						int pathresult = 1;
+						int difX = player.getCenterX() - getCenterX();
+						int difY = player.getCenterY() - getCenterY();
+						int absdifX = Math.abs(difX);
+						int absdifY = Math.abs(difY);
+						int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + bginity) / 50));
+						int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + bginitx) / 50));
+						pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1, toshootx2, posplayery, 8, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+						switch (pathresult) {
+						case 0:
+							stopMoving();
+							break;
+						case 1:
+							moveLeft();
+							break;
+						case 2:
+							moveUp();
+							break;
+						case 3:
+							moveRight();
+							break;
+						case 4:
+							moveDown();
+							break;
+						}
+					} else {
 						stopMoving();
 					}
 				}
-				int difXu = player.getCenterX() - getCenterX();
-				int difYu = player.getCenterY() - getCenterY();
-				int absdifXu = Math.abs(difXu);
-				int absdifYu = Math.abs(difYu);
-				if (absdifXu < 80 && difYu > 0 && difYu < 530) {
-					stopMoving();
-					isShooting = true;
-					if (weapon.isReady2Fire()) {
-						shootDown();
+				if (weapon.isReady2Fire()) {
+					int diffx = Math.abs(getCenterX() - player.getCenterX());
+					int diffy = Math.abs(getCenterY() - player.getCenterY());
+					if (diffx > diffy && diffy < 120 && diffx < 530) {
+						if (player.getCenterX() > getCenterX())
+							shootRight();
+						else
+							shootLeft();
+					} else if (diffx < 120 && diffy < 530){
+						if (player.getCenterY() > getCenterY())
+							shootDown();
+						else
+							shootUp();
 					}
-				} else if (absdifXu < 80 && difYu < 0 && difYu > -530) {
-					stopMoving();
-					isShooting = true;
-					if (weapon.isReady2Fire()) {
-						shootUp();
-					}
-				} else if (absdifYu < 80 && difXu > 0 && difXu < 530) {
-					stopMoving();
-					isShooting = true;
-					if (weapon.isReady2Fire()) {
-						shootRight();
-					}
-				} else if (absdifYu < 80 && difXu < 0 && difXu > -530) {
-					stopMoving();
-					isShooting = true;
-					if (weapon.isReady2Fire()) {
-						shootLeft();
-					}
-				} else {
-					isShooting = false;
 				}
 				break;
 			case 2:
-				if (movementTime % 60 == 0) {
+				if (movementTime % 35 == 0) {
 					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
 					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
 					if (Math.abs(posplayery-posy)+Math.abs(posplayerx-posx) < 15) {
@@ -127,7 +123,7 @@ public class Tato extends Enemy {
 				}
 				break;
 			case 3:
-				if (movementTime % 40 == 0) {
+				if (movementTime % 25 == 0) {
 					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
 					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
 					if (Math.abs(posplayery-posy)+Math.abs(posplayerx-posx) < 15) {

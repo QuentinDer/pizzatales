@@ -6,7 +6,8 @@ import java.awt.Rectangle;
 public abstract class Projectile extends Stuff {
 
 	protected boolean visible;
-	private Rectangle rectP;
+	protected boolean canbedestroyed;
+	protected Rectangle rectP;
 	private int initX;
 	private int initY;
 	private int initbgx;
@@ -32,15 +33,21 @@ public abstract class Projectile extends Stuff {
 		this.range = range;
 		rectP = new Rectangle(getCenterX() - halfsize, getCenterY() - halfsize, size, size);
 	}
-
+	
 	@Override
 	public void update() {
 		super.update();
 		rectP.setBounds(getCenterX() - halfsize, getCenterY() - halfsize, size, size);
-		if (Math.abs(this.getCenterX() - bg.getCenterX() + initbgx - initX) > range) {
+		if (Math.abs(centerX - bg.getCenterX() + initbgx - initX) > range) {
 			doOnLimitRange();
 		}
-		if (Math.abs(this.getCenterY() - bg.getCenterY() + initbgy - initY) > range) {
+		if (Math.abs(centerY - bg.getCenterY() + initbgy - initY) > range) {
+			doOnLimitRange();
+		}
+		if (centerX > 1240 && speedX > 0) {
+			doOnLimitRange();
+		}
+		if (centerX < 40 && speedX < 0) {
 			doOnLimitRange();
 		}
 	}
@@ -60,6 +67,13 @@ public abstract class Projectile extends Stuff {
 			return false;
 		}
 		return false;
+	}
+	
+	public boolean checkCollision(Projectile p) {
+		if (rectP.intersects(p.rectP))
+			return true;
+		else
+			return false;
 	}
 	
 	boolean checkCollision(Player p) {
@@ -87,4 +101,5 @@ public abstract class Projectile extends Stuff {
 	public abstract void doOnCollision(Enemy e);
 	public abstract void doOnCollision(Tile t);
 	public abstract void doOnLimitRange();
+	public abstract void doOnCollision(Projectile p);
 }

@@ -40,4 +40,9 @@ public class Bullet extends Projectile {
 	public void doOnLimitRange() {
 		visible = false;
 	}
+
+	@Override
+	public void doOnCollision(Projectile p) {
+		visible = false;
+	}
 }

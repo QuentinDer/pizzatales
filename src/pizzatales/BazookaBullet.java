@@ -6,6 +6,7 @@ public class BazookaBullet extends Projectile {
 
 	public static Image bulletsprite, bulletspriteLeft, bulletspriteRight, bulletspriteUp, bulletspriteDown;
 	private int aiming;
+	private int life;
 	
 	public BazookaBullet(int startX, int startY, int vectorX, int vectorY) {
 		super(startX, startY, vectorX, vectorY, 5 , 4, 30, 15, 750);
@@ -18,6 +19,8 @@ public class BazookaBullet extends Projectile {
 		} else {
 			aiming = 2;
 		}
+		life = 1;
+		canbedestroyed = true;
 	}
 	
 	@Override
@@ -65,6 +68,18 @@ public class BazookaBullet extends Projectile {
 		if (visible) {
 			visible = false;
 			StartingClass.getExplosions().add(new BazookaBulletExplosion(this.centerX,this.centerY));
+		}
+	}
+
+	@Override
+	public void doOnCollision(Projectile p) {
+		if (visible) {
+			if (life > 0)
+				life -= p.damage;
+			else {
+				visible = false;
+				StartingClass.getExplosions().add(new BazookaBulletExplosion(this.centerX,this.centerY));
+			}
 		}
 	}
 }

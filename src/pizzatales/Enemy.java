@@ -20,7 +20,7 @@ public abstract class Enemy extends Stuff {
 	protected int movementTime = ((int) Math.random() * 100) + 50;
 
 	protected Player player = StartingClass.getPlayer();
-	private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
+	protected ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	protected PathFinder pf = StartingClass.getPathFinder();
 	protected int posx;
 	protected int posy;
@@ -38,9 +38,10 @@ public abstract class Enemy extends Stuff {
 	private boolean sleepy = false;
 	public int halfsizex;
 	public int halfsizey;
+	protected int range;
 	
 	//protected Animation anim;
-	private int speed;
+	protected int speed;
 	
 	protected Firearm weapon;
 	private boolean isAimingUp = true;
@@ -61,6 +62,7 @@ public abstract class Enemy extends Stuff {
 		bginity = bg.getCenterY() - 15;
 		posx = (centerX-15) / 50;
 		posy = (centerY-15) / 50;
+		pf.map[posx][posy] = false;
 		setStaySprite();
 		R = new Rectangle(getCenterX() - 22, getCenterY() - 22, 45, 45);
 		this.halfsizex = halfsizex;
@@ -83,7 +85,7 @@ public abstract class Enemy extends Stuff {
 		}
 	}
 	
-	private void checkCollisionPlayer() {
+	protected void checkCollisionPlayer() {
 		if (R.intersects(player.R)) {
 			if (Math.abs(player.getCenterX() - getCenterX()) > Math.abs(player.getCenterY() - getCenterY())) {
 				if (player.getCenterX() - getCenterX() > 0) {
@@ -373,6 +375,11 @@ public abstract class Enemy extends Stuff {
 	
 	public Firearm getWeapon() {
 		return weapon;
+	}
+	
+	public void setWeapon(Firearm weapon_) {
+		weapon = weapon_;
+		weapon.setHolderProjectiles(projectiles);
 	}
 	
 	public void sleep() {

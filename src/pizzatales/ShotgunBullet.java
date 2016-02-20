@@ -41,4 +41,9 @@ public class ShotgunBullet extends Projectile {
 		visible = false;
 	}
 
+	@Override
+	public void doOnCollision(Projectile p) {
+		visible = false;
+	}
+
 }

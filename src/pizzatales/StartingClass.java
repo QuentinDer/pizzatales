@@ -25,7 +25,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
-	public static int difficultylevel = 1;
+	public static int difficultylevel = 3;
 	private static Player player;
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
 	private Image blooddrop;
@@ -130,6 +130,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Smg.downSprite = getImage(base, "data/smg3.png");
 		Smg.upSprite = getImage(base, "data/smg4.png");
 		SmgBullet.bulletsprite = getImage(base, "data/smgprojectile.png");
+		TomatoProjectile.tomatoprojectilesprite = getImage(base, "data/sirtomatoprojectile.png");
 
 		Tato.staySprite = getImage(base, "data/tato1.png");
 		Tato.move1Sprite = getImage(base, "data/tato2.png");
@@ -161,8 +162,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		SirTomato.move1SpriteRight = getImage(base, "data/sirtomatoright2.png");
 		SirTomato.move2SpriteRight = getImage(base, "data/sirtomatoright3.png");
 		SirTomato.dieSprite = getImage(base, "data/sirtomatodead.png");
+		SirTomato.sirtomatothrowleft = getImage(base, "data/sirtomatothrowleft.png");
+		SirTomato.sirtomatothrowright = getImage(base, "data/sirtomatothrowright.png");
+		SirTomato.dashSpriteLeft = getImage(base, "data/sirtomatodashleft.png");
+		SirTomato.dashSpriteRight = getImage(base, "data/sirtomatodashright.png");
 		
 		BazookaBulletExplosion.bazookaexplosionsprite = getImage(base, "data/bazookaexplosion.png");
+		TomatoProjectileExplosion.tomatoexplosionsprite = getImage(base, "data/sirtomatoprojectileexplosion.png");
 
 		ArmorPotion.armorpotionsprite = getImage(base, "data/armor.png");
 		HealthPotion.healthpotionsprite = getImage(base, "data/health.png");
@@ -314,7 +320,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	@Override
 	public void run() {
 		if (state == GameState.Running) {
-			soundtrack.loop();
+			//soundtrack.loop();
 			while (true) {
 				try {
 					Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
@@ -367,6 +373,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				updatePlayer();
 				callEnemiesAIs();
 				updateEnemies();
+				
 
 				bg1.update();
 				bg2.update();
@@ -467,6 +474,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 													if(player.getHealth() < 20){
 														player.setHealth(player.getHealth() + 1);
 													}
+												}
+											}
+										}
+										if (p.canbedestroyed) {
+											for (Projectile pe : e.getProjectiles()) {
+												if (pe.isVisible() && p.checkCollision(pe)) {
+													p.doOnCollision(pe);
+													pe.doOnCollision(p);
 												}
 											}
 										}
@@ -614,6 +629,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				g.drawImage(e.getSprite(), e.getR().x, e.getR().y, this);
 			}
 			ArrayList<Projectile> projectiles = player.getProjectiles();
+			for (Enemy e : getEnemyarray()) {
+				if (!e.alive) {
+					g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
+				}
+			}
 			for (int i = 0; i < getEnemyarray().size(); i++) {
 				Enemy e = getEnemyarray().get(i);
 				if (e.alive) {
@@ -628,8 +648,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					} else {
 						g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
 					}
-				} else {
-					g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
 				}
 				for (int j = 0; j < e.getProjectiles().size(); j++) {
 					Projectile p = e.getProjectiles().get(j);
@@ -738,6 +756,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							}
 						}
 					}
+					if (p.canbedestroyed) {
+						for (Projectile pe : e.getProjectiles()) {
+							if (pe.isVisible() && p.checkCollision(pe)) {
+								p.doOnCollision(pe);
+								pe.doOnCollision(p);
+							}
+						}
+					}
 				}
 				for (int j = 0; j < tilearray.size(); j++) {
 					if (true == p.checkCollision(tilearray.get(j))) {
@@ -787,6 +813,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					for (int k = 0; k < tilearray.size(); k++) {
 						if (true == p.checkCollision(tilearray.get(k))) {
 							p.doOnCollision(tilearray.get(j));
+						}
+					}
+					if (p.canbedestroyed) {
+						for (Projectile pe : player.getProjectiles()) {
+							if (pe.isVisible() && p.checkCollision(pe)) {
+								p.doOnCollision(pe);
+								pe.doOnCollision(p);
+							}
 						}
 					}
 					i++;
