@@ -10,9 +10,12 @@ public class SirTomato extends Enemy {
 	private int inAnimation, slashdmg, dashdmg, dashspeed, tatocd, dashcd, tcd, dcd;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, staySpriteRight, 
 		move1SpriteRight, move2SpriteRight, sirtomatothrowleft, sirtomatothrowright,
-		dashSpriteRight, dashSpriteLeft;
+		dashSpriteRight, dashSpriteLeft, slashSpriteLeft, slashSpriteRight;
 	private int maxInAnimation;
 	private boolean isDashing;
+	private boolean isSlashing;
+	private boolean isSlashingRight;
+	private boolean hasSlashed;
 	private int dashSpeedX;
 	
 	public SirTomato(int centerX, int centerY) {
@@ -30,19 +33,19 @@ public class SirTomato extends Enemy {
 			break;
 		case 2:
 			maxInAnimation = 50;
-			tatocd = 250;
+			tatocd = 240;
 			dcd = Integer.MAX_VALUE;
 			dashcd = Integer.MAX_VALUE;
 			break;
 		case 3:
 			maxInAnimation = 40;
-			tatocd = 200;
+			tatocd = 180;
 			dashcd = 180;
 			dashspeed = 6;
 			break;
 		case 4:
 			maxInAnimation = 30;
-			tatocd = 120;
+			tatocd = 240;
 			dashcd = 120;
 			dashspeed = 8;
 			break;
@@ -67,6 +70,15 @@ public class SirTomato extends Enemy {
 					halfrsizey = 45;
 					isDashing = false;
 					speed = 3;
+					currentSprite = staySprite;
+					if (isSlashing) {
+						if (isSlashingRight)
+							centerX -= 50;
+						else
+							centerX += 50;
+						centerY += 15;
+						isSlashing = false;
+					}
 				}
 			}
 			if (isDashing && speedX != dashSpeedX) {
@@ -133,8 +145,30 @@ public class SirTomato extends Enemy {
 						moveLeftDown();
 					}
 				}
-				
-				if (tcd == 0 && Math.abs(player.getCenterX() - getCenterX()) > 300) {
+				int diffx = Math.abs(player.getCenterX() - getCenterX());
+				int diffy = player.getCenterY() - getCenterY();
+				if (diffx < 120 && diffy < 20 && diffy > -80) {
+					stopMoving();
+					hasSlashed = false;
+					isSlashing = true;
+					inAnimation = maxInAnimation;
+					halfsizex = 100;
+					halfrsizex = 90;
+					halfsizey = 65;
+					halfrsizey = 58;
+					if (player.getCenterX() > getCenterX()) {
+						currentSprite = slashSpriteRight;
+						isSlashingRight = true;
+						centerX += 50;
+						centerY -= 15;
+					} else {
+						currentSprite = slashSpriteLeft;
+						isSlashingRight = false;
+						centerX -= 50;
+						centerY -= 15;
+					}
+				}
+				if (tcd == 0 && diffx > 300) {
 					if (player.getCenterX() < getCenterX()) {
 						projectiles.add(new TomatoProjectile(centerX - 30,centerY,-1,0));
 						stopMoving();
@@ -149,7 +183,7 @@ public class SirTomato extends Enemy {
 						tcd = tatocd;
 					}
 				}
-				if (dcd == 0 && Math.abs(player.getCenterX() - getCenterX()) > 100 && Math.abs(posplayery-posy)<=1) {
+				if (dcd == 0 && diffx > 120 && Math.abs(posplayery-posy)<=1) {
 					if (player.getCenterX() > getCenterX()) {
 						currentSprite = dashSpriteRight;
 						moveRight();
@@ -243,6 +277,15 @@ public class SirTomato extends Enemy {
 				currentSprite = staySprite;
 				inAnimation = 0;
 				speed = 3;
+			}
+			if (isSlashing && !hasSlashed) {
+				hasSlashed = true;
+				if (player.getArmor().defense - slashdmg < 0) {
+					player.setHealth(player.getHealth() - slashdmg + player.getArmor().defense);
+					player.getArmor().setDefense(0);
+				} else {
+					player.getArmor().setDefense(player.getArmor().getDefense() - slashdmg);
+				}
 			}
 		}
 	}

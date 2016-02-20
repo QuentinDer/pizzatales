@@ -25,7 +25,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
-	public static int difficultylevel = 3;
+	public static int difficultylevel = 2;
 	private static Player player;
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
 	private Image blooddrop;
@@ -166,6 +166,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		SirTomato.sirtomatothrowright = getImage(base, "data/sirtomatothrowright.png");
 		SirTomato.dashSpriteLeft = getImage(base, "data/sirtomatodashleft.png");
 		SirTomato.dashSpriteRight = getImage(base, "data/sirtomatodashright.png");
+		SirTomato.slashSpriteLeft = getImage(base, "data/sirtomatoswipeleft.png");
+		SirTomato.slashSpriteRight = getImage(base, "data/sirtomatoswiperight.png");
 		
 		BazookaBulletExplosion.bazookaexplosionsprite = getImage(base, "data/bazookaexplosion.png");
 		TomatoProjectileExplosion.tomatoexplosionsprite = getImage(base, "data/sirtomatoprojectileexplosion.png");
@@ -320,7 +322,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	@Override
 	public void run() {
 		if (state == GameState.Running) {
-			//soundtrack.loop();
+			soundtrack.loop();
 			while (true) {
 				try {
 					Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
