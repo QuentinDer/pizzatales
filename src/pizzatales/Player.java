@@ -328,33 +328,7 @@ public class Player extends Point {
 	public void stopMovingDown() {
 		ismovingdown = false;
 	}
-/*
-	public void stopHor() {
-		speedX = 0;
-		setMovingHor(false);
-	}
 
-	public void stopVer() {
-		this.setSpeedY(0);
-		setMovingVer(false);
-	}*/
-/*
-	public boolean isMovingVer() {
-		return isMovingVer;
-	}
-
-	public void setMovingVer(boolean isMovingVer) {
-		this.isMovingVer = isMovingVer;
-	}
-
-	public boolean isMovingHor() {
-		return isMovingHor;
-	}
-
-	public void setMovingHor(boolean isMovingHor) {
-		this.isMovingHor = isMovingHor;
-	}
-*/
 	public double getSpeedX() {
 		return speedX;
 	}

@@ -84,7 +84,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		soundtrack = getAudioClip(base, "data/Soundtrack.wav");
 		
 		// Image Setups
-		background = getImage(base, "data/background1.png");
+		background = getImage(base, "data/background.png");
 		tileTree = getImage(base, "data/tree.png");
 		tileGrass = getImage(base, "data/grass.png");
 		tileWall = getImage(base, "data/wall.png");
@@ -168,6 +168,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		SirTomato.dashSpriteRight = getImage(base, "data/sirtomatodashright.png");
 		SirTomato.slashSpriteLeft = getImage(base, "data/sirtomatoswipeleft.png");
 		SirTomato.slashSpriteRight = getImage(base, "data/sirtomatoswiperight.png");
+		MushroomWizard.staySprite = getImage(base, "data/mushroomwizardleft1.png");
+		MushroomWizard.move1Sprite = getImage(base, "data/mushroomwizardleft2.png");
+		MushroomWizard.move2Sprite = getImage(base, "data/mushroomwizardleft3.png");
+		MushroomWizard.staySpriteRight = getImage(base, "data/mushroomwizardright1.png");
+		MushroomWizard.move1SpriteRight = getImage(base, "data/mushroomwizardright2.png");
+		MushroomWizard.move2SpriteRight = getImage(base, "data/mushroomwizardright3.png");
+		
+		//MushroomWizard.
 		
 		BazookaBulletExplosion.bazookaexplosionsprite = getImage(base, "data/bazookaexplosion.png");
 		TomatoProjectileExplosion.tomatoexplosionsprite = getImage(base, "data/sirtomatoprojectileexplosion.png");
@@ -220,7 +228,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		// Initialize Tiles
 		try {
-			loadMap("data/L14.txt");
+			loadMap("data/L24.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -363,6 +371,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				player.canmoveleft = true;
 				player.canmoveright = true;
 				player.canmoveup = true;
+				player.setMOVESPEED(player.getArmor().speed);
 				for (Enemy e : enemyarray) {
 					e.canmovedown = true;
 					e.canmoveleft = true;

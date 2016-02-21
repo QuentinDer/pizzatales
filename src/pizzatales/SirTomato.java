@@ -3,8 +3,6 @@ package pizzatales;
 import java.awt.Image;
 import java.awt.Rectangle;
 
-import pizzatales.StartingClass.GameState;
-
 public class SirTomato extends Enemy {
 	
 	private int inAnimation, slashdmg, dashdmg, dashspeed, tatocd, dashcd, tcd, dcd;
@@ -22,6 +20,8 @@ public class SirTomato extends Enemy {
 	public SirTomato(int centerX, int centerY) {
 		super(centerX, centerY, null, 100, basicspeed, 50, 50);
 		movementTime = ((int) (Math.random() * 50));
+		halfrsizex = 45;
+		halfrsizey = 45;
 		R = new Rectangle(getCenterX() - 45, getCenterY() - 45, 90, 90);
 		slashdmg = 4;
 		dashdmg = 5;
@@ -51,12 +51,6 @@ public class SirTomato extends Enemy {
 			dashspeed = 8;
 			break;
 		}
-	}
-	
-	@Override
-	public void update() {
-		super.update();
-		R.setBounds(getCenterX() - 45, getCenterY() - 45, 90, 90);
 	}
  
 	@Override

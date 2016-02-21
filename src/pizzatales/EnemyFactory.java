@@ -2,7 +2,7 @@ package pizzatales;
 
 public class EnemyFactory {
 
-	private static String acceptedEnemyTypes = "TABPMS";
+	private static String acceptedEnemyTypes = "TABPMSW";
 	
 	public static boolean isTileTypeSupported(char type) {
 		String test = "";
@@ -30,6 +30,10 @@ public class EnemyFactory {
 			break;
 		case 'S':
 			e = new SirTomato((x * 50) + 25,(y*50) + 40);
+			break;
+		case 'W':
+			e = new MushroomWizard(x*50+25,y*50+40);
+			break;
 		}
 		return e;
 	}

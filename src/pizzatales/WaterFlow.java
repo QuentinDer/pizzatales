@@ -13,7 +13,8 @@ public class WaterFlow extends Item {
 
 	@Override
 	protected void doEffect() {
-		//player.getArmor().speed -= 1;
+		if (player.getArmor().speed >= 4)
+			player.setMOVESPEED(player.getArmor().speed/2);
 		effectTimer = 3;
 		effectactive = true;
 	}
