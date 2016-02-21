@@ -8,6 +8,7 @@ import pizzatales.StartingClass.GameState;
 public class SirTomato extends Enemy {
 	
 	private int inAnimation, slashdmg, dashdmg, dashspeed, tatocd, dashcd, tcd, dcd;
+	private static final int basicspeed = 3;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, staySpriteRight, 
 		move1SpriteRight, move2SpriteRight, sirtomatothrowleft, sirtomatothrowright,
 		dashSpriteRight, dashSpriteLeft, slashSpriteLeft, slashSpriteRight;
@@ -19,7 +20,7 @@ public class SirTomato extends Enemy {
 	private int dashSpeedX;
 	
 	public SirTomato(int centerX, int centerY) {
-		super(centerX, centerY, null, 100, 3, 50, 50);
+		super(centerX, centerY, null, 100, basicspeed, 50, 50);
 		movementTime = ((int) (Math.random() * 50));
 		R = new Rectangle(getCenterX() - 45, getCenterY() - 45, 90, 90);
 		slashdmg = 4;
@@ -69,7 +70,7 @@ public class SirTomato extends Enemy {
 					halfrsizex = 45;
 					halfrsizey = 45;
 					isDashing = false;
-					speed = 3;
+					speed = basicspeed;
 					currentSprite = staySprite;
 					if (isSlashing) {
 						if (isSlashingRight)
@@ -88,7 +89,7 @@ public class SirTomato extends Enemy {
 				halfrsizey = 45;
 				isDashing = false;
 				currentSprite = staySprite;
-				speed = 3;
+				speed = basicspeed;
 				inAnimation = 0;
 			}
 				
@@ -153,9 +154,9 @@ public class SirTomato extends Enemy {
 					isSlashing = true;
 					inAnimation = maxInAnimation;
 					halfsizex = 100;
-					halfrsizex = 90;
+					halfrsizex = 85;
 					halfsizey = 65;
-					halfrsizey = 58;
+					halfrsizey = 50;
 					if (player.getCenterX() > getCenterX()) {
 						currentSprite = slashSpriteRight;
 						isSlashingRight = true;
@@ -276,7 +277,7 @@ public class SirTomato extends Enemy {
 				isDashing = false;
 				currentSprite = staySprite;
 				inAnimation = 0;
-				speed = 3;
+				speed = basicspeed;
 			}
 			if (isSlashing && !hasSlashed) {
 				hasSlashed = true;

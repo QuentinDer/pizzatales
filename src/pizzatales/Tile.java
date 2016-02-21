@@ -58,13 +58,13 @@ public class Tile extends Stuff {
 			if (r.intersects(player.R)) {
 				int diffX = Math.abs(getCenterX() - player.getCenterX());
 				int diffY = Math.abs(getCenterY() - player.getCenterY());
-				if (diffX > diffY && diffY < 45) {
+				if (diffX > diffY && diffY < 40) {
 					if (player.getCenterX() <= this.getCenterX()) {
 						player.canmoveright = false;
 					} else {
 						player.canmoveleft = false;
 					}
-				} else if (diffX < diffY && diffX < 45) {
+				} else if (diffX < diffY && diffX < 40) {
 					if (player.getCenterY() <= this.getCenterY()) {
 						player.canmovedown = false;
 					} else {
