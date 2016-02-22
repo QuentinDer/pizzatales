@@ -8,7 +8,7 @@
 ! capital lessers = enemies
 sss0ssssssslssssssssssssss
 ssssssslss0ssslsssrsssslss
-0s00s00s00000s00s00s00s0s0
+0s00s00s00U00s00s00s00s0s0
 s0ss0ss0000000ss0sss0s0s00
 0ss000000000000000s0ss0s0s
 ss00000000000000000000s0s0
@@ -114,4 +114,4 @@ s0sl00000s0ss000000000s0s0
 0s0000A00ss00000000r000ss0
 00s00000000000000r00s000s0
 ss0000r0000000000000000s00
-rrrrrrrrrrrrrrrrrrrrrrrrrr
+xxxxxxxxxxxxxxxxxxxxxxxxxx
