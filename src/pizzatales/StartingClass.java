@@ -30,7 +30,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
 	private Image blooddrop;
 	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, tilePuddle, tileCaveRock, tileGate, tileCaveExit, tileLavaPuddle, tileWaterFlow;
-	private int walkCounter = 1;
+	private int walkCounter = 3;
 	private URL base;
 	private Graphics second;
 	private static Background bg1, bg2;
@@ -65,7 +65,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public ArrayList<EntryDoor> entrydoors = new ArrayList<EntryDoor>();
 	public static EntryDoor activatedentry = null;
 	public static int isInArena = -1;
-	private int startinglevel = 6;
+	private int startinglevel = 5;
 	
 
 	@Override
