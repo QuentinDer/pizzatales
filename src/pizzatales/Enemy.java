@@ -59,8 +59,8 @@ public abstract class Enemy extends Stuff {
 		}
 		this.health = health * StartingClass.difficultylevel;
 		this.speed = speed;
-		posx = (centerX-15) / 50;
-		posy = (centerY-15) / 50;
+		posx = (centerX - bg.getCenterX() + StartingClass.bginitx) / 50;
+		posy = (centerY - bg.getCenterY() + StartingClass.bginity) / 50;
 		pf.map[posx][posy] = false;
 		setStaySprite();
 		R = new Rectangle(getCenterX() - halfrsizex, getCenterY() - halfrsizey, 2 * halfrsizex, 2 * halfrsizey);

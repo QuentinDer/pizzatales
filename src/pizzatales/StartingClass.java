@@ -65,7 +65,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public ArrayList<EntryDoor> entrydoors = new ArrayList<EntryDoor>();
 	public static EntryDoor activatedentry = null;
 	public static int isInArena = -1;
-	private int startinglevel = 7;
+	private int startinglevel = 4;
 	
 
 	@Override
@@ -284,7 +284,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					player.setCenterY(50*(j+deltapy)+40);
 				}
 				if (ItemFactory.isItemSupported(ch)) {
-					Item it = ItemFactory.getItem(i, j+deltapy, ch);
+					Item it = ItemFactory.getItem(i, j, deltapy, ch);
 					items.add(it);
 					if (ch == 'i') {
 						mentrydoors.put(height*i+j,(EntryDoor)it);
