@@ -44,11 +44,27 @@ public class Player extends Point {
 		super(640,100);
 	}
 
-	/*
-	private static Background bg1 = StartingClass.getBg1();
-	private static Background bg2 = StartingClass.getBg2();*/
+	private Background bg;
 
 	private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
+	
+	public void setBackground(Background bg) {
+		this.bg = bg;
+		posx = (centerX - bg.getCenterX() + StartingClass.bginitx) / 50;
+		posy = (centerY - bg.getCenterY() + StartingClass.bginity) / 50;
+	}
+	
+	@Override
+	public void setCenterX(int centerX) {
+		super.setCenterX(centerX);
+		posx = (centerX - bg.getCenterX() + StartingClass.bginitx) / 50;
+	}
+	
+	@Override
+	public void setCenterY(int centerY) {
+		super.setCenterY(centerY);
+		posy = (centerY - bg.getCenterY() + StartingClass.bginity) / 50;
+	}
 
 	public void update() {
 
@@ -161,6 +177,9 @@ public class Player extends Point {
 			}
 		}
 		weapon.increaseShootingCounter();
+		
+		posx = (centerX - bg.getCenterX() + StartingClass.bginitx) / 50;
+		posy = (centerY - bg.getCenterY() + StartingClass.bginity) / 50;
 		//animate();
 	}
 	
@@ -184,6 +203,8 @@ public class Player extends Point {
 		centerX += speedX;
 		R.setRect(centerX +speedX- 25, centerY +speedY- 25, 50, 50);
 		weapon.increaseShootingCounter();
+		posx = (centerX - bg.getCenterX() + StartingClass.bginitx) / 50;
+		posy = (centerY - bg.getCenterY() + StartingClass.bginity) / 50;
 	}
 	
 	/*

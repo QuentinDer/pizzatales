@@ -25,7 +25,6 @@ public abstract class Enemy extends Stuff {
 	protected int posx;
 	protected int posy;
 	protected Background bg = StartingClass.getBg1();
-	protected int bginitx, bginity;
 	
 	public boolean canmoveup = true;
 	public boolean canmovedown = true;
@@ -60,8 +59,6 @@ public abstract class Enemy extends Stuff {
 		}
 		this.health = health * StartingClass.difficultylevel;
 		this.speed = speed;
-		bginitx = bg.getCenterX();
-		bginity = bg.getCenterY() - 15;
 		posx = (centerX-15) / 50;
 		posy = (centerY-15) / 50;
 		pf.map[posx][posy] = false;
@@ -150,8 +147,8 @@ public abstract class Enemy extends Stuff {
 		
 		if (alive == true) {
 			
-			int currentposx = (getCenterX() - bg.getCenterX() + bginitx) / 50;
-			int currentposy = (getCenterY() - bg.getCenterY() + bginity) / 50;
+			int currentposx = (getCenterX() - bg.getCenterX() + StartingClass.bginitx) / 50;
+			int currentposy = (getCenterY() - bg.getCenterY() + StartingClass.bginity) / 50;
 			
 			if (currentposx != posx || currentposy != posy) {
 				pf.map[posx][posy] = true;

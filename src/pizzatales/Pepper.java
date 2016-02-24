@@ -21,9 +21,7 @@ public class Pepper extends Enemy {
 			switch(StartingClass.difficultylevel) {
 			case 1:
 				if (movementTime % 30 == 0) {
-					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
-					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
-					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 7, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+					int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 7, canmoveleft, canmoveup, canmoveright, canmovedown, false);
 					switch (pathresult) {
 					case 0:
 						stopMoving();
@@ -45,9 +43,7 @@ public class Pepper extends Enemy {
 				break;
 			case 2:
 				if (movementTime % 20 == 0) {
-					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
-					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
-					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 9, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+					int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 9, canmoveleft, canmoveup, canmoveright, canmovedown, false);
 					switch (pathresult) {
 					case 0:
 						stopMoving();
@@ -69,9 +65,7 @@ public class Pepper extends Enemy {
 				break;
 			case 3:
 				if (movementTime % 10 == 0) {
-					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
-					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
-					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 11, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+					int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 11, canmoveleft, canmoveup, canmoveright, canmovedown, false);
 					switch (pathresult) {
 					case 0:
 						stopMoving();
@@ -93,9 +87,7 @@ public class Pepper extends Enemy {
 				break;
 			case 4:
 				if (movementTime % 10 == 0) {
-					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
-					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
-					int pathresult = pf.getDirection(posx, posy, posplayerx, posplayery, 11, canmoveleft, canmoveup, canmoveright, canmovedown, true);
+					int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 11, canmoveleft, canmoveup, canmoveright, canmovedown, true);
 					switch (pathresult) {
 					case 0:
 						stopMoving();

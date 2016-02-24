@@ -25,7 +25,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
-	public static int difficultylevel = 1;
+	public static int difficultylevel = 3;
 	private static Player player;
 	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
 	private Image blooddrop;
@@ -44,8 +44,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	private int weaponindex;
 	private int armorindex;
-	private int bginitx;
-	private int bginity;
+	public static int bginitx;
+	public static int bginity;
 	private long clock = System.currentTimeMillis();
 
 	enum GameState {
@@ -65,7 +65,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public ArrayList<EntryDoor> entrydoors = new ArrayList<EntryDoor>();
 	public static EntryDoor activatedentry = null;
 	public static int isInArena = -1;
-	private int startinglevel = 5;
+	private int startinglevel = 7;
 	
 
 	@Override
@@ -225,6 +225,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		bg1 = new Background(0, -200);
 		bg2 = new Background(0, 3000);
+		player.setBackground(bg1);
 		bginitx = bg1.getCenterX();
 		bginity = bg1.getCenterY() - 15;
 
@@ -258,34 +259,45 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		HashMap<Integer,EntryDoor> mentrydoors = new HashMap<Integer,EntryDoor>();
 		HashMap<Integer, Tile> doors = new HashMap<Integer, Tile>();
 		
+		int posplayery = 0;
+		
 		for (int j = 0; j < height; j++) {
 			line = lines.get(j);
 			for (int i = 0; i < width; i++) {
 				if (i < line.length()) {
-					char ch = line.charAt(i);
-					if (ch == '0' || ItemFactory.isItemSupported(ch))
-						pf.map[i][j] = true;
-					if (ch =='U') {
-						player.setCenterX(50*i+25);
-						player.setCenterY(50*j+40);
+					charmap[i][j] = line.charAt(i);
+					if (charmap[i][j] == 'U')
+						posplayery = j;
+				}
+			}
+		}
+		int deltapy = 8 - posplayery;
+		bginity -= 50*deltapy;
+		
+		for (int j = 0; j < height; j++) {
+			for (int i = 0; i < width; i++) {
+				char ch = charmap[i][j];
+				if (ch == '0' || ItemFactory.isItemSupported(ch))
+					pf.map[i][j] = true;
+				if (ch =='U') {
+					player.setCenterX(50*i+25);
+					player.setCenterY(50*(j+deltapy)+40);
+				}
+				if (ItemFactory.isItemSupported(ch)) {
+					Item it = ItemFactory.getItem(i, j+deltapy, ch);
+					items.add(it);
+					if (ch == 'i') {
+						mentrydoors.put(height*i+j,(EntryDoor)it);
 					}
-					if (ItemFactory.isItemSupported(ch)) {
-						Item it = ItemFactory.getItem(i, j, ch);
-						items.add(it);
-						if (ch == 'i') {
-							mentrydoors.put(height*i+j,(EntryDoor)it);
-						}
-					}
-					if (Tile.isTileTypeSupported(ch)) {
-						Tile t = new Tile(i, j, ch);
-						tilearray.add(t);
-						if (ch == 'd')
-							doors.put(height*i+j,t);
-					}
-					if (EnemyFactory.isTileTypeSupported(ch)) {
-						getEnemyarray().add(EnemyFactory.getEnemy(i, j, ch));
-					}
-					charmap[i][j] = ch;
+				}
+				if (Tile.isTileTypeSupported(ch)) {
+					Tile t = new Tile(i, j+deltapy, ch);
+					tilearray.add(t);
+					if (ch == 'd')
+						doors.put(height*i+j,t);
+				}
+				if (EnemyFactory.isTileTypeSupported(ch)) {
+					getEnemyarray().add(EnemyFactory.getEnemy(i, j+deltapy, ch));
 				}
 			}
 		}
@@ -623,6 +635,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					bg1.setCenterY(-200);
 					bg2.setCenterX(0);
 					bg2.setCenterY(3000);
+					bginity = bg1.getCenterY();
 					background = getImage(base, "data/"+Level.getBackground(startinglevel));
 					try {
 						this.loadMap("data/"+Level.getMapName(startinglevel));
@@ -1029,10 +1042,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			loadArmor();
 			break;
 		case KeyEvent.VK_SPACE:
-			if (state == GameState.Paused)
+			if (state == GameState.Paused) {
 				state = GameState.Running;
-			else if (state == GameState.Running)
+				soundtrack.loop();
+			}
+			else if (state == GameState.Running) {
 				state = GameState.Paused;
+				soundtrack.stop();
+			}	
 			break;
 		}
 	}

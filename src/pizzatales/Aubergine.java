@@ -21,17 +21,15 @@ public class Aubergine extends Enemy {
 			switch (StartingClass.difficultylevel) {
 			case 1:
 				if (movementTime % 40 == 0) {
-					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
-					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
-					if (Math.abs(posplayery-posy)+Math.abs(posplayerx-posx) < 15) {
+					if (Math.abs(player.posy-posy)+Math.abs(player.posx-posx) < 15) {
 						int pathresult = 1;
 						int difX = player.getCenterX() - getCenterX();
 						int difY = player.getCenterY() - getCenterY();
 						int absdifX = Math.abs(difX);
 						int absdifY = Math.abs(difY);
-						int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + bginity) / 50));
-						int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + bginitx) / 50));
-						pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1, toshootx2, posplayery, 8, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+						int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + StartingClass.bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + StartingClass.bginity) / 50));
+						int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + StartingClass.bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + StartingClass.bginitx) / 50));
+						pathresult = pf.getDirectionToShoot(posx, posy, player.posx, toshooty1, toshootx2, player.posy, 8, canmoveleft, canmoveup, canmoveright, canmovedown, false);
 						switch (pathresult) {
 						case 0:
 							stopMoving();
@@ -56,17 +54,15 @@ public class Aubergine extends Enemy {
 				break;
 			case 2:
 				if (movementTime % 30 == 0) {
-					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
-					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
-					if (Math.abs(posplayery-posy)+Math.abs(posplayerx-posx) < 15) {
+					if (Math.abs(player.posy-posy)+Math.abs(player.posx-posx) < 15) {
 						int pathresult = 1;
 						int difX = player.getCenterX() - getCenterX();
 						int difY = player.getCenterY() - getCenterY();
 						int absdifX = Math.abs(difX);
 						int absdifY = Math.abs(difY);
-						int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + bginity) / 50));
-						int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + bginitx) / 50));
-						pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1, toshootx2, posplayery, 8, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+						int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + StartingClass.bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + StartingClass.bginity) / 50));
+						int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + StartingClass.bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + StartingClass.bginitx) / 50));
+						pathresult = pf.getDirectionToShoot(posx, posy, player.posx, toshooty1, toshootx2, player.posy, 8, canmoveleft, canmoveup, canmoveright, canmovedown, false);
 						switch (pathresult) {
 						case 0:
 							stopMoving();
@@ -91,17 +87,15 @@ public class Aubergine extends Enemy {
 				break;
 			case 3:
 				if (movementTime % 20 == 0) {
-					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
-					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
-					if (Math.abs(posplayery-posy)+Math.abs(posplayerx-posx) < 15) {
+					if (Math.abs(player.posy-posy)+Math.abs(player.posx-posx) < 15) {
 						int pathresult = 1;
 						int difX = player.getCenterX() - getCenterX();
 						int difY = player.getCenterY() - getCenterY();
 						int absdifX = Math.abs(difX);
 						int absdifY = Math.abs(difY);
-						int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + bginity) / 50));
-						int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + bginitx) / 50));
-						pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1, toshootx2, posplayery, 12, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+						int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + StartingClass.bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + StartingClass.bginity) / 50));
+						int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + StartingClass.bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + StartingClass.bginitx) / 50));
+						pathresult = pf.getDirectionToShoot(posx, posy, player.posx, toshooty1, toshootx2, player.posy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, false);
 						switch (pathresult) {
 						case 0:
 							stopMoving();
@@ -126,41 +120,39 @@ public class Aubergine extends Enemy {
 				break;
 			case 4:
 				if (movementTime % 10 == 0) {
-					int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
-					int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
-					if (Math.abs(posplayery-posy)+Math.abs(posplayerx-posx) < 15) {
+					if (Math.abs(player.posy-posy)+Math.abs(player.posx-posx) < 15) {
 						int pathresult = 1;
 						int difX = player.getCenterX() - getCenterX();
 						int difY = player.getCenterY() - getCenterY();
 						int absdifX = Math.abs(difX);
 						int absdifY = Math.abs(difY);
-						int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + bginity) / 50));
-						int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + bginitx) / 50));
-						int toshootx2R = posplayerx;
-						int toshooty1R = posplayery;
+						int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + StartingClass.bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + StartingClass.bginity) / 50));
+						int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + StartingClass.bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + StartingClass.bginitx) / 50));
+						int toshootx2R = player.posx;
+						int toshooty1R = player.posy;
 						if (difX > 0) {
 							toshootx2R--;
-							while (toshootx2R >= toshootx2 && pf.map[toshootx2R][posplayery])
+							while (toshootx2R >= toshootx2 && pf.map[toshootx2R][player.posy])
 								toshootx2R--;
 							toshootx2R++;
 						} else {
 							toshootx2R++;
-							while (toshootx2R <= toshootx2 && pf.map[toshootx2R][posplayery])
+							while (toshootx2R <= toshootx2 && pf.map[toshootx2R][player.posy])
 								toshootx2R++;
 							toshootx2R--;
 						}
 						if (difY > 0) {
 							toshooty1R--;
-							while (toshooty1R >= toshooty1 && pf.map[posplayerx][toshooty1R])
+							while (toshooty1R >= toshooty1 && pf.map[player.posx][toshooty1R])
 								toshooty1R--;
 							toshooty1R++;
 						} else {
 							toshooty1R++;
-							while (toshooty1R <= toshooty1 && pf.map[posplayerx][toshooty1R])
+							while (toshooty1R <= toshooty1 && pf.map[player.posx][toshooty1R])
 								toshooty1R++;
 							toshooty1R--;
 						}
-						pathresult = pf.getDirectionToShoot(posx, posy, posplayerx, toshooty1R, toshootx2R, posplayery, 12, canmoveleft, canmoveup, canmoveright, canmovedown, true);
+						pathresult = pf.getDirectionToShoot(posx, posy, player.posx, toshooty1R, toshootx2R, player.posy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, true);
 						switch (pathresult) {
 						case 0:
 							stopMoving();

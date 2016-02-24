@@ -94,23 +94,21 @@ public class SirTomato extends Enemy {
 			if (dcd > 0)
 				dcd--;
 			
-			int posplayerx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
-			int posplayery = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
 			if (inAnimation == 0 && !isDashing) {
 				if (movementTime % 10 == 0) {
-					int tox = posplayerx;
-					if (posx < posplayerx) {
-						if (pf.map[posplayerx-1][posplayery])
-							tox = posplayerx-1;
+					int tox = player.posx;
+					if (posx < player.posx) {
+						if (pf.map[player.posx-1][player.posy])
+							tox = player.posx-1;
 						else 
-							tox = posplayerx+1;
+							tox = player.posx+1;
 					} else {
-						if (pf.map[posplayerx+1][posplayery])
-							tox = posplayerx+1;
+						if (pf.map[player.posx+1][player.posy])
+							tox = player.posx+1;
 						else
-							tox = posplayerx-1;
+							tox = player.posx-1;
 					}
-					int pathresult = pf.getDirectionToShoot(posx, posy, tox, posplayery, 50, canmoveleft, canmoveup, canmoveright, canmovedown, true);
+					int pathresult = pf.getDirectionToShoot(posx, posy, tox, player.posy, 50, canmoveleft, canmoveup, canmoveright, canmovedown, true);
 					switch (pathresult) {
 					case 0:
 						stopMoving();
@@ -178,7 +176,7 @@ public class SirTomato extends Enemy {
 						tcd = tatocd;
 					}
 				}
-				if (dcd == 0 && diffx > 120 && Math.abs(posplayery-posy)<=1) {
+				if (dcd == 0 && diffx > 120 && Math.abs(player.posy-posy)<=1) {
 					if (player.getCenterX() > getCenterX()) {
 						currentSprite = dashSpriteRight;
 						moveRight();
