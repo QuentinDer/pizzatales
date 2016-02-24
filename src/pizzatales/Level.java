@@ -1,5 +1,7 @@
 package pizzatales;
 
+import java.awt.Image;
+
 public class Level {
 
 	public static String getMapName(int level) {
@@ -20,5 +22,16 @@ public class Level {
 		return ans;
 	}
 	
-	
+	public static Image getHidingImage(int level) {
+		Image ans = null;
+		switch ((level-1)/4+1) {
+		case 1:
+			ans = StartingClass.tileTree;
+			break;
+		case 2:
+			ans = StartingClass.tileStalag;
+			break;
+		}
+		return ans;
+	}
 }

@@ -9,11 +9,15 @@ public abstract class Item extends Stuff {
 	private boolean onetimeeffect;
 	public boolean effectactive;
 	protected int effectTimer;
+	public int posx;
+	public int posy;
 	
-	public Item(int x, int y, boolean onetimeeffect) {
-		super((x * 50) + 25,(y * 50) + 40);
+	public Item(int x, int y, int deltapy, boolean onetimeeffect) {
+		super(x * 50 + 25,(y + deltapy)* 50 + 40);
 		this.onetimeeffect = onetimeeffect;
 		r = new Rectangle(getCenterX() - 22, getCenterY() - 22, 45, 45);
+		posx = x;
+		posy = y;
 	}
 	
 	@Override

@@ -4,8 +4,8 @@ import java.awt.Image;
 
 public class HealthPotion extends Item {
 
-	public HealthPotion(int x, int y, boolean onetimeeffect) {
-		super(x, y, onetimeeffect);
+	public HealthPotion(int x, int y, int deltapy, boolean onetimeeffect) {
+		super(x, y, deltapy, onetimeeffect);
 	}
 
 	public static Image healthpotionsprite;

@@ -6,7 +6,8 @@ import java.awt.Rectangle;
 public class Tile extends Stuff {
 
 	private char type;
-	public Image tileImage;
+	private Image tileImage;
+	private Image hiddenImage;
 
 	// private Background bg = StartingClass.getBg1();
 
@@ -158,6 +159,15 @@ public class Tile extends Stuff {
 
 	public void setType(char type) {
 		this.type = type;
+	}
+	
+	public void hideImage(Image replacing) {
+		this.hiddenImage = tileImage;
+		this.tileImage = replacing;
+	}
+	
+	public void reveal() {
+		this.tileImage = this.hiddenImage;
 	}
 
 	public Image getTileImage() {

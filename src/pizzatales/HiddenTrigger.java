@@ -2,11 +2,11 @@ package pizzatales;
 
 import java.awt.Image;
 
-import pizzatales.StartingClass.GameState;
+public class HiddenTrigger extends Item {
 
-public class LevelExit extends Item {
-
-	public LevelExit(int x, int y, int deltapy, boolean onetimeeffect) {
+	private int hiddenarea = -1;
+	
+	public HiddenTrigger(int x, int y, int deltapy, boolean onetimeeffect) {
 		super(x, y, deltapy, onetimeeffect);
 	}
 
@@ -17,7 +17,11 @@ public class LevelExit extends Item {
 
 	@Override
 	protected void doEffect() {
-		StartingClass.state = GameState.LevelEnded;
+		StartingClass.revealHidden = hiddenarea;
+	}
+	
+	public void setHiddenAreaNumber(int hiddenareanumber) {
+		hiddenarea = hiddenareanumber;
 	}
 
 	@Override
@@ -29,5 +33,5 @@ public class LevelExit extends Item {
 	protected Image getEffectSprite() {
 		return null;
 	}
-
+	
 }

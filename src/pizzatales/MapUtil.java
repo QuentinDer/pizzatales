@@ -128,4 +128,63 @@ public class MapUtil {
 		}
 	}
 	
+	public static void getHiddenAccesibleArea(int x, int y, int mp, char[][] map, HashMap<Integer,Character> area, HashMap<Integer,HiddenTrigger> hiddentriggers, int hiddenareanumber) {
+		area.clear();
+		int width = map.length;
+		int height = map[0].length;
+		ArrayList<Integer> todiscover = new ArrayList<Integer>();
+		todiscover.add(height*x+y);
+		area.put(height*x+y, map[x][y]);
+		int i = 0;
+		int j = 0;
+		int size;
+		while (i < mp && !todiscover.isEmpty()) {
+			j = 0;
+			size = todiscover.size();
+			while (j < size) {
+				int current = todiscover.get(0);
+				int xj = current / height;
+				int yj = current % height;
+				if (!area.containsKey(current-height) && !todiscover.contains(current-height) && 0 != xj) {
+					if ('m' == map[xj-1][yj] && hiddentriggers.containsKey(current-height)) {
+						hiddentriggers.get(current-height).setHiddenAreaNumber(hiddenareanumber);
+					} else if (!Tile.isTileBlocking(map[xj-1][yj])) {
+						todiscover.add(current-height);
+						area.put(current-height,map[xj-1][yj]);
+					}
+				}
+				if (!area.containsKey(current+height) && !todiscover.contains(current+height) && width -1 != xj) {
+					if ('m' == map[xj+1][yj] && hiddentriggers.containsKey(current+height)) {
+						hiddentriggers.get(current+height).setHiddenAreaNumber(hiddenareanumber);
+					} else if (!Tile.isTileBlocking(map[xj+1][yj])) {
+						todiscover.add(current+height);
+						area.put(current+height,map[xj+1][yj]);
+					}
+				}
+				if (!area.containsKey(current-1) && !todiscover.contains(current-1) && 0 != yj) {
+					if ('m' == map[xj][yj-1] && hiddentriggers.containsKey(current-1)) {
+						hiddentriggers.get(current-1).setHiddenAreaNumber(hiddenareanumber);
+					} else if (!Tile.isTileBlocking(map[xj][yj-1])) {
+						todiscover.add(current-1);
+						area.put(current-1,map[xj][yj-1]);
+					}
+				}
+				if (!area.containsKey(current+1) && !todiscover.contains(current+1) && height-1 != yj) {
+					if ('m' == map[xj][yj+1] && hiddentriggers.containsKey(current+1)) {
+						hiddentriggers.get(current+1).setHiddenAreaNumber(hiddenareanumber);
+					} else if (!Tile.isTileBlocking(map[xj][yj+1])) {
+						todiscover.add(current+1);
+						area.put(current+1,map[xj][yj+1]);
+					}
+				}
+				todiscover.remove(0);
+				j++;
+			}
+			i++;
+		}
+		if (i == mp) {
+			area.clear();
+		}
+	}
+	
 }

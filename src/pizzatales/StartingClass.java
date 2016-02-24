@@ -62,10 +62,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public static ArrayList<ArrayList<EntryDoor>> arenaentrydoors = new ArrayList<ArrayList<EntryDoor>>();
 	public static ArrayList<Entry<Integer,Integer>> arenacenters = new ArrayList<Entry<Integer,Integer>>();
 	public static ArrayList<HitPoint> hitpoints = new ArrayList<HitPoint>();
+	public static ArrayList<ArrayList<Enemy>> hiddenenemies = new ArrayList<ArrayList<Enemy>>();
+	public static ArrayList<ArrayList<Tile>> hiddentiles = new ArrayList<ArrayList<Tile>>();
+	public static ArrayList<ArrayList<Item>> hiddenitems = new ArrayList<ArrayList<Item>>();
 	public ArrayList<EntryDoor> entrydoors = new ArrayList<EntryDoor>();
 	public static EntryDoor activatedentry = null;
 	public static int isInArena = -1;
-	private int startinglevel = 4;
+	public static int revealHidden = -1;
+	private int startinglevel = 0;
 	
 
 	@Override
@@ -258,6 +262,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		char [][] charmap = new char[width][height];
 		HashMap<Integer,EntryDoor> mentrydoors = new HashMap<Integer,EntryDoor>();
 		HashMap<Integer, Tile> doors = new HashMap<Integer, Tile>();
+		HashMap<Integer, HiddenTrigger> hiddentriggers = new HashMap<Integer, HiddenTrigger>();
 		
 		int posplayery = 0;
 		
@@ -288,6 +293,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					items.add(it);
 					if (ch == 'i') {
 						mentrydoors.put(height*i+j,(EntryDoor)it);
+					}
+					if (ch == 'm') {
+						hiddentriggers.put(height*i+j, (HiddenTrigger)it);
 					}
 				}
 				if (Tile.isTileTypeSupported(ch)) {
@@ -326,12 +334,66 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				}
 			}
 		}
-		k = 0;
 		for (EntryDoor e : mentrydoors.values()) {
 			if (e.isGoingIn() < 0)
 				items.remove(e);
 			else
 				entrydoors.add(e);
+		}
+		k=0;
+		HashMap<Integer, Character> area = new HashMap<Integer, Character>();
+		for (int i=0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				if (charmap[i][j] == 'y') {
+					MapUtil.getHiddenAccesibleArea(i,j,100,charmap, area, hiddentriggers, k);
+					if (!area.isEmpty()) {
+						int l = 0;
+						ArrayList<Enemy> lenemies = new ArrayList<Enemy>();
+						while (l < enemyarray.size()) {
+							if (area.containsKey(height*enemyarray.get(l).posx + enemyarray.get(l).posy)) {
+								lenemies.add(enemyarray.get(l));
+								enemyarray.remove(l);
+							} else
+								l++;
+						}
+						hiddenenemies.add(lenemies);
+						ArrayList<Tile> ltiles = new ArrayList<Tile>();
+						ArrayList<Item> litems = new ArrayList<Item>();
+						l = 0;
+						while (l < tilearray.size()) {
+							int postx = (tilearray.get(l).getCenterX() - bg1.getCenterX() + bginitx) / 50;
+							int posty = (tilearray.get(l).getCenterY() - bg1.getCenterY() + bginity) / 50;
+							if (area.containsKey(height*postx+posty)) {
+								tilearray.get(l).hideImage(Level.getHidingImage(startinglevel));
+								ltiles.add(tilearray.get(l));
+								tilearray.remove(l);
+							} else
+								l++;
+						}
+						for (Entry<Integer,Character> entry : area.entrySet()) {
+							if (!Tile.isTileTypeSupported(entry.getValue())) {
+								Tile t = new Tile(entry.getKey()/height, entry.getKey()%height+deltapy, entry.getValue());
+								t.hideImage(Level.getHidingImage(startinglevel));
+								tilearray.add(t);
+								ltiles.add(t);
+							}
+						}
+						l = 0;
+						while (l < items.size()) {
+							int posix = (items.get(l).getCenterX() - bg1.getCenterX() + bginitx) / 50;
+							int posiy = (items.get(l).getCenterY() - bg1.getCenterY() + bginity) / 50;
+							if (area.containsKey(height*posix+posiy)) {
+								litems.add(items.get(l));
+								items.remove(l);
+							} else
+								l++;
+						}
+						hiddentiles.add(ltiles);
+						hiddenitems.add(litems);
+						k++;
+					}
+				}
+			}
 		}
 	}
 
@@ -618,6 +680,22 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							}
 							isInArena = -1;
 						}
+					}
+					if (revealHidden >= 0) {
+						for (Tile t : hiddentiles.get(revealHidden)) {
+							t.reveal();
+						}
+						for (Item it : hiddenitems.get(revealHidden)) {
+							it.setCenterX(50*it.posx+bg1.getCenterX()-bginitx);
+							it.setCenterY(50*it.posy+bg1.getCenterY()-bginity);
+							items.add(it);
+						}
+						for (Enemy e : hiddenenemies.get(revealHidden)) {
+							e.setCenterX(50*e.posx+bg1.getCenterX()-bginitx);
+							e.setCenterY(50*e.posy+bg1.getCenterY()-bginity);
+							enemyarray.add(e);
+						}
+						revealHidden = -1;
 					}
 					
 					if (walkCounter == 1000) {

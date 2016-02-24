@@ -4,8 +4,8 @@ import java.awt.Image;
 
 public class ArmorPotion extends Item {
 
-	public ArmorPotion(int x, int y, boolean onetimeeffect) {
-		super(x, y, onetimeeffect);
+	public ArmorPotion(int x, int y, int deltapy, boolean onetimeeffect) {
+		super(x, y, deltapy, onetimeeffect);
 	}
 
 	public static Image armorpotionsprite;
