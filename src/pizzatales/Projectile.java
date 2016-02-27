@@ -59,6 +59,15 @@ public abstract class Projectile extends Stuff {
 			return StartingClass.map[posx][posy];
 		return null;
 	}
+	
+	Tile checkCollisionTile() {
+		int posx = (getCenterX() - bg.getCenterX() + StartingClass.bginitx) / 50;
+		int posy = (getCenterY() - bg.getCenterY() + StartingClass.bginity) / 50;
+		if (null != StartingClass.map[posx][posy] && Tile.class.isInstance(StartingClass.map[posx][posy]) && rectP.intersects(StartingClass.map[posx][posy].R)) {
+			return (Tile)StartingClass.map[posx][posy];
+		}
+		return null;
+	}
 
 	boolean checkCollision(Enemy e) {
 		if(rectP.intersects(e.R)){

@@ -41,9 +41,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private static ArrayList<Explosion> explosions;
 	private AudioClip soundtrack;
 	
-	public static int difficultylevel = 3;
+	public static int difficultylevel = 4;
 	public static final boolean TESTMODE = true;
-	public static int currentlevel = TESTMODE?1:0;
+	public static int currentlevel = TESTMODE?4:0;
 
 	private int weaponindex;
 	private int armorindex;
@@ -621,10 +621,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 												}
 											}
 										}
-										for (int j = 0; j < tilearray.size(); j++) {
-											if (true == p.checkCollision(tilearray.get(j))) {
-												p.doOnCollision(tilearray.get(j));
-											}
+										Tile t = p.checkCollisionTile();
+										if (null != t) {
+											p.doOnCollision(t);
 										}
 										i++;
 									} else {
@@ -643,6 +642,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 								}
 								playerposx = (player.getCenterX()-bg1.getCenterX()+bginitx+deltapx)/50;
 								playerposy = (player.getCenterY()-bg1.getCenterY()+bginity+deltapy)/50;
+								map[player.posx][player.posy] = null;
 								if (!foundposition) {
 									switch (pf.getDirection(playerposx, playerposy, activatedentry.getOut().getPosX(), activatedentry.getOut().getPosY(),10, player.canmoveleft, player.canmoveup, player.canmoveright, player.canmovedown, true)) {
 									case 0:
@@ -677,7 +677,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 								}
 								for (Enemy e : getEnemyarray())
 									map[e.posx][e.posy] = null;
-								map[player.posx][player.posy] = null;
 								player.controlledupdate();
 								updateEnemies();
 								bg1.update();
@@ -1066,10 +1065,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						}
 					}
 				}
-				for (int j = 0; j < tilearray.size(); j++) {
-					if (true == p.checkCollision(tilearray.get(j))) {
-						p.doOnCollision(tilearray.get(j));
-					}
+				Tile t = p.checkCollisionTile();
+				if (null != t) {
+					p.doOnCollision(t);
 				}
 				i++;
 			} else {
@@ -1111,10 +1109,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							player.getArmor().setDefense(player.getArmor().getDefense() - p.damage);
 						}
 					}
-					for (int k = 0; k < tilearray.size(); k++) {
-						if (true == p.checkCollision(tilearray.get(k))) {
-							p.doOnCollision(tilearray.get(j));
-						}
+					Tile t = p.checkCollisionTile();
+					if (null != t) {
+						p.doOnCollision(t);
 					}
 					if (p.canbedestroyed) {
 						for (Projectile pe : player.getProjectiles()) {
