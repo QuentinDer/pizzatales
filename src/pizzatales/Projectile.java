@@ -51,20 +51,25 @@ public abstract class Projectile extends Stuff {
 			doOnLimitRange();
 		}
 	}
+	
+	BlockingStuff checkCollision() {
+		int posx = (getCenterX() - bg.getCenterX() + StartingClass.bginitx) / 50;
+		int posy = (getCenterY() - bg.getCenterY() + StartingClass.bginity) / 50;
+		if (null != StartingClass.map[posx][posy] && rectP.intersects(StartingClass.map[posx][posy].R))
+			return StartingClass.map[posx][posy];
+		return null;
+	}
 
 	boolean checkCollision(Enemy e) {
-		if(rectP.intersects(e.R) /*|| rectP.intersects(e.rectY)*/){
+		if(rectP.intersects(e.R)){
 			return true;
 		}
 		return false;
 	}
 	
 	boolean checkCollision(Tile t) {
-		if (Tile.isTileBlocking(t.getType())) {
-			if(rectP.intersects(t.getR())){
-				return true;
-			}
-			return false;
+		if(rectP.intersects(t.R)){
+			return true;
 		}
 		return false;
 	}

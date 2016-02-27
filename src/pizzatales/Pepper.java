@@ -9,7 +9,7 @@ public class Pepper extends Enemy {
 	move2SpriteRight;
 
 	public Pepper(int centerX, int centerY) {
-		super(centerX,centerY, new Flamer(), 5, (StartingClass.difficultylevel == 1)?2:((StartingClass.difficultylevel == 3)?4:3), 31, 31);
+		super(centerX,centerY, new Flamer(), 5, (StartingClass.difficultylevel == 1)?2:((StartingClass.difficultylevel == 3)?4:3), 31, 31, 26, 26);
 		movementTime = ((int) (Math.random() * 50));
 	}
 
@@ -87,7 +87,7 @@ public class Pepper extends Enemy {
 				break;
 			case 4:
 				if (movementTime % 10 == 0) {
-					int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 11, canmoveleft, canmoveup, canmoveright, canmovedown, true);
+					int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, true);
 					switch (pathresult) {
 					case 0:
 						stopMoving();

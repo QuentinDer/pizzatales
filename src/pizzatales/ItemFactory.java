@@ -1,7 +1,7 @@
 package pizzatales;
 
 public class ItemFactory {
-	private final static String itemslist = "phailoxm";
+	private final static String itemslist = "phailoxmu";
 	
 	public static boolean isItemSupported(char type) {
 		String test = "";
@@ -13,7 +13,7 @@ public class ItemFactory {
 		Item i = null;
 		switch(c) {
 		case 'p':
-			
+			i = new PizzaBox(x,y,deltapy,true);
 			break;
 		case 'h':
 			i = new HealthPotion(x,y,deltapy, true);
@@ -35,6 +35,9 @@ public class ItemFactory {
 			break;
 		case 'm':
 			i = new HiddenTrigger(x, y,deltapy, true);
+			break;
+		case 'u':
+			i = new WaterPuddle(x, y, deltapy, false);
 			break;
 		}
 		return i;

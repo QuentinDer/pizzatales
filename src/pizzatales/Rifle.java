@@ -7,7 +7,7 @@ public class Rifle extends Firearm {
 	
 	public Rifle() {
 		super();
-		this.setFireRate(25);
+		this.setFireRate(40);
 	}
 	
 	@Override

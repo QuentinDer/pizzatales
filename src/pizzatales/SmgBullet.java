@@ -7,7 +7,7 @@ public class SmgBullet extends Projectile {
 	public static Image bulletsprite;
 	
 	public SmgBullet(int startX, int startY, int vectorX, int vectorY) {
-		super(startX, startY, vectorX, vectorY, 10, 1, 15, 7, 450);
+		super(startX, startY, vectorX, vectorY, 10, 1, 15, 7, 300);
 	}
 	
 	@Override

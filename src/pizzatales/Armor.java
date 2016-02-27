@@ -5,7 +5,6 @@ import java.awt.Image;
 public abstract class Armor {
 	
 	public Image currentSprite;
-	public String armor1, armor2, armor3, armor4;
 	public int MAXDEF;
 	public int defense;
 	public int speed;
@@ -15,18 +14,6 @@ public abstract class Armor {
 			defense++;
 		}
 	}
-	
-	/*
-	public void damageArmor(){
-		if(defense > 0){
-			defense--;
-		}
-	}*/
-	
-	/*public abstract void setSpriteStay1();
-	public abstract void setSpriteStay2();
-	public abstract void setSpriteWalk1();
-	public abstract void setSpriteWalk2();*/
 
 	public int getDefense() {
 		return defense;
@@ -44,5 +31,8 @@ public abstract class Armor {
 		this.speed = speed;
 	}
 	
-	
+	public abstract Image getStaySprite();
+	public abstract Image getStaySprite2();
+	public abstract Image getMoveSprite1();
+	public abstract Image getMoveSprite2();
 }

@@ -5,10 +5,10 @@ import java.awt.Image;
 public class Aubergine extends Enemy {
 
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
-	private final static int range = 420;
+	private final static int range = 280;
 
 	public Aubergine(int centerX, int centerY) {
-		super(centerX,centerY, new Smg(), 4, 2, 31, 31);
+		super(centerX,centerY, new Smg(), 4, 2, 31, 31, 26, 26);
 		movementTime = ((int) (Math.random() * 50));
 	}
 
@@ -132,23 +132,23 @@ public class Aubergine extends Enemy {
 						int toshooty1R = player.posy;
 						if (difX > 0) {
 							toshootx2R--;
-							while (toshootx2R >= toshootx2 && pf.map[toshootx2R][player.posy])
+							while (toshootx2R >= toshootx2 && null == StartingClass.map[toshootx2R][player.posy])
 								toshootx2R--;
 							toshootx2R++;
 						} else {
 							toshootx2R++;
-							while (toshootx2R <= toshootx2 && pf.map[toshootx2R][player.posy])
+							while (toshootx2R <= toshootx2 && null == StartingClass.map[toshootx2R][player.posy])
 								toshootx2R++;
 							toshootx2R--;
 						}
 						if (difY > 0) {
 							toshooty1R--;
-							while (toshooty1R >= toshooty1 && pf.map[player.posx][toshooty1R])
+							while (toshooty1R >= toshooty1 && null == StartingClass.map[player.posx][toshooty1R])
 								toshooty1R--;
 							toshooty1R++;
 						} else {
 							toshooty1R++;
-							while (toshooty1R <= toshooty1 && pf.map[player.posx][toshooty1R])
+							while (toshooty1R <= toshooty1 && null == StartingClass.map[player.posx][toshooty1R])
 								toshooty1R++;
 							toshooty1R--;
 						}
@@ -191,12 +191,12 @@ public class Aubergine extends Enemy {
 			if (weapon.isReady2Fire()) {
 				int diffx = Math.abs(getCenterX() - player.getCenterX());
 				int diffy = Math.abs(getCenterY() - player.getCenterY());
-				if (diffx > diffy && diffy < 120 && diffx < 480) {
+				if (diffx > diffy && diffy < 120 && diffx < 330) {
 					if (player.getCenterX() > getCenterX())
 						shootRight();
 					else
 						shootLeft();
-				} else if (diffx < 120 && diffy < 480){
+				} else if (diffx < 120 && diffy < 330){
 					if (player.getCenterY() > getCenterY())
 						shootDown();
 					else

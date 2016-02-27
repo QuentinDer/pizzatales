@@ -25,27 +25,33 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
-	public static int difficultylevel = 3;
+	
 	private static Player player;
-	private Image image, character1, character2, characterMove1, characterMove2, currentSprite, background;
+	private Image image, background;
 	private Image blooddrop;
-	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, tilePuddle, tileCaveRock, tileGate, tileCaveExit, tileLavaPuddle, tileWaterFlow;
-	private int walkCounter = 3;
+	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit, tileLavaPuddle, tileWaterFlow;
+	private int walkCounter = 1;
 	private URL base;
 	private Graphics second;
 	private static Background bg1, bg2;
 	private static PathFinder pf;
 	private Animation anim;
-	ArrayList<Firearm> playerweapons;
-	private ArrayList<Armor> playerarmor;
+	public static ArrayList<Firearm> playerweapons;
+	public static ArrayList<Armor> playerarmor;
 	private static ArrayList<Explosion> explosions;
 	private AudioClip soundtrack;
 	
+	public static int difficultylevel = 3;
+	public static final boolean TESTMODE = true;
+	public static int currentlevel = TESTMODE?1:0;
 
 	private int weaponindex;
 	private int armorindex;
 	public static int bginitx;
 	public static int bginity;
+	private int fps;
+	private int fpscount;
+	private long fpsclock = System.currentTimeMillis();
 	private long clock = System.currentTimeMillis();
 
 	enum GameState {
@@ -54,6 +60,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	public static GameState state = GameState.Running;
 
+	public static BlockingStuff[][] map;
+	public static int width;
+	public static int height;
+	
 	private ArrayList<Tile> tilearray = new ArrayList<Tile>();
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private ArrayList<Item> leavingitems = new ArrayList<Item>();
@@ -69,7 +79,17 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public static EntryDoor activatedentry = null;
 	public static int isInArena = -1;
 	public static int revealHidden = -1;
-	private int startinglevel = 0;
+	private boolean centeringOnPlayerRequest = false;
+	private boolean toggleScrollingModeRequest = false;
+	private boolean showPlayerHealthBar = TESTMODE;
+	/*
+	 * ScrollingMode :
+	 * 0 - noscrolling
+	 * 1 - dynamic
+	 * 2 - player centered
+	 * 3 - player controlled scrolling //TODO implement ?
+	 */
+	public static int ScrollingMode = 1;
 	
 
 	@Override
@@ -90,12 +110,33 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		
 		// Image Setups
 		
+		CheeseArmor.staysprite1 = getImage(base, "data/cheese1.png");
+		CheeseArmor.staysprite2 = getImage(base, "data/cheese2.png");
+		CheeseArmor.movesprite1 = getImage(base, "data/cheese3.png");
+		CheeseArmor.movesprite2 = getImage(base, "data/cheese4.png");
+		ChicagoArmor.staysprite1 = getImage(base, "data/chicago1.png");
+		ChicagoArmor.staysprite2 = getImage(base, "data/chicago2.png");
+		ChicagoArmor.movesprite1 = getImage(base, "data/chicago3.png");
+		ChicagoArmor.movesprite2 = getImage(base, "data/chicago4.png");
+		HawaiiArmor.staysprite1 = getImage(base, "data/hawaii1.png");
+		HawaiiArmor.staysprite2 = getImage(base, "data/hawaii2.png");
+		HawaiiArmor.movesprite1 = getImage(base, "data/hawaii3.png");
+		HawaiiArmor.movesprite2 = getImage(base, "data/hawaii4.png");
+		MargheritaArmor.staysprite1 = getImage(base, "data/margherita1.png");
+		MargheritaArmor.staysprite2 = getImage(base, "data/margherita2.png");
+		MargheritaArmor.movesprite1 = getImage(base, "data/margherita3.png");
+		MargheritaArmor.movesprite2 = getImage(base, "data/margherita4.png");
+		PepperoniArmor.staysprite1 = getImage(base, "data/pepperoni1.png");
+		PepperoniArmor.staysprite2 = getImage(base, "data/pepperoni2.png");
+		PepperoniArmor.movesprite1 = getImage(base, "data/pepperoni3.png");
+		PepperoniArmor.movesprite2 = getImage(base, "data/pepperoni4.png");
+		
 		tileTree = getImage(base, "data/tree.png");
 		tileGrass = getImage(base, "data/grass.png");
 		tileWall = getImage(base, "data/wall.png");
 		tileCave = getImage(base, "data/cave.png");
 		tileStalag = getImage(base, "data/stalagmites.png");
-		tilePuddle = getImage(base, "data/puddle.png");
+		WaterPuddle.sprite = getImage(base, "data/puddle.png");
 		tileCaveRock = getImage(base, "data/caverock.png");
 		tileGate = getImage(base, "data/gate.png");
 		tileCaveExit = getImage(base, "data/caveexit.png");
@@ -191,10 +232,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Lava.lavaeffectsprite = getImage(base, "data/lavaeffect.png");
 		WaterFlow.waterflowsprite = getImage(base, "data/waterflow.png");
 		WaterFlow.watereffectsprite = getImage(base, "data/watereffect.png");
+		PizzaBox.pizzaboxsprite = getImage(base, "data/pizzabox.png");
 		
 		/*
-		 * anim = new Animation(); anim.addFrame(character1, 1250);
-		 * anim.addFrame(character2, 50); currentSprite = anim.getImage();
+		 anim = new Animation(); anim.addFrame(character1, 1250);
+		 anim.addFrame(character2, 50); currentSprite = anim.getImage();
 		 */
 	}
 
@@ -208,24 +250,26 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		explosions = new ArrayList<Explosion>();
 		playerweapons = new ArrayList<Firearm>();
 		playerweapons.add(new Gun());
-		playerweapons.add(new Shotgun());
-		playerweapons.add(new Smg());
-		playerweapons.add(new Rifle());
-		playerweapons.add(new Flamer());
-		playerweapons.add(new Rocket());
+		if (TESTMODE) {
+			playerweapons.add(new Shotgun());
+			playerweapons.add(new Smg());
+			playerweapons.add(new Rifle());
+			playerweapons.add(new Flamer());
+			playerweapons.add(new Rocket());
+		}
 		for (Firearm firearm : playerweapons)
 			firearm.setHolderProjectiles(player.getProjectiles());
 		player.setWeapon(playerweapons.get(weaponindex));
 
 		playerarmor = new ArrayList<Armor>();
 		playerarmor.add(new PepperoniArmor());
-		playerarmor.add(new CheeseArmor());
-		playerarmor.add(new ChicagoArmor());
-		playerarmor.add(new HawaiiArmor());
-		playerarmor.add(new MargheritaArmor());
-		
+		if (TESTMODE) {
+			playerarmor.add(new CheeseArmor());
+			playerarmor.add(new ChicagoArmor());
+			playerarmor.add(new HawaiiArmor());
+			playerarmor.add(new MargheritaArmor());
+		}
 		player.setArmor(playerarmor.get(armorindex));
-		loadArmor();
 
 		bg1 = new Background(0, -200);
 		bg2 = new Background(0, 3000);
@@ -235,7 +279,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		// Initialize Tiles
 		try {
-			loadMap("data/"+Level.getMapName(startinglevel));
+			loadMap("data/"+Level.getMapName(currentlevel));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -243,8 +287,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	private void loadMap(String filename) throws IOException {
 		ArrayList<String> lines = new ArrayList<String>();
-		int width = 0;
-		int height = 0;
 
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
 		String line;
@@ -258,7 +300,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		reader.close();
 		height = lines.size();
 
-		pf.map = new boolean[width][height];
+		map = new BlockingStuff[width][height];
 		char [][] charmap = new char[width][height];
 		HashMap<Integer,EntryDoor> mentrydoors = new HashMap<Integer,EntryDoor>();
 		HashMap<Integer, Tile> doors = new HashMap<Integer, Tile>();
@@ -282,11 +324,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		for (int j = 0; j < height; j++) {
 			for (int i = 0; i < width; i++) {
 				char ch = charmap[i][j];
-				if (ch == '0' || ItemFactory.isItemSupported(ch))
-					pf.map[i][j] = true;
 				if (ch =='U') {
 					player.setCenterX(50*i+25);
 					player.setCenterY(50*(j+deltapy)+40);
+					map[player.posx][player.posy] = player;
 				}
 				if (ItemFactory.isItemSupported(ch)) {
 					Item it = ItemFactory.getItem(i, j, deltapy, ch);
@@ -364,7 +405,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							int postx = (tilearray.get(l).getCenterX() - bg1.getCenterX() + bginitx) / 50;
 							int posty = (tilearray.get(l).getCenterY() - bg1.getCenterY() + bginity) / 50;
 							if (area.containsKey(height*postx+posty)) {
-								tilearray.get(l).hideImage(Level.getHidingImage(startinglevel));
+								tilearray.get(l).hideImage(Level.getHidingImage(currentlevel));
 								ltiles.add(tilearray.get(l));
 								tilearray.remove(l);
 							} else
@@ -373,7 +414,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						for (Entry<Integer,Character> entry : area.entrySet()) {
 							if (!Tile.isTileTypeSupported(entry.getValue())) {
 								Tile t = new Tile(entry.getKey()/height, entry.getKey()%height+deltapy, entry.getValue());
-								t.hideImage(Level.getHidingImage(startinglevel));
+								t.hideImage(Level.getHidingImage(currentlevel));
 								tilearray.add(t);
 								ltiles.add(t);
 							}
@@ -395,6 +436,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				}
 			}
 		}
+		if (TESTMODE) {
+			for (Enemy e : enemyarray) {
+				e.showHealthBar = true;
+			}
+			for (ArrayList<Enemy> liste : hiddenenemies) {
+				for (Enemy e : liste) {
+					e.showHealthBar = true;
+				}
+			}
+		}
 	}
 
 	@Override
@@ -411,7 +462,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public void run() {
 		if (state == GameState.Running) {
 			soundtrack.loop();
-			background = getImage(base, "data/"+Level.getBackground(startinglevel));
+			background = getImage(base, "data/"+Level.getBackground(currentlevel));
 			while (true) {
 				while (state == GameState.Running) {
 					try {
@@ -420,22 +471,17 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						e.printStackTrace();
 					}
 					clock = System.currentTimeMillis();
-					
-					// Animation
-
-					if (player.getSpeedX() != 0 || player.getSpeedY() != 0) {
-						if (walkCounter % 30 == 0) {
-							// player.getArmor().setSpriteWalk1();
-							// currentSprite = player.getArmor().currentSprite;
-							currentSprite = characterMove1;
-						} else if (walkCounter % 15 == 0) {
-							// player.getArmor().setSpriteWalk2();
-							// currentSprite = player.getArmor().currentSprite;
-							currentSprite = characterMove2;
+					if (TESTMODE) {
+						if (clock > fpsclock+1000) {
+							fpsclock = clock;
+							fps = fpscount;
+							fpscount = 0;
+						} else {
+							fpscount++;
 						}
-					} else {
-						currentSprite = character1;
 					}
+					
+
 					int i = 0;
 					while (i < hitpoints.size()) {
 						if (hitpoints.get(i).timer == 0)
@@ -458,8 +504,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						e.canmoveup = true;
 					}
 					checkEnemiesCollision();
-					checkTileCollisions();
 					checkItemsCollision();
+					player.checkCollisionsWithBlockingStuff();
+					for (Enemy e : getEnemyarray())
+						map[e.posx][e.posy] = null;
+					map[player.posx][player.posy] = null;
 					updatePlayer();
 					callEnemiesAIs();
 					updateEnemies();
@@ -476,7 +525,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						int playerposx = (player.getCenterX()-bg1.getCenterX()+bginitx)/50;
 						int playerposy = (player.getCenterY()-bg1.getCenterY()+bginity)/50;
 						for (Tile t : activatedentry.getDoors()) {
-							pf.map[(t.getCenterX()-bg1.getCenterX()+bginitx)/50][(t.getCenterY()-bg1.getCenterY()+bginity)/50] = true;
+							map[t.posx][t.posy] = null;
 						}
 						if (pf.getDirection(playerposx, playerposy, activatedentry.getOut().getPosX(), activatedentry.getOut().getPosY(),10, player.canmoveleft, player.canmoveup, player.canmoveright, player.canmovedown, true) > 0) {
 							for (Enemy e : enemyarray) {
@@ -517,18 +566,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 									e.printStackTrace();
 								}
 								clock = System.currentTimeMillis();
-								if (player.getSpeedX() != 0 || player.getSpeedY() != 0) {
-									if (walkCounter % 30 == 0) {
-										// player.getArmor().setSpriteWalk1();
-										// currentSprite = player.getArmor().currentSprite;
-										currentSprite = characterMove1;
-									} else if (walkCounter % 15 == 0) {
-										// player.getArmor().setSpriteWalk2();
-										// currentSprite = player.getArmor().currentSprite;
-										currentSprite = characterMove2;
+								if (TESTMODE) {
+									if (clock > fpsclock+1000) {
+										fpsclock = clock;
+										fps = fpscount;
+										fpscount = 0;
+									} else {
+										fpscount++;
 									}
-								} else {
-									currentSprite = character1;
 								}
 								i = 0;
 								while (i < hitpoints.size()) {
@@ -545,8 +590,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 								player.canmoveright = true;
 								player.canmoveup = true;
 								checkEnemiesCollision();
-								checkTileCollisions();
 								checkItemsCollision();
+								player.checkCollisionsWithBlockingStuff();
 								ArrayList<Projectile> projectiles = player.getProjectiles();
 								i = 0;
 								while (i < projectiles.size()) {
@@ -591,8 +636,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 										if (player.getArmor().defense - e.damage < 0) {
 											player.setHealth(player.getHealth() - e.damage + player.getArmor().defense);
 											player.getArmor().setDefense(0);
-											if (player.getHealth() < 1)
-												state = GameState.Dead;
 										} else {
 											player.getArmor().setDefense(player.getArmor().getDefense() - e.damage);
 										}
@@ -632,6 +675,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 										break;
 									}
 								}
+								for (Enemy e : getEnemyarray())
+									map[e.posx][e.posy] = null;
+								map[player.posx][player.posy] = null;
 								player.controlledupdate();
 								updateEnemies();
 								bg1.update();
@@ -646,20 +692,21 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 									player.setScrollingSpeed(0);
 								
 							}
-							for (Enemy e : enemyarray) {
-								if (arenaenemies.get(activatedentry.isGoingIn()).contains(e))
-									e.wakeup();
+							for (Enemy e : arenaenemies.get(activatedentry.isGoingIn())) {
+								e.wakeup();
+								e.showHealthBar = true;
 							}
 							for (Tile t : activatedentry.getDoors()) {
-								pf.map[(t.getCenterX()-bg1.getCenterX()+bginitx)/50][(t.getCenterY()-bg1.getCenterY()+bginity)/50] = false;
 								tilearray.add(t);
+								map[t.posx][t.posy] = t;
 							}
 						} else {
 							for (Tile t : activatedentry.getDoors()) {
-								pf.map[(t.getCenterX()-bg1.getCenterX()+bginitx)/50][(t.getCenterY()-bg1.getCenterY()+bginity)/50] = false;
+								map[t.posx][t.posy] = t;
 							}
 						}
 						activatedentry = null;
+						ScrollingMode = 0;
 					}
 					if (isInArena >= 0) {
 						boolean stillgoing = false;
@@ -674,16 +721,66 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 								if (ed.isGoingIn() == isInArena) {
 									for (Tile t : ed.getDoors()) {
 										tilearray.remove(t);
-										pf.map[(t.getCenterX()-bg1.getCenterX()+bginitx)/50][(t.getCenterY()-bg1.getCenterY()+bginity)/50] = true;
+										map[t.posx][t.posy] = null;
 									}
 								}
 							}
+							ScrollingMode = 1;
 							isInArena = -1;
 						}
+					}
+					if (ScrollingMode > 0 && centeringOnPlayerRequest) {
+						int delta = (400 - player.getCenterY())/10;
+						int finaldelta = 400 - player.getCenterY() - delta*9;
+						for (int l = 0; l < 9; l++) {
+							bg1.setCenterY(bg1.getCenterY()+delta);
+							bg2.setCenterY(bg2.getCenterY()+delta);
+							for (Tile t : tilearray)
+								t.setCenterY(t.getCenterY()+delta);
+							for (Enemy e : enemyarray)
+								e.setCenterY(e.getCenterY()+delta);
+							for (Item it : items)
+								it.setCenterY(it.getCenterY()+delta);
+							player.setCenterY(player.getCenterY()+delta);
+							repaint();
+							try {
+								Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+							clock = System.currentTimeMillis();
+							if (TESTMODE) {
+								if (clock > fpsclock+1000) {
+									fpsclock = clock;
+									fps = fpscount;
+									fpscount = 0;
+								} else {
+									fpscount++;
+								}
+							}
+						}
+						bg1.setCenterY(bg1.getCenterY()+finaldelta);
+						bg2.setCenterY(bg2.getCenterY()+finaldelta);
+						for (Tile t : tilearray)
+							t.setCenterY(t.getCenterY()+finaldelta);
+						for (Enemy e : enemyarray)
+							e.setCenterY(e.getCenterY()+finaldelta);
+						for (Item it : items)
+							it.setCenterY(it.getCenterY()+finaldelta);
+						player.setCenterY(player.getCenterY()+finaldelta);
+						centeringOnPlayerRequest = false;
+					}
+					if (ScrollingMode > 0 && toggleScrollingModeRequest) {
+						ScrollingMode = 3-ScrollingMode;
+						toggleScrollingModeRequest = false;
 					}
 					if (revealHidden >= 0) {
 						for (Tile t : hiddentiles.get(revealHidden)) {
 							t.reveal();
+							if (t.getSprite() == null) {
+								map[t.posx][t.posy] = null;
+								tilearray.remove(t);
+							}
 						}
 						for (Item it : hiddenitems.get(revealHidden)) {
 							it.setCenterX(50*it.posx+bg1.getCenterX()-bginitx);
@@ -695,6 +792,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							e.setCenterY(50*e.posy+bg1.getCenterY()-bginity);
 							enemyarray.add(e);
 						}
+						hiddentiles.get(revealHidden).clear();
+						hiddenitems.get(revealHidden).clear();
+						hiddenenemies.get(revealHidden).clear();
 						revealHidden = -1;
 					}
 					
@@ -702,32 +802,43 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						walkCounter = 0;
 					}
 					walkCounter++;
-					if(player.getHealth() <= 0){
+					if (player.getHealth() < 1) {
 						state = GameState.Dead;
+						soundtrack.stop();
 					}
 				}
 				if (state == GameState.LevelEnded) {
-					startinglevel++;
+					currentlevel++;
 					this.clean();
 					bg1.setCenterX(0);
 					bg1.setCenterY(-200);
 					bg2.setCenterX(0);
 					bg2.setCenterY(3000);
 					bginity = bg1.getCenterY();
-					background = getImage(base, "data/"+Level.getBackground(startinglevel));
+					background = getImage(base, "data/"+Level.getBackground(currentlevel));
 					try {
-						this.loadMap("data/"+Level.getMapName(startinglevel));
+						this.loadMap("data/"+Level.getMapName(currentlevel));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 					state = GameState.Running;
 				}
+				repaint();
 				try {
 					Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				clock = System.currentTimeMillis();
+				if (TESTMODE) {
+					if (clock > fpsclock+1000) {
+						fpsclock = clock;
+						fps = fpscount;
+						fpscount = 0;
+					} else {
+						fpscount++;
+					}
+				}
 			}
 		}
 	}
@@ -748,11 +859,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		if (state == GameState.Running) {
+		if (state != GameState.Dead) {
 			g.drawImage(background, bg1.getCenterX(), bg1.getCenterY(), this);
 			g.drawImage(background, bg2.getCenterX(), bg2.getCenterY(), this);
 			paintItems(g);
-			paintBelowTiles(g);
+			for (int i = 0; i < getEnemyarray().size(); i++) {
+				Enemy e = getEnemyarray().get(i);
+				if (!e.alive) {
+					
+				}
+			}
 			for (Explosion e : explosions) {
 				g.drawImage(e.getSprite(), e.getR().x, e.getR().y, this);
 			}
@@ -760,8 +876,52 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			for (Enemy e : getEnemyarray()) {
 				if (!e.alive) {
 					g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
+					for (int j = 0; j < e.getProjectiles().size(); j++) {
+						Projectile p = e.getProjectiles().get(j);
+						g.drawImage(p.getSprite(), p.getR().x, p.getR().y, this);
+					}
 				}
 			}
+			for (int y = 0; y < height; y++) {
+				for (int x = 0; x < width; x++) {
+					if (null != map[x][y]) {
+						if (Enemy.class.isInstance(map[x][y])) {
+							Enemy e = (Enemy)map[x][y];
+							if (null != e.getWeapon()) {
+								if (e.isAimingUp()) {
+									g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+									g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
+								} else {
+									g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
+									g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+								}
+							} else {
+								g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
+							}
+							if (e.showHealthBar) {
+								g.setColor(Color.GREEN);
+								int lifetaken = ((e.getMaxHealth()-e.getHealth())*e.halfbar*2)/e.getMaxHealth();
+								g.fillRect(e.getCenterX()-e.halfbar, e.getCenterY()-e.halfsizey, 2*e.halfbar-lifetaken, 2);
+								g.setColor(Color.RED);
+								g.fillRect(e.getCenterX()+e.halfbar-lifetaken, e.getCenterY()-e.halfsizey, lifetaken, 2);
+							}
+							for (int j = 0; j < e.getProjectiles().size(); j++) {
+								Projectile p = e.getProjectiles().get(j);
+								g.drawImage(p.getSprite(), p.getR().x, p.getR().y, this);
+							}
+						} else if (Player.class.isInstance(map[x][y])) {
+							if (player.isAimingUp()) {
+								g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
+								g.drawImage(player.currentSprite, player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey, this);
+							} else {
+								g.drawImage(player.currentSprite, player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey, this);
+								g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
+							}
+						} else
+							g.drawImage(map[x][y].getSprite(),map[x][y].getCenterX() - map[x][y].halfrsizex, map[x][y].getCenterY() - map[x][y].halfsizey, this);
+					}
+				}
+			}/*
 			for (int i = 0; i < getEnemyarray().size(); i++) {
 				Enemy e = getEnemyarray().get(i);
 				if (e.alive) {
@@ -776,12 +936,15 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					} else {
 						g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
 					}
+					if (e.showHealthBar) {
+						g.setColor(Color.GREEN);
+						int lifetaken = ((e.getMaxHealth()-e.getHealth())*e.halfbar*2)/e.getMaxHealth();
+						g.fillRect(e.getCenterX()-e.halfbar, e.getCenterY()-e.halfsizey, 2*e.halfbar-lifetaken, 2);
+						g.setColor(Color.RED);
+						g.fillRect(e.getCenterX()+e.halfbar-lifetaken, e.getCenterY()-e.halfsizey, lifetaken, 2);
+					}
 				}
-				for (int j = 0; j < e.getProjectiles().size(); j++) {
-					Projectile p = e.getProjectiles().get(j);
-					g.drawImage(p.getSprite(), p.getR().x, p.getR().y, this);
-				}
-			}
+			}*/
 			for (int i = 0; i < projectiles.size(); i++) {
 				Projectile p = projectiles.get(i);
 				// g.setColor(Color.YELLOW);
@@ -789,17 +952,19 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				// p.getR().height);
 				g.drawImage(p.getSprite(), p.getR().x, p.getR().y, this);
 			}
-			if (player.isAimingUp()) {
-				g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
-				g.drawImage(currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
-			} else {
-				g.drawImage(currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
-				g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
+			if (showPlayerHealthBar) {
+				g.setColor(Color.GREEN);
+				int lifetaken = ((20+player.getArmor().MAXDEF-player.getHealth()-player.getArmor().getDefense())*44)/(20+player.getArmor().MAXDEF);
+				int armorp = (player.getArmor().getDefense()*44)/(20+player.getArmor().MAXDEF);
+				g.fillRect(player.getCenterX()-22, player.getCenterY()-31, 44-lifetaken-armorp, 2);
+				g.setColor(Color.BLUE);
+				g.fillRect(player.getCenterX()+22-lifetaken-armorp, player.getCenterY()-31, armorp, 2);
+				g.setColor(Color.RED);
+				g.fillRect(player.getCenterX()+22-lifetaken, player.getCenterY()-31, lifetaken, 2);
 			}
 			for (int i = 0; i < hitpoints.size(); i++) {
 				g.drawImage(blooddrop, hitpoints.get(i).getCenterX()-7, hitpoints.get(i).getCenterY()-7, this);
 			}
-			paintAboveTiles(g);
 			paintItemEffect(g);
 			g.setColor(Color.RED);
 			g.fillRect(32, 37, 20, 20);
@@ -809,7 +974,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			g.fillRect(52, 37, 20, 20);
 			g.setColor(Color.WHITE);
 			g.drawString(Integer.toString(player.getArmor().defense),55, 51);
-		} else if (state == GameState.Dead) {
+			if (TESTMODE) {
+				g.setColor(Color.DARK_GRAY);
+				g.fillRect(1200, 37, 20, 20);
+				g.setColor(Color.WHITE);
+				g.drawString(Integer.toString(fps), 1203, 51);
+			}
+		} else {
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, 800, 480);
 			g.setColor(Color.WHITE);
@@ -826,8 +997,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	private void checkEnemiesCollision() {
 		for (Enemy e : getEnemyarray()) {
-			if (e.alive)
-				e.checkEnemyCollisions();
+			if (e.alive) {
+				e.checkCollisionsWithBlockingStuff();
+				e.checkCollisionPlayer();
+			}
 		}
 	}
 	
@@ -842,13 +1015,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			}
 		}
 	}
-
+/*
 	private void checkTileCollisions() {
 		for (int i = 0; i < tilearray.size(); i++) {
 			Tile t = tilearray.get(i);
 			t.checkCollisions();
 		}
-	}
+	}*/
 	
 	private void updateExplosions() {
 		int i = 0;
@@ -908,8 +1081,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				if (player.getArmor().defense - e.damage < 0) {
 					player.setHealth(player.getHealth() - e.damage + player.getArmor().defense);
 					player.getArmor().setDefense(0);
-					if (player.getHealth() < 1)
+					if (player.getHealth() < 1) {
 						state = GameState.Dead;
+						soundtrack.stop();
+					}
 				} else {
 					player.getArmor().setDefense(player.getArmor().getDefense() - e.damage);
 				}
@@ -932,8 +1107,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						if (player.getArmor().defense - p.damage < 0) {
 							player.setHealth(player.getHealth() - p.damage + player.getArmor().defense);
 							player.getArmor().setDefense(0);
-							if (player.getHealth() < 1)
-								state = GameState.Dead;
 						} else {
 							player.getArmor().setDefense(player.getArmor().getDefense() - p.damage);
 						}
@@ -980,12 +1153,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		for (Item i : leavingitems)
 			i.update();
 	}
-
+/*
 	private void paintBelowTiles(Graphics g) {
 		for (int i = 0; i < tilearray.size(); i++) {
 			Tile t = tilearray.get(i);
 			if (t.getCenterY() <= player.getCenterY() || !Tile.isTileBlocking(t.getType()))
-				g.drawImage(t.getTileImage(), t.getCenterX() - 31, t.getCenterY() - 31, this);
+				g.drawImage(t.getSprite(), t.getCenterX() - 31, t.getCenterY() - 31, this);
 		}
 	}
 	
@@ -993,9 +1166,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		for (int i = 0; i < tilearray.size(); i++) {
 			Tile t = tilearray.get(i);
 			if (t.getCenterY() > player.getCenterY() && Tile.isTileBlocking(t.getType()))
-				g.drawImage(t.getTileImage(), t.getCenterX() - 31, t.getCenterY() - 31, this);
+				g.drawImage(t.getSprite(), t.getCenterX() - 31, t.getCenterY() - 31, this);
 		}
-	}
+	}*/
 	
 	private void paintItems(Graphics g) {
 		for (int i = 0; i < items.size(); i++) {
@@ -1023,15 +1196,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	public void animate() {
 		anim.update(10);
-	}
-
-	public void loadArmor() {
-		player.getArmor();
-		character1 = getImage(base, player.getArmor().armor1);
-		character2 = getImage(base, player.getArmor().armor2);
-		characterMove1 = getImage(base, player.getArmor().armor3);
-		characterMove2 = getImage(base, player.getArmor().armor4);
-		player.setMOVESPEED(player.getArmor().getSpeed());
 	}
 
 	@Override
@@ -1117,7 +1281,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			if (armorindex == playerarmor.size())
 				armorindex = 0;
 			player.setArmor(playerarmor.get(armorindex));
-			loadArmor();
 			break;
 		case KeyEvent.VK_SPACE:
 			if (state == GameState.Paused) {
@@ -1128,6 +1291,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				state = GameState.Paused;
 				soundtrack.stop();
 			}	
+			break;
+		case KeyEvent.VK_C:
+			if (ScrollingMode > 0)
+				centeringOnPlayerRequest = true;
+			break;
+		case KeyEvent.VK_V:
+			if (ScrollingMode > 0)
+				toggleScrollingModeRequest = true;
 			break;
 		}
 	}

@@ -1,21 +1,15 @@
 package pizzatales;
 
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
-public class Player extends Point {
+public class Player extends BlockingStuff {
 
 	private int MOVESPEED = 4;
 	//private final static double MAXSCROLLINGPROPORTION = 0.5;
 	//private final static int SCROLLINGRANGE = 150;
-	private int speedX = 0;
-	private int speedY = 0;
 	private int scrollingSpeed = 0;
 	private int health = 20;
-	public boolean isColliding = false;
-	public Rectangle R = new Rectangle(0,0,0,0);
-	private Firearm weapon;
 	private Armor armor;
 	private boolean ismovingup;
 	private boolean ismovingdown;
@@ -29,24 +23,25 @@ public class Player extends Point {
 	public boolean canmoveleft = true;
 	public boolean canmoveup = true;
 	public boolean canmovedown = true;
-	public int posx;
-	public int posy;
-
-	private boolean isAimingUp = true;
+	private boolean isMoving;
+	
+	protected Firearm weapon;
+	public boolean isAimingUp = true;
+	protected ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
+	public boolean showHealthBar;
 	
 	public Image currentSprite;
 
 	// 0 = not, 1 = left, 2 = top, 3 = right, 4 = bottom
 	private int isShooting = 0;
-	public int walkCounter = 0;
+	private int walkCounter = 0;
+	private int stayCounter = 0;
 	
 	public Player() {
-		super(640,100);
+		super(640,100, 31,31,25,25);
 	}
 
 	private Background bg;
-
-	private ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	
 	public void setBackground(Background bg) {
 		this.bg = bg;
@@ -66,31 +61,105 @@ public class Player extends Point {
 		posy = (centerY - bg.getCenterY() + StartingClass.bginity) / 50;
 	}
 
+	public void checkCollisionsWithBlockingStuff() {
+		/*if (diffX > diffY && diffY < 45) {
+			if (player.getCenterX() <= this.getCenterX()) {
+				player.canmoveright = false;
+				;
+			} else {
+				player.canmoveleft = false;
+			}
+		} else if (diffX < diffY && diffX < 45) {
+			if (player.getCenterY() <= this.getCenterY()) {
+				player.canmovedown = false;
+			} else {
+				player.canmoveup = false;
+			}
+		}*/
+		if (posx != 0) {
+			if (null != StartingClass.map[posx-1][posy] && R.intersects(StartingClass.map[posx-1][posy].R)) {
+				canmoveleft = false;
+			}
+			if (posy != 0 && null != StartingClass.map[posx-1][posy-1] && R.intersects(StartingClass.map[posx-1][posy-1].R)) {
+				int diffX = Math.abs(StartingClass.map[posx-1][posy-1].getCenterX()-centerX);
+				int diffY = Math.abs(StartingClass.map[posx-1][posy-1].getCenterY()-centerY);
+				if (diffX > diffY && diffY < 45)
+					canmoveleft = false;
+				else if (diffX < diffY && diffX < 45)
+					canmoveup = false;
+			}
+			if (posy != StartingClass.height - 1 && null != StartingClass.map[posx-1][posy+1] && R.intersects(StartingClass.map[posx-1][posy+1].R)) {
+				int diffX = Math.abs(StartingClass.map[posx-1][posy+1].getCenterX()-centerX);
+				int diffY = Math.abs(StartingClass.map[posx-1][posy+1].getCenterY()-centerY);
+				if (diffX > diffY && diffY < 45)
+					canmoveleft = false;
+				else if (diffX < diffY && diffX < 45)
+					canmovedown = false;
+			}
+		}
+		if (posx != StartingClass.width - 1) {
+			if (null != StartingClass.map[posx+1][posy] && R.intersects(StartingClass.map[posx+1][posy].R)) {
+				canmoveright = false;
+			}
+			if (posy != 0 && null != StartingClass.map[posx+1][posy-1] && R.intersects(StartingClass.map[posx+1][posy-1].R)) {
+				int diffX = Math.abs(StartingClass.map[posx+1][posy-1].getCenterX()-centerX);
+				int diffY = Math.abs(StartingClass.map[posx+1][posy-1].getCenterY()-centerY);
+				if (diffX > diffY && diffY < 45)
+					canmoveright = false;
+				else if (diffX < diffY && diffX < 45)
+					canmoveup = false;
+			}
+			if (posy != StartingClass.height - 1 && null != StartingClass.map[posx+1][posy+1] && R.intersects(StartingClass.map[posx+1][posy+1].R)) {
+				int diffX = Math.abs(StartingClass.map[posx+1][posy+1].getCenterX()-centerX);
+				int diffY = Math.abs(StartingClass.map[posx+1][posy+1].getCenterY()-centerY);
+				if (diffX > diffY && diffY < 45)
+					canmoveright = false;
+				else if (diffX < diffY && diffX < 45)
+					canmovedown = false;
+			}
+		}
+		if (posy != 0 && null != StartingClass.map[posx][posy-1] && R.intersects(StartingClass.map[posx][posy-1].R)) {
+			canmoveup = false;
+		}
+		if (posy != StartingClass.height - 1 && null != StartingClass.map[posx][posy+1] && R.intersects(StartingClass.map[posx][posy+1].R)) {
+			canmovedown = false;
+		}
+	}
+
+	protected void shootUp() {
+		isAimingUp = true;
+		weapon.shootUp(centerX, centerY);
+	}
+
+	protected void shootDown() {
+		isAimingUp = false;
+		weapon.shootDown(centerX, centerY);
+	}
+
+	protected void shootLeft() {
+		isAimingUp = false;
+		weapon.shootLeft(centerX, centerY);
+	}
+
+	protected void shootRight() {
+		isAimingUp = false;
+		weapon.shootRight(centerX, centerY);
+	}
+	
+	@Override
 	public void update() {
 
 		// Moves Character or Scrolls Background accordingly.
 
 		// Updates X Position
 		
-		
 		speedY = 0;
 		speedX = 0;
-		scrollingSpeed = 0;
 		if (ismovingup && canmoveup) {
-			if (StartingClass.isInArena >= 0) {
-				speedY += -MOVESPEED;
-			} else {
-				speedY += -MOVESPEED/2;
-				scrollingSpeed += -MOVESPEED/2;
-			}
+			speedY += -MOVESPEED;
 		}
 		if (ismovingdown && canmovedown) {
-			if (StartingClass.isInArena >= 0) {
-				speedY += MOVESPEED;
-			} else {
-				speedY += MOVESPEED/2;
-				scrollingSpeed += MOVESPEED/2;
-			}
+			speedY += MOVESPEED;
 		}
 		if (ismovingleft && canmoveleft) {
 			speedX += -MOVESPEED;
@@ -116,6 +185,27 @@ public class Player extends Point {
 				isAimingUp = true;
 			}
 		}
+		// Prevents going beyond Y coordinate of 250 and 550
+		switch (StartingClass.ScrollingMode) {
+		case 0: // no scrolling
+			scrollingSpeed = 0;
+			break;
+		case 1: // dynamic
+			if (centerY + speedY <= 249) {
+				scrollingSpeed = speedY;
+			} else if (centerY + speedY >= 550) {
+				scrollingSpeed = speedY;
+			} else {
+				scrollingSpeed = speedY - speedY/2;
+			}
+			break;
+		case 2: // player centered
+			scrollingSpeed = speedY;
+			break;
+		case 3: // player controlled.
+			break;
+		}
+		speedY -= scrollingSpeed;
 			
 		
 		/*
@@ -137,17 +227,6 @@ public class Player extends Point {
 			centerX = 31;
 		} else if (centerX + speedX >= 1249) {
 			centerX = 1248;
-		}
-
-		// Prevents going beyond Y coordinate of 250 and 550
-		if (StartingClass.isInArena < 0) {
-			if (centerY + speedY <= 249) {
-				centerY = 250;
-				scrollingSpeed = 2*speedY;
-			} else if (centerY + speedY >= 550) {
-				centerY = 549;
-				scrollingSpeed = 2*speedY;
-			}
 		}
 		centerY += speedY;
 		centerX += speedX;
@@ -180,7 +259,9 @@ public class Player extends Point {
 		
 		posx = (centerX - bg.getCenterX() + StartingClass.bginitx) / 50;
 		posy = (centerY - bg.getCenterY() + StartingClass.bginity) / 50;
-		//animate();
+		StartingClass.map[posx][posy] = this;
+		isMoving = ismovingdown || ismovingright || ismovingup || ismovingleft;
+		animate();
 	}
 	
 	public void controlledupdate() {
@@ -205,29 +286,34 @@ public class Player extends Point {
 		weapon.increaseShootingCounter();
 		posx = (centerX - bg.getCenterX() + StartingClass.bginitx) / 50;
 		posy = (centerY - bg.getCenterY() + StartingClass.bginity) / 50;
+		StartingClass.map[posx][posy] = this;
+		isMoving = controlledismovingdown || controlledismovingright || controlledismovingup || controlledismovingleft;
+		animate();
 	}
 	
-	/*
+	
 	public void animate(){
-		walkCounter++;
-		if (walkCounter == 1000)
-			walkCounter = 0;
-		if (isMovingHor() == true || isMovingVer() == true) {
+		if (isMoving) {
+			stayCounter = 0;
+			walkCounter++;
+			if (walkCounter == 1000)
+				walkCounter = 0;
 			if (walkCounter % 30 == 0) {
-				armor.setSpriteWalk1();
-				currentSprite = armor.currentSprite;
-				//currentSprite = characterMove1;
+				currentSprite = armor.getMoveSprite1();
 			} else if (walkCounter % 15 == 0) {
-				armor.setSpriteWalk2();
-				currentSprite = armor.currentSprite;
-				//currentSprite = characterMove2;
+				currentSprite = armor.getMoveSprite2();
 			}
-		} else if (isMovingVer() == false && isMovingHor() == false) {
-			armor.setSpriteStay1();
-			currentSprite = armor.currentSprite;
-			//currentSprite = anim.getImage();
+		} else {
+			stayCounter++;
+			walkCounter = 0;
+			if (stayCounter == 1000)
+				stayCounter = 0;
+			if (stayCounter % 300 > 270)
+				currentSprite = armor.getStaySprite2();
+			else
+				currentSprite = armor.getStaySprite();
 		}
-	}*/
+	}
 	
 	public boolean isAimingUp() {
 		return isAimingUp;
@@ -349,14 +435,6 @@ public class Player extends Point {
 	public void stopMovingDown() {
 		ismovingdown = false;
 	}
-
-	public double getSpeedX() {
-		return speedX;
-	}
-
-	public double getSpeedY() {
-		return speedY;
-	}
 	
 	public int getMOVESPEED() {
 		return MOVESPEED;
@@ -372,15 +450,6 @@ public class Player extends Point {
 	
 	public void setScrollingSpeed(int scrollingspeed) {
 		this.scrollingSpeed = scrollingspeed;
-	}
-
-	public void setSpeedX(int speedX) {
-		this.speedX = speedX;
-	}
-	
-	public void addSpeedY(int speedY) {
-		this.speedY += speedY /2;
-		this.scrollingSpeed += speedY/2;
 	}
 	
 	public int getHealth() {
@@ -405,6 +474,12 @@ public class Player extends Point {
 
 	public void setArmor(Armor armor) {
 		this.armor = armor;
+		setMOVESPEED(armor.getSpeed());
+	}
+
+	@Override
+	public Image getSprite() {
+		return currentSprite;
 	}
 }
 

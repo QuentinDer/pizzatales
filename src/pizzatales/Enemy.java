@@ -1,30 +1,24 @@
 package pizzatales;
 
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.net.URL;
 import java.util.ArrayList;
 
 //import pizzatales.framework.Animation;
 
-public abstract class Enemy extends Stuff {
+public abstract class Enemy extends BlockingStuff {
 
-	private int maxHealth, currentHealth, power;
-	protected int health;
+	protected int maxHealth, health;
+	//private int power;
 	protected boolean alive = true;
 	protected URL base;
 	protected boolean isMoving = false;
 	protected int walkCounter = 1;
 
-	public Rectangle R;
 	protected int movementTime = ((int) Math.random() * 100) + 50;
 
 	protected Player player = StartingClass.getPlayer();
-	protected ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	protected PathFinder pf = StartingClass.getPathFinder();
-	protected int posx;
-	protected int posy;
-	protected Background bg = StartingClass.getBg1();
 	
 	public boolean canmoveup = true;
 	public boolean canmovedown = true;
@@ -35,39 +29,76 @@ public abstract class Enemy extends Stuff {
 	private boolean ismovingup;
 	private boolean ismovingdown;
 	private boolean sleepy = false;
-	public int halfsizex;
-	public int halfsizey;
-	protected int halfrsizex = 22;
-	protected int halfrsizey = 22;
+	public int halfbar = 22;
 	protected int range;
+	
+	protected Firearm weapon;
+	public boolean isAimingUp = true;
+	protected ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
+	public boolean showHealthBar;
 	
 	//protected Animation anim;
 	protected int speed;
 	
-	protected Firearm weapon;
-	private boolean isAimingUp = true;
-	
-	public Image currentSprite;
+	protected Image currentSprite;
 	private boolean isArenaEnemy;
 
-	public Enemy(int centerX, int centerY, Firearm weapon, int health, int speed, int halfsizex, int halfsizey) {
-		super(centerX, centerY);
+	public Enemy(int centerX, int centerY, Firearm weapon, int health, int speed, int halfsizex, int halfsizey, int halfrsizex, int halfrsizey) {
+		super(centerX, centerY, halfsizex, halfsizey, halfrsizex, halfrsizey);
 		this.weapon = weapon;
 		if (weapon != null) {
 			weapon.setFireRate(weapon.getFireRate() * (5 - StartingClass.difficultylevel));
 			weapon.setHolderProjectiles(projectiles);
 		}
 		this.health = health * StartingClass.difficultylevel;
+		this.maxHealth = this.health;
 		this.speed = speed;
-		posx = (centerX - bg.getCenterX() + StartingClass.bginitx) / 50;
-		posy = (centerY - bg.getCenterY() + StartingClass.bginity) / 50;
-		pf.map[posx][posy] = false;
 		setStaySprite();
-		R = new Rectangle(getCenterX() - halfrsizex, getCenterY() - halfrsizey, 2 * halfrsizex, 2 * halfrsizey);
-		this.halfsizex = halfsizex;
-		this.halfsizey = halfsizey;
 	}
-
+	
+	public void checkCollisionsWithBlockingStuff() {
+		if (posx != 0) {
+			if (null != StartingClass.map[posx-1][posy] && R.intersects(StartingClass.map[posx-1][posy].R)) {
+				canmoveleft = false;
+			}
+			if (posy != 0 && null != StartingClass.map[posx-1][posy-1] && R.intersects(StartingClass.map[posx-1][posy-1].R)) {
+				if (Math.abs(StartingClass.map[posx-1][posy-1].getCenterX()-centerX) > Math.abs(StartingClass.map[posx-1][posy-1].getCenterY()-centerY))
+					canmoveleft = false;
+				else 
+					canmoveup = false;
+			}
+			if (posy != StartingClass.height - 1 && null != StartingClass.map[posx-1][posy+1] && R.intersects(StartingClass.map[posx-1][posy+1].R)) {
+				if (Math.abs(StartingClass.map[posx-1][posy+1].getCenterX()-centerX) > Math.abs(StartingClass.map[posx-1][posy+1].getCenterY()-centerY))
+					canmoveleft = false;
+				else 
+					canmovedown = false;
+			}
+		}
+		if (posx != StartingClass.width - 1) {
+			if (null != StartingClass.map[posx+1][posy] && R.intersects(StartingClass.map[posx+1][posy].R)) {
+				canmoveright = false;
+			}
+			if (posy != 0 && null != StartingClass.map[posx+1][posy-1] && R.intersects(StartingClass.map[posx+1][posy-1].R)) {
+				if (Math.abs(StartingClass.map[posx+1][posy-1].getCenterX()-centerX) > Math.abs(StartingClass.map[posx+1][posy-1].getCenterY()-centerY))
+					canmoveright = false;
+				else 
+					canmoveup = false;
+			}
+			if (posy != StartingClass.height - 1 && null != StartingClass.map[posx+1][posy+1] && R.intersects(StartingClass.map[posx+1][posy+1].R)) {
+				if (Math.abs(StartingClass.map[posx+1][posy+1].getCenterX()-centerX) > Math.abs(StartingClass.map[posx+1][posy+1].getCenterY()-centerY))
+					canmoveright = false;
+				else 
+					canmovedown = false;
+			}
+		}
+		if (posy != 0 && null != StartingClass.map[posx][posy-1] && R.intersects(StartingClass.map[posx][posy-1].R)) {
+			canmoveup = false;
+		}
+		if (posy != StartingClass.height - 1 && null != StartingClass.map[posx][posy+1] && R.intersects(StartingClass.map[posx][posy+1].R)) {
+			canmovedown = false;
+		}
+	}
+/*
 	private void checkCollision(Enemy e) {
 		if (R.intersects(e.R)) {
 			if (Math.abs(e.getCenterX() - getCenterX()) > Math.abs(e.getCenterY() - getCenterY())) {
@@ -82,9 +113,9 @@ public abstract class Enemy extends Stuff {
 					canmoveup = false;
 			}
 		}
-	}
+	}*/
 	
-	protected void checkCollisionPlayer() {
+	public void checkCollisionPlayer() {
 		if (R.intersects(player.R)) {
 			if (Math.abs(player.getCenterX() - getCenterX()) > Math.abs(player.getCenterY() - getCenterY())) {
 				if (player.getCenterX() - getCenterX() > 0) {
@@ -106,14 +137,14 @@ public abstract class Enemy extends Stuff {
 		}
 	}
 
-	
+	/*
 	public void checkEnemyCollisions() {
 		for (Enemy e : StartingClass.getEnemyarray()) {
 			if (!e.equals(this) && e.alive)
 				checkCollision(e);
 		}
 		checkCollisionPlayer();
-	}
+	}*/
 	
 	// Behavioral Methods
 	@Override
@@ -143,29 +174,12 @@ public abstract class Enemy extends Stuff {
 		
 		super.update();
 		
-		R.setBounds(getCenterX() - halfrsizex + speedX, getCenterY() - halfrsizey + speedY, 2*halfrsizex, 2*halfrsizey);
-		
 		if (alive == true) {
 			
-			int currentposx = (getCenterX() - bg.getCenterX() + StartingClass.bginitx) / 50;
-			int currentposy = (getCenterY() - bg.getCenterY() + StartingClass.bginity) / 50;
-			
-			if (currentposx != posx || currentposy != posy) {
-				pf.map[posx][posy] = true;
-				pf.map[currentposx][currentposy] = false;
-				posx = currentposx;
-				posy = currentposy;
-			}
-			
-			
+			posx = (getCenterX() - bg.getCenterX() + StartingClass.bginitx) / 50;
+			posy = (getCenterY() - bg.getCenterY() + StartingClass.bginity) / 50;
+			StartingClass.map[posx][posy] = this;
 			animate();
-				
-
-			// Collision
-			// rectX.setRect(getCenterX() - 55, getCenterY() - 55, 50, 40);
-			// rectY.setRect(getCenterX() - 50, getCenterY() - 60, 40, 50);
-
-			// AI
 		}
 	}
 
@@ -183,17 +197,15 @@ public abstract class Enemy extends Stuff {
 	public void animate(){
 		if (isMoving) {
 			walkCounter++;
+			if (walkCounter == 1000)
+				walkCounter = 0;
 			if (getSpeedX() <= 0) {
-				if (walkCounter == 1000)
-					walkCounter = 0;
 				if (walkCounter % 30 == 0) {
 					setMove1Sprite();
 				} else if (walkCounter % 15 == 0) {
 					setMove2Sprite();
 				}
 			} else {
-				if (walkCounter == 1000)
-					walkCounter = 0;
 				if (walkCounter % 30 == 0) {
 					setMove1SpriteAlt();
 				} else if (walkCounter % 15 == 0) {
@@ -207,10 +219,7 @@ public abstract class Enemy extends Stuff {
 		alive = false;
 		stopMoving();
 		setDieSprite();
-		pf.map[posx][posy] = true;
-	}
-
-	public void attack() {
+		StartingClass.map[posx][posy] = null;
 	}
 
 	public int getMaxHealth() {
@@ -220,29 +229,6 @@ public abstract class Enemy extends Stuff {
 	public void setMaxHealth(int maxHealth) {
 		this.maxHealth = maxHealth;
 	}
-
-	public int getCurrentHealth() {
-		return currentHealth;
-	}
-
-	public void setCurrentHealth(int currentHealth) {
-		this.currentHealth = currentHealth;
-	}
-
-	public int getPower() {
-		return power;
-	}
-
-	public void setPower(int power) {
-		this.power = power;
-	}
-
-	/*
-	 * public int getMovementParam() { return movementParam; }
-	 * 
-	 * public void setMovementParam(int movementParam) { this.movementParam =
-	 * movementParam; }
-	 */
 
 	public Background getBg() {
 		return bg;
@@ -260,28 +246,38 @@ public abstract class Enemy extends Stuff {
 		this.health = health;
 	}
 	
-	public boolean isAimingUp() {
-		return isAimingUp;
+
+	public Firearm getWeapon() {
+		return weapon;
 	}
 	
-	public void shootUp() {
+	public void setWeapon(Firearm weapon_) {
+		weapon = weapon_;
+		weapon.setHolderProjectiles(projectiles);
+	}
+
+	protected void shootUp() {
 		isAimingUp = true;
 		weapon.shootUp(centerX, centerY);
 	}
 
-	public void shootDown() {
+	protected void shootDown() {
 		isAimingUp = false;
 		weapon.shootDown(centerX, centerY);
 	}
 
-	public void shootLeft() {
+	protected void shootLeft() {
 		isAimingUp = false;
 		weapon.shootLeft(centerX, centerY);
 	}
 
-	public void shootRight() {
+	protected void shootRight() {
 		isAimingUp = false;
 		weapon.shootRight(centerX, centerY);
+	}
+	
+	public boolean isAimingUp() {
+		return isAimingUp;
 	}
 
 	public ArrayList<Projectile> getProjectiles() {
@@ -373,15 +369,6 @@ public abstract class Enemy extends Stuff {
 		
 	}
 	
-	public Firearm getWeapon() {
-		return weapon;
-	}
-	
-	public void setWeapon(Firearm weapon_) {
-		weapon = weapon_;
-		weapon.setHolderProjectiles(projectiles);
-	}
-	
 	public void sleep() {
 		sleepy = true;
 		if (alive)
@@ -398,6 +385,10 @@ public abstract class Enemy extends Stuff {
 	
 	public boolean isInArena() {
 		return isArenaEnemy;
+	}
+	
+	public Image getSprite() {
+		return currentSprite;
 	}
 	
 	public abstract void setStaySprite();

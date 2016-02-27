@@ -30,12 +30,14 @@ public class TomatoProjectile extends Projectile {
 	public void doOnCollision(Enemy e) {
 		if (visible) {
 			visible = false;
-			Tato t = new Tato(this.centerX,this.centerY);
+			Tato t1 = new Tato(this.centerX,this.centerY);
 			if (StartingClass.difficultylevel > 3) {
-				t.setWeapon(new Shotgun());
-				t.range = 220;
+				t1.setWeapon(new Shotgun());
+				t1.range = 170;
+				if (StartingClass.TESTMODE)
+					t1.showHealthBar = true;
 			}
-			StartingClass.getEnemyarray().add(t);
+			StartingClass.getEnemyarray().add(t1);
 		}
 	}
 
@@ -46,7 +48,9 @@ public class TomatoProjectile extends Projectile {
 			Tato t1 = new Tato(this.centerX,this.centerY);
 			if (StartingClass.difficultylevel > 3) {
 				t1.setWeapon(new Shotgun());
-				t1.range = 220;
+				t1.range = 170;
+				if (StartingClass.TESTMODE)
+					t1.showHealthBar = true;
 			}
 			StartingClass.getEnemyarray().add(t1);
 		}
@@ -59,7 +63,9 @@ public class TomatoProjectile extends Projectile {
 			Tato t = new Tato(this.centerX,this.centerY);
 			if (StartingClass.difficultylevel > 3) {
 				t.setWeapon(new Shotgun());
-				t.range = 220;
+				t.range = 170;
+				if (StartingClass.TESTMODE)
+					t.showHealthBar = true;
 			}
 			StartingClass.getEnemyarray().add(t);
 		}

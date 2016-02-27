@@ -1,15 +1,35 @@
 package pizzatales;
 
+import java.awt.Image;
+
 public class ChicagoArmor extends Armor {
+
+	public static Image staysprite1, staysprite2, movesprite1, movesprite2;
 	
 	public ChicagoArmor() {
 		super();
 		this.MAXDEF = 20;
 		this.defense = this.MAXDEF;
 		this.speed = 2;
-		armor1 = "data/chicago1.png";
-		armor2 = "data/chicago2.png";
-		armor3 = "data/chicago3.png";
-		armor4 = "data/chicago4.png";
+	}
+	
+	@Override
+	public Image getStaySprite() {
+		return staysprite1;
+	}
+
+	@Override
+	public Image getStaySprite2() {
+		return staysprite2;
+	}
+
+	@Override
+	public Image getMoveSprite1() {
+		return movesprite1;
+	}
+
+	@Override
+	public Image getMoveSprite2() {
+		return movesprite2;
 	}
 }

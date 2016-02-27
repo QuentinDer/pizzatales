@@ -1,7 +1,6 @@
 package pizzatales;
 
 import java.awt.Image;
-import java.awt.Rectangle;
 
 public class SirTomato extends Enemy {
 	
@@ -18,11 +17,9 @@ public class SirTomato extends Enemy {
 	private int dashSpeedX;
 	
 	public SirTomato(int centerX, int centerY) {
-		super(centerX, centerY, null, 100, basicspeed, 50, 50);
+		super(centerX, centerY, null, 100, basicspeed, 50, 50, 45, 45);
 		movementTime = ((int) (Math.random() * 50));
-		halfrsizex = 45;
-		halfrsizey = 45;
-		R = new Rectangle(getCenterX() - 45, getCenterY() - 45, 90, 90);
+		halfbar = 45;
 		slashdmg = 4;
 		dashdmg = 5;
 		switch (StartingClass.difficultylevel) {
@@ -98,12 +95,12 @@ public class SirTomato extends Enemy {
 				if (movementTime % 10 == 0) {
 					int tox = player.posx;
 					if (posx < player.posx) {
-						if (pf.map[player.posx-1][player.posy])
+						if (null == StartingClass.map[player.posx-1][player.posy])
 							tox = player.posx-1;
 						else 
 							tox = player.posx+1;
 					} else {
-						if (pf.map[player.posx+1][player.posy])
+						if (null == StartingClass.map[player.posx+1][player.posy])
 							tox = player.posx+1;
 						else
 							tox = player.posx-1;
@@ -189,9 +186,11 @@ public class SirTomato extends Enemy {
 					speed = dashspeed;
 					halfsizex = 100;
 					halfrsizex = 90;
+					halfrsizey = 35;
 					isDashing = true;
 					inAnimation = 50;
 					dcd = dashcd;
+					R.setBounds(getCenterX() - halfrsizex + speedX, getCenterY() - halfrsizey + speedY, 2*halfrsizex, 2*halfrsizey);
 				}
 			}
 			movementTime++;
@@ -236,7 +235,7 @@ public class SirTomato extends Enemy {
 	}
 	
 	@Override
-	protected void checkCollisionPlayer() {
+	public void checkCollisionPlayer() {
 		if (R.intersects(player.R)) {
 			if (Math.abs(player.getCenterX() - getCenterX()) > Math.abs(player.getCenterY() - getCenterY())) {
 				if (player.getCenterX() - getCenterX() > 0) {

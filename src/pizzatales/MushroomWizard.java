@@ -12,10 +12,7 @@ public class MushroomWizard extends Enemy {
 	private int maxInAnimation;
 	
 	public MushroomWizard(int centerX, int centerY) {
-		super(centerX, centerY, null, 100, basicspeed, 50, 50);
-		halfrsizex = 45;
-		halfrsizey = 45;
-		R = new Rectangle(getCenterX() - 45, getCenterY() - 45, 90, 90);
+		super(centerX, centerY, null, 100, basicspeed, 50, 50, 45, 45);
 	}
 
 	@Override

@@ -9,7 +9,7 @@ public class Broccoli extends Enemy {
 	private final static int range = 720;
 
 	public Broccoli(int centerX, int centerY) {
-		super(centerX,centerY, new Rocket(), 4, 1, 31, 31);
+		super(centerX,centerY, new Rocket(), 4, 1, 31, 31, 26, 26);
 		movementTime = ((int) (Math.random() * 50));
 	}
 
@@ -133,23 +133,23 @@ public class Broccoli extends Enemy {
 						int toshooty1R = player.posy;
 						if (difX > 0) {
 							toshootx2R--;
-							while (toshootx2R >= toshootx2 && pf.map[toshootx2R][player.posy])
+							while (toshootx2R >= toshootx2 && null == StartingClass.map[toshootx2R][player.posy])
 								toshootx2R--;
 							toshootx2R++;
 						} else {
 							toshootx2R++;
-							while (toshootx2R <= toshootx2 && pf.map[toshootx2R][player.posy])
+							while (toshootx2R <= toshootx2 && null == StartingClass.map[toshootx2R][player.posy])
 								toshootx2R++;
 							toshootx2R--;
 						}
 						if (difY > 0) {
 							toshooty1R--;
-							while (toshooty1R >= toshooty1 && pf.map[player.posx][toshooty1R])
+							while (toshooty1R >= toshooty1 && null == StartingClass.map[player.posx][toshooty1R])
 								toshooty1R--;
 							toshooty1R++;
 						} else {
 							toshooty1R++;
-							while (toshooty1R <= toshooty1 && pf.map[player.posx][toshooty1R])
+							while (toshooty1R <= toshooty1 && null == StartingClass.map[player.posx][toshooty1R])
 								toshooty1R++;
 							toshooty1R--;
 						}
@@ -196,28 +196,28 @@ public class Broccoli extends Enemy {
 				int diffy = Math.abs(getCenterY() - player.getCenterY());
 				if (diffx > diffy && diffy < 120 && diffx < range && Math.abs(centerpY-getCenterY())<10) {
 					if (player.getCenterX() > getCenterX()) {
-						if ((posx == pf.map.length - 2) ||
-						(posx == pf.map.length - 3 && pf.map[posx+1][posy]) ||
-						(posx < pf.map.length - 3 && pf.map[posx+1][posy] && pf.map[posx+2][posy]))
+						if ((posx == StartingClass.width - 2) ||
+						(posx == StartingClass.width - 3 && null == StartingClass.map[posx+1][posy]) ||
+						(posx < StartingClass.width - 3 && null == StartingClass.map[posx+1][posy] && null == StartingClass.map[posx+2][posy]))
 							shootRight();
 					}
 					else {
 						if ((posx == 1) ||
-							(posx == 2 && pf.map[1][posy]) ||
-							(posx > 2 && pf.map[posx-1][posy] && pf.map[posx-2][posy]))
+							(posx == 2 && null == StartingClass.map[1][posy]) ||
+							(posx > 2 && null == StartingClass.map[posx-1][posy] && null == StartingClass.map[posx-2][posy]))
 							shootLeft();
 					}
 				} else if (diffx < 120 && diffy < range && Math.abs(centerpX-getCenterX())<10){
 					if (player.getCenterY() > getCenterY()) {
-						if ((posy == pf.map[0].length - 2) ||
-								(posy == pf.map[0].length - 3 && pf.map[posx][posy+1]) ||
-								(posy < pf.map[0].length - 3 && pf.map[posx][posy+1] && pf.map[posx][posy+2]))
+						if ((posy == StartingClass.height - 2) ||
+								(posy == StartingClass.height - 3 && null == StartingClass.map[posx][posy+1]) ||
+								(posy < StartingClass.height - 3 && null == StartingClass.map[posx][posy+1] && null == StartingClass.map[posx][posy+2]))
 									shootDown();
 					}
 					else {
 						if ((posy == 1) ||
-								(posy == 2 && pf.map[posx][1]) ||
-								(posy > 2 && pf.map[posx][posy-1] && pf.map[posx][posy-2]))
+								(posy == 2 && null == StartingClass.map[posx][1]) ||
+								(posy > 2 && null == StartingClass.map[posx][posy-1] && null == StartingClass.map[posx][posy-2]))
 								shootUp();
 					}
 				}
