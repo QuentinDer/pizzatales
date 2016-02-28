@@ -736,10 +736,19 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							bg2.setCenterY(bg2.getCenterY()+delta);
 							for (Tile t : tilearray)
 								t.setCenterY(t.getCenterY()+delta);
-							for (Enemy e : enemyarray)
+							for (Enemy e : enemyarray) {
 								e.setCenterY(e.getCenterY()+delta);
+								for (Projectile p : e.getProjectiles())
+									p.setCenterY(p.getCenterY()+delta);
+							}
+							for (Projectile p : player.getProjectiles())
+								p.setCenterY(p.getCenterY()+delta);
 							for (Item it : items)
 								it.setCenterY(it.getCenterY()+delta);
+							for (Item it : leavingitems)
+								it.setCenterY(it.getCenterY()+delta);
+							for (Explosion e : explosions)
+								e.setCenterY(e.getCenterY()+delta);
 							player.setCenterY(player.getCenterY()+delta);
 							repaint();
 							try {
@@ -762,10 +771,19 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						bg2.setCenterY(bg2.getCenterY()+finaldelta);
 						for (Tile t : tilearray)
 							t.setCenterY(t.getCenterY()+finaldelta);
-						for (Enemy e : enemyarray)
+						for (Enemy e : enemyarray) {
 							e.setCenterY(e.getCenterY()+finaldelta);
+							for (Projectile p : e.getProjectiles())
+								p.setCenterY(p.getCenterY()+finaldelta);
+						}
+						for (Projectile p : player.getProjectiles())
+							p.setCenterY(p.getCenterY()+finaldelta);	
 						for (Item it : items)
 							it.setCenterY(it.getCenterY()+finaldelta);
+						for (Item it : leavingitems)
+							it.setCenterY(it.getCenterY()+finaldelta);
+						for (Explosion e : explosions)
+							e.setCenterY(e.getCenterY()+finaldelta);
 						player.setCenterY(player.getCenterY()+finaldelta);
 						centeringOnPlayerRequest = false;
 					}
@@ -862,12 +880,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			g.drawImage(background, bg1.getCenterX(), bg1.getCenterY(), this);
 			g.drawImage(background, bg2.getCenterX(), bg2.getCenterY(), this);
 			paintItems(g);
-			for (int i = 0; i < getEnemyarray().size(); i++) {
-				Enemy e = getEnemyarray().get(i);
-				if (!e.alive) {
-					
-				}
-			}
 			for (Explosion e : explosions) {
 				g.drawImage(e.getSprite(), e.getR().x, e.getR().y, this);
 			}
@@ -877,7 +889,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
 					for (int j = 0; j < e.getProjectiles().size(); j++) {
 						Projectile p = e.getProjectiles().get(j);
-						g.drawImage(p.getSprite(), p.getR().x, p.getR().y, this);
+						g.drawImage(p.getSprite(), p.getCenterX()-p.halfsize, p.getCenterY()-p.halfsize, this);
 					}
 				}
 			}
@@ -906,7 +918,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							}
 							for (int j = 0; j < e.getProjectiles().size(); j++) {
 								Projectile p = e.getProjectiles().get(j);
-								g.drawImage(p.getSprite(), p.getR().x, p.getR().y, this);
+								g.drawImage(p.getSprite(), p.getCenterX()-p.halfsize, p.getCenterY()-p.halfsize, this);
 							}
 						} else if (Player.class.isInstance(map[x][y])) {
 							if (player.isAimingUp()) {
@@ -949,7 +961,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				// g.setColor(Color.YELLOW);
 				// g.fillRect(p.getR().x, p.getR().y, p.getR().width,
 				// p.getR().height);
-				g.drawImage(p.getSprite(), p.getR().x, p.getR().y, this);
+				g.drawImage(p.getSprite(), p.getCenterX()-p.halfsize, p.getCenterY()-p.halfsize, this);
 			}
 			if (showPlayerHealthBar) {
 				g.setColor(Color.GREEN);

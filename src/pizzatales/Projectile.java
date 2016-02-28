@@ -109,6 +109,12 @@ public abstract class Projectile extends Stuff {
 		return rectP;
 	}
 	
+	@Override
+	public void setCenterY(int centerY) {
+		super.setCenterY(centerY);
+		rectP = new Rectangle(getCenterX() - halfsize, getCenterY() - halfsize, size, size);
+	}
+	
 	public abstract Image getSprite();
 	
 	public abstract void doOnCollision(Player p);
