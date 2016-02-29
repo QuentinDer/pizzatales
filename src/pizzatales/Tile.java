@@ -10,7 +10,7 @@ public class Tile extends BlockingStuff {
 
 	// private Background bg = StartingClass.getBg1();
 
-	private final static String acceptedTileTypes = "twcsrdekg";
+	private final static String acceptedTileTypes = "twcsrdekgvy";
 
 	public static boolean isTileTypeSupported(char type) {
 		String test = "";
@@ -41,6 +41,10 @@ public class Tile extends BlockingStuff {
 			tileImage = StartingClass.tilePikes;
   		} else if (type == 'g') {
 			tileImage = StartingClass.tileFlag;
+  		} else if (type == 'v') {
+			tileImage = StartingClass.tileRock;
+  		} else if (type == 'y') {
+			tileImage = StartingClass.tileDecoy;
   		}
 	}
 /*

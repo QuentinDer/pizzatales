@@ -29,7 +29,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private static Player player;
 	private Image image, background;
 	private Image blooddrop;
-	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit, tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag;
+	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit, tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag, tileRock, tileDecoy;
 	private int walkCounter = 1;
 	private URL base;
 	private Graphics second;
@@ -141,6 +141,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		tileCaveExit = getImage(base, "data/caveexit.png");
 		tilePikes = getImage(base, "data/pikes.png");
 		tileFlag = getImage(base, "data/flag.png");
+		tileRock = getImage(base, "data/rock.png");
+		tileDecoy = getImage(base, "data/decoy.png");
 		
 		blooddrop = getImage(base, "data/blooddrop.png");
 		Gun.leftSprite = getImage(base, "data/pistol1.png");
