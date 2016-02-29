@@ -136,7 +136,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		tileWall = getImage(base, "data/wall.png");
 		tileCave = getImage(base, "data/cave.png");
 		tileStalag = getImage(base, "data/stalagmites.png");
-		WaterPuddle.sprite = getImage(base, "data/puddle.png");
 		tileCaveRock = getImage(base, "data/caverock.png");
 		tileGate = getImage(base, "data/gate.png");
 		tileCaveExit = getImage(base, "data/caveexit.png");
@@ -234,6 +233,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Lava.lavaeffectsprite = getImage(base, "data/lavaeffect.png");
 		WaterFlow.waterflowsprite = getImage(base, "data/waterflow.png");
 		WaterFlow.watereffectsprite = getImage(base, "data/watereffect.png");
+		WaterPuddle.sprite = getImage(base, "data/puddle.png");
+		WoodBridge.sprite = getImage(base, "data/woodbridge.png");
 		PizzaBox.pizzaboxsprite = getImage(base, "data/pizzabox.png");
 		
 		/*

@@ -1,7 +1,7 @@
 package pizzatales;
 
 public class ItemFactory {
-	private final static String itemslist = "phailoxmu";
+	private final static String itemslist = "phailoxmub";
 	
 	public static boolean isItemSupported(char type) {
 		String test = "";
@@ -38,6 +38,9 @@ public class ItemFactory {
 			break;
 		case 'u':
 			i = new WaterPuddle(x, y, deltapy, false);
+			break;
+		case 'b':
+			i = new WoodBridge(x, y, deltapy, false);
 			break;
 		}
 		return i;
