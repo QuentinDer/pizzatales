@@ -27,7 +27,7 @@ public abstract class Stuff extends Point {
 	}
 	
 	public void update() {
-		centerX += speedX;
-		centerY += speedY - player.getScrollingSpeed();
+		centerX += speedX - player.getScrollingSpeedX();
+		centerY += speedY - player.getScrollingSpeedY();
 	}
 }

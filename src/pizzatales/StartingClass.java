@@ -29,7 +29,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private static Player player;
 	private Image image, background;
 	private Image blooddrop;
-	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit, tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag, tileRock, tileDecoy;
+	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, 
+		tileCaveRock, tileGate, tileCaveExit, tileLavaPuddle, tileWaterFlow, 
+		tilePikes, tileFlag, tileRock, tileDecoy;
 	private int walkCounter = 1;
 	private URL base;
 	private Graphics second;
@@ -90,6 +92,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * 3 - player controlled scrolling //TODO implement ?
 	 */
 	public static int ScrollingMode = 1;
+	public static boolean levelwithxscrolling = true;
+	public static boolean levelwithyscrolling = true;
 	
 
 	@Override
@@ -139,10 +143,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		tileCaveRock = getImage(base, "data/caverock.png");
 		tileGate = getImage(base, "data/gate.png");
 		tileCaveExit = getImage(base, "data/caveexit.png");
-		tilePikes = getImage(base, "data/pikes.png");
-		tileFlag = getImage(base, "data/flag.png");
 		tileRock = getImage(base, "data/rock.png");
 		tileDecoy = getImage(base, "data/decoy.png");
+		tilePikes = getImage(base, "data/pikes.png");
+		tileFlag = getImage(base, "data/flag.png");
 		
 		blooddrop = getImage(base, "data/blooddrop.png");
 		Gun.leftSprite = getImage(base, "data/pistol1.png");
@@ -304,6 +308,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 		reader.close();
 		height = lines.size();
+		levelwithxscrolling = false;
+		levelwithyscrolling = false;
+		if (height > 16)
+			levelwithyscrolling = true;
+		if (width > 26)
+			levelwithxscrolling = true;
 
 		map = new BlockingStuff[width][height];
 		char [][] charmap = new char[width][height];
@@ -390,7 +400,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		HashMap<Integer, Character> area = new HashMap<Integer, Character>();
 		for (int i=0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				if (charmap[i][j] == 'y') {
+				if (charmap[i][j] == 'z') {
 					MapUtil.getHiddenAccesibleArea(i,j,100,charmap, area, hiddentriggers, k);
 					if (!area.isEmpty()) {
 						int l = 0;
@@ -466,7 +476,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	@Override
 	public void run() {
 		if (state == GameState.Running) {
-			soundtrack.loop();
+			//soundtrack.loop();
 			background = getImage(base, "data/"+Level.getBackground(currentlevel));
 			while (true) {
 				while (state == GameState.Running) {
@@ -549,10 +559,21 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							isInArena = activatedentry.isGoingIn();
 							
 							int arenacentery = arenacenters.get(isInArena).getValue() * 50 + bg1.getCenterY() - bginity;
-							if (arenacentery > 400)
-								player.setScrollingSpeed(player.getMOVESPEED());
-							else
-								player.setScrollingSpeed(-player.getMOVESPEED());
+							int arenacenterx = arenacenters.get(isInArena).getKey() * 50 + bg1.getCenterX() - bginitx;
+							player.setScrollingSpeedX(0);
+							player.setScrollingSpeedY(0);
+							if (levelwithyscrolling) {
+								if (arenacentery > 400)
+									player.setScrollingSpeedY(player.getMOVESPEED());
+								else
+									player.setScrollingSpeedY(-player.getMOVESPEED());
+							}
+							if (levelwithxscrolling) {
+								if (arenacenterx > 640)
+									player.setScrollingSpeedX(player.getMOVESPEED());
+								else
+									player.setScrollingSpeedX(-player.getMOVESPEED());
+							}
 							boolean foundposition = false;
 							int deltapx = 0;
 							int deltapy = 0;
@@ -564,7 +585,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 								deltapy = -30;
 							if (activatedentry.getPosY() > activatedentry.getOut().getPosY())
 								deltapy = 30;
-							while (Math.abs(arenacentery-400) > 20 || !foundposition) {
+							while ((levelwithyscrolling && Math.abs(arenacentery-400) > 20) || (levelwithxscrolling && Math.abs(arenacenterx-640)>20) || !foundposition) {
 								try {
 									Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
 								} catch (InterruptedException e) {
@@ -693,7 +714,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 								repaint();
 								arenacentery = arenacenters.get(isInArena).getValue() * 50 + bg1.getCenterY() - bginity;
 								if (Math.abs(arenacentery-400) < 20)
-									player.setScrollingSpeed(0);
+									player.setScrollingSpeedY(0);
+								if (Math.abs(arenacenterx-640) < 20)
+									player.setScrollingSpeedX(0);
 								
 							}
 							for (Enemy e : arenaenemies.get(activatedentry.isGoingIn())) {
@@ -733,28 +756,54 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							isInArena = -1;
 						}
 					}
-					if (ScrollingMode > 0 && centeringOnPlayerRequest) {
-						int delta = (400 - player.getCenterY())/10;
-						int finaldelta = 400 - player.getCenterY() - delta*9;
+					if (ScrollingMode > 0 && (levelwithxscrolling || levelwithyscrolling) && centeringOnPlayerRequest) {
+						int deltax = 0;
+						int deltay = 0;
+						int finaldeltax = 0;
+						int finaldeltay = 0;
+						if (levelwithxscrolling) {
+							deltax = (640 - player.getCenterX())/10;
+							finaldeltax = 640 - player.getCenterX() - deltax*9;
+						}
+						if (levelwithyscrolling) {
+							deltay = (400 - player.getCenterY())/10;
+							finaldeltay = 400 - player.getCenterY() - deltay*9;
+						}
 						for (int l = 0; l < 9; l++) {
-							bg1.setCenterY(bg1.getCenterY()+delta);
-							bg2.setCenterY(bg2.getCenterY()+delta);
-							for (Tile t : tilearray)
-								t.setCenterY(t.getCenterY()+delta);
-							for (Enemy e : enemyarray) {
-								e.setCenterY(e.getCenterY()+delta);
-								for (Projectile p : e.getProjectiles())
-									p.setCenterY(p.getCenterY()+delta);
+							bg1.setCenterX(bg1.getCenterX()+deltax);
+							bg1.setCenterY(bg1.getCenterY()+deltay);
+							bg2.setCenterX(bg2.getCenterX()+deltax);
+							bg2.setCenterY(bg2.getCenterY()+deltay);
+							for (Tile t : tilearray) {
+								t.setCenterX(t.getCenterX()+deltax);
+								t.setCenterY(t.getCenterY()+deltay);
 							}
-							for (Projectile p : player.getProjectiles())
-								p.setCenterY(p.getCenterY()+delta);
-							for (Item it : items)
-								it.setCenterY(it.getCenterY()+delta);
-							for (Item it : leavingitems)
-								it.setCenterY(it.getCenterY()+delta);
-							for (Explosion e : explosions)
-								e.setCenterY(e.getCenterY()+delta);
-							player.setCenterY(player.getCenterY()+delta);
+							for (Enemy e : enemyarray) {
+								e.setCenterX(e.getCenterX()+deltax);
+								e.setCenterY(e.getCenterY()+deltay);
+								for (Projectile p : e.getProjectiles()) {
+									p.setCenterX(p.getCenterX()+deltax);
+									p.setCenterY(p.getCenterY()+deltay);
+								}
+							}
+							for (Projectile p : player.getProjectiles()) {
+								p.setCenterX(p.getCenterX()+deltax);
+								p.setCenterY(p.getCenterY()+deltay);
+							}
+							for (Item it : items) {
+								it.setCenterX(it.getCenterX()+deltax);
+								it.setCenterY(it.getCenterY()+deltay);
+							}
+							for (Item it : leavingitems) {
+								it.setCenterX(it.getCenterX()+deltax);
+								it.setCenterY(it.getCenterY()+deltay);
+							}
+							for (Explosion e : explosions) {
+								e.setCenterX(e.getCenterX()+deltax);
+								e.setCenterY(e.getCenterY()+deltay);
+							}
+							player.setCenterX(player.getCenterX()+deltax);
+							player.setCenterY(player.getCenterY()+deltay);
 							repaint();
 							try {
 								Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
@@ -772,24 +821,40 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 								}
 							}
 						}
-						bg1.setCenterY(bg1.getCenterY()+finaldelta);
-						bg2.setCenterY(bg2.getCenterY()+finaldelta);
-						for (Tile t : tilearray)
-							t.setCenterY(t.getCenterY()+finaldelta);
-						for (Enemy e : enemyarray) {
-							e.setCenterY(e.getCenterY()+finaldelta);
-							for (Projectile p : e.getProjectiles())
-								p.setCenterY(p.getCenterY()+finaldelta);
+						bg1.setCenterX(bg1.getCenterX()+finaldeltax);
+						bg1.setCenterY(bg1.getCenterY()+finaldeltay);
+						bg2.setCenterX(bg2.getCenterX()+finaldeltax);
+						bg2.setCenterY(bg2.getCenterY()+finaldeltay);
+						for (Tile t : tilearray) {
+							t.setCenterX(t.getCenterX()+finaldeltax);
+							t.setCenterY(t.getCenterY()+finaldeltay);
 						}
-						for (Projectile p : player.getProjectiles())
-							p.setCenterY(p.getCenterY()+finaldelta);	
-						for (Item it : items)
-							it.setCenterY(it.getCenterY()+finaldelta);
-						for (Item it : leavingitems)
-							it.setCenterY(it.getCenterY()+finaldelta);
-						for (Explosion e : explosions)
-							e.setCenterY(e.getCenterY()+finaldelta);
-						player.setCenterY(player.getCenterY()+finaldelta);
+						for (Enemy e : enemyarray) {
+							e.setCenterX(e.getCenterX()+finaldeltax);
+							e.setCenterY(e.getCenterY()+finaldeltay);
+							for (Projectile p : e.getProjectiles()) {
+								p.setCenterX(p.getCenterX()+finaldeltax);
+								p.setCenterY(p.getCenterY()+finaldeltay);
+							}
+						}
+						for (Projectile p : player.getProjectiles()) {
+							p.setCenterX(p.getCenterX()+finaldeltax);
+							p.setCenterY(p.getCenterY()+finaldeltay);
+						}
+						for (Item it : items) {
+							it.setCenterX(it.getCenterX()+finaldeltax);
+							it.setCenterY(it.getCenterY()+finaldeltay);
+						}
+						for (Item it : leavingitems) {
+							it.setCenterX(it.getCenterX()+finaldeltax);
+							it.setCenterY(it.getCenterY()+finaldeltay);
+						}
+						for (Explosion e : explosions) {
+							e.setCenterX(e.getCenterX()+finaldeltax);
+							e.setCenterY(e.getCenterY()+finaldeltay);
+						}
+						player.setCenterX(player.getCenterX()+finaldeltax);
+						player.setCenterY(player.getCenterY()+finaldeltay);
 						centeringOnPlayerRequest = false;
 					}
 					if (ScrollingMode > 0 && toggleScrollingModeRequest) {

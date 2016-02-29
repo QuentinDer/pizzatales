@@ -8,7 +8,8 @@ public class Player extends BlockingStuff {
 	private int MOVESPEED = 4;
 	//private final static double MAXSCROLLINGPROPORTION = 0.5;
 	//private final static int SCROLLINGRANGE = 150;
-	private int scrollingSpeed = 0;
+	private int scrollingSpeedY = 0;
+	private int scrollingSpeedX = 0;
 	private int health = 20;
 	private Armor armor;
 	private boolean ismovingup;
@@ -38,7 +39,7 @@ public class Player extends BlockingStuff {
 	private int stayCounter = 0;
 	
 	public Player() {
-		super(640,100, 31,31,25,25);
+		super(640,100, 31,31,23,23);
 	}
 
 	private Background bg;
@@ -186,26 +187,51 @@ public class Player extends BlockingStuff {
 			}
 		}
 		// Prevents going beyond Y coordinate of 250 and 550
-		switch (StartingClass.ScrollingMode) {
-		case 0: // no scrolling
-			scrollingSpeed = 0;
-			break;
-		case 1: // dynamic
-			if (centerY + speedY <= 249) {
-				scrollingSpeed = speedY;
-			} else if (centerY + speedY >= 550) {
-				scrollingSpeed = speedY;
-			} else {
-				scrollingSpeed = speedY - speedY/2;
+		if (StartingClass.levelwithyscrolling) {
+			switch (StartingClass.ScrollingMode) {
+			case 0: // no scrolling
+				scrollingSpeedY = 0;
+				break;
+			case 1: // dynamic
+				if (centerY + speedY <= 249) {
+					scrollingSpeedY = speedY;
+				} else if (centerY + speedY >= 550) {
+					scrollingSpeedY = speedY;
+				} else {
+					scrollingSpeedY = speedY - speedY/2;
+				}
+				break;
+			case 2: // player centered
+				scrollingSpeedY = speedY;
+				break;
+			case 3: // player controlled.
+				break;
 			}
-			break;
-		case 2: // player centered
-			scrollingSpeed = speedY;
-			break;
-		case 3: // player controlled.
-			break;
+			speedY -= scrollingSpeedY;
 		}
-		speedY -= scrollingSpeed;
+		if (StartingClass.levelwithxscrolling) {
+			switch (StartingClass.ScrollingMode) {
+			case 0: // no scrolling
+				scrollingSpeedX = 0;
+				break;
+			case 1: // dynamic
+				if (centerX + speedX <= 350) {
+					scrollingSpeedX = speedX;
+				} else if (centerX + speedX >= 930) {
+					scrollingSpeedX = speedX;
+				} else {
+					scrollingSpeedX = speedX - speedX/2;
+				}
+				break;
+			case 2: // player centered
+				scrollingSpeedX = speedX;
+				break;
+			case 3: // player controlled.
+				break;
+			}
+			speedX -= scrollingSpeedX;
+		}
+		
 			
 		
 		/*
@@ -227,6 +253,12 @@ public class Player extends BlockingStuff {
 			centerX = 31;
 		} else if (centerX + speedX >= 1249) {
 			centerX = 1248;
+		}
+		// Prevents going beyond X coordinate of 0 or 800
+		if (centerY + speedY <= 30) {
+			centerY = 31;
+		} else if (centerY + speedY >= 1249) {
+			centerY = 1248;
 		}
 		centerY += speedY;
 		centerX += speedX;
@@ -279,7 +311,8 @@ public class Player extends BlockingStuff {
 		if (controlledismovingdown && canmovedown) {
 			speedY = MOVESPEED;
 		}
-		speedY -= scrollingSpeed;
+		speedY -= scrollingSpeedY;
+		speedX -= scrollingSpeedX;
 		centerY += speedY;
 		centerX += speedX;
 		R.setRect(centerX +speedX- 25, centerY +speedY- 25, 50, 50);
@@ -444,12 +477,20 @@ public class Player extends BlockingStuff {
 		MOVESPEED = mOVESPEED;
 	}
 	
-	public int getScrollingSpeed() {
-		return this.scrollingSpeed;
+	public int getScrollingSpeedX() {
+		return this.scrollingSpeedX;
 	}
 	
-	public void setScrollingSpeed(int scrollingspeed) {
-		this.scrollingSpeed = scrollingspeed;
+	public int getScrollingSpeedY() {
+		return this.scrollingSpeedY;
+	}
+	
+	public void setScrollingSpeedY(int scrollingspeed) {
+		this.scrollingSpeedY = scrollingspeed;
+	}
+	
+	public void setScrollingSpeedX(int scrollingspeedX) {
+		this.scrollingSpeedX = scrollingspeedX;
 	}
 	
 	public int getHealth() {
