@@ -19,7 +19,10 @@ public class Level {
 			ans = "background1.png";
 			break;
 		case 2:
-			ans = "background.png";
+			ans = "background2.png";
+			break;
+		case 3:
+			ans = "background3.png";
 			break;
 		}
 		return ans;
