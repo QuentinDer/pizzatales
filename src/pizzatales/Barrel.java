@@ -3,7 +3,7 @@ package pizzatales;
 public class Barrel extends DestroyableTile {
 
 	public Barrel(int x, int y) {
-		super(x, y, 3);
+		super(x, y, 2);
 	}
 
 	@Override

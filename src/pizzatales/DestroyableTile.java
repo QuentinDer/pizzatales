@@ -9,13 +9,16 @@ public abstract class DestroyableTile extends Tile {
 		this.life = life;
 	}
 	
-	public void damage(int dmg) {
+	public boolean damage(int dmg) {
 		life -= dmg;
-		if (life < 0) {
+		if (life < 1) {
 			StartingClass.getTilearray().remove(this);
+			StartingClass.destroyabletiles.remove(this);
 			StartingClass.map[posx][posy] = null;
 			doOnDestruction();
+			return true;
 		}
+		return false;
 	}
 	
 	protected abstract void doOnDestruction();

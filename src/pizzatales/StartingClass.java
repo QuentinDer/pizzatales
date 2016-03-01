@@ -44,7 +44,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	
 	public static int difficultylevel = 3;
 	public static final boolean TESTMODE = true;
-	public static int currentlevel = TESTMODE?9:0;
+	public static int currentlevel = TESTMODE?10:0;
 
 	private int weaponindex;
 	private int armorindex;
@@ -76,6 +76,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public static ArrayList<ArrayList<Enemy>> hiddenenemies = new ArrayList<ArrayList<Enemy>>();
 	public static ArrayList<ArrayList<Tile>> hiddentiles = new ArrayList<ArrayList<Tile>>();
 	public static ArrayList<ArrayList<Item>> hiddenitems = new ArrayList<ArrayList<Item>>();
+	public static ArrayList<DestroyableTile> destroyabletiles = new ArrayList<DestroyableTile>();
 	public ArrayList<EntryDoor> entrydoors = new ArrayList<EntryDoor>();
 	public static EntryDoor activatedentry = null;
 	public static int isInArena = -1;
@@ -377,6 +378,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					tilearray.add(t);
 					if (ch == 'd')
 						doors.put(height*i+j,t);
+					if (DestroyableTile.class.isInstance(t))
+						destroyabletiles.add((DestroyableTile)t);
 				}
 				if (EnemyFactory.isTileTypeSupported(ch)) {
 					getEnemyarray().add(EnemyFactory.getEnemy(i+deltapx, j+deltapy, ch));
@@ -545,8 +548,20 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					updatePlayer();
 					callEnemiesAIs();
 					updateEnemies();
-					
-
+					int exi = 0;
+					int exsize = explosions.size();
+					while (exi < exsize) {
+						Explosion e = explosions.get(exi);
+						int dt = 0;
+						while (dt < destroyabletiles.size()) {
+							if (e.isProcing() && e.getR().intersects(destroyabletiles.get(dt).R)) {
+								if (!destroyabletiles.get(dt).damage(e.damage))
+									dt++;
+							} else
+								dt++;
+						}
+						exi++;
+					}
 					bg.update();
 					// animate();
 					updateTiles();
@@ -724,6 +739,20 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 									map[e.posx][e.posy] = null;
 								player.controlledupdate();
 								updateEnemies();
+								exi = 0;
+								exsize = 0;
+								while (exi < exsize) {
+									Explosion e = explosions.get(exi);
+									int dt = 0;
+									while (dt < destroyabletiles.size()) {
+										if (e.isProcing() && e.getR().intersects(destroyabletiles.get(dt).R)) {
+											if (!destroyabletiles.get(dt).damage(e.damage))
+												dt++;
+										} else
+											dt++;
+									}
+									exi++;
+								}
 								bg.update();
 								updateTiles();
 								for (Tile t : activatedentry.getDoors())
@@ -957,19 +986,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		if (state != GameState.Dead) {
 			g.drawImage(background, bg.getCenterX(), bg.getCenterY(), this);
 			paintItems(g);
-			for (Explosion e : explosions) {
-				g.drawImage(e.getSprite(), e.getR().x, e.getR().y, this);
-			}
-			ArrayList<Projectile> projectiles = player.getProjectiles();
-			for (Enemy e : getEnemyarray()) {
-				if (!e.alive) {
-					g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
-					for (int j = 0; j < e.getProjectiles().size(); j++) {
-						Projectile p = e.getProjectiles().get(j);
-						g.drawImage(p.getSprite(), p.getCenterX()-p.halfsize, p.getCenterY()-p.halfsize, this);
-					}
-				}
-			}
 			for (int y = 0; y < height; y++) {
 				for (int x = 0; x < width; x++) {
 					if (null != map[x][y]) {
@@ -1033,6 +1049,19 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					}
 				}
 			}*/
+			for (Explosion e : explosions) {
+				g.drawImage(e.getSprite(), e.getR().x, e.getR().y, this);
+			}
+			ArrayList<Projectile> projectiles = player.getProjectiles();
+			for (Enemy e : getEnemyarray()) {
+				if (!e.alive) {
+					g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
+					for (int j = 0; j < e.getProjectiles().size(); j++) {
+						Projectile p = e.getProjectiles().get(j);
+						g.drawImage(p.getSprite(), p.getCenterX()-p.halfsize, p.getCenterY()-p.halfsize, this);
+					}
+				}
+			}
 			for (int i = 0; i < projectiles.size(); i++) {
 				Projectile p = projectiles.get(i);
 				// g.setColor(Color.YELLOW);
@@ -1395,8 +1424,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public static Background getBg() {
@@ -1449,5 +1476,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		arenacenters.clear();
 		hitpoints.clear();
 		entrydoors.clear();
+		destroyabletiles.clear();
 	}
 }
