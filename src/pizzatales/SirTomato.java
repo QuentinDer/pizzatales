@@ -63,14 +63,7 @@ public class SirTomato extends Enemy {
 					isDashing = false;
 					speed = basicspeed;
 					currentSprite = staySprite;
-					if (isSlashing) {
-						if (isSlashingRight)
-							centerX -= 50;
-						else
-							centerX += 50;
-						centerY += 15;
-						isSlashing = false;
-					}
+					isSlashing = false;
 				}
 			}
 			if (isDashing && speedX != dashSpeedX) {
@@ -149,48 +142,59 @@ public class SirTomato extends Enemy {
 					if (player.getCenterX() > getCenterX()) {
 						currentSprite = slashSpriteRight;
 						isSlashingRight = true;
-						centerX += 50;
-						centerY -= 15;
 					} else {
 						currentSprite = slashSpriteLeft;
 						isSlashingRight = false;
-						centerX -= 50;
-						centerY -= 15;
 					}
 				}
 				if (tcd == 0 && diffx > 300) {
 					if (player.getCenterX() < getCenterX()) {
-						projectiles.add(new TomatoProjectile(centerX - 30,centerY,-1,0));
-						stopMoving();
-						currentSprite = sirtomatothrowleft;
-						inAnimation = maxInAnimation;
-						tcd = tatocd;
+						if (StartingClass.map[posx+1][posy] == null) {
+							projectiles.add(new TomatoProjectile(centerX - 30,centerY,-1,0));
+							stopMoving();
+							currentSprite = sirtomatothrowleft;
+							inAnimation = maxInAnimation;
+							tcd = tatocd;
+						}
 					} else {
-						projectiles.add(new TomatoProjectile(centerX + 30,centerY,1,0));
-						stopMoving();
-						currentSprite = sirtomatothrowright;
-						inAnimation = maxInAnimation;
-						tcd = tatocd;
+						if (StartingClass.map[posx-1][posy] == null) {
+							projectiles.add(new TomatoProjectile(centerX + 30,centerY,1,0));
+							stopMoving();
+							currentSprite = sirtomatothrowright;
+							inAnimation = maxInAnimation;
+							tcd = tatocd;
+						}
 					}
 				}
 				if (dcd == 0 && diffx > 120 && Math.abs(player.posy-posy)<=1) {
+					boolean candash = true;
 					if (player.getCenterX() > getCenterX()) {
-						currentSprite = dashSpriteRight;
-						moveRight();
-						dashSpeedX = dashspeed;
+						for (int i = posx+1; i < player.posx; i++)
+							candash = candash && (StartingClass.map[i][posy] == null);
+						if (candash) {
+							currentSprite = dashSpriteRight;
+							moveRight();
+							dashSpeedX = dashspeed;
+						}
 					} else {
-						currentSprite = dashSpriteLeft;
-						moveLeft();
-						dashSpeedX = -dashspeed;
+						for (int i = posx-1; i > player.posx; i--)
+							candash = candash && (StartingClass.map[i][posy] == null);
+						if (candash) {
+							currentSprite = dashSpriteLeft;
+							moveLeft();
+							dashSpeedX = -dashspeed;
+						}
 					}
-					speed = dashspeed;
-					halfsizex = 100;
-					halfrsizex = 90;
-					halfrsizey = 35;
-					isDashing = true;
-					inAnimation = 50;
-					dcd = dashcd;
-					R.setBounds(getCenterX() - halfrsizex + speedX, getCenterY() - halfrsizey + speedY, 2*halfrsizex, 2*halfrsizey);
+					if (candash) {
+						speed = dashspeed;
+						halfsizex = 100;
+						halfrsizex = 90;
+						halfrsizey = 35;
+						isDashing = true;
+						inAnimation = 50;
+						dcd = dashcd;
+						R.setBounds(getCenterX() - halfrsizex + speedX, getCenterY() - halfrsizey + speedY, 2*halfrsizex, 2*halfrsizey);
+					}
 				}
 			}
 			movementTime++;
@@ -271,12 +275,14 @@ public class SirTomato extends Enemy {
 				speed = basicspeed;
 			}
 			if (isSlashing && !hasSlashed) {
-				hasSlashed = true;
-				if (player.getArmor().defense - slashdmg < 0) {
-					player.setHealth(player.getHealth() - slashdmg + player.getArmor().defense);
-					player.getArmor().setDefense(0);
-				} else {
-					player.getArmor().setDefense(player.getArmor().getDefense() - slashdmg);
+				if ((isSlashingRight && player.getCenterX() > centerX - 20 && player.getCenterY() < centerY + 10) || (!isSlashingRight && player.getCenterX() < centerX + 20 && player.getCenterY() < centerY + 10)) {
+					hasSlashed = true;
+					if (player.getArmor().defense - slashdmg < 0) {
+						player.setHealth(player.getHealth() - slashdmg + player.getArmor().defense);
+						player.getArmor().setDefense(0);
+					} else {
+						player.getArmor().setDefense(player.getArmor().getDefense() - slashdmg);
+					}
 				}
 			}
 		}

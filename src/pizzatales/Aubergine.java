@@ -5,7 +5,7 @@ import java.awt.Image;
 public class Aubergine extends Enemy {
 
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
-	private final static int range = 280;
+	private final static int range = 380;
 
 	public Aubergine(int centerX, int centerY) {
 		super(centerX,centerY, new Smg(), 4, 2, 31, 31, 26, 26);
@@ -191,12 +191,12 @@ public class Aubergine extends Enemy {
 			if (weapon.isReady2Fire()) {
 				int diffx = Math.abs(getCenterX() - player.getCenterX());
 				int diffy = Math.abs(getCenterY() - player.getCenterY());
-				if (diffx > diffy && diffy < 120 && diffx < 330) {
+				if (diffx > diffy && diffy < 120 && diffx < 430) {
 					if (player.getCenterX() > getCenterX())
 						shootRight();
 					else
 						shootLeft();
-				} else if (diffx < 120 && diffy < 330){
+				} else if (diffx < 120 && diffy < 430){
 					if (player.getCenterY() > getCenterY())
 						shootDown();
 					else

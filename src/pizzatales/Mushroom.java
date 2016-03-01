@@ -6,7 +6,7 @@ public class Mushroom extends Enemy {
 
 	protected boolean isShooting;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
-	private final static int range = 470;
+	private final static int range = 670;
 
 	public Mushroom(int centerX, int centerY) {
 		super(centerX,centerY, new Rifle(), 4, 3, 31, 31, 26, 26);
@@ -192,12 +192,12 @@ public class Mushroom extends Enemy {
 			if (weapon.isReady2Fire()) {
 				int diffx = Math.abs(getCenterX() - player.getCenterX());
 				int diffy = Math.abs(getCenterY() - player.getCenterY());
-				if (diffx > diffy && diffy < 120 && diffx < 530) {
+				if (diffx > diffy && diffy < 120 && diffx < 730) {
 					if (player.getCenterX() > getCenterX())
 						shootRight();
 					else
 						shootLeft();
-				} else if (diffx < 120 && diffy < 530){
+				} else if (diffx < 120 && diffy < 730){
 					if (player.getCenterY() > getCenterY())
 						shootDown();
 					else
