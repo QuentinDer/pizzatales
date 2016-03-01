@@ -7,8 +7,8 @@ public class Lava extends Item {
 	int timer = 0;
 	int freq = 30;
 	
-	public Lava(int x, int y, int deltapy, boolean onetimeeffect) {
-		super(x, y, deltapy, onetimeeffect);
+	public Lava(int x, int y, int deltapx, int deltapy, boolean onetimeeffect) {
+		super(x, y, deltapx, deltapy, onetimeeffect);
 	}
 
 	public static Image lavasprite;

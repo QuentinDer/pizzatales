@@ -31,11 +31,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private Image blooddrop;
 	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, 
 		tileCaveRock, tileGate, tileCaveExit, tileLavaPuddle, tileWaterFlow, 
-		tilePikes, tileFlag, tileRock, tileDecoy;
-	private int walkCounter = 1;
+		tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel;
 	private URL base;
 	private Graphics second;
-	private static Background bg1, bg2;
+	private static Background bg;
 	private static PathFinder pf;
 	private Animation anim;
 	public static ArrayList<Firearm> playerweapons;
@@ -66,7 +65,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public static int width;
 	public static int height;
 	
-	private ArrayList<Tile> tilearray = new ArrayList<Tile>();
+	private static ArrayList<Tile> tilearray = new ArrayList<Tile>();
 	private ArrayList<Item> items = new ArrayList<Item>();
 	private ArrayList<Item> leavingitems = new ArrayList<Item>();
 	public static ArrayList<Enemy> enemyarray = new ArrayList<Enemy>();
@@ -147,6 +146,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		tileDecoy = getImage(base, "data/decoy.png");
 		tilePikes = getImage(base, "data/pikes.png");
 		tileFlag = getImage(base, "data/flag.png");
+		tileBarrel = getImage(base, "data/barrel.png");
 		
 		blooddrop = getImage(base, "data/blooddrop.png");
 		Gun.leftSprite = getImage(base, "data/pistol1.png");
@@ -232,6 +232,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		
 		BazookaBulletExplosion.bazookaexplosionsprite = getImage(base, "data/bazookaexplosion.png");
 		TomatoProjectileExplosion.tomatoexplosionsprite = getImage(base, "data/sirtomatoprojectileexplosion.png");
+		BarrelExplosion.explosionsprite = getImage(base, "data/barrelexplosion.png");
 
 		ArmorPotion.armorpotionsprite = getImage(base, "data/armor.png");
 		HealthPotion.healthpotionsprite = getImage(base, "data/health.png");
@@ -280,11 +281,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 		player.setArmor(playerarmor.get(armorindex));
 
-		bg1 = new Background(0, -200);
-		bg2 = new Background(0, 3000);
-		player.setBackground(bg1);
-		bginitx = bg1.getCenterX();
-		bginity = bg1.getCenterY() - 15;
+		bg = new Background(0, 0);
+		player.setBackground(bg);
+		bginitx = bg.getCenterX();
+		bginity = bg.getCenterY() - 15;
 
 		// Initialize Tiles
 		try {
@@ -322,30 +322,48 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		HashMap<Integer, HiddenTrigger> hiddentriggers = new HashMap<Integer, HiddenTrigger>();
 		
 		int posplayery = 0;
+		int posplayerx = 0;
 		
 		for (int j = 0; j < height; j++) {
 			line = lines.get(j);
 			for (int i = 0; i < width; i++) {
 				if (i < line.length()) {
 					charmap[i][j] = line.charAt(i);
-					if (charmap[i][j] == 'U')
+					if (charmap[i][j] == 'U') {
+						posplayerx = i;
 						posplayery = j;
+					}
 				}
 			}
 		}
-		int deltapy = 8 - posplayery;
-		bginity -= 50*deltapy;
+		int deltapx = 0;
+		int deltapy = 0;
+		if (levelwithxscrolling)
+			deltapx = 13 - posplayerx;
+		if (levelwithyscrolling)
+			deltapy = 8 - posplayery;
+		if (levelwithxscrolling)
+			bginitx = -700;
+		else
+			bginitx = 0;
+		if (levelwithyscrolling)
+			bginity = -400;
+		else
+			bginity = 0;
+		bg.setCenterX(bginitx+50*deltapx);
+		bg.setCenterY(bginity+50*deltapy);
+		bginity -= 15;
 		
 		for (int j = 0; j < height; j++) {
 			for (int i = 0; i < width; i++) {
 				char ch = charmap[i][j];
 				if (ch =='U') {
-					player.setCenterX(50*i+25);
+					player.setCenterX(50*(i+deltapx)+25);
 					player.setCenterY(50*(j+deltapy)+40);
 					map[player.posx][player.posy] = player;
 				}
 				if (ItemFactory.isItemSupported(ch)) {
-					Item it = ItemFactory.getItem(i, j, deltapy, ch);
+					Item it = ItemFactory.getItem(i, j, deltapx, deltapy, ch);
 					items.add(it);
 					if (ch == 'i') {
 						mentrydoors.put(height*i+j,(EntryDoor)it);
@@ -354,14 +372,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						hiddentriggers.put(height*i+j, (HiddenTrigger)it);
 					}
 				}
-				if (Tile.isTileTypeSupported(ch)) {
-					Tile t = new Tile(i, j+deltapy, ch);
+				if (TileFactory.isTileTypeSupported(ch)) {
+					Tile t = TileFactory.getTile(i+deltapx, j+deltapy, ch);
 					tilearray.add(t);
 					if (ch == 'd')
 						doors.put(height*i+j,t);
 				}
 				if (EnemyFactory.isTileTypeSupported(ch)) {
-					getEnemyarray().add(EnemyFactory.getEnemy(i, j+deltapy, ch));
+					getEnemyarray().add(EnemyFactory.getEnemy(i+deltapx, j+deltapy, ch));
 				}
 			}
 		}
@@ -417,8 +435,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						ArrayList<Item> litems = new ArrayList<Item>();
 						l = 0;
 						while (l < tilearray.size()) {
-							int postx = (tilearray.get(l).getCenterX() - bg1.getCenterX() + bginitx) / 50;
-							int posty = (tilearray.get(l).getCenterY() - bg1.getCenterY() + bginity) / 50;
+							int postx = (tilearray.get(l).getCenterX() - bg.getCenterX() + bginitx) / 50;
+							int posty = (tilearray.get(l).getCenterY() - bg.getCenterY() + bginity) / 50;
 							if (area.containsKey(height*postx+posty)) {
 								tilearray.get(l).hideImage(Level.getHidingImage(currentlevel));
 								ltiles.add(tilearray.get(l));
@@ -427,8 +445,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 								l++;
 						}
 						for (Entry<Integer,Character> entry : area.entrySet()) {
-							if (!Tile.isTileTypeSupported(entry.getValue())) {
-								Tile t = new Tile(entry.getKey()/height, entry.getKey()%height+deltapy, entry.getValue());
+							if (!TileFactory.isTileTypeSupported(entry.getValue())) {
+								Tile t = TileFactory.getTile(entry.getKey()/height, entry.getKey()%height+deltapy, entry.getValue());
 								t.hideImage(Level.getHidingImage(currentlevel));
 								tilearray.add(t);
 								ltiles.add(t);
@@ -436,8 +454,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						}
 						l = 0;
 						while (l < items.size()) {
-							int posix = (items.get(l).getCenterX() - bg1.getCenterX() + bginitx) / 50;
-							int posiy = (items.get(l).getCenterY() - bg1.getCenterY() + bginity) / 50;
+							int posix = (items.get(l).getCenterX() - bg.getCenterX() + bginitx) / 50;
+							int posiy = (items.get(l).getCenterY() - bg.getCenterY() + bginity) / 50;
 							if (area.containsKey(height*posix+posiy)) {
 								litems.add(items.get(l));
 								items.remove(l);
@@ -529,16 +547,15 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					updateEnemies();
 					
 
-					bg1.update();
-					bg2.update();
+					bg.update();
 					// animate();
 					updateTiles();
 					updateItems();
 					repaint(); // this calls paint
 				
 					if (isInArena < 0 && activatedentry != null) {
-						int playerposx = (player.getCenterX()-bg1.getCenterX()+bginitx)/50;
-						int playerposy = (player.getCenterY()-bg1.getCenterY()+bginity)/50;
+						int playerposx = (player.getCenterX()-bg.getCenterX()+bginitx)/50;
+						int playerposy = (player.getCenterY()-bg.getCenterY()+bginity)/50;
 						for (Tile t : activatedentry.getDoors()) {
 							map[t.posx][t.posy] = null;
 						}
@@ -558,8 +575,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							}
 							isInArena = activatedentry.isGoingIn();
 							
-							int arenacentery = arenacenters.get(isInArena).getValue() * 50 + bg1.getCenterY() - bginity;
-							int arenacenterx = arenacenters.get(isInArena).getKey() * 50 + bg1.getCenterX() - bginitx;
+							int arenacentery = arenacenters.get(isInArena).getValue() * 50 + bg.getCenterY() - bginity;
+							int arenacenterx = arenacenters.get(isInArena).getKey() * 50 + bg.getCenterX() - bginitx;
 							player.setScrollingSpeedX(0);
 							player.setScrollingSpeedY(0);
 							if (levelwithyscrolling) {
@@ -650,6 +667,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 										Tile t = p.checkCollisionTile();
 										if (null != t) {
 											p.doOnCollision(t);
+											if (DestroyableTile.class.isInstance(t))
+												((DestroyableTile)t).damage(p.damage);
 										}
 										i++;
 									} else {
@@ -666,8 +685,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 										}
 									}
 								}
-								playerposx = (player.getCenterX()-bg1.getCenterX()+bginitx+deltapx)/50;
-								playerposy = (player.getCenterY()-bg1.getCenterY()+bginity+deltapy)/50;
+								playerposx = (player.getCenterX()-bg.getCenterX()+bginitx+deltapx)/50;
+								playerposy = (player.getCenterY()-bg.getCenterY()+bginity+deltapy)/50;
 								map[player.posx][player.posy] = null;
 								if (!foundposition) {
 									switch (pf.getDirection(playerposx, playerposy, activatedentry.getOut().getPosX(), activatedentry.getOut().getPosY(),10, player.canmoveleft, player.canmoveup, player.canmoveright, player.canmovedown, true)) {
@@ -705,14 +724,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 									map[e.posx][e.posy] = null;
 								player.controlledupdate();
 								updateEnemies();
-								bg1.update();
-								bg2.update();
+								bg.update();
 								updateTiles();
 								for (Tile t : activatedentry.getDoors())
 									t.update();
 								updateItems();
 								repaint();
-								arenacentery = arenacenters.get(isInArena).getValue() * 50 + bg1.getCenterY() - bginity;
+								arenacentery = arenacenters.get(isInArena).getValue() * 50 + bg.getCenterY() - bginity;
+								arenacenterx = arenacenters.get(isInArena).getKey() * 50 + bg.getCenterX() - bginitx;
 								if (Math.abs(arenacentery-400) < 20)
 									player.setScrollingSpeedY(0);
 								if (Math.abs(arenacenterx-640) < 20)
@@ -770,10 +789,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							finaldeltay = 400 - player.getCenterY() - deltay*9;
 						}
 						for (int l = 0; l < 9; l++) {
-							bg1.setCenterX(bg1.getCenterX()+deltax);
-							bg1.setCenterY(bg1.getCenterY()+deltay);
-							bg2.setCenterX(bg2.getCenterX()+deltax);
-							bg2.setCenterY(bg2.getCenterY()+deltay);
+							bg.setCenterX(bg.getCenterX()+deltax);
+							bg.setCenterY(bg.getCenterY()+deltay);
 							for (Tile t : tilearray) {
 								t.setCenterX(t.getCenterX()+deltax);
 								t.setCenterY(t.getCenterY()+deltay);
@@ -821,10 +838,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 								}
 							}
 						}
-						bg1.setCenterX(bg1.getCenterX()+finaldeltax);
-						bg1.setCenterY(bg1.getCenterY()+finaldeltay);
-						bg2.setCenterX(bg2.getCenterX()+finaldeltax);
-						bg2.setCenterY(bg2.getCenterY()+finaldeltay);
+						bg.setCenterX(bg.getCenterX()+finaldeltax);
+						bg.setCenterY(bg.getCenterY()+finaldeltay);
 						for (Tile t : tilearray) {
 							t.setCenterX(t.getCenterX()+finaldeltax);
 							t.setCenterY(t.getCenterY()+finaldeltay);
@@ -870,13 +885,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							}
 						}
 						for (Item it : hiddenitems.get(revealHidden)) {
-							it.setCenterX(50*it.posx+bg1.getCenterX()-bginitx);
-							it.setCenterY(50*it.posy+bg1.getCenterY()-bginity);
+							it.setCenterX(50*it.posx+bg.getCenterX()-bginitx);
+							it.setCenterY(50*it.posy+bg.getCenterY()-bginity);
 							items.add(it);
 						}
 						for (Enemy e : hiddenenemies.get(revealHidden)) {
-							e.setCenterX(50*e.posx+bg1.getCenterX()-bginitx);
-							e.setCenterY(50*e.posy+bg1.getCenterY()-bginity);
+							e.setCenterX(50*e.posx+bg.getCenterX()-bginitx);
+							e.setCenterY(50*e.posy+bg.getCenterY()-bginity);
 							enemyarray.add(e);
 						}
 						hiddentiles.get(revealHidden).clear();
@@ -884,11 +899,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						hiddenenemies.get(revealHidden).clear();
 						revealHidden = -1;
 					}
-					
-					if (walkCounter == 1000) {
-						walkCounter = 0;
-					}
-					walkCounter++;
 					if (player.getHealth() < 1) {
 						state = GameState.Dead;
 						soundtrack.stop();
@@ -897,11 +907,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				if (state == GameState.LevelEnded) {
 					currentlevel++;
 					this.clean();
-					bg1.setCenterX(0);
-					bg1.setCenterY(-200);
-					bg2.setCenterX(0);
-					bg2.setCenterY(3000);
-					bginity = bg1.getCenterY();
+					bg.setCenterX(0);
+					bg.setCenterY(0);
+					bginity = bg.getCenterY() - 15;
 					background = getImage(base, "data/"+Level.getBackground(currentlevel));
 					try {
 						this.loadMap("data/"+Level.getMapName(currentlevel));
@@ -947,8 +955,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public void paint(Graphics g) {
 		super.paint(g);
 		if (state != GameState.Dead) {
-			g.drawImage(background, bg1.getCenterX(), bg1.getCenterY(), this);
-			g.drawImage(background, bg2.getCenterX(), bg2.getCenterY(), this);
+			g.drawImage(background, bg.getCenterX(), bg.getCenterY(), this);
 			paintItems(g);
 			for (Explosion e : explosions) {
 				g.drawImage(e.getSprite(), e.getR().x, e.getR().y, this);
@@ -1150,6 +1157,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				Tile t = p.checkCollisionTile();
 				if (null != t) {
 					p.doOnCollision(t);
+					if (DestroyableTile.class.isInstance(t))
+						((DestroyableTile)t).damage(p.damage);
 				}
 				i++;
 			} else {
@@ -1194,6 +1203,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					Tile t = p.checkCollisionTile();
 					if (null != t) {
 						p.doOnCollision(t);
+						if (DestroyableTile.class.isInstance(t))
+							((DestroyableTile)t).damage(p.damage);
 					}
 					if (p.canbedestroyed) {
 						for (Projectile pe : player.getProjectiles()) {
@@ -1388,20 +1399,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	}
 
-	public static Background getBg1() {
-		return bg1;
+	public static Background getBg() {
+		return bg;
 	}
 
-	public static void setBg1(Background bg1) {
-		StartingClass.bg1 = bg1;
-	}
-
-	public static Background getBg2() {
-		return bg2;
-	}
-
-	public static void setBg2(Background bg2) {
-		StartingClass.bg2 = bg2;
+	public static void setBg(Background bg) {
+		StartingClass.bg = bg;
 	}
 
 	public static Player getPlayer() {
@@ -1428,12 +1431,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	 * = enemyarray; }
 	 */
 
-	public ArrayList<Tile> getTilearray() {
+	public static ArrayList<Tile> getTilearray() {
 		return tilearray;
 	}
 
-	public void setTilearray(ArrayList<Tile> tilearray) {
-		this.tilearray = tilearray;
+	public static void setTilearray(ArrayList<Tile> tilearray_) {
+		tilearray = tilearray_;
 	}
 
 	public void clean() {

@@ -51,6 +51,12 @@ public abstract class Explosion extends Stuff {
 	}
 	
 	@Override
+	public void setCenterX(int centerX) {
+		super.setCenterX(centerX);
+		rectP = new Rectangle(getCenterX() - halfsize, getCenterY() - halfsize, size, size);
+	}
+	
+	@Override
 	public void setCenterY(int centerY) {
 		super.setCenterY(centerY);
 		rectP.setBounds(getCenterX() - halfsize, getCenterY() - halfsize, size, size);

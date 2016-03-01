@@ -84,17 +84,17 @@ public class Player extends BlockingStuff {
 			if (posy != 0 && null != StartingClass.map[posx-1][posy-1] && R.intersects(StartingClass.map[posx-1][posy-1].R)) {
 				int diffX = Math.abs(StartingClass.map[posx-1][posy-1].getCenterX()-centerX);
 				int diffY = Math.abs(StartingClass.map[posx-1][posy-1].getCenterY()-centerY);
-				if (diffX > diffY && diffY < 45)
+				if (diffX > diffY && diffY < 42)
 					canmoveleft = false;
-				else if (diffX < diffY && diffX < 45)
+				else if (diffX < diffY && diffX < 42)
 					canmoveup = false;
 			}
 			if (posy != StartingClass.height - 1 && null != StartingClass.map[posx-1][posy+1] && R.intersects(StartingClass.map[posx-1][posy+1].R)) {
 				int diffX = Math.abs(StartingClass.map[posx-1][posy+1].getCenterX()-centerX);
 				int diffY = Math.abs(StartingClass.map[posx-1][posy+1].getCenterY()-centerY);
-				if (diffX > diffY && diffY < 45)
+				if (diffX > diffY && diffY < 42)
 					canmoveleft = false;
-				else if (diffX < diffY && diffX < 45)
+				else if (diffX < diffY && diffX < 42)
 					canmovedown = false;
 			}
 		}
@@ -105,17 +105,17 @@ public class Player extends BlockingStuff {
 			if (posy != 0 && null != StartingClass.map[posx+1][posy-1] && R.intersects(StartingClass.map[posx+1][posy-1].R)) {
 				int diffX = Math.abs(StartingClass.map[posx+1][posy-1].getCenterX()-centerX);
 				int diffY = Math.abs(StartingClass.map[posx+1][posy-1].getCenterY()-centerY);
-				if (diffX > diffY && diffY < 45)
+				if (diffX > diffY && diffY < 42)
 					canmoveright = false;
-				else if (diffX < diffY && diffX < 45)
+				else if (diffX < diffY && diffX < 42)
 					canmoveup = false;
 			}
 			if (posy != StartingClass.height - 1 && null != StartingClass.map[posx+1][posy+1] && R.intersects(StartingClass.map[posx+1][posy+1].R)) {
 				int diffX = Math.abs(StartingClass.map[posx+1][posy+1].getCenterX()-centerX);
 				int diffY = Math.abs(StartingClass.map[posx+1][posy+1].getCenterY()-centerY);
-				if (diffX > diffY && diffY < 45)
+				if (diffX > diffY && diffY < 42)
 					canmoveright = false;
-				else if (diffX < diffY && diffX < 45)
+				else if (diffX < diffY && diffX < 42)
 					canmovedown = false;
 			}
 		}
@@ -193,9 +193,9 @@ public class Player extends BlockingStuff {
 				scrollingSpeedY = 0;
 				break;
 			case 1: // dynamic
-				if (centerY + speedY <= 249) {
+				if (centerY + speedY <= 249 && speedY < 0) {
 					scrollingSpeedY = speedY;
-				} else if (centerY + speedY >= 550) {
+				} else if (centerY + speedY >= 550 && speedY > 0) {
 					scrollingSpeedY = speedY;
 				} else {
 					scrollingSpeedY = speedY - speedY/2;
@@ -207,6 +207,8 @@ public class Player extends BlockingStuff {
 			case 3: // player controlled.
 				break;
 			}
+			if (scrollingSpeedY>0 && (bg.getCenterY()-scrollingSpeedY - StartingClass.bginity < - (StartingClass.height-16) * 50) || (scrollingSpeedY<0 && (bg.getCenterY()-scrollingSpeedY - StartingClass.bginity> 0)))
+				scrollingSpeedY = 0;
 			speedY -= scrollingSpeedY;
 		}
 		if (StartingClass.levelwithxscrolling) {
@@ -215,9 +217,9 @@ public class Player extends BlockingStuff {
 				scrollingSpeedX = 0;
 				break;
 			case 1: // dynamic
-				if (centerX + speedX <= 350) {
+				if (centerX + speedX <= 350 && speedX < 0) {
 					scrollingSpeedX = speedX;
-				} else if (centerX + speedX >= 930) {
+				} else if (centerX + speedX >= 930 && speedX > 0) {
 					scrollingSpeedX = speedX;
 				} else {
 					scrollingSpeedX = speedX - speedX/2;
@@ -229,6 +231,8 @@ public class Player extends BlockingStuff {
 			case 3: // player controlled.
 				break;
 			}
+			if ((scrollingSpeedX > 0 && bg.getCenterX()-scrollingSpeedX - StartingClass.bginitx < - (StartingClass.width-27) * 50) || (scrollingSpeedX < 0 && bg.getCenterX()-scrollingSpeedX - StartingClass.bginitx>0))
+				scrollingSpeedX = 0;
 			speedX -= scrollingSpeedX;
 		}
 		
@@ -257,8 +261,8 @@ public class Player extends BlockingStuff {
 		// Prevents going beyond X coordinate of 0 or 800
 		if (centerY + speedY <= 30) {
 			centerY = 31;
-		} else if (centerY + speedY >= 1249) {
-			centerY = 1248;
+		} else if (centerY + speedY >= 769) {
+			centerY = 769;
 		}
 		centerY += speedY;
 		centerX += speedX;

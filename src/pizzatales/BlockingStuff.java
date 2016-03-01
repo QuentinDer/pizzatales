@@ -7,7 +7,7 @@ public abstract class BlockingStuff extends Stuff {
 
 	protected int posx;
 	protected int posy;
-	protected Background bg = StartingClass.getBg1();
+	protected Background bg = StartingClass.getBg();
 	public int halfsizex;
 	public int halfsizey;
 	protected int halfrsizex;

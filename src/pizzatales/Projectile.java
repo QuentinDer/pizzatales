@@ -16,7 +16,7 @@ public abstract class Projectile extends Stuff {
 	protected int size;
 	protected int halfsize;
 	public int damage = 1;
-	private Background bg = StartingClass.getBg1();
+	private Background bg = StartingClass.getBg();
 
 	public Projectile(int startX, int startY, float vectorX, float vectorY, int speed, int damage, int size, int halfsize, int range) {
 		super(startX, startY);
@@ -107,6 +107,12 @@ public abstract class Projectile extends Stuff {
 
 	public Rectangle getR() {
 		return rectP;
+	}
+	
+	@Override
+	public void setCenterX(int centerX) {
+		super.setCenterX(centerX);
+		rectP = new Rectangle(getCenterX() - halfsize, getCenterY() - halfsize, size, size);
 	}
 	
 	@Override

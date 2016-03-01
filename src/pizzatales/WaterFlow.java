@@ -4,8 +4,8 @@ import java.awt.Image;
 
 public class WaterFlow extends Item {
 	
-	public WaterFlow(int x, int y, int deltapy, boolean onetimeeffect) {
-		super(x, y, deltapy, onetimeeffect);
+	public WaterFlow(int x, int y, int deltapx, int deltapy, boolean onetimeeffect) {
+		super(x, y, deltapx, deltapy, onetimeeffect);
 	}
 
 	public static Image waterflowsprite;

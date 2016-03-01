@@ -29,6 +29,7 @@ public abstract class Enemy extends BlockingStuff {
 	private boolean ismovingup;
 	private boolean ismovingdown;
 	private boolean sleepy = false;
+	private boolean hasSeenU = false;
 	public int halfbar = 22;
 	protected int range;
 	
@@ -180,11 +181,13 @@ public abstract class Enemy extends BlockingStuff {
 			posy = (getCenterY() - bg.getCenterY() + StartingClass.bginity) / 50;
 			StartingClass.map[posx][posy] = this;
 			animate();
+			if (!hasSeenU && centerX + halfsizex > 0 && centerX - halfsizex< 1280 && centerY + halfsizey > 0 && centerY - halfsizey < 800)
+				hasSeenU = true;
 		}
 	}
 
 	public void launchAI() {
-		if (!sleepy)
+		if (!sleepy && hasSeenU)
 			callAI();
 	}
 	

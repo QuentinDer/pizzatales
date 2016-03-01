@@ -9,38 +9,38 @@ public class ItemFactory {
 		return itemslist.contains(test);
 	}
 	
-	public static Item getItem(int x, int y, int deltapy, char c) {
+	public static Item getItem(int x, int y, int deltapx, int deltapy, char c) {
 		Item i = null;
 		switch(c) {
 		case 'p':
-			i = new PizzaBox(x,y,deltapy,true);
+			i = new PizzaBox(x,y,deltapx,deltapy,true);
 			break;
 		case 'h':
-			i = new HealthPotion(x,y,deltapy, true);
+			i = new HealthPotion(x,y,deltapx,deltapy, true);
 			break;
 		case 'a':
-			i = new ArmorPotion(x,y,deltapy, true);
+			i = new ArmorPotion(x,y, deltapx,deltapy, true);
 			break;
 		case 'i':
-			i = new EntryDoor(x,y,deltapy, true);
+			i = new EntryDoor(x,y,deltapx,deltapy, true);
 			break;
 		case 'l':
-			i = new Lava(x, y,deltapy, false);
+			i = new Lava(x, y,deltapx,deltapy, false);
 			break;
 		case 'o':
-			i = new WaterFlow(x, y,deltapy, false);
+			i = new WaterFlow(x, y,deltapx,deltapy, false);
 			break;
 		case 'x':
-			i = new LevelExit(x, y,deltapy, true);
+			i = new LevelExit(x, y,deltapx,deltapy, true);
 			break;
 		case 'm':
-			i = new HiddenTrigger(x, y,deltapy, true);
+			i = new HiddenTrigger(x, y,deltapx,deltapy, true);
 			break;
 		case 'u':
-			i = new WaterPuddle(x, y, deltapy, false);
+			i = new WaterPuddle(x, y,deltapx, deltapy, false);
 			break;
 		case 'b':
-			i = new WoodBridge(x, y, deltapy, false);
+			i = new WoodBridge(x, y, deltapx, deltapy, false);
 			break;
 		}
 		return i;

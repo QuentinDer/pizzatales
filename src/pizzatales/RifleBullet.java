@@ -34,6 +34,8 @@ public class RifleBullet extends Projectile {
 	@Override
 	public void doOnCollision(Tile t) {
 		visible = false;
+		if (DestroyableTile.class.isInstance(t))
+			StartingClass.hitpoints.add(new HitPoint(t,(getCenterX()-t.getCenterX())/2,(getCenterY()-t.getCenterY())/2));
 	}
 
 	@Override
