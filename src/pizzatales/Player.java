@@ -207,7 +207,9 @@ public class Player extends BlockingStuff {
 			case 3: // player controlled.
 				break;
 			}
-			if (scrollingSpeedY>0 && (bg.getCenterY()-scrollingSpeedY - StartingClass.bginity < - (StartingClass.height-16) * 50) || (scrollingSpeedY<0 && (bg.getCenterY()-scrollingSpeedY - StartingClass.bginity> 0)))
+			if (scrollingSpeedY>0 && 
+					(bg.getCenterY()-scrollingSpeedY - StartingClass.bginity < - (StartingClass.height-16) * 50) 
+					|| (scrollingSpeedY<0 && (bg.getCenterY()-scrollingSpeedY - StartingClass.bginity> 0)))
 				scrollingSpeedY = 0;
 			speedY -= scrollingSpeedY;
 		}
@@ -231,7 +233,9 @@ public class Player extends BlockingStuff {
 			case 3: // player controlled.
 				break;
 			}
-			if ((scrollingSpeedX > 0 && bg.getCenterX()-scrollingSpeedX - StartingClass.bginitx < - (StartingClass.width-27) * 50) || (scrollingSpeedX < 0 && bg.getCenterX()-scrollingSpeedX - StartingClass.bginitx>0))
+			if ((scrollingSpeedX > 0 && 
+					bg.getCenterX()-scrollingSpeedX - StartingClass.bginitx < - (StartingClass.width-27) * 50) 
+					|| (scrollingSpeedX < 0 && bg.getCenterX()-scrollingSpeedX - StartingClass.bginitx>0))
 				scrollingSpeedX = 0;
 			speedX -= scrollingSpeedX;
 		}
