@@ -44,10 +44,10 @@ public abstract class Projectile extends Stuff {
 		if (Math.abs(centerY - bg.getCenterY() + initbgy - initY) > range) {
 			doOnLimitRange();
 		}
-		if (centerX > 1240 && speedX > 0) {
+		if (centerX > 1280 && speedX > 0) {
 			doOnLimitRange();
 		}
-		if (centerX < 40 && speedX < 0) {
+		if (centerX < 0 && speedX < 0) {
 			doOnLimitRange();
 		}
 	}
