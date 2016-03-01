@@ -527,7 +527,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							i++;
 						}	
 					}
-					updateExplosions();
 					player.canmovedown = true;
 					player.canmoveleft = true;
 					player.canmoveright = true;
@@ -546,6 +545,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						map[e.posx][e.posy] = null;
 					map[player.posx][player.posy] = null;
 					updatePlayer();
+					updateExplosions();
 					callEnemiesAIs();
 					updateEnemies();
 					int exi = 0;
@@ -642,7 +642,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 										i++;
 									}	
 								}
-								updateExplosions();
+								
 								player.canmovedown = true;
 								player.canmoveleft = true;
 								player.canmoveright = true;
@@ -738,6 +738,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 								for (Enemy e : getEnemyarray())
 									map[e.posx][e.posy] = null;
 								player.controlledupdate();
+								updateExplosions();
 								updateEnemies();
 								exi = 0;
 								exsize = 0;
