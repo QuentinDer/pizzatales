@@ -21,7 +21,9 @@ public class Pepper extends Enemy {
 			switch(StartingClass.difficultylevel) {
 			case 1:
 				if (movementTime % 30 == 0) {
+					StartingClass.map[player.posx][player.posy] = null;
 					int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 7, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+					StartingClass.map[player.posx][player.posy] = player;
 					switch (pathresult) {
 					case 0:
 						stopMoving();
@@ -43,7 +45,9 @@ public class Pepper extends Enemy {
 				break;
 			case 2:
 				if (movementTime % 20 == 0) {
+					StartingClass.map[player.posx][player.posy] = null;
 					int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 9, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+					StartingClass.map[player.posx][player.posy] = player;
 					switch (pathresult) {
 					case 0:
 						stopMoving();
@@ -65,7 +69,9 @@ public class Pepper extends Enemy {
 				break;
 			case 3:
 				if (movementTime % 10 == 0) {
+					StartingClass.map[player.posx][player.posy] = null;
 					int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 11, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+					StartingClass.map[player.posx][player.posy] = player;
 					switch (pathresult) {
 					case 0:
 						stopMoving();
@@ -87,7 +93,9 @@ public class Pepper extends Enemy {
 				break;
 			case 4:
 				if (movementTime % 10 == 0) {
+					StartingClass.map[player.posx][player.posy] = null;
 					int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, true);
+					StartingClass.map[player.posx][player.posy] = player;
 					switch (pathresult) {
 					case 0:
 						stopMoving();
