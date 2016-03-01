@@ -33,6 +33,9 @@ public abstract class Enemy extends BlockingStuff {
 	public int halfbar = 22;
 	protected int range;
 	
+	private final static int visionRange = 15;
+	private final static float slightincrease = (float)0.5;
+	
 	protected Firearm weapon;
 	public boolean isAimingUp = true;
 	protected ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
@@ -181,14 +184,24 @@ public abstract class Enemy extends BlockingStuff {
 			posy = (getCenterY() - bg.getCenterY() + StartingClass.bginity) / 50;
 			StartingClass.map[posx][posy] = this;
 			animate();
-			if (!hasSeenU && centerX + halfsizex > 0 && centerX - halfsizex< 1280 && centerY + halfsizey > 0 && centerY - halfsizey < 800)
+			if (movementTime % 15 == 0 && !hasSeenU && centerX + halfsizex > 0 
+					&& centerX - halfsizex< 1280 && centerY + halfsizey > 0 
+					&& centerY - halfsizey < 800 && this.canSeePlayer()) {
 				hasSeenU = true;
+			}
+				
 		}
 	}
 
 	public void launchAI() {
-		if (!sleepy && hasSeenU)
-			callAI();
+		if (alive) {
+			if (!sleepy && hasSeenU)
+				callAI();
+			movementTime++;
+			if (movementTime == 1000) {
+				movementTime = 0;
+			}
+		}
 	}
 	
 	public abstract void callAI();/* {
@@ -401,4 +414,40 @@ public abstract class Enemy extends BlockingStuff {
 	public abstract void setStaySpriteAlt();
 	public abstract void setMove1SpriteAlt();
 	public abstract void setMove2SpriteAlt();
+	
+	private boolean canSeePlayer() {
+		if (Math.abs(posx-player.posx)+Math.abs(posy-player.posy) > visionRange)
+			return false;
+		boolean ans = true;
+		if (Math.abs(posx-player.posx)>Math.abs(posy-player.posy)) {
+			if (player.posx>posx) {
+				float deltay = (player.posy-posy)/((float)(player.posx-posx));
+				float inc = (deltay>0)?slightincrease:-slightincrease;
+				for (int i = 1; i < player.posx-posx; i++) {
+					ans = ans && (StartingClass.map[posx+i][posy+(int)(deltay*i+inc)] == null);
+				}
+			} else {
+				float deltay = (player.posy-posy)/((float)(posx-player.posx));
+				float inc = (deltay>0)?slightincrease:-slightincrease;
+				for (int i = 1; i < posx-player.posx; i++) {
+					ans = ans && (StartingClass.map[posx-i][posy+(int)(deltay*i+inc)] == null);
+				}
+			}
+		} else {
+			if (player.posy>posy) {
+				float deltax = (player.posx-posx)/((float)(player.posy-posy));
+				float inc = (deltax>0)?slightincrease:-slightincrease;
+				for (int i = 1; i < player.posy-posy; i++) {
+					ans = ans && (StartingClass.map[posx+(int)(deltax*i+inc)][posy+i] == null);
+				}
+			} else {
+				float deltax = (player.posx-posx)/((float)(posy-player.posy));
+				float inc = (deltax>0)?slightincrease:-slightincrease;
+				for (int i = 1; i < posy-player.posy; i++) {
+					ans = ans && (StartingClass.map[posx+(int)(deltax*i+inc)][posy-i] == null);
+				}
+			}
+		}
+		return ans;
+	}
 }

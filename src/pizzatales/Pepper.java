@@ -17,142 +17,136 @@ public class Pepper extends Enemy {
 	@Override
 	public void callAI() {
 
-		if (alive == true) {
-			switch(StartingClass.difficultylevel) {
-			case 1:
-				if (movementTime % 30 == 0) {
-					StartingClass.map[player.posx][player.posy] = null;
-					int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 7, canmoveleft, canmoveup, canmoveright, canmovedown, false);
-					StartingClass.map[player.posx][player.posy] = player;
-					switch (pathresult) {
-					case 0:
-						stopMoving();
-						break;
-					case 1:
-						moveLeft();
-						break;
-					case 2:
-						moveUp();
-						break;
-					case 3:
-						moveRight();
-						break;
-					case 4:
-						moveDown();
-						break;
-					}
-				}
-				break;
-			case 2:
-				if (movementTime % 20 == 0) {
-					StartingClass.map[player.posx][player.posy] = null;
-					int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 9, canmoveleft, canmoveup, canmoveright, canmovedown, false);
-					StartingClass.map[player.posx][player.posy] = player;
-					switch (pathresult) {
-					case 0:
-						stopMoving();
-						break;
-					case 1:
-						moveLeft();
-						break;
-					case 2:
-						moveUp();
-						break;
-					case 3:
-						moveRight();
-						break;
-					case 4:
-						moveDown();
-						break;
-					}
-				}
-				break;
-			case 3:
-				if (movementTime % 10 == 0) {
-					StartingClass.map[player.posx][player.posy] = null;
-					int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 11, canmoveleft, canmoveup, canmoveright, canmovedown, false);
-					StartingClass.map[player.posx][player.posy] = player;
-					switch (pathresult) {
-					case 0:
-						stopMoving();
-						break;
-					case 1:
-						moveLeft();
-						break;
-					case 2:
-						moveUp();
-						break;
-					case 3:
-						moveRight();
-						break;
-					case 4:
-						moveDown();
-						break;
-					}
-				}
-				break;
-			case 4:
-				if (movementTime % 10 == 0) {
-					StartingClass.map[player.posx][player.posy] = null;
-					int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, true);
-					StartingClass.map[player.posx][player.posy] = player;
-					switch (pathresult) {
-					case 0:
-						stopMoving();
-						break;
-					case 1:
-						moveLeft();
-						break;
-					case 2:
-						moveUp();
-						break;
-					case 3:
-						moveRight();
-						break;
-					case 4:
-						moveDown();
-						break;
-					case 5:
-						moveLeftUp();
-						break;
-					case 6:
-						moveRightUp();
-						break;
-					case 7:
-						moveRightDown();
-						break;
-					case 8:
-						moveLeftDown();
-						break;
-					}
-				}
-				break;
-			}
-			if (movementTime % 5 == 0 && weapon.isReady2Fire()) {
-				int diffx = Math.abs(getCenterX() - player.getCenterX());
-				int diffy = Math.abs(getCenterY() - player.getCenterY());
-				if (diffx + diffy < 150) {
-					if (diffx > diffy) {
-						if (player.getCenterX() > getCenterX())
-							shootRight();
-						else
-							shootLeft();
-					} else {
-						if (player.getCenterY() > getCenterY())
-							shootDown();
-						else
-							shootUp();
-					}
+		switch(StartingClass.difficultylevel) {
+		case 1:
+			if (movementTime % 30 == 0) {
+				StartingClass.map[player.posx][player.posy] = null;
+				int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 7, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+				StartingClass.map[player.posx][player.posy] = player;
+				switch (pathresult) {
+				case 0:
+					stopMoving();
+					break;
+				case 1:
+					moveLeft();
+					break;
+				case 2:
+					moveUp();
+					break;
+				case 3:
+					moveRight();
+					break;
+				case 4:
+					moveDown();
+					break;
 				}
 			}
-			// AI
-
-			weapon.increaseShootingCounter();
-			movementTime++;
-			if (movementTime == 1000) {
-				movementTime = 0;
+			break;
+		case 2:
+			if (movementTime % 20 == 0) {
+				StartingClass.map[player.posx][player.posy] = null;
+				int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 9, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+				StartingClass.map[player.posx][player.posy] = player;
+				switch (pathresult) {
+				case 0:
+					stopMoving();
+					break;
+				case 1:
+					moveLeft();
+					break;
+				case 2:
+					moveUp();
+					break;
+				case 3:
+					moveRight();
+					break;
+				case 4:
+					moveDown();
+					break;
+				}
+			}
+			break;
+		case 3:
+			if (movementTime % 10 == 0) {
+				StartingClass.map[player.posx][player.posy] = null;
+				int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 11, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+				StartingClass.map[player.posx][player.posy] = player;
+				switch (pathresult) {
+				case 0:
+					stopMoving();
+					break;
+				case 1:
+					moveLeft();
+					break;
+				case 2:
+					moveUp();
+					break;
+				case 3:
+					moveRight();
+					break;
+				case 4:
+					moveDown();
+					break;
+				}
+			}
+			break;
+		case 4:
+			if (movementTime % 10 == 0) {
+				StartingClass.map[player.posx][player.posy] = null;
+				int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, true);
+				StartingClass.map[player.posx][player.posy] = player;
+				switch (pathresult) {
+				case 0:
+					stopMoving();
+					break;
+				case 1:
+					moveLeft();
+					break;
+				case 2:
+					moveUp();
+					break;
+				case 3:
+					moveRight();
+					break;
+				case 4:
+					moveDown();
+					break;
+				case 5:
+					moveLeftUp();
+					break;
+				case 6:
+					moveRightUp();
+					break;
+				case 7:
+					moveRightDown();
+					break;
+				case 8:
+					moveLeftDown();
+					break;
+				}
+			}
+			break;
+		}
+		if (movementTime % 5 == 0 && weapon.isReady2Fire()) {
+			int diffx = Math.abs(getCenterX() - player.getCenterX());
+			int diffy = Math.abs(getCenterY() - player.getCenterY());
+			if (diffx + diffy < 150) {
+				if (diffx > diffy) {
+					if (player.getCenterX() > getCenterX())
+						shootRight();
+					else
+						shootLeft();
+				} else {
+					if (player.getCenterY() > getCenterY())
+						shootDown();
+					else
+						shootUp();
+				}
 			}
 		}
+		// AI
+
+		weapon.increaseShootingCounter();
 	}
 
 	@Override

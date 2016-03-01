@@ -52,154 +52,148 @@ public class SirTomato extends Enemy {
  
 	@Override
 	public void callAI() {
-		if (alive == true) {
-			if (inAnimation>0) {
-				inAnimation--;
-				if (inAnimation == 0) {
-					halfsizex = 50;
-					halfsizey = 50;
-					halfrsizex = 45;
-					halfrsizey = 45;
-					isDashing = false;
-					speed = basicspeed;
-					currentSprite = staySprite;
-					isSlashing = false;
-				}
-			}
-			if (isDashing && speedX != dashSpeedX) {
+		if (inAnimation>0) {
+			inAnimation--;
+			if (inAnimation == 0) {
 				halfsizex = 50;
 				halfsizey = 50;
 				halfrsizex = 45;
 				halfrsizey = 45;
 				isDashing = false;
-				currentSprite = staySprite;
 				speed = basicspeed;
-				inAnimation = 0;
+				currentSprite = staySprite;
+				isSlashing = false;
 			}
-				
+		}
+		if (isDashing && speedX != dashSpeedX) {
+			halfsizex = 50;
+			halfsizey = 50;
+			halfrsizex = 45;
+			halfrsizey = 45;
+			isDashing = false;
+			currentSprite = staySprite;
+			speed = basicspeed;
+			inAnimation = 0;
+		}
 			
-			//boss parameters difinition
-			if (tcd > 0)
-				tcd--;
-			if (dcd > 0)
-				dcd--;
-			
-			if (inAnimation == 0 && !isDashing) {
-				if (movementTime % 10 == 0) {
-					int tox = player.posx;
-					if (posx < player.posx) {
-						if (null == StartingClass.map[player.posx-1][player.posy])
-							tox = player.posx-1;
-						else 
-							tox = player.posx+1;
-					} else {
-						if (null == StartingClass.map[player.posx+1][player.posy])
-							tox = player.posx+1;
-						else
-							tox = player.posx-1;
-					}
-					int pathresult = pf.getDirectionToShoot(posx, posy, tox, player.posy, 50, canmoveleft, canmoveup, canmoveright, canmovedown, true);
-					switch (pathresult) {
-					case 0:
-						stopMoving();
-						break;
-					case 1:
-						moveLeft();
-						break;
-					case 2:
-						moveUp();
-						break;
-					case 3:
-						moveRight();
-						break;
-					case 4:
-						moveDown();
-						break;
-					case 5:
-						moveLeftUp();
-						break;
-					case 6:
-						moveRightUp();
-						break;
-					case 7:
-						moveRightDown();
-						break;
-					case 8:
-						moveLeftDown();
-					}
+		
+		//boss parameters difinition
+		if (tcd > 0)
+			tcd--;
+		if (dcd > 0)
+			dcd--;
+		
+		if (inAnimation == 0 && !isDashing) {
+			if (movementTime % 10 == 0) {
+				int tox = player.posx;
+				if (posx < player.posx) {
+					if (null == StartingClass.map[player.posx-1][player.posy])
+						tox = player.posx-1;
+					else 
+						tox = player.posx+1;
+				} else {
+					if (null == StartingClass.map[player.posx+1][player.posy])
+						tox = player.posx+1;
+					else
+						tox = player.posx-1;
 				}
-				int diffx = Math.abs(player.getCenterX() - getCenterX());
-				int diffy = player.getCenterY() - getCenterY();
-				if (diffx < 120 && diffy < 20 && diffy > -80) {
+				int pathresult = pf.getDirectionToShoot(posx, posy, tox, player.posy, 50, canmoveleft, canmoveup, canmoveright, canmovedown, true);
+				switch (pathresult) {
+				case 0:
 					stopMoving();
-					hasSlashed = false;
-					isSlashing = true;
-					inAnimation = maxInAnimation;
-					halfsizex = 100;
-					halfrsizex = 85;
-					halfsizey = 65;
-					halfrsizey = 50;
-					if (player.getCenterX() > getCenterX()) {
-						currentSprite = slashSpriteRight;
-						isSlashingRight = true;
-					} else {
-						currentSprite = slashSpriteLeft;
-						isSlashingRight = false;
-					}
+					break;
+				case 1:
+					moveLeft();
+					break;
+				case 2:
+					moveUp();
+					break;
+				case 3:
+					moveRight();
+					break;
+				case 4:
+					moveDown();
+					break;
+				case 5:
+					moveLeftUp();
+					break;
+				case 6:
+					moveRightUp();
+					break;
+				case 7:
+					moveRightDown();
+					break;
+				case 8:
+					moveLeftDown();
 				}
-				if (tcd == 0 && diffx > 300) {
-					if (player.getCenterX() < getCenterX()) {
-						if (StartingClass.map[posx+1][posy] == null) {
-							projectiles.add(new TomatoProjectile(centerX - 30,centerY,-1,0));
-							stopMoving();
-							currentSprite = sirtomatothrowleft;
-							inAnimation = maxInAnimation;
-							tcd = tatocd;
-						}
-					} else {
-						if (StartingClass.map[posx-1][posy] == null) {
-							projectiles.add(new TomatoProjectile(centerX + 30,centerY,1,0));
-							stopMoving();
-							currentSprite = sirtomatothrowright;
-							inAnimation = maxInAnimation;
-							tcd = tatocd;
-						}
-					}
+			}
+			int diffx = Math.abs(player.getCenterX() - getCenterX());
+			int diffy = player.getCenterY() - getCenterY();
+			if (diffx < 120 && diffy < 20 && diffy > -80) {
+				stopMoving();
+				hasSlashed = false;
+				isSlashing = true;
+				inAnimation = maxInAnimation;
+				halfsizex = 100;
+				halfrsizex = 85;
+				halfsizey = 65;
+				halfrsizey = 50;
+				if (player.getCenterX() > getCenterX()) {
+					currentSprite = slashSpriteRight;
+					isSlashingRight = true;
+				} else {
+					currentSprite = slashSpriteLeft;
+					isSlashingRight = false;
 				}
-				if (dcd == 0 && diffx > 120 && Math.abs(player.posy-posy)<=1) {
-					boolean candash = true;
-					if (player.getCenterX() > getCenterX()) {
-						for (int i = posx+1; i < player.posx; i++)
-							candash = candash && (StartingClass.map[i][posy] == null);
-						if (candash) {
-							currentSprite = dashSpriteRight;
-							moveRight();
-							dashSpeedX = dashspeed;
-						}
-					} else {
-						for (int i = posx-1; i > player.posx; i--)
-							candash = candash && (StartingClass.map[i][posy] == null);
-						if (candash) {
-							currentSprite = dashSpriteLeft;
-							moveLeft();
-							dashSpeedX = -dashspeed;
-						}
+			}
+			if (tcd == 0 && diffx > 300) {
+				if (player.getCenterX() < getCenterX()) {
+					if (StartingClass.map[posx+1][posy] == null) {
+						projectiles.add(new TomatoProjectile(centerX - 30,centerY,-1,0));
+						stopMoving();
+						currentSprite = sirtomatothrowleft;
+						inAnimation = maxInAnimation;
+						tcd = tatocd;
 					}
-					if (candash) {
-						speed = dashspeed;
-						halfsizex = 100;
-						halfrsizex = 90;
-						halfrsizey = 35;
-						isDashing = true;
-						inAnimation = 50;
-						dcd = dashcd;
-						R.setBounds(getCenterX() - halfrsizex + speedX, getCenterY() - halfrsizey + speedY, 2*halfrsizex, 2*halfrsizey);
+				} else {
+					if (StartingClass.map[posx-1][posy] == null) {
+						projectiles.add(new TomatoProjectile(centerX + 30,centerY,1,0));
+						stopMoving();
+						currentSprite = sirtomatothrowright;
+						inAnimation = maxInAnimation;
+						tcd = tatocd;
 					}
 				}
 			}
-			movementTime++;
-			if (movementTime == 1000) {
-				movementTime = 0;
+			if (dcd == 0 && diffx > 120 && Math.abs(player.posy-posy)<=1) {
+				boolean candash = true;
+				if (player.getCenterX() > getCenterX()) {
+					for (int i = posx+1; i < player.posx; i++)
+						candash = candash && (StartingClass.map[i][posy] == null);
+					if (candash) {
+						currentSprite = dashSpriteRight;
+						moveRight();
+						dashSpeedX = dashspeed;
+					}
+				} else {
+					for (int i = posx-1; i > player.posx; i--)
+						candash = candash && (StartingClass.map[i][posy] == null);
+					if (candash) {
+						currentSprite = dashSpriteLeft;
+						moveLeft();
+						dashSpeedX = -dashspeed;
+					}
+				}
+				if (candash) {
+					speed = dashspeed;
+					halfsizex = 100;
+					halfrsizex = 90;
+					halfrsizey = 35;
+					isDashing = true;
+					inAnimation = 50;
+					dcd = dashcd;
+					R.setBounds(getCenterX() - halfrsizex + speedX, getCenterY() - halfrsizey + speedY, 2*halfrsizex, 2*halfrsizey);
+				}
 			}
 		}
 	}
