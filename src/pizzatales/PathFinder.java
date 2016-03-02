@@ -1,5 +1,6 @@
 package pizzatales;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -246,6 +247,148 @@ public class PathFinder {
 			return direction.get(getMin(f_score_final));
 		else
 			return 0;
+	}
+	
+	public int getDirectionToShoot(int fromx, int fromy, ArrayList<Integer> tox, ArrayList<Integer> toy, int maxmp, boolean canmoveleft, boolean canmoveup, boolean canmoveright, boolean canmovedown, boolean allowdiag) {
+		ArrayList<Integer> ctox = new ArrayList<Integer>();
+		ArrayList<Integer> ctoy = new ArrayList<Integer>();
+		for (int i = 0; i < tox.size(); i++) {
+			if (fromx == tox.get(i) && fromy == toy.get(i))
+				return 0;
+			if (Math.abs(fromx-tox.get(i))+Math.abs(fromy-toy.get(i)) <= maxmp) {
+				ctox.add(tox.get(i));
+				ctoy.add(toy.get(i));
+			}
+		}
+		if (ctox.isEmpty())
+			return 0;
+		HashMap<Integer,Integer> g_score = new HashMap<Integer,Integer>();
+		HashMap<Integer,Integer> f_score = new HashMap<Integer,Integer>();
+		HashMap<Integer,Integer> direction = new HashMap<Integer,Integer>();
+		HashMap<Integer,Integer> f_score_final = new HashMap<Integer,Integer>();
+		ArrayList<Integer> goals = new ArrayList<Integer>();
+		for (int i = 0; i < ctox.size(); i++) {
+			goals.add(ctox.get(i)*StartingClass.height + ctoy.get(i));
+		}
+		//System.out.println("Left:"+null == StartingClass.map[fromx-1][fromy])
+		if (0 != fromx && null == StartingClass.map[fromx-1][fromy] && canmoveleft) {
+			int left = StartingClass.height*(fromx-1) + fromy;
+			g_score.put(left, 1);
+			f_score.put(left, getMinDistance(fromx-1,fromy,ctox,ctoy));
+			direction.put(left, 1);
+		}
+		if ((fromx != StartingClass.width - 1) && null == StartingClass.map[fromx+1][fromy] && canmoveright) {
+			int right = StartingClass.height*(fromx+1) + fromy;
+			g_score.put(right, 1);
+			f_score.put(right, getMinDistance(fromx+1,fromy,ctox,ctoy));
+			direction.put(right, 3);
+		}
+		if (0 != fromy && null == StartingClass.map[fromx][fromy-1] && canmoveup) {
+			int up = StartingClass.height*fromx + fromy-1;
+			f_score.put(up, getMinDistance(fromx,fromy-1,ctox,ctoy));
+			g_score.put(up, 1);
+			direction.put(up, 2);
+		}
+		if ((fromy != StartingClass.height-1) && null == StartingClass.map[fromx][fromy+1] && canmovedown) {
+			int down = StartingClass.height*fromx + fromy+1;
+			f_score.put(down, getMinDistance(fromx,fromy+1,ctox,ctoy));
+			g_score.put(down, 1);
+			direction.put(down, 4);
+		}
+		if (allowdiag) {
+			if (0 != fromy) {
+				if (0 != fromx && null == StartingClass.map[fromx-1][fromy-1] && (canmoveup || canmoveleft)) {
+					int upleft = StartingClass.height*(fromx-1) + fromy-1;
+					f_score.put(upleft, getMinDistance(fromx-1,fromy-1,ctox,ctoy));
+					g_score.put(upleft, 1);
+					direction.put(upleft, 5);
+				}
+				if ((fromx != StartingClass.width - 1) && null == StartingClass.map[fromx+1][fromy-1] && (canmoveup || canmoveright)) {
+					int upright = StartingClass.height*(fromx+1) + fromy-1;
+					f_score.put(upright, getMinDistance(fromx+1,fromy-1,ctox,ctoy));
+					g_score.put(upright, 1);
+					direction.put(upright, 6);
+				}
+			}
+			if (fromy != StartingClass.height - 1) {
+				if (0 != fromx && null == StartingClass.map[fromx-1][fromy+1] && (canmovedown || canmoveleft)) {
+					int downleft = StartingClass.height*(fromx-1) + fromy+1;
+					f_score.put(downleft, getMinDistance(fromx-1,fromy+1,ctox,ctoy));
+					g_score.put(downleft, 1);
+					direction.put(downleft, 8);
+				}
+				if ((fromx != StartingClass.width-1) && null == StartingClass.map[fromx+1][fromy+1] && (canmovedown || canmoveright)) {
+					int downright = StartingClass.height*(fromx+1)+fromy+1;
+					f_score.put(downright, getMinDistance(fromx+1,fromy+1,ctox,ctoy));
+					g_score.put(downright, 1);
+					direction.put(downright, 7);
+				}
+			}
+		}
+		while (!f_score.isEmpty()) {
+			Entry<Integer, Integer> currententry = getMinEntry(f_score);
+			int current = currententry.getKey();
+			if (goals.contains(current))
+				return direction.get(current);
+			//int fk = f_score.firstKey();
+			f_score.remove(current);
+			if (g_score.get(current) >= maxmp) {
+				f_score_final.put(current,currententry.getValue());
+			} else {
+				int currentx = current/StartingClass.height;
+				int currenty = current % StartingClass.height;
+				/*String scorear = " {";
+				for (Entry<Integer,Integer> e : f_score.entrySet())
+					scorear += "[" + e.getValue()+ " g:" + g_score.get(e.getValue()) + " f:" + e.getKey() + " d:" + direction.get(e.getValue())+"]";
+				System.out.println("Current: " + currentx+"-"+currenty+" g:"+g_score.get(current)+" f:"+fk+" d:"+direction.get(current)+scorear+"}");*/
+				if (0 != currentx) {
+					int left = StartingClass.height*(currentx-1) + currenty;
+					if (!g_score.containsKey(left) && null == StartingClass.map[currentx-1][currenty]) {
+						g_score.put(left, g_score.get(current)+1);
+						f_score.put(left, getMinDistance(currentx-1,currenty,ctox,ctoy));
+						direction.put(left, direction.get(current));
+					}
+				}
+				if (StartingClass.width - 1 != currentx) {
+					int right = StartingClass.height*(currentx+1) + currenty;
+					if (!g_score.containsKey(right) && null == StartingClass.map[currentx+1][currenty]) {
+						g_score.put(right, g_score.get(current)+1);
+						f_score.put(right, getMinDistance(currentx+1,currenty,ctox,ctoy));
+						direction.put(right, direction.get(current));
+					}
+				}
+				if (0 != currenty) {
+					int up = StartingClass.height*currentx + currenty-1;
+					if (!g_score.containsKey(up) && null == StartingClass.map[currentx][currenty-1]) {
+						f_score.put(up, getMinDistance(currentx,currenty-1,ctox,ctoy));
+						g_score.put(up, g_score.get(current)+1);
+						direction.put(up, direction.get(current));
+					}
+				}
+				if (StartingClass.height -1 != currenty) {
+					int down = StartingClass.height*currentx + currenty+1;
+					if (!g_score.containsKey(down) && null == StartingClass.map[currentx][currenty+1]) {
+						f_score.put(down, getMinDistance(currentx,currenty+1,ctox,ctoy));
+						g_score.put(down, g_score.get(current)+1);
+						direction.put(down, direction.get(current));
+					}
+				}
+			}
+		}
+		if (!f_score_final.isEmpty())
+			return direction.get(getMin(f_score_final));
+		else
+			return 0;
+	}
+	
+	private final int getMinDistance(int x, int y, ArrayList<Integer> tox, ArrayList<Integer> toy) {
+		int mindist = Math.abs(x-tox.get(0))+Math.abs(y-toy.get(0));
+		for (int i = 1; i < tox.size(); i++) {
+			int dist = Math.abs(x-tox.get(i))+Math.abs(y-toy.get(i));
+			if (dist < mindist)
+				mindist = dist;
+		}
+		return mindist;
 	}
 	
 	public int getDirectionToShoot(int fromx, int fromy, int tox, int toy, int maxmp, boolean canmoveleft, boolean canmoveup, boolean canmoveright, boolean canmovedown, boolean allowdiag) {

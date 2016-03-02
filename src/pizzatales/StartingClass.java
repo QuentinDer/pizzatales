@@ -42,7 +42,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private static ArrayList<Explosion> explosions;
 	private AudioClip soundtrack;
 	
-	public static int difficultylevel = 3;
+	public static int difficultylevel = 4;
 	public static final boolean TESTMODE = true;
 	public static int currentlevel = TESTMODE?10:0;
 
@@ -54,6 +54,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private int fpscount;
 	private long fpsclock = System.currentTimeMillis();
 	private long clock = System.currentTimeMillis();
+	private long nanoclock = System.nanoTime();
+	private int computationtime;
+	private int cmptime;
 
 	enum GameState {
 		Running, Dead, Paused, LevelEnded
@@ -228,8 +231,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		MushroomWizard.staySpriteRight = getImage(base, "data/mushroomwizardright1.png");
 		MushroomWizard.move1SpriteRight = getImage(base, "data/mushroomwizardright2.png");
 		MushroomWizard.move2SpriteRight = getImage(base, "data/mushroomwizardright3.png");
-		
-		//MushroomWizard.
+		MushroomWizard.dieSprite = getImage(base, "data/mushroomwizarddead.png");
+		MushroomWizard.swipeLeft = getImage(base, "data/mushroomwizardswipeleft.png");
+		MushroomWizard.swipeRight = getImage(base, "data/mushroomwizardswiperight.png");
+		MushroomWizard.swipeDown = getImage(base, "data/mushroomwizardswipedown.png");
+		MushroomWizard.swipeUp = getImage(base, "data/mushroomwizardswipeup.png");
 		
 		BazookaBulletExplosion.bazookaexplosionsprite = getImage(base, "data/bazookaexplosion.png");
 		TomatoProjectileExplosion.tomatoexplosionsprite = getImage(base, "data/sirtomatoprojectileexplosion.png");
@@ -501,17 +507,21 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			background = getImage(base, "data/"+Level.getBackground(currentlevel));
 			while (true) {
 				while (state == GameState.Running) {
+					computationtime += System.nanoTime() - nanoclock;
 					try {
 						Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+					nanoclock = System.nanoTime();
 					clock = System.currentTimeMillis();
 					if (TESTMODE) {
 						if (clock > fpsclock+1000) {
 							fpsclock = clock;
 							fps = fpscount;
 							fpscount = 0;
+							cmptime = computationtime / fps / 1000;
+							computationtime = 0;
 						} else {
 							fpscount++;
 						}
@@ -618,17 +628,21 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							if (activatedentry.getPosY() > activatedentry.getOut().getPosY())
 								deltapy = 30;
 							while ((levelwithyscrolling && Math.abs(arenacentery-400) > 20) || (levelwithxscrolling && Math.abs(arenacenterx-640)>20) || !foundposition) {
+								computationtime += System.nanoTime() - nanoclock;
 								try {
 									Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
+								nanoclock = System.nanoTime();
 								clock = System.currentTimeMillis();
 								if (TESTMODE) {
 									if (clock > fpsclock+1000) {
 										fpsclock = clock;
 										fps = fpscount;
 										fpscount = 0;
+										cmptime = computationtime / fps / 1000;
+										computationtime = 0;
 									} else {
 										fpscount++;
 									}
@@ -852,17 +866,21 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							player.setCenterX(player.getCenterX()+deltax);
 							player.setCenterY(player.getCenterY()+deltay);
 							repaint();
+							computationtime += System.nanoTime() - nanoclock;
 							try {
 								Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
+							nanoclock = System.nanoTime();
 							clock = System.currentTimeMillis();
 							if (TESTMODE) {
 								if (clock > fpsclock+1000) {
 									fpsclock = clock;
 									fps = fpscount;
 									fpscount = 0;
+									cmptime = computationtime / fps / 1000;
+									computationtime = 0;
 								} else {
 									fpscount++;
 								}
@@ -949,17 +967,21 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					state = GameState.Running;
 				}
 				repaint();
+				computationtime += System.nanoTime() - nanoclock;
 				try {
 					Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				nanoclock = System.nanoTime();
 				clock = System.currentTimeMillis();
 				if (TESTMODE) {
 					if (clock > fpsclock+1000) {
 						fpsclock = clock;
 						fps = fpscount;
 						fpscount = 0;
+						cmptime = computationtime / fps / 1000;
+						computationtime = 0;
 					} else {
 						fpscount++;
 					}
@@ -987,8 +1009,25 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		if (state != GameState.Dead) {
 			g.drawImage(background, bg.getCenterX(), bg.getCenterY(), this);
 			paintItems(g);
-			for (int y = 0; y < height; y++) {
-				for (int x = 0; x < width; x++) {
+			for (Enemy e : getEnemyarray()) {
+				if (!e.alive) {
+					g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
+					for (int j = 0; j < e.getProjectiles().size(); j++) {
+						Projectile p = e.getProjectiles().get(j);
+						g.drawImage(p.getSprite(), p.getCenterX()-p.halfsize, p.getCenterY()-p.halfsize, this);
+					}
+				}
+				for (int j = 0; j < e.getProjectiles().size(); j++) {
+					Projectile p = e.getProjectiles().get(j);
+					g.drawImage(p.getSprite(), p.getCenterX()-p.halfsize, p.getCenterY()-p.halfsize, this);
+				}
+			}
+			int stx = Math.max(0,(- 50 - bg.getCenterX() + StartingClass.bginitx) / 50);
+			int sty = Math.max(0, (- 50 - bg.getCenterY() + StartingClass.bginity) / 50);
+			int fx = Math.min(width,(1330 - bg.getCenterX() + StartingClass.bginitx) / 50);
+			int fy = Math.min(height,(850 - bg.getCenterY() + StartingClass.bginity) / 50);
+			for (int y = sty; y < fy; y++) {
+				for (int x = stx; x < fx; x++) {
 					if (null != map[x][y]) {
 						if (Enemy.class.isInstance(map[x][y])) {
 							Enemy e = (Enemy)map[x][y];
@@ -1009,10 +1048,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 								g.fillRect(e.getCenterX()-e.halfbar, e.getCenterY()-e.halfsizey, 2*e.halfbar-lifetaken, 2);
 								g.setColor(Color.RED);
 								g.fillRect(e.getCenterX()+e.halfbar-lifetaken, e.getCenterY()-e.halfsizey, lifetaken, 2);
-							}
-							for (int j = 0; j < e.getProjectiles().size(); j++) {
-								Projectile p = e.getProjectiles().get(j);
-								g.drawImage(p.getSprite(), p.getCenterX()-p.halfsize, p.getCenterY()-p.halfsize, this);
 							}
 						} else if (Player.class.isInstance(map[x][y])) {
 							if (player.isAimingUp()) {
@@ -1054,15 +1089,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				g.drawImage(e.getSprite(), e.getR().x, e.getR().y, this);
 			}
 			ArrayList<Projectile> projectiles = player.getProjectiles();
-			for (Enemy e : getEnemyarray()) {
-				if (!e.alive) {
-					g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
-					for (int j = 0; j < e.getProjectiles().size(); j++) {
-						Projectile p = e.getProjectiles().get(j);
-						g.drawImage(p.getSprite(), p.getCenterX()-p.halfsize, p.getCenterY()-p.halfsize, this);
-					}
-				}
-			}
 			for (int i = 0; i < projectiles.size(); i++) {
 				Projectile p = projectiles.get(i);
 				// g.setColor(Color.YELLOW);
@@ -1095,8 +1121,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			if (TESTMODE) {
 				g.setColor(Color.DARK_GRAY);
 				g.fillRect(1200, 37, 20, 20);
+				g.fillRect(1230, 37, 45, 20);
 				g.setColor(Color.WHITE);
 				g.drawString(Integer.toString(fps), 1203, 51);
+				g.drawString(Integer.toString(cmptime), 1233, 51);
 			}
 		} else {
 			g.setColor(Color.BLACK);

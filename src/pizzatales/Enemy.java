@@ -66,15 +66,19 @@ public abstract class Enemy extends BlockingStuff {
 				canmoveleft = false;
 			}
 			if (posy != 0 && null != StartingClass.map[posx-1][posy-1] && R.intersects(StartingClass.map[posx-1][posy-1].R)) {
-				if (Math.abs(StartingClass.map[posx-1][posy-1].getCenterX()-centerX) > Math.abs(StartingClass.map[posx-1][posy-1].getCenterY()-centerY))
+				int diffX = Math.abs(StartingClass.map[posx-1][posy-1].getCenterX()-centerX);
+				int diffY = Math.abs(StartingClass.map[posx-1][posy-1].getCenterY()-centerY);
+				if (diffX > diffY && diffY < 42)
 					canmoveleft = false;
-				else 
+				else if (diffX < diffY && diffX < 42)
 					canmoveup = false;
 			}
 			if (posy != StartingClass.height - 1 && null != StartingClass.map[posx-1][posy+1] && R.intersects(StartingClass.map[posx-1][posy+1].R)) {
-				if (Math.abs(StartingClass.map[posx-1][posy+1].getCenterX()-centerX) > Math.abs(StartingClass.map[posx-1][posy+1].getCenterY()-centerY))
+				int diffX = Math.abs(StartingClass.map[posx-1][posy+1].getCenterX()-centerX);
+				int diffY = Math.abs(StartingClass.map[posx-1][posy+1].getCenterY()-centerY);
+				if (diffX > diffY && diffY < 42)
 					canmoveleft = false;
-				else 
+				else if (diffX < diffY && diffX < 42)
 					canmovedown = false;
 			}
 		}
@@ -83,15 +87,19 @@ public abstract class Enemy extends BlockingStuff {
 				canmoveright = false;
 			}
 			if (posy != 0 && null != StartingClass.map[posx+1][posy-1] && R.intersects(StartingClass.map[posx+1][posy-1].R)) {
-				if (Math.abs(StartingClass.map[posx+1][posy-1].getCenterX()-centerX) > Math.abs(StartingClass.map[posx+1][posy-1].getCenterY()-centerY))
+				int diffX = Math.abs(StartingClass.map[posx+1][posy-1].getCenterX()-centerX);
+				int diffY = Math.abs(StartingClass.map[posx+1][posy-1].getCenterY()-centerY);
+				if (diffX > diffY && diffY < 42)
 					canmoveright = false;
-				else 
+				else if (diffX < diffY && diffX < 42)
 					canmoveup = false;
 			}
 			if (posy != StartingClass.height - 1 && null != StartingClass.map[posx+1][posy+1] && R.intersects(StartingClass.map[posx+1][posy+1].R)) {
-				if (Math.abs(StartingClass.map[posx+1][posy+1].getCenterX()-centerX) > Math.abs(StartingClass.map[posx+1][posy+1].getCenterY()-centerY))
+				int diffX = Math.abs(StartingClass.map[posx+1][posy+1].getCenterX()-centerX);
+				int diffY = Math.abs(StartingClass.map[posx+1][posy+1].getCenterY()-centerY);
+				if (diffX > diffY && diffY < 42)
 					canmoveright = false;
-				else 
+				else if (diffX < diffY && diffX < 42)
 					canmovedown = false;
 			}
 		}

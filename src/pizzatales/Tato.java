@@ -1,6 +1,7 @@
 package pizzatales;
 
 import java.awt.Image;
+import java.util.ArrayList;
 
 public class Tato extends Enemy {
 
@@ -162,13 +163,37 @@ public class Tato extends Enemy {
 			}
 			break;
 		case 4:
-			if (movementTime % 15 == 0) {
+			if (movementTime % 10 == 0) {
 				if (Math.abs(player.posy-posy)+Math.abs(player.posx-posx) < 15) {
 					int pathresult = 1;
 					int difX = player.getCenterX() - getCenterX();
 					int difY = player.getCenterY() - getCenterY();
+					ArrayList<Integer> tox = new ArrayList<Integer>();
+					ArrayList<Integer> toy = new ArrayList<Integer>();
 					int absdifX = Math.abs(difX);
 					int absdifY = Math.abs(difY);
+					if (difX > 0) {
+						if (StartingClass.map[player.posx+1][player.posy] == null) {
+							tox.add(player.posx+1);
+							toy.add(player.posy);
+						}
+					} else {
+						if (StartingClass.map[player.posx-1][player.posy] == null) {
+							tox.add(player.posx-1);
+							toy.add(player.posy);
+						}
+					}
+					if (difY > 0) {
+						if (StartingClass.map[player.posx][player.posy+1] == null) {
+							tox.add(player.posx);
+							toy.add(player.posy+1);
+						}
+					} else {
+						if (StartingClass.map[player.posx][player.posy-1] == null) {
+							tox.add(player.posx);
+							toy.add(player.posy-1);
+						}
+					}
 					int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + StartingClass.bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + StartingClass.bginity) / 50));
 					int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + StartingClass.bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + StartingClass.bginitx) / 50));
 					int toshootx2R = player.posx;
@@ -184,6 +209,10 @@ public class Tato extends Enemy {
 							toshootx2R++;
 						toshootx2R--;
 					}
+					if (toshootx2R != player.posx) {
+						tox.add(toshootx2R);
+						toy.add(player.posy);
+					}
 					if (difY > 0) {
 						toshooty1R--;
 						while (toshooty1R >= toshooty1 && null == StartingClass.map[player.posx][toshooty1R])
@@ -195,7 +224,11 @@ public class Tato extends Enemy {
 							toshooty1R++;
 						toshooty1R--;
 					}
-					pathresult = pf.getDirectionToShoot(posx, posy, player.posx, toshooty1R, toshootx2R, player.posy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, true);
+					if (toshooty1R != player.posy) {
+						tox.add(player.posx);
+						toy.add(toshooty1R);
+					}
+					pathresult = pf.getDirectionToShoot(posx, posy, tox, toy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, true);
 					switch (pathresult) {
 					case 0:
 						stopMoving();
@@ -227,21 +260,6 @@ public class Tato extends Enemy {
 					}
 				} else {
 					stopMoving();
-				}
-			}
-			if (weapon.isReady2Fire()) {
-				int diffx = Math.abs(getCenterX() - player.getCenterX());
-				int diffy = Math.abs(getCenterY() - player.getCenterY());
-				if (diffx > diffy && diffy < 120 && diffx < 530) {
-					if (player.getCenterX() > getCenterX())
-						shootRight();
-					else
-						shootLeft();
-				} else if (diffx < 120 && diffy < 530){
-					if (player.getCenterY() > getCenterY())
-						shootDown();
-					else
-						shootUp();
 				}
 			}
 			break;
