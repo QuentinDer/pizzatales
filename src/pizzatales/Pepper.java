@@ -21,7 +21,33 @@ public class Pepper extends Enemy {
 		case 1:
 			if (movementTime % 30 == 0) {
 				StartingClass.map[player.posx][player.posy] = null;
-				int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 7, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+				int dirplace = 0;
+				int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
+				int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
+				if (difPX < 5) {
+					if (difPY > 0)
+						dirplace = 4;
+					else
+						dirplace = 2;
+				} else if (difPY < 5) {
+					if (difPX > 0)
+						dirplace = 3;
+					else
+						dirplace = 1;
+				} else {
+					if (difPX > 0) {
+						if (difPY > 0)
+							dirplace = 7;
+						else
+							dirplace = 6;
+					} else {
+						if (difPY > 0)
+							dirplace = 8;
+						else
+							dirplace = 5;
+					}
+				}
+				int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 7, canmoveleft, canmoveup, canmoveright, canmovedown, dirplace, false);
 				StartingClass.map[player.posx][player.posy] = player;
 				switch (pathresult) {
 				case 0:
@@ -45,7 +71,33 @@ public class Pepper extends Enemy {
 		case 2:
 			if (movementTime % 20 == 0) {
 				StartingClass.map[player.posx][player.posy] = null;
-				int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 9, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+				int dirplace = 0;
+				int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
+				int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
+				if (difPX < 5) {
+					if (difPY > 0)
+						dirplace = 4;
+					else
+						dirplace = 2;
+				} else if (difPY < 5) {
+					if (difPX > 0)
+						dirplace = 3;
+					else
+						dirplace = 1;
+				} else {
+					if (difPX > 0) {
+						if (difPY > 0)
+							dirplace = 7;
+						else
+							dirplace = 6;
+					} else {
+						if (difPY > 0)
+							dirplace = 8;
+						else
+							dirplace = 5;
+					}
+				}
+				int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 9, canmoveleft, canmoveup, canmoveright, canmovedown, dirplace, false);
 				StartingClass.map[player.posx][player.posy] = player;
 				switch (pathresult) {
 				case 0:
@@ -69,7 +121,33 @@ public class Pepper extends Enemy {
 		case 3:
 			if (movementTime % 10 == 0) {
 				StartingClass.map[player.posx][player.posy] = null;
-				int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 11, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+				int dirplace = 0;
+				int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
+				int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
+				if (difPX < 5) {
+					if (difPY > 0)
+						dirplace = 4;
+					else
+						dirplace = 2;
+				} else if (difPY < 5) {
+					if (difPX > 0)
+						dirplace = 3;
+					else
+						dirplace = 1;
+				} else {
+					if (difPX > 0) {
+						if (difPY > 0)
+							dirplace = 7;
+						else
+							dirplace = 6;
+					} else {
+						if (difPY > 0)
+							dirplace = 8;
+						else
+							dirplace = 5;
+					}
+				}
+				int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 11, canmoveleft, canmoveup, canmoveright, canmovedown, dirplace, false);
 				StartingClass.map[player.posx][player.posy] = player;
 				switch (pathresult) {
 				case 0:
@@ -93,7 +171,33 @@ public class Pepper extends Enemy {
 		case 4:
 			if (movementTime % 10 == 0) {
 				StartingClass.map[player.posx][player.posy] = null;
-				int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, true);
+				int dirplace = 0;
+				int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
+				int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
+				if (difPX < 5) {
+					if (difPY > 0)
+						dirplace = 4;
+					else
+						dirplace = 2;
+				} else if (difPY < 5) {
+					if (difPX > 0)
+						dirplace = 3;
+					else
+						dirplace = 1;
+				} else {
+					if (difPX > 0) {
+						if (difPY > 0)
+							dirplace = 7;
+						else
+							dirplace = 6;
+					} else {
+						if (difPY > 0)
+							dirplace = 8;
+						else
+							dirplace = 5;
+					}
+				}
+				int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, dirplace, true);
 				StartingClass.map[player.posx][player.posy] = player;
 				switch (pathresult) {
 				case 0:

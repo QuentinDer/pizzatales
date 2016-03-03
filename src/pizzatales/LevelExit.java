@@ -6,8 +6,8 @@ import pizzatales.StartingClass.GameState;
 
 public class LevelExit extends Item {
 
-	public LevelExit(int x, int y, int deltapx, int deltapy, boolean onetimeeffect) {
-		super(x, y, deltapx, deltapy, onetimeeffect);
+	public LevelExit(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
+		super(x, y, deltapx, deltapy, onetimeeffect, height);
 	}
 
 	@Override

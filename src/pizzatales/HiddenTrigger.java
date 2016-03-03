@@ -6,8 +6,8 @@ public class HiddenTrigger extends Item {
 
 	private int hiddenarea = -1;
 	
-	public HiddenTrigger(int x, int y, int deltapx, int deltapy, boolean onetimeeffect) {
-		super(x, y, deltapx, deltapy, onetimeeffect);
+	public HiddenTrigger(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
+		super(x, y, deltapx, deltapy, onetimeeffect, height);
 	}
 
 	@Override

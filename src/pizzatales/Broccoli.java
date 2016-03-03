@@ -28,7 +28,7 @@ public class Broccoli extends Enemy {
 					int absdifY = Math.abs(difY);
 					int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + StartingClass.bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + StartingClass.bginity) / 50));
 					int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + StartingClass.bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + StartingClass.bginitx) / 50));
-					pathresult = pf.getDirectionToShoot(posx, posy, player.posx, toshooty1, toshootx2, player.posy, 8, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+					pathresult = pf.getDirectionToShoot(posx, posy, player.posx, toshooty1, toshootx2, player.posy, 8, canmoveleft, canmoveup, canmoveright, canmovedown, 0, false);
 					switch (pathresult) {
 					case 0:
 						stopMoving();
@@ -61,7 +61,7 @@ public class Broccoli extends Enemy {
 					int absdifY = Math.abs(difY);
 					int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + StartingClass.bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + StartingClass.bginity) / 50));
 					int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + StartingClass.bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + StartingClass.bginitx) / 50));
-					pathresult = pf.getDirectionToShoot(posx, posy, player.posx, toshooty1, toshootx2, player.posy, 8, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+					pathresult = pf.getDirectionToShoot(posx, posy, player.posx, toshooty1, toshootx2, player.posy, 8, canmoveleft, canmoveup, canmoveright, canmovedown, 0, false);
 					switch (pathresult) {
 					case 0:
 						stopMoving();
@@ -94,7 +94,7 @@ public class Broccoli extends Enemy {
 					int absdifY = Math.abs(difY);
 					int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + StartingClass.bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + StartingClass.bginity) / 50));
 					int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + StartingClass.bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + StartingClass.bginitx) / 50));
-					pathresult = pf.getDirectionToShoot(posx, posy, player.posx, toshooty1, toshootx2, player.posy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+					pathresult = pf.getDirectionToShoot(posx, posy, player.posx, toshooty1, toshootx2, player.posy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, 0, false);
 					switch (pathresult) {
 					case 0:
 						stopMoving();
@@ -151,7 +151,7 @@ public class Broccoli extends Enemy {
 							toshooty1R++;
 						toshooty1R--;
 					}
-					pathresult = pf.getDirectionToShoot(posx, posy, player.posx, toshooty1R, toshootx2R, player.posy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, true);
+					pathresult = pf.getDirectionToShoot(posx, posy, player.posx, toshooty1R, toshootx2R, player.posy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, 0, true);
 					switch (pathresult) {
 					case 0:
 						stopMoving();

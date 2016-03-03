@@ -7,8 +7,8 @@ public class PizzaBox extends Item {
 
 	public static Image pizzaboxsprite;
 	
-	public PizzaBox(int x, int y, int deltapx, int deltapy, boolean onetimeeffect) {
-		super(x, y, deltapx, deltapy, onetimeeffect);
+	public PizzaBox(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
+		super(x, y, deltapx, deltapy, onetimeeffect, height);
 	}
 
 	@Override

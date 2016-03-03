@@ -44,7 +44,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	
 	public static int difficultylevel = 4;
 	public static final boolean TESTMODE = true;
-	public static int currentlevel = TESTMODE?10:0;
+	public static int currentlevel = TESTMODE?0:0;
 
 	private int weaponindex;
 	private int armorindex;
@@ -87,6 +87,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private boolean centeringOnPlayerRequest = false;
 	private boolean toggleScrollingModeRequest = false;
 	private boolean showPlayerHealthBar = TESTMODE;
+	private int blockmaxheight;
 	/*
 	 * ScrollingMode :
 	 * 0 - noscrolling
@@ -303,14 +304,16 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 	private void loadMap(String filename) throws IOException {
 		ArrayList<String> lines = new ArrayList<String>();
-
+		blockmaxheight = 0;
+		
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
 		String line;
 		while (null != (line = reader.readLine())) {
 			// no more lines to read
 			if (!line.startsWith("!")) {
 				lines.add(line);
-				width = Math.max(width, line.length());
+				if (!line.contains("["))
+					width = Math.max(width, line.length());
 			}
 		}
 		reader.close();
@@ -331,16 +334,28 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		int posplayery = 0;
 		int posplayerx = 0;
 		
+		boolean inBlock = false;
 		for (int j = 0; j < height; j++) {
 			line = lines.get(j);
-			for (int i = 0; i < width; i++) {
-				if (i < line.length()) {
-					charmap[i][j] = line.charAt(i);
-					if (charmap[i][j] == 'U') {
-						posplayerx = i;
-						posplayery = j;
-					}
+			int widthl = width;
+			inBlock = false;
+			int k = 0;
+			for (int i = 0; i < widthl; i++) {
+				charmap[k][j] = line.charAt(i);
+				if (charmap[k][j] == 'U') {
+					posplayerx = k;
+					posplayery = j;
 				}
+				if (charmap[k][j] == '[') {
+					inBlock = true;
+				}
+				if (charmap[k][j] == ']') {
+					inBlock = false;
+				}
+				if (inBlock) {
+					widthl++;
+				} else
+					k++;
 			}
 		}
 		int deltapx = 0;
@@ -362,34 +377,57 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		bginity -= 15;
 		
 		for (int j = 0; j < height; j++) {
-			for (int i = 0; i < width; i++) {
-				char ch = charmap[i][j];
+			line = lines.get(j);
+			int widthl = width;
+			inBlock = false;
+			int k = 0;
+			int itemheight = 0;
+			for (int i = 0; i < widthl; i++) {
+				char ch = line.charAt(i);
+				if (ch == '[') {
+					inBlock = true;
+				}
+				if (ch == ']') {
+					inBlock = false;
+					itemheight = 0;
+				}
 				if (ch =='U') {
-					player.setCenterX(50*(i+deltapx)+25);
+					player.setCenterX(50*(k+deltapx)+25);
 					player.setCenterY(50*(j+deltapy)+40);
 					map[player.posx][player.posy] = player;
 				}
 				if (ItemFactory.isItemSupported(ch)) {
-					Item it = ItemFactory.getItem(i, j, deltapx, deltapy, ch);
+					Item it = ItemFactory.getItem(k, j, deltapx, deltapy, ch, itemheight);
 					items.add(it);
 					if (ch == 'i') {
-						mentrydoors.put(height*i+j,(EntryDoor)it);
+						mentrydoors.put(height*k+j,(EntryDoor)it);
 					}
 					if (ch == 'm') {
-						hiddentriggers.put(height*i+j, (HiddenTrigger)it);
+						hiddentriggers.put(height*k+j, (HiddenTrigger)it);
 					}
 				}
 				if (TileFactory.isTileTypeSupported(ch)) {
-					Tile t = TileFactory.getTile(i+deltapx, j+deltapy, ch);
+					Tile t = TileFactory.getTile(k+deltapx, j+deltapy, ch);
 					tilearray.add(t);
 					if (ch == 'd')
-						doors.put(height*i+j,t);
+						doors.put(height*k+j,t);
 					if (DestroyableTile.class.isInstance(t))
 						destroyabletiles.add((DestroyableTile)t);
 				}
 				if (EnemyFactory.isTileTypeSupported(ch)) {
-					getEnemyarray().add(EnemyFactory.getEnemy(i+deltapx, j+deltapy, ch));
+					getEnemyarray().add(EnemyFactory.getEnemy(k+deltapx, j+deltapy, ch));
 				}
+				if (inBlock) {
+					if (itemheight > blockmaxheight)
+						blockmaxheight = itemheight;
+					itemheight++;
+					widthl++;
+				} else
+					k++;
+			}
+			for (int i = 0; i < width; i++) {
+				char ch = charmap[i][j];
+				
 			}
 		}
 		ArrayList<Integer> nonobstacles = new ArrayList<Integer>();
@@ -551,12 +589,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					checkEnemiesCollision();
 					checkItemsCollision();
 					player.checkCollisionsWithBlockingStuff();
-					for (Enemy e : getEnemyarray())
-						map[e.posx][e.posy] = null;
 					map[player.posx][player.posy] = null;
 					updatePlayer();
 					updateExplosions();
 					callEnemiesAIs();
+					for (Enemy e : getEnemyarray())
+						map[e.posx][e.posy] = null;
 					updateEnemies();
 					int exi = 0;
 					int exsize = explosions.size();
@@ -584,7 +622,21 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						for (Tile t : activatedentry.getDoors()) {
 							map[t.posx][t.posy] = null;
 						}
-						if (pf.getDirection(playerposx, playerposy, activatedentry.getOut().getPosX(), activatedentry.getOut().getPosY(),10, player.canmoveleft, player.canmoveup, player.canmoveright, player.canmovedown, true) > 0) {
+						int dirplace = 0;
+						int difPX = 50*player.posx+25+bg.getCenterX()-StartingClass.bginitx - player.getCenterX();
+						int difPY = 50*player.posy+40+bg.getCenterY()-StartingClass.bginity - player.getCenterY();
+						if (Math.abs(difPX) > Math.abs(difPY)) {
+							if (difPX > 0)
+								dirplace = 3;
+							else
+								dirplace = 1;
+						} else {
+							if (difPY > 0)
+								dirplace = 4;
+							else
+								dirplace = 2;
+						}
+						if (pf.getDirection(playerposx, playerposy, activatedentry.getOut().getPosX(), activatedentry.getOut().getPosY(),10, player.canmoveleft, player.canmoveup, player.canmoveright, player.canmovedown, dirplace, true) > 0) {
 							for (Enemy e : enemyarray) {
 								e.sleep();
 							}
@@ -718,7 +770,21 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 								playerposy = (player.getCenterY()-bg.getCenterY()+bginity+deltapy)/50;
 								map[player.posx][player.posy] = null;
 								if (!foundposition) {
-									switch (pf.getDirection(playerposx, playerposy, activatedentry.getOut().getPosX(), activatedentry.getOut().getPosY(),10, player.canmoveleft, player.canmoveup, player.canmoveright, player.canmovedown, true)) {
+									dirplace = 0;
+									difPX = 50*player.posx+25+bg.getCenterX()-StartingClass.bginitx - player.getCenterX();
+									difPY = 50*player.posy+40+bg.getCenterY()-StartingClass.bginity - player.getCenterY();
+									if (Math.abs(difPX) > Math.abs(difPY)) {
+										if (difPX > 0)
+											dirplace = 3;
+										else
+											dirplace = 1;
+									} else {
+										if (difPY > 0)
+											dirplace = 4;
+										else
+											dirplace = 2;
+									}
+									switch (pf.getDirection(playerposx, playerposy, activatedentry.getOut().getPosX(), activatedentry.getOut().getPosY(),10, player.canmoveleft, player.canmoveup, player.canmoveright, player.canmovedown, dirplace, true)) {
 									case 0:
 										player.controlledstopMoving();
 										foundposition = true;
@@ -749,10 +815,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 										break;
 									}
 								}
-								for (Enemy e : getEnemyarray())
-									map[e.posx][e.posy] = null;
 								player.controlledupdate();
 								updateExplosions();
+								for (Enemy e : getEnemyarray())
+									map[e.posx][e.posy] = null;
 								updateEnemies();
 								exi = 0;
 								exsize = 0;
@@ -1319,10 +1385,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	}*/
 	
 	private void paintItems(Graphics g) {
-		for (int i = 0; i < items.size(); i++) {
-			Item it = items.get(i);
-			g.drawImage(it.getSprite(), it.getCenterX() - 31, it.getCenterY() - 31, this);
+		for (int hght = 0; hght <= blockmaxheight; hght++) {
+			for (int i = 0; i < items.size(); i++) {
+				Item it = items.get(i);
+				if (items.get(i).height == hght)
+					g.drawImage(it.getSprite(), it.getCenterX() - 31, it.getCenterY() - 31, this);
+			}
 		}
+		
 	}
 	
 	private void paintItemEffect(Graphics g){

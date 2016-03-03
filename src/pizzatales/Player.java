@@ -156,6 +156,22 @@ public class Player extends BlockingStuff {
 		
 		speedY = 0;
 		speedX = 0;
+		
+		// Prevents going beyond X coordinate of 0 or 1250
+		if (centerX - MOVESPEED <= 30) {
+			canmoveleft = false;
+		}
+		if (centerX + MOVESPEED >= 1249) {
+			canmoveright = false;
+		}
+		// Prevents going beyond X coordinate of 0 or 800
+		if (centerY - MOVESPEED <= 30) {
+			canmoveup = false;
+		}
+		if (centerY + MOVESPEED >= 769) {
+			canmovedown = false;
+		}
+		
 		if (ismovingup && canmoveup) {
 			speedY += -MOVESPEED;
 		}
@@ -168,6 +184,7 @@ public class Player extends BlockingStuff {
 		if (ismovingright && canmoveright) {
 			speedX += MOVESPEED;
 		}
+		
 		if (0 == isShooting) {
 			if (speedX > 0) {
 				weapon.setSpriteRight();
@@ -234,7 +251,7 @@ public class Player extends BlockingStuff {
 				break;
 			}
 			if ((scrollingSpeedX > 0 && 
-					bg.getCenterX()-scrollingSpeedX - StartingClass.bginitx < - (StartingClass.width-27) * 50) 
+					bg.getCenterX()-scrollingSpeedX - StartingClass.bginitx < - (StartingClass.width-26) * 50 + 30) 
 					|| (scrollingSpeedX < 0 && bg.getCenterX()-scrollingSpeedX - StartingClass.bginitx>0))
 				scrollingSpeedX = 0;
 			speedX -= scrollingSpeedX;
@@ -256,18 +273,6 @@ public class Player extends BlockingStuff {
 			setCenterY(getCenterY() + 2);
 		}*/
 
-		// Prevents going beyond X coordinate of 0 or 1250
-		if (centerX + speedX <= 30) {
-			centerX = 31;
-		} else if (centerX + speedX >= 1249) {
-			centerX = 1248;
-		}
-		// Prevents going beyond X coordinate of 0 or 800
-		if (centerY + speedY <= 30) {
-			centerY = 31;
-		} else if (centerY + speedY >= 769) {
-			centerY = 769;
-		}
 		centerY += speedY;
 		centerX += speedX;
 

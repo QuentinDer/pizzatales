@@ -14,8 +14,8 @@ public class EntryDoor extends Item {
 	
 	public static Image gateeffectsprite;
 	
-	public EntryDoor(int x, int y, int deltapx, int deltapy, boolean onetimeeffect) {
-		super(x, y, deltapx, deltapy, onetimeeffect);
+	public EntryDoor(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
+		super(x, y, deltapx, deltapy, onetimeeffect, height);
 		isGoingIn = -1;
 		isGoingOut = -1;
 		posx = x;
