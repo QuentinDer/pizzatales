@@ -19,7 +19,7 @@ public class Broccoli extends Enemy {
 		
 		switch (StartingClass.difficultylevel) {
 		case 1:
-			if (movementTime % 50 == 0) {
+			if (movementTime % 30 == 0) {
 				if (Math.abs(player.posy-posy)+Math.abs(player.posx-posx) < 15) {
 					int pathresult = 1;
 					int difX = player.getCenterX() - getCenterX();
@@ -52,7 +52,7 @@ public class Broccoli extends Enemy {
 			}
 			break;
 		case 2:
-			if (movementTime % 40 == 0) {
+			if (movementTime % 20 == 0) {
 				if (Math.abs(player.posy-posy)+Math.abs(player.posx-posx) < 15) {
 					int pathresult = 1;
 					int difX = player.getCenterX() - getCenterX();
@@ -85,7 +85,7 @@ public class Broccoli extends Enemy {
 			}
 			break;
 		case 3:
-			if (movementTime % 30 == 0) {
+			if (movementTime % 10 == 0) {
 				if (Math.abs(player.posy-posy)+Math.abs(player.posx-posx) < 15) {
 					int pathresult = 1;
 					int difX = player.getCenterX() - getCenterX();
@@ -118,7 +118,7 @@ public class Broccoli extends Enemy {
 			}
 			break;
 		case 4:
-			if (movementTime % 15 == 0) {
+			if (movementTime % 05 == 0) {
 				if (Math.abs(player.posy-posy)+Math.abs(player.posx-posx) < 15) {
 					int pathresult = 1;
 					int difX = player.getCenterX() - getCenterX();

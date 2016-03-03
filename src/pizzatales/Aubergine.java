@@ -18,39 +18,6 @@ public class Aubergine extends Enemy {
 
 		switch (StartingClass.difficultylevel) {
 		case 1:
-			if (movementTime % 40 == 0) {
-				if (Math.abs(player.posy-posy)+Math.abs(player.posx-posx) < 15) {
-					int pathresult = 1;
-					int difX = player.getCenterX() - getCenterX();
-					int difY = player.getCenterY() - getCenterY();
-					int absdifX = Math.abs(difX);
-					int absdifY = Math.abs(difY);
-					int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + StartingClass.bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + StartingClass.bginity) / 50));
-					int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + StartingClass.bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + StartingClass.bginitx) / 50));
-					pathresult = pf.getDirectionToShoot(posx, posy, player.posx, toshooty1, toshootx2, player.posy, 8, canmoveleft, canmoveup, canmoveright, canmovedown, false);
-					switch (pathresult) {
-					case 0:
-						stopMoving();
-						break;
-					case 1:
-						moveLeft();
-						break;
-					case 2:
-						moveUp();
-						break;
-					case 3:
-						moveRight();
-						break;
-					case 4:
-						moveDown();
-						break;
-					}
-				} else {
-					stopMoving();
-				}
-			}
-			break;
-		case 2:
 			if (movementTime % 30 == 0) {
 				if (Math.abs(player.posy-posy)+Math.abs(player.posx-posx) < 15) {
 					int pathresult = 1;
@@ -83,41 +50,8 @@ public class Aubergine extends Enemy {
 				}
 			}
 			break;
-		case 3:
+		case 2:
 			if (movementTime % 20 == 0) {
-				if (Math.abs(player.posy-posy)+Math.abs(player.posx-posx) < 15) {
-					int pathresult = 1;
-					int difX = player.getCenterX() - getCenterX();
-					int difY = player.getCenterY() - getCenterY();
-					int absdifX = Math.abs(difX);
-					int absdifY = Math.abs(difY);
-					int toshooty1 = (absdifY<=range)?posy:((difY>0)?((player.getCenterY() - range - bg.getCenterY() + StartingClass.bginity) / 50):((player.getCenterY() + range - bg.getCenterY() + StartingClass.bginity) / 50));
-					int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + StartingClass.bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + StartingClass.bginitx) / 50));
-					pathresult = pf.getDirectionToShoot(posx, posy, player.posx, toshooty1, toshootx2, player.posy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, false);
-					switch (pathresult) {
-					case 0:
-						stopMoving();
-						break;
-					case 1:
-						moveLeft();
-						break;
-					case 2:
-						moveUp();
-						break;
-					case 3:
-						moveRight();
-						break;
-					case 4:
-						moveDown();
-						break;
-					}
-				} else {
-					stopMoving();
-				}
-			}
-			break;
-		case 4:
-			if (movementTime % 10 == 0) {
 				if (Math.abs(player.posy-posy)+Math.abs(player.posx-posx) < 15) {
 					int pathresult = 1;
 					int difX = player.getCenterX() - getCenterX();
@@ -181,6 +115,120 @@ public class Aubergine extends Enemy {
 					if (toshooty1R != player.posy) {
 						tox.add(player.posx);
 						toy.add(toshooty1R);
+					}
+					pathresult = pf.getDirectionToShoot(posx, posy, tox, toy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+					switch (pathresult) {
+					case 0:
+						stopMoving();
+						break;
+					case 1:
+						moveLeft();
+						break;
+					case 2:
+						moveUp();
+						break;
+					case 3:
+						moveRight();
+						break;
+					case 4:
+						moveDown();
+						break;
+					case 5:
+						moveLeftUp();
+						break;
+					case 6:
+						moveRightUp();
+						break;
+					case 7:
+						moveRightDown();
+						break;
+					case 8:
+						moveLeftDown();
+						break;
+					}
+				} else {
+					stopMoving();
+				}
+			}
+			break;
+		case 3:
+			if (movementTime % 10 == 0) {
+				if (Math.abs(player.posy-posy)+Math.abs(player.posx-posx) < 15) {
+					int pathresult = 1;
+					ArrayList<Integer> tox = new ArrayList<Integer>();
+					ArrayList<Integer> toy = new ArrayList<Integer>();
+					if (StartingClass.map[player.posx+1][player.posy] == null) {
+						tox.add(player.posx+1);
+						toy.add(player.posy);
+					}
+					if (StartingClass.map[player.posx-1][player.posy] == null) {
+						tox.add(player.posx-1);
+						toy.add(player.posy);
+					}
+					if (StartingClass.map[player.posx][player.posy+1] == null) {
+						tox.add(player.posx);
+						toy.add(player.posy+1);
+					}
+					if (StartingClass.map[player.posx][player.posy-1] == null) {
+						tox.add(player.posx+1);
+						toy.add(player.posy-1);
+					}
+					pathresult = pf.getDirectionToShoot(posx, posy, tox, toy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, false);
+					switch (pathresult) {
+					case 0:
+						stopMoving();
+						break;
+					case 1:
+						moveLeft();
+						break;
+					case 2:
+						moveUp();
+						break;
+					case 3:
+						moveRight();
+						break;
+					case 4:
+						moveDown();
+						break;
+					case 5:
+						moveLeftUp();
+						break;
+					case 6:
+						moveRightUp();
+						break;
+					case 7:
+						moveRightDown();
+						break;
+					case 8:
+						moveLeftDown();
+						break;
+					}
+				} else {
+					stopMoving();
+				}
+			}
+			break;
+		case 4:
+			if (movementTime % 05 == 0) {
+				if (Math.abs(player.posy-posy)+Math.abs(player.posx-posx) < 15) {
+					int pathresult = 1;
+					ArrayList<Integer> tox = new ArrayList<Integer>();
+					ArrayList<Integer> toy = new ArrayList<Integer>();
+					if (StartingClass.map[player.posx+1][player.posy] == null) {
+						tox.add(player.posx+1);
+						toy.add(player.posy);
+					}
+					if (StartingClass.map[player.posx-1][player.posy] == null) {
+						tox.add(player.posx-1);
+						toy.add(player.posy);
+					}
+					if (StartingClass.map[player.posx][player.posy+1] == null) {
+						tox.add(player.posx);
+						toy.add(player.posy+1);
+					}
+					if (StartingClass.map[player.posx][player.posy-1] == null) {
+						tox.add(player.posx+1);
+						toy.add(player.posy-1);
 					}
 					pathresult = pf.getDirectionToShoot(posx, posy, tox, toy, 12, canmoveleft, canmoveup, canmoveright, canmovedown, true);
 					switch (pathresult) {
