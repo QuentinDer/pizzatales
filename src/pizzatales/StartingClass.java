@@ -44,7 +44,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	
 	public static int difficultylevel = 4;
 	public static final boolean TESTMODE = true;
-	public static int currentlevel = TESTMODE?11:0;
+	public static int currentlevel = TESTMODE?0:0;
 
 	private int weaponindex;
 	private int armorindex;
@@ -67,6 +67,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	public static BlockingStuff[][] map;
 	public static int width;
 	public static int height;
+	private int[][] heightitemmap;
 	
 	private static ArrayList<Tile> tilearray = new ArrayList<Tile>();
 	private ArrayList<Item> items = new ArrayList<Item>();
@@ -328,6 +329,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		map = new BlockingStuff[width][height];
 		char [][] charmap = new char[width][height];
+		heightitemmap = new int[width][height];
 		HashMap<Integer,EntryDoor> mentrydoors = new HashMap<Integer,EntryDoor>();
 		HashMap<Integer, Tile> doors = new HashMap<Integer, Tile>();
 		HashMap<Integer, HiddenTrigger> hiddentriggers = new HashMap<Integer, HiddenTrigger>();
@@ -389,6 +391,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					inBlock = true;
 				}
 				if (ch == ']') {
+					heightitemmap[k][j] = itemheight-1;
 					inBlock = false;
 					itemheight = 0;
 				}
@@ -1224,7 +1227,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private void checkItemsCollision() {
 		int i = 0;
 		while (i < items.size()) {
-			if (items.get(i).checkCollisionPlayer(player)) {
+			Item it = items.get(i);
+			if (it.height == heightitemmap[it.posx][it.posy] && it.checkCollisionPlayer(player)) {
 				leavingitems.add(items.get(i));
 				items.remove(i);
 			} else {
