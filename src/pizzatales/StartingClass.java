@@ -1230,6 +1230,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			Item it = items.get(i);
 			if (it.height == heightitemmap[it.posx][it.posy] && it.checkCollisionPlayer(player)) {
 				leavingitems.add(items.get(i));
+				heightitemmap[it.posx][it.posy]--;
 				items.remove(i);
 			} else {
 				i++;
