@@ -427,6 +427,21 @@ public class Tato extends Enemy {
 			}
 			break;
 		}
+		if (weapon.isReady2Fire()) {
+			int diffx = Math.abs(getCenterX() - player.getCenterX());
+			int diffy = Math.abs(getCenterY() - player.getCenterY());
+			if (diffx > diffy && diffy < 120 && diffx < 430) {
+				if (player.getCenterX() > getCenterX())
+					shootRight();
+				else
+					shootLeft();
+			} else if (diffx < 120 && diffy < 430){
+				if (player.getCenterY() > getCenterY())
+					shootDown();
+				else
+					shootUp();
+			}
+		}
 		weapon.increaseShootingCounter();
 	}
 
