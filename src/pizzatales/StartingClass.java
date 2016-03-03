@@ -44,7 +44,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	
 	public static int difficultylevel = 4;
 	public static final boolean TESTMODE = true;
-	public static int currentlevel = TESTMODE?0:0;
+	public static int currentlevel = TESTMODE?11:0;
 
 	private int weaponindex;
 	private int armorindex;
@@ -308,12 +308,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		
 		BufferedReader reader = new BufferedReader(new FileReader(filename));
 		String line;
+		width = Integer.MAX_VALUE;
 		while (null != (line = reader.readLine())) {
 			// no more lines to read
 			if (!line.startsWith("!")) {
 				lines.add(line);
 				if (!line.contains("["))
-					width = Math.max(width, line.length());
+					width = Math.min(width, line.length());
 			}
 		}
 		reader.close();
@@ -493,7 +494,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						}
 						for (Entry<Integer,Character> entry : area.entrySet()) {
 							if (!TileFactory.isTileTypeSupported(entry.getValue())) {
-								Tile t = TileFactory.getTile(entry.getKey()/height, entry.getKey()%height+deltapy, entry.getValue());
+								Tile t = TileFactory.getTile(entry.getKey()/height+deltapx, entry.getKey()%height+deltapy, entry.getValue());
 								t.hideImage(Level.getHidingImage(currentlevel));
 								tilearray.add(t);
 								ltiles.add(t);
