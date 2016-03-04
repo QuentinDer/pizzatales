@@ -32,12 +32,12 @@ public class Mushroom extends Enemy {
 					int dirplace = 0;
 					int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
 					int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
-					if (difPX < 5) {
+					if (Math.abs(difPX) < 2) {
 						if (difPY > 0)
 							dirplace = 4;
 						else
 							dirplace = 2;
-					} else if (difPY < 5) {
+					} else if (Math.abs(difPY) < 2) {
 						if (difPX > 0)
 							dirplace = 3;
 						else
@@ -159,12 +159,12 @@ public class Mushroom extends Enemy {
 					int dirplace = 0;
 					int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
 					int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
-					if (difPX < 5) {
+					if (Math.abs(difPX) < 2) {
 						if (difPY > 0)
 							dirplace = 4;
 						else
 							dirplace = 2;
-					} else if (difPY < 5) {
+					} else if (Math.abs(difPY) < 2) {
 						if (difPX > 0)
 							dirplace = 3;
 						else
@@ -286,12 +286,12 @@ public class Mushroom extends Enemy {
 					int dirplace = 0;
 					int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
 					int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
-					if (difPX < 5) {
+					if (Math.abs(difPX) < 2) {
 						if (difPY > 0)
 							dirplace = 4;
 						else
 							dirplace = 2;
-					} else if (difPY < 5) {
+					} else if (Math.abs(difPY) < 2) {
 						if (difPX > 0)
 							dirplace = 3;
 						else
@@ -369,12 +369,12 @@ public class Mushroom extends Enemy {
 					int dirplace = 0;
 					int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
 					int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
-					if (difPX < 5) {
+					if (Math.abs(difPX) < 2) {
 						if (difPY > 0)
 							dirplace = 4;
 						else
 							dirplace = 2;
-					} else if (difPY < 5) {
+					} else if (Math.abs(difPY) < 2) {
 						if (difPX > 0)
 							dirplace = 3;
 						else

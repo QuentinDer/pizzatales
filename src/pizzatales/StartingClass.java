@@ -429,10 +429,6 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				} else
 					k++;
 			}
-			for (int i = 0; i < width; i++) {
-				char ch = charmap[i][j];
-				
-			}
 		}
 		ArrayList<Integer> nonobstacles = new ArrayList<Integer>();
 		int k = 0;
