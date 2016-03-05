@@ -47,18 +47,19 @@ public class MushroomWizard extends Enemy {
 			maxInAnimation = 40;
 			ballAnimation = false;
 			ballcd = 30;
-			randg = 36;
-			randy = 37;
+			randg = 34;
+			randy = 35;
 			randb = 38;
 			randr = 40;
 			break;
 		case 4:
 			maxInAnimation = 30;
 			ballAnimation = false;
-			ballcd = 15;
-			randg = 37;
-			randy = 38;
-			randb = 39;
+			phase = 4;
+			ballcd = 22;
+			randg = 34;
+			randy = 35;
+			randb = 38;
 			randr = 40;
 			break;
 		}
@@ -297,7 +298,7 @@ public class MushroomWizard extends Enemy {
 				float vectory = diffy / ((float)(Math.abs(diffx-30)+Math.abs(diffy)));
 				projectiles.add(new MushroomWizardBall(centerX + 30,centerY,vectorx,vectory,getNextBall(),phase % 2 == 0));
 				if (phase > 2)
-					projectiles.add(new MushroomWizardBall(centerX + 30,centerY,vectorx,vectory,centerX,centerY,getNextBall()));
+					projectiles.add(new MushroomWizardBall(centerX + 30,centerY,vectorx,vectory,centerX,centerY,getNextBall(),phase % 2 == 0));
 				if (ballAnimation) {
 					stopMoving();
 					currentSprite = shooting;

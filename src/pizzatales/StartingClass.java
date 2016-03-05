@@ -42,7 +42,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private static ArrayList<Explosion> explosions;
 	private AudioClip soundtrack;
 	
-	public static int difficultylevel = 3;
+	public static int difficultylevel = 4;
 	public static final boolean TESTMODE = true;
 	public static int currentlevel = TESTMODE?8:0;
 

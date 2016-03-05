@@ -31,7 +31,7 @@ public class MushroomWizardBall extends Projectile {
 				speed = 5;
 			speedX = (int)(vectorX * speed);
 			speedY = (int)(vectorY * speed);
-			range = 700;
+			range = 600;
 			break;
 		case 3:
 			currentball = blueball;
@@ -55,11 +55,12 @@ public class MushroomWizardBall extends Projectile {
 		
 	}
 	
-	public MushroomWizardBall(int startX, int startY, float vectorX, float vectorY, int cX, int cY, int color) {
+	public MushroomWizardBall(int startX, int startY, float vectorX, float vectorY, int cX, int cY, int color, boolean newpattern) {
 		super(startX, startY, vectorX, vectorY, 10, 1, 15, 7, 1000);
 		this.cX = cX;
 		this.cY = cY;
 		type = 1;
+		this.newpattern = newpattern;
 		range = 5000;
 		this.color = color;
 		switch (color) {
@@ -87,7 +88,13 @@ public class MushroomWizardBall extends Projectile {
 	
 	@Override
 	public void update() {
-		if (type == 1) {
+		if (color == 2 && newpattern) {
+			int diffX = player.centerX - centerX;
+			int diffY = player.centerY - centerY;
+			speedX = 5 * diffX / (Math.abs(diffX)+Math.abs(diffY));
+			speedY = 5 * diffY / (Math.abs(diffX)+Math.abs(diffY));
+			super.update();
+		} else if (type == 1) {
 			int diffX = centerX - cX;
 			int diffY = centerY - cY;
 			speedX = (diffY*speed) / (Math.abs(diffX)+Math.abs(diffY));
@@ -107,12 +114,6 @@ public class MushroomWizardBall extends Projectile {
 			super.update();
 			speedX = basespeedX;
 			speedY = basespeedY;
-		} else if (color == 2 && newpattern) {
-			int diffX = player.centerX - centerX;
-			int diffY = player.centerY - centerY;
-			speedX = 5 * diffX / (Math.abs(diffX)+Math.abs(diffY));
-			speedY = 5 * diffY / (Math.abs(diffX)+Math.abs(diffY));
-			super.update();
 		} else
 			super.update();
 	}
