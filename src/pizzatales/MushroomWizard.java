@@ -9,6 +9,8 @@ public class MushroomWizard extends Enemy {
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, staySpriteRight, 
 		move1SpriteRight, move2SpriteRight, swipeDown, swipeRight, swipeLeft, swipeUp, shooting, summoning;
 	private int maxInAnimation;
+	private int ballInAnimation;
+	private int maxBallInAnimation;
 	private int ballcd;
 	private int bcd;
 	private int slashdmg;
@@ -17,7 +19,6 @@ public class MushroomWizard extends Enemy {
 	private boolean isSlashing;
 	private int slashDirection;
 	private boolean hasSlashed;
-	private boolean ballAnimation;
 	
 	public MushroomWizard(int centerX, int centerY) {
 		super(centerX, centerY, null, 75, (StartingClass.difficultylevel>2)?1:2, 50, 50, 45, 45);
@@ -27,7 +28,7 @@ public class MushroomWizard extends Enemy {
 		switch(StartingClass.difficultylevel) {
 		case 1:
 			maxInAnimation = 60;
-			ballAnimation = true;
+			maxBallInAnimation = 45;
 			ballcd = 90;
 			randg = 5;
 			randy = 7;
@@ -36,7 +37,7 @@ public class MushroomWizard extends Enemy {
 			break;
 		case 2:
 			maxInAnimation = 30;
-			ballAnimation = true;
+			maxBallInAnimation = 30;
 			ballcd = 60;
 			randg = 10;
 			randy = 15;
@@ -45,8 +46,8 @@ public class MushroomWizard extends Enemy {
 			break;
 		case 3:
 			maxInAnimation = 40;
-			ballAnimation = false;
-			phase = 3;
+			maxBallInAnimation = 15;
+			//phase = 3;
 			ballcd = 30;
 			randg = 34;
 			randy = 35;
@@ -55,7 +56,7 @@ public class MushroomWizard extends Enemy {
 			break;
 		case 4:
 			maxInAnimation = 30;
-			ballAnimation = false;
+			maxBallInAnimation = 12;
 			//phase = 4;
 			ballcd = 22;
 			randg = 34;
@@ -68,6 +69,11 @@ public class MushroomWizard extends Enemy {
 
 	@Override
 	public void callAI() {
+		if (ballInAnimation>0) {
+			ballInAnimation--;
+			if (ballInAnimation == 0)
+				currentSprite = staySprite;
+		}
 		if (inAnimation>0) {
 			inAnimation--;
 			if (inAnimation == 0) {
@@ -300,10 +306,11 @@ public class MushroomWizard extends Enemy {
 				projectiles.add(new MushroomWizardBall(centerX + 30,centerY,vectorx,vectory,getNextBall(),phase % 2 == 0));
 				if (phase > 2)
 					projectiles.add(new MushroomWizardBall(centerX + 30,centerY,vectorx,vectory,centerX,centerY,getNextBall(),phase % 2 == 0));
-				if (ballAnimation) {
-					stopMoving();
+				else {
+					if (StartingClass.difficultylevel < 3)
+						stopMoving();
 					currentSprite = shooting;
-					inAnimation = maxInAnimation;
+					ballInAnimation = maxBallInAnimation;
 				}
 			}
 		}
@@ -417,7 +424,7 @@ public class MushroomWizard extends Enemy {
 
 	@Override
 	public void animate(){
-		if (isMoving && inAnimation == 0) {
+		if (isMoving && inAnimation == 0 && ballInAnimation == 0) {
 			walkCounter++;
 			if (getSpeedX() <= 0) {
 				if (walkCounter == 1000)

@@ -63,7 +63,7 @@ public class MushroomWizardBall extends Projectile {
 		this.cY = cY;
 		type = 1;
 		this.newpattern = newpattern;
-		range = 5000;
+		range = 4000;
 		this.color = color;
 		switch (color) {
 		case 1:
