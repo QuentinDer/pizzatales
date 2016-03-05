@@ -50,6 +50,8 @@ public class PizzaBox extends Item {
 		return null;
 	}
 
-	
-	
+	@Override
+	protected void doLeavingEffect() {
+	}
+
 }

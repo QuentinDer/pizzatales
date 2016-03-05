@@ -33,5 +33,9 @@ public class HiddenTrigger extends Item {
 	protected Image getEffectSprite() {
 		return null;
 	}
+
+	@Override
+	protected void doLeavingEffect() {
+	}
 	
 }

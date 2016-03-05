@@ -37,4 +37,8 @@ public class HealthPotion extends Item {
 	protected boolean canDoEffect() {
 		return player.getHealth() != 20;
 	}
+
+	@Override
+	protected void doLeavingEffect() {
+	}
 }

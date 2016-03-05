@@ -29,4 +29,8 @@ public class WaterPuddle extends Item {
 		return null;
 	}
 
+	@Override
+	protected void doLeavingEffect() {
+	}
+
 }

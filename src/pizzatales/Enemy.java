@@ -30,7 +30,8 @@ public abstract class Enemy extends BlockingStuff {
 	private boolean ismovingdown;
 	private boolean sleepy = false;
 	private boolean hasSeenU = false;
-	public int halfbar = 22;
+	public int halfbarx = 22;
+	public int halfbary = 25;
 	protected int range;
 	
 	private final static int visionRange = 15;
@@ -49,6 +50,7 @@ public abstract class Enemy extends BlockingStuff {
 
 	public Enemy(int centerX, int centerY, Firearm weapon, int health, int speed, int halfsizex, int halfsizey, int halfrsizex, int halfrsizey) {
 		super(centerX, centerY, halfsizex, halfsizey, halfrsizex, halfrsizey);
+		halfbary = halfrsizey;
 		this.weapon = weapon;
 		if (weapon != null) {
 			weapon.setFireRate(weapon.getFireRate() * (5 - StartingClass.difficultylevel));

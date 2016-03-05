@@ -39,4 +39,8 @@ public class Lava extends Item {
 		return true;
 	}
 
+	@Override
+	protected void doLeavingEffect() {
+	}
+
 }

@@ -8,10 +8,7 @@ public abstract class Projectile extends Stuff {
 	protected boolean visible;
 	protected boolean canbedestroyed;
 	protected Rectangle rectP;
-	private int initX;
-	private int initY;
-	private int initbgx;
-	private int initbgy;
+	private int travelleddist;
 	protected int range;
 	protected int size;
 	protected int halfsize;
@@ -22,10 +19,6 @@ public abstract class Projectile extends Stuff {
 		super(startX, startY);
 		speedX = (int)(vectorX * speed);
 		speedY = (int)(vectorY * speed);
-		initX = startX;
-		initY = startY;
-		initbgx = bg.getCenterX();
-		initbgy = bg.getCenterY();
 		visible = true;
 		this.damage = damage;
 		this.size = size;
@@ -38,10 +31,11 @@ public abstract class Projectile extends Stuff {
 	public void update() {
 		super.update();
 		rectP.setBounds(getCenterX() - halfsize, getCenterY() - halfsize, size, size);
-		if (Math.abs(centerX - bg.getCenterX() + initbgx - initX) > range) {
+		travelleddist += Math.abs(speedX)+Math.abs(speedY);
+		if (travelleddist > range) {
 			doOnLimitRange();
 		}
-		if (Math.abs(centerY - bg.getCenterY() + initbgy - initY) > range) {
+		if (travelleddist > range) {
 			doOnLimitRange();
 		}
 		if (centerX > 1280 && speedX > 0) {

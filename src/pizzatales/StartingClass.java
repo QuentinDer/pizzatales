@@ -42,9 +42,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private static ArrayList<Explosion> explosions;
 	private AudioClip soundtrack;
 	
-	public static int difficultylevel = 4;
+	public static int difficultylevel = 3;
 	public static final boolean TESTMODE = true;
-	public static int currentlevel = TESTMODE?0:0;
+	public static int currentlevel = TESTMODE?8:0;
 
 	private int weaponindex;
 	private int armorindex;
@@ -70,12 +70,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private int[][] heightitemmap;
 	
 	private static ArrayList<Tile> tilearray = new ArrayList<Tile>();
-	private ArrayList<Item> items = new ArrayList<Item>();
-	private ArrayList<Item> leavingitems = new ArrayList<Item>();
+	public static ArrayList<Item> items = new ArrayList<Item>();
+	public static ArrayList<Item> leavingitems = new ArrayList<Item>();
 	public static ArrayList<Enemy> enemyarray = new ArrayList<Enemy>();
 	public static ArrayList<ArrayList<Enemy>> arenaenemies = new ArrayList<ArrayList<Enemy>>();
 	public static ArrayList<ArrayList<EntryDoor>> arenaentrydoors = new ArrayList<ArrayList<EntryDoor>>();
 	public static ArrayList<Entry<Integer,Integer>> arenacenters = new ArrayList<Entry<Integer,Integer>>();
+	public static ArrayList<ArrayList<Integer>> arenainsidearea = new ArrayList<ArrayList<Integer>>();
 	public static ArrayList<HitPoint> hitpoints = new ArrayList<HitPoint>();
 	public static ArrayList<ArrayList<Enemy>> hiddenenemies = new ArrayList<ArrayList<Enemy>>();
 	public static ArrayList<ArrayList<Tile>> hiddentiles = new ArrayList<ArrayList<Tile>>();
@@ -190,6 +191,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Smg.upSprite = getImage(base, "data/smg4.png");
 		SmgBullet.bulletsprite = getImage(base, "data/smgprojectile.png");
 		TomatoProjectile.tomatoprojectilesprite = getImage(base, "data/sirtomatoprojectile.png");
+		MushroomWizardBall.greenball = getImage(base, "data/mushroomwizardgreenball.png");
+		MushroomWizardBall.yellowball = getImage(base, "data/mushroomwizardyellowball.png");
+		MushroomWizardBall.redball = getImage(base, "data/mushroomwizardredball.png");
+		MushroomWizardBall.blueball = getImage(base, "data/mushroomwizardblueball.png");
 
 		Tato.staySprite = getImage(base, "data/tato1.png");
 		Tato.move1Sprite = getImage(base, "data/tato2.png");
@@ -238,6 +243,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		MushroomWizard.swipeRight = getImage(base, "data/mushroomwizardswiperight.png");
 		MushroomWizard.swipeDown = getImage(base, "data/mushroomwizardswipedown.png");
 		MushroomWizard.swipeUp = getImage(base, "data/mushroomwizardswipeup.png");
+		MushroomWizard.shooting = getImage(base, "data/mushroomwizardshooting.png");
 		
 		BazookaBulletExplosion.bazookaexplosionsprite = getImage(base, "data/bazookaexplosion.png");
 		TomatoProjectileExplosion.tomatoexplosionsprite = getImage(base, "data/sirtomatoprojectileexplosion.png");
@@ -450,6 +456,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						l = 0;
 						arenaenemies.add(lenemies);
 						arenacenters.add(new SimpleEntry<Integer,Integer>(i,j));
+						arenainsidearea.add(nonobstacles);
 						k++;
 					}
 				}
@@ -654,8 +661,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							}
 							isInArena = activatedentry.isGoingIn();
 							
-							int arenacentery = arenacenters.get(isInArena).getValue() * 50 + bg.getCenterY() - bginity;
-							int arenacenterx = arenacenters.get(isInArena).getKey() * 50 + bg.getCenterX() - bginitx;
+							int arenacentery = arenacenters.get(isInArena).getValue() * 50 + 25 +bg.getCenterY() - bginity;
+							int arenacenterx = arenacenters.get(isInArena).getKey() * 50 + 25 + bg.getCenterX() - bginitx;
 							player.setScrollingSpeedX(0);
 							player.setScrollingSpeedY(0);
 							if (levelwithyscrolling) {
@@ -1114,10 +1121,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							}
 							if (e.showHealthBar) {
 								g.setColor(Color.GREEN);
-								int lifetaken = ((e.getMaxHealth()-e.getHealth())*e.halfbar*2)/e.getMaxHealth();
-								g.fillRect(e.getCenterX()-e.halfbar, e.getCenterY()-e.halfsizey, 2*e.halfbar-lifetaken, 2);
+								int lifetaken = ((e.getMaxHealth()-e.getHealth())*e.halfbarx*2)/e.getMaxHealth();
+								g.fillRect(e.getCenterX()-e.halfbarx, e.getCenterY()-e.halfbary, 2*e.halfbarx-lifetaken, 2);
 								g.setColor(Color.RED);
-								g.fillRect(e.getCenterX()+e.halfbar-lifetaken, e.getCenterY()-e.halfsizey, lifetaken, 2);
+								g.fillRect(e.getCenterX()+e.halfbarx-lifetaken, e.getCenterY()-e.halfbary, lifetaken, 2);
 							}
 						} else if (Player.class.isInstance(map[x][y])) {
 							if (player.isAimingUp()) {
@@ -1231,6 +1238,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			} else {
 				i++;
 			}
+		}
+		for (Item it : leavingitems) {
+			it.doLeavingEffect();
 		}
 	}
 /*

@@ -36,4 +36,8 @@ public class ArmorPotion extends Item {
 		return player.getArmor().defense != player.getArmor().MAXDEF;
 	}
 
+	@Override
+	protected void doLeavingEffect() {
+	}
+
 }

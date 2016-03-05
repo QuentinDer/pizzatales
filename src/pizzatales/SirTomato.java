@@ -19,7 +19,7 @@ public class SirTomato extends Enemy {
 	public SirTomato(int centerX, int centerY) {
 		super(centerX, centerY, null, 100, basicspeed, 50, 50, 45, 45);
 		movementTime = ((int) (Math.random() * 50));
-		halfbar = 45;
+		halfbarx = 45;
 		slashdmg = 4;
 		dashdmg = 5;
 		switch (StartingClass.difficultylevel) {

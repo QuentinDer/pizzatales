@@ -84,4 +84,8 @@ public class EntryDoor extends Item {
 	public int getPosY() {
 		return posy;
 	}
+
+	@Override
+	protected void doLeavingEffect() {
+	}
 }

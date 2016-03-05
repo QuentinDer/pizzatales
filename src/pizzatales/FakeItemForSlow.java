@@ -2,12 +2,12 @@ package pizzatales;
 
 import java.awt.Image;
 
-import pizzatales.StartingClass.GameState;
-
-public class LevelExit extends Item {
-
-	public LevelExit(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
-		super(x, y, deltapx, deltapy, onetimeeffect, height);
+public class FakeItemForSlow extends Item {
+	
+	public FakeItemForSlow(int slowDuration) {
+		super(0, 0, 0, 0, true, 0);
+		effectTimer = slowDuration;
+		effectactive = true;
 	}
 
 	@Override
@@ -17,7 +17,7 @@ public class LevelExit extends Item {
 
 	@Override
 	protected void doEffect() {
-		StartingClass.state = GameState.LevelEnded;
+		
 	}
 
 	@Override
@@ -32,6 +32,8 @@ public class LevelExit extends Item {
 
 	@Override
 	protected void doLeavingEffect() {
+		if (player.getArmor().speed >= 4)
+			player.setMOVESPEED(player.getArmor().speed/2);
 	}
 
 }

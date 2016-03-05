@@ -34,4 +34,8 @@ public class WaterFlow extends Item {
 		return true;
 	}
 
+	@Override
+	protected void doLeavingEffect() {
+	}
+
 }

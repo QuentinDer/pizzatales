@@ -47,6 +47,7 @@ public abstract class Item extends Stuff {
 
 	protected abstract boolean canDoEffect();
 	protected abstract void doEffect();
+	protected abstract void doLeavingEffect();
 	
 	protected abstract Image getSprite();
 	protected abstract Image getEffectSprite();

@@ -29,4 +29,8 @@ public class WoodBridge extends Item {
 		return null;
 	}
 
+	@Override
+	protected void doLeavingEffect() {
+	}
+
 }
