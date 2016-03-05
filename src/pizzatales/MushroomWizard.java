@@ -55,7 +55,7 @@ public class MushroomWizard extends Enemy {
 		case 4:
 			maxInAnimation = 30;
 			ballAnimation = false;
-			phase = 4;
+			//phase = 4;
 			ballcd = 22;
 			randg = 34;
 			randy = 35;

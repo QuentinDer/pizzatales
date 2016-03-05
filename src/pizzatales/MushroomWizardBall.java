@@ -27,11 +27,13 @@ public class MushroomWizardBall extends Projectile {
 		case 2:
 			currentball = yellowball;
 			damage = 5;
-			if (newpattern)
+			if (newpattern) {
 				speed = 5;
+				range = 600;
+			}
 			speedX = (int)(vectorX * speed);
 			speedY = (int)(vectorY * speed);
-			range = 600;
+			
 			break;
 		case 3:
 			currentball = blueball;
@@ -69,6 +71,10 @@ public class MushroomWizardBall extends Projectile {
 			break;
 		case 2:
 			currentball = yellowball;
+			if (newpattern) {
+				speed = 5;
+				range = 600;
+			}
 			damage = 5;
 			break;
 		case 3:
@@ -91,8 +97,8 @@ public class MushroomWizardBall extends Projectile {
 		if (color == 2 && newpattern) {
 			int diffX = player.centerX - centerX;
 			int diffY = player.centerY - centerY;
-			speedX = 5 * diffX / (Math.abs(diffX)+Math.abs(diffY));
-			speedY = 5 * diffY / (Math.abs(diffX)+Math.abs(diffY));
+			speedX = speed * diffX / (Math.abs(diffX)+Math.abs(diffY));
+			speedY = speed * diffY / (Math.abs(diffX)+Math.abs(diffY));
 			super.update();
 		} else if (type == 1) {
 			int diffX = centerX - cX;
