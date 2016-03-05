@@ -39,10 +39,10 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private Animation anim;
 	public static ArrayList<Firearm> playerweapons;
 	public static ArrayList<Armor> playerarmor;
-	private static ArrayList<Explosion> explosions;
+	public static ArrayList<Explosion> explosions;
 	private AudioClip soundtrack;
 	
-	public static int difficultylevel = 3;
+	public static int difficultylevel = 2;
 	public static final boolean TESTMODE = true;
 	public static int currentlevel = TESTMODE?8:0;
 
@@ -50,13 +50,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private int armorindex;
 	public static int bginitx;
 	public static int bginity;
-	private int fps;
-	private int fpscount;
-	private long fpsclock = System.currentTimeMillis();
-	private long clock = System.currentTimeMillis();
-	private long nanoclock = System.nanoTime();
-	private int computationtime;
-	private int cmptime;
+	public static int fps;
+	public static int fpscount;
+	public static long fpsclock = System.currentTimeMillis();
+	public static long clock = System.currentTimeMillis();
+	public static long nanoclock = System.nanoTime();
+	public static int computationtime;
+	public static int cmptime;
 
 	enum GameState {
 		Running, Dead, Paused, LevelEnded
@@ -244,6 +244,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		MushroomWizard.swipeDown = getImage(base, "data/mushroomwizardswipedown.png");
 		MushroomWizard.swipeUp = getImage(base, "data/mushroomwizardswipeup.png");
 		MushroomWizard.shooting = getImage(base, "data/mushroomwizardshooting.png");
+		MushroomWizard.summoning = getImage(base, "data/mushroomwizardlavasummon.png");
 		
 		BazookaBulletExplosion.bazookaexplosionsprite = getImage(base, "data/bazookaexplosion.png");
 		TomatoProjectileExplosion.tomatoexplosionsprite = getImage(base, "data/sirtomatoprojectileexplosion.png");
@@ -425,7 +426,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 						destroyabletiles.add((DestroyableTile)t);
 				}
 				if (EnemyFactory.isTileTypeSupported(ch)) {
-					getEnemyarray().add(EnemyFactory.getEnemy(k+deltapx, j+deltapy, ch));
+					getEnemyarray().add(EnemyFactory.getEnemy(k+deltapx, j+deltapy, ch, this));
 				}
 				if (inBlock) {
 					if (itemheight > blockmaxheight)
@@ -1251,7 +1252,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 	}*/
 	
-	private void updateExplosions() {
+	public static void updateExplosions() {
 		int i = 0;
 		while (i < explosions.size()) {
 			Explosion e = explosions.get(i);
@@ -1322,7 +1323,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		player.update();
 	}
 
-	private void updateEnemies() {
+	public static void updateEnemies() {
 		for (int j = 0; j < getEnemyarray().size(); j++) {
 			Enemy e = getEnemyarray().get(j);
 			e.update();
@@ -1370,14 +1371,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 	}
 
-	private void updateTiles() {
+	public static void updateTiles() {
 		for (int i = 0; i < tilearray.size(); i++) {
 			Tile t = tilearray.get(i);
 			t.update();
 		}
 	}
 	
-	private void updateItems() {
+	public static void updateItems() {
 		for (Item i : items)
 			i.update();
 		for (Item i : leavingitems)

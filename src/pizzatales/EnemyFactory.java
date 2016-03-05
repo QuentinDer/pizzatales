@@ -1,5 +1,7 @@
 package pizzatales;
 
+import java.applet.Applet;
+
 public class EnemyFactory {
 
 	private static String acceptedEnemyTypes = "TABPMSW";
@@ -10,7 +12,7 @@ public class EnemyFactory {
 		return acceptedEnemyTypes.contains(test);
 	}
 	
-	public static Enemy getEnemy(int x, int y, char c) {
+	public static Enemy getEnemy(int x, int y, char c, Applet app) {
 		Enemy e = null;
 		switch(c) {
 		case 'T':
@@ -32,7 +34,7 @@ public class EnemyFactory {
 			e = new SirTomato((x * 50) + 25,(y*50) + 40);
 			break;
 		case 'W':
-			e = new MushroomWizard(x*50+25,y*50+40);
+			e = new MushroomWizard(x*50+25,y*50+40,app);
 			break;
 		}
 		return e;

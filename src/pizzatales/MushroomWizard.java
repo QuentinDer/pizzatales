@@ -1,5 +1,6 @@
 package pizzatales;
 
+import java.applet.Applet;
 import java.awt.Image;
 import java.util.ArrayList;
 
@@ -19,12 +20,14 @@ public class MushroomWizard extends Enemy {
 	private boolean isSlashing;
 	private int slashDirection;
 	private boolean hasSlashed;
+	private Applet applet;
 	
-	public MushroomWizard(int centerX, int centerY) {
+	public MushroomWizard(int centerX, int centerY, Applet applet) {
 		super(centerX, centerY, null, 75, (StartingClass.difficultylevel>2)?1:2, 50, 50, 45, 45);
 		movementTime = ((int) (Math.random() * 50));
 		halfbarx = 45;
 		slashdmg = 4;
+		this.applet = applet;
 		switch(StartingClass.difficultylevel) {
 		case 1:
 			maxInAnimation = 60;
@@ -452,7 +455,6 @@ public class MushroomWizard extends Enemy {
 		stopMoving();
 		player.controlledstopMoving();
 		currentSprite = summoning;
-		setHealth(maxHealth);
 		
 		int insideareasize = StartingClass.arenainsidearea.get(StartingClass.isInArena).size();
 		//add 2 lavatiles
@@ -460,84 +462,180 @@ public class MushroomWizard extends Enemy {
 		int poslx;
 		int posly;
 		boolean test;
-		//Adding Lava 1
-		do {
-			posl = (int)(Math.random()*insideareasize);
-			poslx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) / StartingClass.height;
-			posly = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) % StartingClass.height;
-			test = false;
-			for (Item it : StartingClass.items)
-				test = test || (it.posx == poslx && it.posy == posly);
-		} while (test || Math.abs(player.posx-poslx) <=1 || Math.abs(player.posy-posly) <= 1);
-		Lava l1 = new Lava(poslx,posly,0,0,false,0);
-		l1.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
-		l1.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
-		l1.r.setBounds(l1.getCenterX() - 22, l1.getCenterY() - 22, 45, 45);
-		StartingClass.items.add(l1);
 		
-		//Adding Lava 2
-		do {
-			posl = (int)(Math.random()*insideareasize);
-			poslx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) / StartingClass.height;
-			posly = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) % StartingClass.height;
-			test = false;
-			for (Item it : StartingClass.items)
-				test = test || (it.posx == poslx && it.posy == posly);
-		} while (test || Math.abs(player.posx-poslx) <=1 || Math.abs(player.posy-posly) <= 1);
-		Lava l2 = new Lava(poslx,posly,0,0,false,0);
-		l2.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
-		l2.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
-		l2.r.setBounds(l2.getCenterX() - 22, l2.getCenterY() - 22, 45, 45);
-		StartingClass.items.add(l2);
+		int toheal = maxHealth * (StartingClass.difficultylevel-phase)/StartingClass.difficultylevel;
+		float deltaheal = (toheal-health)/((float)240);
+		float fhealth = (float)health;
+		float summoningdelta = (toheal-health)/((float)6);
+		int summoningstep = 0;
 		
-		//Adding WaterFlow 1
-		do {
-			posl = (int)(Math.random()*insideareasize);
-			poslx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) / StartingClass.height;
-			posly = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) % StartingClass.height;
-			test = false;
-			for (Item it : StartingClass.items)
-				test = test || (it.posx == poslx && it.posy == posly);
-		} while (test || Math.abs(player.posx-poslx) <=1 || Math.abs(player.posy-posly) <= 1);
-		WaterFlow w1 = new WaterFlow(poslx,posly,0,0,false,0);
-		w1.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
-		w1.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
-		w1.r.setBounds(w1.getCenterX() - 22, w1.getCenterY() - 22, 45, 45);
-		StartingClass.items.add(w1);
+		int animcounter = 0;
 		
-		//Adding healthpotion 1
-		do {
-			posl = (int)(Math.random()*insideareasize);
-			poslx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) / StartingClass.height;
-			posly = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) % StartingClass.height;
-			test = false;
-			for (Item it : StartingClass.items)
-				test = test || (it.posx == poslx && it.posy == posly);
-		} while (test || Math.abs(player.posx-poslx) >3 || Math.abs(player.posy-posly) > 3);
-		HealthPotion h1 = new HealthPotion(poslx,posly,0,0,true,0);
-		h1.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
-		h1.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
-		h1.r.setBounds(h1.getCenterX() - 22, h1.getCenterY() - 22, 45, 45);
-		StartingClass.items.add(h1);
-		
-		//Adding armorpotion 1
-		do {
-			posl = (int)(Math.random()*insideareasize);
-			poslx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) / StartingClass.height;
-			posly = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) % StartingClass.height;
-			test = false;
-			for (Item it : StartingClass.items)
-				test = test || (it.posx == poslx && it.posy == posly);
-		} while (test || Math.abs(player.posx-poslx) > 3 || Math.abs(player.posy-posly) > 3);
-		ArmorPotion a1 = new ArmorPotion(poslx,posly,0,0,true,0);
-		a1.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
-		a1.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
-		a1.r.setBounds(a1.getCenterX() - 22, a1.getCenterY() - 22, 45, 45);
-		StartingClass.items.add(a1);
-		
-		//TODO animation
-		
-		
+		while (health < toheal) {
+			StartingClass.computationtime += System.nanoTime() - StartingClass.nanoclock;
+			try {
+				Thread.sleep(Math.abs(17 - System.currentTimeMillis() + StartingClass.clock));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			StartingClass.nanoclock = System.nanoTime();
+			StartingClass.clock = System.currentTimeMillis();
+			if (StartingClass.TESTMODE) {
+				if (StartingClass.clock > StartingClass.fpsclock+1000) {
+					StartingClass.fpsclock = StartingClass.clock;
+					StartingClass.fps = StartingClass.fpscount;
+					StartingClass.fpscount = 0;
+					StartingClass.cmptime = StartingClass.computationtime / StartingClass.fps / 1000;
+					StartingClass.computationtime = 0;
+				} else {
+					StartingClass.fpscount++;
+				}
+			}
+			int i = 0;
+			while (i < StartingClass.hitpoints.size()) {
+				if (StartingClass.hitpoints.get(i).timer == 0)
+					StartingClass.hitpoints.remove(i);
+				else {
+					StartingClass.hitpoints.get(i).timer--;
+					i++;
+				}	
+			}
+			
+			player.canmovedown = true;
+			player.canmoveleft = true;
+			player.canmoveright = true;
+			player.canmoveup = true;
+			for (Explosion e : StartingClass.explosions) {
+				if (e.isProcing() && player.R.intersects(e.getR())) {
+					if (player.getArmor().defense - e.damage < 0) {
+						player.setHealth(player.getHealth() - e.damage + player.getArmor().defense);
+						player.getArmor().setDefense(0);
+					} else {
+						player.getArmor().setDefense(player.getArmor().getDefense() - e.damage);
+					}
+				}
+			}
+			player.controlledupdate();
+			StartingClass.updateExplosions();
+			for (Enemy e : StartingClass.getEnemyarray()) {
+				if (e.alive)
+					StartingClass.map[e.posx][e.posy] = null;
+			}
+			StartingClass.updateEnemies();
+			int exi = 0;
+			int exsize = 0;
+			while (exi < exsize) {
+				Explosion e = StartingClass.explosions.get(exi);
+				int dt = 0;
+				while (dt < StartingClass.destroyabletiles.size()) {
+					if (e.isProcing() && e.getR().intersects(StartingClass.destroyabletiles.get(dt).R)) {
+						if (!StartingClass.destroyabletiles.get(dt).damage(e.damage))
+							dt++;
+					} else
+						dt++;
+				}
+				exi++;
+			}
+			bg.update();
+			StartingClass.updateTiles();
+			StartingClass.updateItems();
+			
+			fhealth += deltaheal;
+			health = (int)fhealth;
+			
+			if (summoningstep == 0 && fhealth > toheal - 5 * summoningdelta) {
+				//Adding Lava 1
+				do {
+					posl = (int)(Math.random()*insideareasize);
+					poslx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) / StartingClass.height;
+					posly = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) % StartingClass.height;
+					test = false;
+					for (Item it : StartingClass.items)
+						test = test || (it.posx == poslx && it.posy == posly);
+				} while (test || Math.abs(player.posx-poslx) <=1 || Math.abs(player.posy-posly) <= 1);
+				Lava l1 = new Lava(poslx,posly,0,0,false,0);
+				l1.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
+				l1.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
+				l1.r.setBounds(l1.getCenterX() - 22, l1.getCenterY() - 22, 45, 45);
+				StartingClass.items.add(l1);
+				summoningstep++;
+			}
+			if (summoningstep == 1 && fhealth > toheal - 4 * summoningdelta) {
+				//Adding healthpotion 1
+				do {
+					posl = (int)(Math.random()*insideareasize);
+					poslx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) / StartingClass.height;
+					posly = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) % StartingClass.height;
+					test = false;
+					for (Item it : StartingClass.items)
+						test = test || (it.posx == poslx && it.posy == posly);
+				} while (test || Math.abs(player.posx-poslx) >3 || Math.abs(player.posy-posly) > 3);
+				HealthPotion h1 = new HealthPotion(poslx,posly,0,0,true,0);
+				h1.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
+				h1.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
+				h1.r.setBounds(h1.getCenterX() - 22, h1.getCenterY() - 22, 45, 45);
+				StartingClass.items.add(h1);
+				summoningstep++;
+			}
+			if (summoningstep == 2 && fhealth > toheal - 3 * summoningdelta) {
+				//Adding WaterFlow 1
+				do {
+					posl = (int)(Math.random()*insideareasize);
+					poslx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) / StartingClass.height;
+					posly = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) % StartingClass.height;
+					test = false;
+					for (Item it : StartingClass.items)
+						test = test || (it.posx == poslx && it.posy == posly);
+				} while (test || Math.abs(player.posx-poslx) <=1 || Math.abs(player.posy-posly) <= 1);
+				WaterFlow w1 = new WaterFlow(poslx,posly,0,0,false,0);
+				w1.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
+				w1.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
+				w1.r.setBounds(w1.getCenterX() - 22, w1.getCenterY() - 22, 45, 45);
+				StartingClass.items.add(w1);
+				summoningstep++;
+			}
+			if (summoningstep == 3 && fhealth > toheal - 2 * summoningdelta) {
+				//Adding Lava 2
+				do {
+					posl = (int)(Math.random()*insideareasize);
+					poslx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) / StartingClass.height;
+					posly = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) % StartingClass.height;
+					test = false;
+					for (Item it : StartingClass.items)
+						test = test || (it.posx == poslx && it.posy == posly);
+				} while (test || Math.abs(player.posx-poslx) <=1 || Math.abs(player.posy-posly) <= 1);
+				Lava l2 = new Lava(poslx,posly,0,0,false,0);
+				l2.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
+				l2.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
+				l2.r.setBounds(l2.getCenterX() - 22, l2.getCenterY() - 22, 45, 45);
+				StartingClass.items.add(l2);
+				summoningstep++;
+			}
+			if (summoningstep == 4 && fhealth > toheal - 1 * summoningdelta) {
+				//Adding armorpotion 1
+				do {
+					posl = (int)(Math.random()*insideareasize);
+					poslx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) / StartingClass.height;
+					posly = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) % StartingClass.height;
+					test = false;
+					for (Item it : StartingClass.items)
+						test = test || (it.posx == poslx && it.posy == posly);
+				} while (test || Math.abs(player.posx-poslx) > 3 || Math.abs(player.posy-posly) > 3);
+				ArmorPotion a1 = new ArmorPotion(poslx,posly,0,0,true,0);
+				a1.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
+				a1.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
+				a1.r.setBounds(a1.getCenterX() - 22, a1.getCenterY() - 22, 45, 45);
+				StartingClass.items.add(a1);
+				summoningstep++;
+			}
+			if (animcounter % 20 < 10)
+				player.setScrollingSpeedY(2);
+			else
+				player.setScrollingSpeedY(-2);
+			animcounter++;
+			applet.repaint();
+		}
+		player.setScrollingSpeedY(0);
 		phase++;
 		currentSprite = staySprite;
 	}
