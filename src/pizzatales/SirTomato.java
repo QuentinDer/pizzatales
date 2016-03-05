@@ -305,4 +305,9 @@ public class SirTomato extends Enemy {
 			}
 		}
 	}
+	
+	@Override
+	public void setGibsSprite() {
+		currentSprite = dieSprite;
+	}
 }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Tato extends Enemy {
 
-	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
+	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, gibsSprite;
 	public int range = 470;
 
 	public Tato(int centerX, int centerY) {
@@ -100,23 +100,23 @@ public class Tato extends Enemy {
 					int absdifX = Math.abs(difX);
 					int absdifY = Math.abs(difY);
 					if (difX > 0) {
-						if (StartingClass.map[player.posx+1][player.posy] == null) {
+						if (player.posx < StartingClass.width-1 && StartingClass.map[player.posx+1][player.posy] == null) {
 							tox.add(player.posx+1);
 							toy.add(player.posy);
 						}
 					} else {
-						if (StartingClass.map[player.posx-1][player.posy] == null) {
+						if (player.posx != 0 && StartingClass.map[player.posx-1][player.posy] == null) {
 							tox.add(player.posx-1);
 							toy.add(player.posy);
 						}
 					}
 					if (difY > 0) {
-						if (StartingClass.map[player.posx][player.posy+1] == null) {
+						if (player.posy != StartingClass.height && StartingClass.map[player.posx][player.posy+1] == null) {
 							tox.add(player.posx);
 							toy.add(player.posy+1);
 						}
 					} else {
-						if (StartingClass.map[player.posx][player.posy-1] == null) {
+						if (player.posy != 0 && StartingClass.map[player.posx][player.posy-1] == null) {
 							tox.add(player.posx);
 							toy.add(player.posy-1);
 						}
@@ -227,23 +227,23 @@ public class Tato extends Enemy {
 					int absdifX = Math.abs(difX);
 					int absdifY = Math.abs(difY);
 					if (difX > 0) {
-						if (StartingClass.map[player.posx+1][player.posy] == null) {
+						if (player.posx < StartingClass.width-1 && StartingClass.map[player.posx+1][player.posy] == null) {
 							tox.add(player.posx+1);
 							toy.add(player.posy);
 						}
 					} else {
-						if (StartingClass.map[player.posx-1][player.posy] == null) {
+						if (player.posx != 0 && StartingClass.map[player.posx-1][player.posy] == null) {
 							tox.add(player.posx-1);
 							toy.add(player.posy);
 						}
 					}
 					if (difY > 0) {
-						if (StartingClass.map[player.posx][player.posy+1] == null) {
+						if (player.posy != StartingClass.height && StartingClass.map[player.posx][player.posy+1] == null) {
 							tox.add(player.posx);
 							toy.add(player.posy+1);
 						}
 					} else {
-						if (StartingClass.map[player.posx][player.posy-1] == null) {
+						if (player.posy != 0 && StartingClass.map[player.posx][player.posy-1] == null) {
 							tox.add(player.posx);
 							toy.add(player.posy-1);
 						}
@@ -480,4 +480,8 @@ public class Tato extends Enemy {
 		currentSprite = move2Sprite;
 	}
 
+	@Override
+	public void setGibsSprite() {
+		currentSprite = gibsSprite;
+	}
 }

@@ -21,9 +21,10 @@ public class MushroomWizard extends Enemy {
 	private int slashDirection;
 	private boolean hasSlashed;
 	private Applet applet;
+	private int nextball;
 	
 	public MushroomWizard(int centerX, int centerY, Applet applet) {
-		super(centerX, centerY, null, 75, (StartingClass.difficultylevel>2)?1:2, 50, 50, 45, 45);
+		super(centerX, centerY, new FakeMushroomWeapon(25,-12), 75, (StartingClass.difficultylevel>2)?1:2, 50, 50, 45, 45);
 		movementTime = ((int) (Math.random() * 50));
 		halfbarx = 45;
 		slashdmg = 4;
@@ -68,14 +69,19 @@ public class MushroomWizard extends Enemy {
 			randr = 40;
 			break;
 		}
+		nextball = getNextBall();
+		((FakeMushroomWeapon)weapon).setSpriteBall(nextball);
 	}
 
 	@Override
 	public void callAI() {
 		if (ballInAnimation>0) {
 			ballInAnimation--;
-			if (ballInAnimation == 0)
+			if (ballInAnimation == 0) {
 				currentSprite = staySprite;
+				nextball = getNextBall();
+				((FakeMushroomWeapon)weapon).setSpriteBall(nextball);
+			}
 		}
 		if (inAnimation>0) {
 			inAnimation--;
@@ -306,12 +312,13 @@ public class MushroomWizard extends Enemy {
 				bcd = ballcd;
 				float vectorx = (diffx-30) / ((float)(Math.abs(diffx-30)+Math.abs(diffy)));
 				float vectory = diffy / ((float)(Math.abs(diffx-30)+Math.abs(diffy)));
-				projectiles.add(new MushroomWizardBall(centerX + 30,centerY,vectorx,vectory,getNextBall(),phase % 2 == 0));
+				projectiles.add(new MushroomWizardBall(centerX + 30,centerY,vectorx,vectory,nextball,phase % 2 == 0));
 				if (phase > 2)
 					projectiles.add(new MushroomWizardBall(centerX + 30,centerY,vectorx,vectory,centerX,centerY,getNextBall(),phase % 2 == 0));
 				else {
 					if (StartingClass.difficultylevel < 3)
 						stopMoving();
+					weapon.currentSprite = null;
 					currentSprite = shooting;
 					ballInAnimation = maxBallInAnimation;
 				}
@@ -455,6 +462,7 @@ public class MushroomWizard extends Enemy {
 		stopMoving();
 		player.controlledstopMoving();
 		currentSprite = summoning;
+		((FakeMushroomWeapon)weapon).currentSprite = null;
 		
 		int insideareasize = StartingClass.arenainsidearea.get(StartingClass.isInArena).size();
 		//add 2 lavatiles
@@ -638,5 +646,13 @@ public class MushroomWizard extends Enemy {
 		player.setScrollingSpeedY(0);
 		phase++;
 		currentSprite = staySprite;
+		nextball = getNextBall();
+		if (phase > 2)
+			((FakeMushroomWeapon)weapon).setSpriteBall(nextball);
+	}
+	
+	@Override
+	public void setGibsSprite() {
+		currentSprite = dieSprite;
 	}
 }

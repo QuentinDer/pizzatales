@@ -6,7 +6,7 @@ public class Pepper extends Enemy {
 
 	protected boolean isShooting;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, staySpriteRight, move1SpriteRight,
-	move2SpriteRight;
+	move2SpriteRight, gibsSprite;
 
 	public Pepper(int centerX, int centerY) {
 		super(centerX,centerY, new Flamer(), 5, (StartingClass.difficultylevel == 1)?2:((StartingClass.difficultylevel == 3)?4:3), 31, 31, 26, 26);
@@ -65,6 +65,18 @@ public class Pepper extends Enemy {
 				case 4:
 					moveDown();
 					break;
+				case 5:
+					moveLeftUp();
+					break;
+				case 6:
+					moveRightUp();
+					break;
+				case 7:
+					moveRightDown();
+					break;
+				case 8:
+					moveLeftDown();
+					break;
 				}
 			}
 			break;
@@ -114,6 +126,18 @@ public class Pepper extends Enemy {
 					break;
 				case 4:
 					moveDown();
+					break;
+				case 5:
+					moveLeftUp();
+					break;
+				case 6:
+					moveRightUp();
+					break;
+				case 7:
+					moveRightDown();
+					break;
+				case 8:
+					moveLeftDown();
 					break;
 				}
 			}
@@ -165,11 +189,23 @@ public class Pepper extends Enemy {
 				case 4:
 					moveDown();
 					break;
+				case 5:
+					moveLeftUp();
+					break;
+				case 6:
+					moveRightUp();
+					break;
+				case 7:
+					moveRightDown();
+					break;
+				case 8:
+					moveLeftDown();
+					break;
 				}
 			}
 			break;
 		case 4:
-			if (movementTime % 10 == 0) {
+			if (movementTime % 05 == 0) {
 				StartingClass.map[player.posx][player.posy] = null;
 				int dirplace = 0;
 				int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
@@ -288,4 +324,8 @@ public class Pepper extends Enemy {
 		currentSprite = move2SpriteRight;
 	}
 	
+	@Override
+	public void setGibsSprite() {
+		currentSprite = gibsSprite;
+	}
 }

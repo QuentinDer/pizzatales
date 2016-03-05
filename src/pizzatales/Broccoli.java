@@ -5,7 +5,7 @@ import java.awt.Image;
 public class Broccoli extends Enemy {
 
 	protected boolean isShooting;
-	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
+	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, gibsSprite;
 	private final static int range = 720;
 
 	public Broccoli(int centerX, int centerY) {
@@ -258,4 +258,8 @@ public class Broccoli extends Enemy {
 		currentSprite = move2Sprite;
 	}
 
+	@Override
+	public void setGibsSprite() {
+		currentSprite = gibsSprite;
+	}
 }

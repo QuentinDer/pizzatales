@@ -33,6 +33,9 @@ public abstract class Enemy extends BlockingStuff {
 	public int halfbarx = 22;
 	public int halfbary = 25;
 	protected int range;
+	private int ppdmg;
+	private int pdmg;
+	private int cdmg;
 	
 	private final static int visionRange = 15;
 	private final static float slightincrease = (float)0.5;
@@ -60,6 +63,13 @@ public abstract class Enemy extends BlockingStuff {
 		this.maxHealth = this.health;
 		this.speed = speed;
 		setStaySprite();
+	}
+	
+	public void damage(int projdmg) {
+		cdmg += projdmg;
+		health -= projdmg;
+		if (health < 0)
+			die();
 	}
 	
 	public void checkCollisionsWithBlockingStuff() {
@@ -201,6 +211,10 @@ public abstract class Enemy extends BlockingStuff {
 			}
 				
 		}
+		
+		ppdmg = pdmg;
+		pdmg = cdmg;
+		cdmg = 0;
 	}
 
 	public void launchAI() {
@@ -244,7 +258,10 @@ public abstract class Enemy extends BlockingStuff {
 	public void die() {
 		alive = false;
 		stopMoving();
-		setDieSprite();
+		if (ppdmg + pdmg + cdmg > 3)
+			setGibsSprite();
+		else
+			setDieSprite();
 		StartingClass.map[posx][posy] = null;
 	}
 
@@ -421,6 +438,7 @@ public abstract class Enemy extends BlockingStuff {
 	public abstract void setMove1Sprite();
 	public abstract void setMove2Sprite();
 	public abstract void setDieSprite();
+	public abstract void setGibsSprite();
 	public abstract void setStaySpriteAlt();
 	public abstract void setMove1SpriteAlt();
 	public abstract void setMove2SpriteAlt();

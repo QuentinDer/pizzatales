@@ -44,7 +44,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	
 	public static int difficultylevel = 2;
 	public static final boolean TESTMODE = true;
-	public static int currentlevel = TESTMODE?8:0;
+	public static int currentlevel = TESTMODE?9:0;
 
 	private int weaponindex;
 	private int armorindex;
@@ -200,14 +200,17 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Tato.move1Sprite = getImage(base, "data/tato2.png");
 		Tato.move2Sprite = getImage(base, "data/tato3.png");
 		Tato.dieSprite = getImage(base, "data/tatoDie.png");
+		Tato.gibsSprite = getImage(base, "data/tatogibs.png");
 		Aubergine.staySprite = getImage(base, "data/aubergine1.png");
 		Aubergine.move1Sprite = getImage(base, "data/aubergine2.png");
 		Aubergine.move2Sprite = getImage(base, "data/aubergine3.png");
 		Aubergine.dieSprite = getImage(base, "data/auberginedead.png");
+		Aubergine.gibsSprite = getImage(base, "data/auberginegibs.png");
 		Broccoli.staySprite = getImage(base, "data/broccoli1.png");
 		Broccoli.move1Sprite = getImage(base, "data/broccoli2.png");
 		Broccoli.move2Sprite = getImage(base, "data/broccoli3.png");
 		Broccoli.dieSprite = getImage(base, "data/broccolidead.png");
+		Broccoli.gibsSprite = getImage(base, "data/broccoligibs.png");
 		Pepper.staySprite = getImage(base, "data/pepperLeft1.png");
 		Pepper.move1Sprite = getImage(base, "data/pepperLeft2.png");
 		Pepper.move2Sprite = getImage(base, "data/pepperLeft3.png");
@@ -215,10 +218,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		Pepper.move1SpriteRight = getImage(base, "data/pepperRight2.png");
 		Pepper.move2SpriteRight = getImage(base, "data/pepperRight3.png");
 		Pepper.dieSprite = getImage(base, "data/pepperdead.png");
+		Pepper.gibsSprite = getImage(base, "data/peppergibs.png");
 		Mushroom.staySprite = getImage(base, "data/shroom1.png");
 		Mushroom.move1Sprite = getImage(base, "data/shroom2.png");
 		Mushroom.move2Sprite = getImage(base, "data/shroom3.png");
 		Mushroom.dieSprite = getImage(base, "data/shroomdead.png");
+		Mushroom.gibsSprite = getImage(base, "data/shroomgibs.png");
 		SirTomato.staySprite = getImage(base, "data/sirtomatoleft1.png");
 		SirTomato.move1Sprite = getImage(base, "data/sirtomatoleft2.png");
 		SirTomato.move2Sprite = getImage(base, "data/sirtomatoleft3.png");
@@ -737,12 +742,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 											if (e.alive == true) {
 												if (p.checkCollision(e) == true) {
 													p.doOnCollision(e);
-													e.setHealth(e.getHealth() - p.damage);
-													if (e.getHealth() < 1) {
-														e.die();
-														if(player.getHealth() < 20){
-															player.setHealth(player.getHealth() + 1);
-														}
+													e.damage(p.damage);
+													if (!e.alive && player.getHealth() < 20) {
+														player.setHealth(player.getHealth() + 1);
 													}
 												}
 											}
@@ -1111,11 +1113,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							Enemy e = (Enemy)map[x][y];
 							if (null != e.getWeapon()) {
 								if (e.isAimingUp()) {
-									g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+									g.drawImage(e.getWeapon().currentSprite, e.getCenterX() + e.getWeapon().deltapx, e.getCenterY() + e.getWeapon().deltapy, this);
 									g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
 								} else {
 									g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
-									g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
+									g.drawImage(e.getWeapon().currentSprite, e.getCenterX() + e.getWeapon().deltapx, e.getCenterY() + e.getWeapon().deltapy, this);
 								}
 							} else {
 								g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
@@ -1277,12 +1279,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					if (e.alive == true) {
 						if (p.checkCollision(e) == true) {
 							p.doOnCollision(e);
-							e.setHealth(e.getHealth() - p.damage);
-							if (e.getHealth() < 1) {
-								e.die();
-								if(player.getHealth() < 20){
-									player.setHealth(player.getHealth() + 1);
-								}
+							e.damage(p.damage);
+							if (!e.alive && player.getHealth() < 20) {
+								player.setHealth(player.getHealth() + 1);
 							}
 						}
 					}
@@ -1362,10 +1361,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			}
 			for (Explosion ex : explosions) {
 				if (ex.isProcing() && e.alive && e.R.intersects(ex.getR())) {
-					e.setHealth(e.getHealth() - ex.damage);
-					if (e.getHealth() < 1) {
-						e.die();
-					}
+					e.damage(ex.damage);
+					if (!e.alive)
+						e.setGibsSprite();
 				}
 			}
 		}

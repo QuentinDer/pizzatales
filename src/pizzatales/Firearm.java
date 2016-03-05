@@ -9,10 +9,23 @@ public abstract class Firearm {
 	protected int shootingCounter;
 	protected int firerate;
 	protected ArrayList<Projectile> holderprojectiles;
+	public int deltapx;
+	public int deltapy;
+	
+	public Firearm() {
+		this.deltapx = -31;
+		this.deltapy = -31;
+	}
+	
+	public Firearm(int deltapx, int deltapy) {
+		this.deltapx = deltapx;
+		this.deltapy = deltapy;
+	}
 	
 	public void setHolderProjectiles(ArrayList<Projectile> holderprojectiles) {
 		this.holderprojectiles = holderprojectiles;
 		setSpriteDown();
+		
 	}
 	
 	public abstract void shootUp(int x, int y);
