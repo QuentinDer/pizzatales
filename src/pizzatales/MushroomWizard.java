@@ -6,7 +6,6 @@ import java.util.ArrayList;
 public class MushroomWizard extends Enemy {
 
 	private int inAnimation;
-	private static final int basicspeed = 2;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, staySpriteRight, 
 		move1SpriteRight, move2SpriteRight, swipeDown, swipeRight, swipeLeft, swipeUp, shooting, summoning;
 	private int maxInAnimation;
@@ -21,7 +20,7 @@ public class MushroomWizard extends Enemy {
 	private boolean ballAnimation;
 	
 	public MushroomWizard(int centerX, int centerY) {
-		super(centerX, centerY, null, 75, basicspeed, 50, 50, 45, 45);
+		super(centerX, centerY, null, 75, (StartingClass.difficultylevel>2)?1:2, 50, 50, 45, 45);
 		movementTime = ((int) (Math.random() * 50));
 		halfbarx = 45;
 		slashdmg = 4;
@@ -294,8 +293,8 @@ public class MushroomWizard extends Enemy {
 			}
 			if (bcd == 0 && (StartingClass.difficultylevel > 2 || Math.abs(diffx) + Math.abs(diffy) > 200)) {
 				bcd = ballcd;
-				float vectorx = diffx / ((float)(Math.abs(diffx)+Math.abs(diffy)));
-				float vectory = diffy / ((float)(Math.abs(diffx)+Math.abs(diffy)));
+				float vectorx = (diffx-30) / ((float)(Math.abs(diffx-30)+Math.abs(diffy)));
+				float vectory = diffy / ((float)(Math.abs(diffx-30)+Math.abs(diffy)));
 				projectiles.add(new MushroomWizardBall(centerX + 30,centerY,vectorx,vectory,getNextBall(),phase % 2 == 0));
 				if (phase > 2)
 					projectiles.add(new MushroomWizardBall(centerX + 30,centerY,vectorx,vectory,centerX,centerY,getNextBall()));
