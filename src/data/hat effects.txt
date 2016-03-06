@@ -1,0 +1,8 @@
+Hat effects
+
+Fedora: +20% firerate with all weapons
+Bowler: +4 max armor
+Top Hat: +20% damage with all weapons
+Panama: +5 max health
+Baseball: +1 speed
+Sherlock: +25% range with all weapons
