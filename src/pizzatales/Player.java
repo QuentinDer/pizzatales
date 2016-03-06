@@ -10,7 +10,7 @@ public class Player extends BlockingStuff {
 	//private final static int SCROLLINGRANGE = 150;
 	private int scrollingSpeedY = 0;
 	private int scrollingSpeedX = 0;
-	private int health = 20;
+	private float health = 20;
 	private Armor armor;
 	private boolean ismovingup;
 	private boolean ismovingdown;
@@ -506,11 +506,11 @@ public class Player extends BlockingStuff {
 		this.scrollingSpeedX = scrollingspeedX;
 	}
 	
-	public int getHealth() {
+	public float getHealth() {
 		return health;
 	}
 
-	public void setHealth(int health) {
+	public void setHealth(float health) {
 		this.health = health;
 	}
 	
@@ -534,6 +534,16 @@ public class Player extends BlockingStuff {
 	@Override
 	public Image getSprite() {
 		return currentSprite;
+	}
+	
+	public void damage(int dmg) {
+		if (armor.getDefense() - dmg*2.0f/3.0f < 0) {
+			health -= dmg - armor.getDefense();
+			armor.setDefense(0.f);
+		} else {
+			armor.setDefense(armor.getDefense() - dmg*2.0f/3.0f);
+			health -= dmg/3.0f;
+		}
 	}
 }
 

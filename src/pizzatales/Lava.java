@@ -17,7 +17,7 @@ public class Lava extends Item {
 	@Override
 	protected void doEffect() {
 		if(timer % freq == 0){
-			player.setHealth(player.getHealth()-1);
+			player.setHealth((int)player.getHealth()-1);
 		}
 		timer++;
 		effectactive = true;

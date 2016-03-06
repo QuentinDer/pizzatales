@@ -8,9 +8,9 @@ public class Flamer extends Firearm {
 	/*private float cos45 = (float)0.7;
 	private float cos22 = (float)0.9;
 	private float sin22 = (float)0.4;*/
-	private float xl = (float)0.3;
-	private float xm = (float)0.2;
-	private float xs = (float)0.1;
+	private float xl = 0.3f;
+	private float xm = 0.2f;
+	private float xs = 0.1f;
 	
 	public Flamer() {
 		super();

@@ -770,12 +770,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 								}
 								for (Explosion e : explosions) {
 									if (e.isProcing() && player.R.intersects(e.getR())) {
-										if (player.getArmor().defense - e.damage < 0) {
-											player.setHealth(player.getHealth() - e.damage + player.getArmor().defense);
-											player.getArmor().setDefense(0);
-										} else {
-											player.getArmor().setDefense(player.getArmor().getDefense() - e.damage);
-										}
+										player.damage(e.damage);
 									}
 								}
 								playerposx = (player.getCenterX()-bg.getCenterX()+bginitx+deltapx)/50;
@@ -1178,8 +1173,8 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			}
 			if (showPlayerHealthBar) {
 				g.setColor(Color.GREEN);
-				int lifetaken = ((20+player.getArmor().MAXDEF-player.getHealth()-player.getArmor().getDefense())*44)/(20+player.getArmor().MAXDEF);
-				int armorp = (player.getArmor().getDefense()*44)/(20+player.getArmor().MAXDEF);
+				int lifetaken = (int)((20+player.getArmor().MAXDEF-player.getHealth()-player.getArmor().getDefense())*44)/(20+player.getArmor().MAXDEF);
+				int armorp = (int)(player.getArmor().getDefense()*44)/(20+player.getArmor().MAXDEF);
 				g.fillRect(player.getCenterX()-22, player.getCenterY()-31, 44-lifetaken-armorp, 2);
 				g.setColor(Color.BLUE);
 				g.fillRect(player.getCenterX()+22-lifetaken-armorp, player.getCenterY()-31, armorp, 2);
@@ -1193,11 +1188,11 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			g.setColor(Color.RED);
 			g.fillRect(32, 37, 20, 20);
 			g.setColor(Color.WHITE);
-			g.drawString(Integer.toString(player.getHealth()), 35, 51);
+			g.drawString(Integer.toString((int)player.getHealth()), 35, 51);
 			g.setColor(Color.BLUE);
 			g.fillRect(52, 37, 20, 20);
 			g.setColor(Color.WHITE);
-			g.drawString(Integer.toString(player.getArmor().defense),55, 51);
+			g.drawString(Integer.toString((int)player.getArmor().defense),55, 51);
 			if (TESTMODE) {
 				g.setColor(Color.DARK_GRAY);
 				g.fillRect(1200, 37, 20, 20);
@@ -1307,16 +1302,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 		for (Explosion e : explosions) {
 			if (e.isProcing() && player.R.intersects(e.getR())) {
-				if (player.getArmor().defense - e.damage < 0) {
-					player.setHealth(player.getHealth() - e.damage + player.getArmor().defense);
-					player.getArmor().setDefense(0);
-					if (player.getHealth() < 1) {
-						state = GameState.Dead;
-						soundtrack.stop();
-					}
-				} else {
-					player.getArmor().setDefense(player.getArmor().getDefense() - e.damage);
-				}
+				player.damage(e.damage);
 			}
 		}
 		player.update();
@@ -1333,12 +1319,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 					p.update();
 					if (p.checkCollision(player)) {
 						p.doOnCollision(player);
-						if (player.getArmor().defense - p.damage < 0) {
-							player.setHealth(player.getHealth() - p.damage + player.getArmor().defense);
-							player.getArmor().setDefense(0);
-						} else {
-							player.getArmor().setDefense(player.getArmor().getDefense() - p.damage);
-						}
+						player.damage(p.damage);
 					}
 					Tile t = p.checkCollisionTile();
 					if (null != t) {

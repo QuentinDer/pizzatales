@@ -472,7 +472,7 @@ public class MushroomWizard extends Enemy {
 		boolean test;
 		
 		int toheal = maxHealth * (StartingClass.difficultylevel-phase)/StartingClass.difficultylevel;
-		float deltaheal = (toheal-health)/((float)240);
+		float deltaheal = (toheal-health)/(240.0f);
 		float fhealth = (float)health;
 		float summoningdelta = (toheal-health)/((float)6);
 		int summoningstep = 0;

@@ -6,7 +6,7 @@ public abstract class Armor {
 	
 	public Image currentSprite;
 	public int MAXDEF;
-	public int defense;
+	public float defense;
 	public int speed;
 	
 	public void repairArmor(){
@@ -15,11 +15,11 @@ public abstract class Armor {
 		}
 	}
 
-	public int getDefense() {
+	public float getDefense() {
 		return defense;
 	}
 
-	public void setDefense(int defense) {
+	public void setDefense(float defense) {
 		this.defense = defense;
 	}
 
