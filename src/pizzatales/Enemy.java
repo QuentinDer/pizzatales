@@ -14,6 +14,10 @@ public abstract class Enemy extends BlockingStuff {
 	protected URL base;
 	protected boolean isMoving = false;
 	protected int walkCounter = 1;
+	private int waiting = 0;
+	private int nextdestx;
+	private int nextdesty;
+	private int waitpatindex = 0;
 
 	protected int movementTime = ((int) Math.random() * 100) + 50;
 
@@ -36,6 +40,7 @@ public abstract class Enemy extends BlockingStuff {
 	private int ppdmg;
 	private int pdmg;
 	private int cdmg;
+	private int[][] waitingpattern;
 	
 	private final static int visionRange = 15;
 	private final static float slightincrease = (float)0.5;
@@ -122,22 +127,6 @@ public abstract class Enemy extends BlockingStuff {
 			canmovedown = false;
 		}
 	}
-/*
-	private void checkCollision(Enemy e) {
-		if (R.intersects(e.R)) {
-			if (Math.abs(e.getCenterX() - getCenterX()) > Math.abs(e.getCenterY() - getCenterY())) {
-				if (e.getCenterX() - getCenterX() > 0)
-					canmoveright = false;
-				else
-					canmoveleft = false;
-			} else {
-				if (e.getCenterY() - getCenterY() > 0)
-					canmovedown = false;
-				else
-					canmoveup = false;
-			}
-		}
-	}*/
 	
 	public void checkCollisionPlayer() {
 		if (R.intersects(player.R)) {
@@ -160,26 +149,10 @@ public abstract class Enemy extends BlockingStuff {
 			}
 		}
 	}
-
-	/*
-	public void checkEnemyCollisions() {
-		for (Enemy e : StartingClass.getEnemyarray()) {
-			if (!e.equals(this) && e.alive)
-				checkCollision(e);
-		}
-		checkCollisionPlayer();
-	}*/
 	
 	// Behavioral Methods
 	@Override
 	public void update() {
-
-		// Prevents going beyond X coordinate of 0 or 1280
-		if (centerX + speedX <= 30) {
-			canmoveleft = false;
-		} else if (centerX + speedX >= 1250) {
-			canmoveright = false;
-		}
 		
 		setSpeedX(0);
 		setSpeedY(0);
@@ -219,13 +192,154 @@ public abstract class Enemy extends BlockingStuff {
 
 	public void launchAI() {
 		if (alive) {
-			if (!sleepy && hasSeenU)
-				callAI();
+			if (!sleepy) {
+				if (hasSeenU)
+					callAI();
+				else
+					followWaitingPattern();
+			}
+				
 			movementTime++;
 			if (movementTime == 1000) {
 				movementTime = 0;
 			}
 		}
+	}
+	
+	private void followWaitingPattern() {
+		if (waitingpattern != null) {
+			if (waiting > 0)
+				waiting--;
+			if (waiting == 0) {
+				/*if (centerY < 800) {
+					System.out.println("pos: "+posx+"-"+posy+" "+nextdestx+"-"+nextdesty+" "+waitingpattern.length+" "+waitpatindex);
+				}*/
+				if (posx == nextdestx && posy == nextdesty) {
+					stopMoving();
+					waiting = waitingpattern[waitpatindex][2];
+					waitpatindex++;
+					if (waitpatindex == waitingpattern.length)
+						waitpatindex = 0;
+					nextdestx = waitingpattern[waitpatindex][0];
+					nextdesty = waitingpattern[waitpatindex][1];
+				} else {
+					if (movementTime % 05 == 0) {
+						int dirplace = 0;
+						int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
+						int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
+						if (Math.abs(difPX) < 2) {
+							if (difPY > 0)
+								dirplace = 4;
+							else
+								dirplace = 2;
+						} else if (Math.abs(difPY) < 2) {
+							if (difPX > 0)
+								dirplace = 3;
+							else
+								dirplace = 1;
+						} else {
+							if (difPX > 0) {
+								if (difPY > 0)
+									dirplace = 7;
+								else
+									dirplace = 6;
+							} else {
+								if (difPY > 0)
+									dirplace = 8;
+								else
+									dirplace = 5;
+							}
+						}
+						switch(pf.getDirection(posx, posy, nextdestx, nextdesty, 10, canmoveleft, canmoveup, canmoveright, canmovedown, dirplace, false)) {
+						case 0:
+							stopMoving();
+							break;
+						case 1:
+							moveLeft();
+							break;
+						case 2:
+							moveUp();
+							break;
+						case 3:
+							moveRight();
+							break;
+						case 4:
+							moveDown();
+							break;
+						case 5:
+							moveLeftUp();
+							break;
+						case 6:
+							moveRightUp();
+							break;
+						case 7:
+							moveRightDown();
+							break;
+						case 8:
+							moveLeftDown();
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public void initWaitingPattern() {
+		if (waitingpattern == null) {
+			//Set default waiting pattern
+			ArrayList<ArrayList<Integer>> tmpwp = new ArrayList<ArrayList<Integer>>();
+			if (posx != 0 && StartingClass.map[posx-1][posy] == null) {
+				ArrayList<Integer> right = new ArrayList<Integer>();
+				right.add(posx-1);
+				right.add(posy);
+				right.add((int)(Math.random()*120)+60);
+				tmpwp.add(right);
+			}
+			if (posx != StartingClass.width - 1 && StartingClass.map[posx+1][posy] == null) {
+				ArrayList<Integer> left = new ArrayList<Integer>();
+				left.add(posx+1);
+				left.add(posy);
+				left.add((int)(Math.random()*120)+60);
+				tmpwp.add(left);
+			}
+			if (posy != 0 && StartingClass.map[posx][posy-1] == null) {
+				ArrayList<Integer> up = new ArrayList<Integer>();
+				up.add(posx);
+				up.add(posy-1);
+				up.add((int)(Math.random()*120)+60);
+				tmpwp.add(up);
+			}
+			if (posy != StartingClass.height-1 && StartingClass.map[posx][posy+1] == null) {
+				ArrayList<Integer> down = new ArrayList<Integer>();
+				down.add(posx);
+				down.add(posy+1);
+				down.add((int)(Math.random()*120)+60);
+				tmpwp.add(down);
+			}
+			int sz = tmpwp.size();
+			if (sz != 0) {
+				waitingpattern = new int[sz*2][3];
+				int i = 0;
+				while (!tmpwp.isEmpty()) {
+					int index = (int)(Math.random()*tmpwp.size());
+					waitingpattern[i][0] = tmpwp.get(index).get(0);
+					waitingpattern[i][1] = tmpwp.get(index).get(1);
+					waitingpattern[i][2] = tmpwp.get(index).get(2);
+					waitingpattern[i+1][0] = posx;
+					waitingpattern[i+1][1] = posy;
+					waitingpattern[i+1][2] = (int)(Math.random()*120)+60;
+					tmpwp.remove(index);
+					i += 2;
+				}
+				nextdestx = waitingpattern[0][0];
+				nextdesty = waitingpattern[0][1];
+			}
+		}
+	}
+	
+	public void setWaitingPattern(int[][] waitingpattern) {
+		this.waitingpattern = waitingpattern;
 	}
 	
 	public abstract void callAI();/* {

@@ -5,7 +5,7 @@ import java.awt.Image;
 public class CarolinaReaper extends Enemy {
 
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, staySpriteRight, 
-	move1SpriteRight, move2SpriteRight;
+	move1SpriteRight, move2SpriteRight, firering, streamleft, streamup, streamright, streamdown;
 	
 	public CarolinaReaper(int centerX, int centerY) {
 		super(centerX, centerY, null, 100, 3, 31, 31, 25, 25);

@@ -1,8 +1,9 @@
 package pizzatales;
 
-import java.applet.Applet;
 import java.awt.Image;
 import java.util.ArrayList;
+
+import javax.swing.JFrame;
 
 public class MushroomWizard extends Enemy {
 
@@ -20,10 +21,10 @@ public class MushroomWizard extends Enemy {
 	private boolean isSlashing;
 	private int slashDirection;
 	private boolean hasSlashed;
-	private Applet applet;
+	private JFrame applet;
 	private int nextball;
 	
-	public MushroomWizard(int centerX, int centerY, Applet applet) {
+	public MushroomWizard(int centerX, int centerY, JFrame applet) {
 		super(centerX, centerY, new FakeMushroomWeapon(25,-12), 75, (StartingClass.difficultylevel>2)?1:2, 50, 50, 45, 45);
 		movementTime = ((int) (Math.random() * 50));
 		halfbarx = 45;
@@ -485,21 +486,21 @@ public class MushroomWizard extends Enemy {
 		int animcounter = 0;
 		
 		while (health < toheal) {
-			StartingClass.computationtime += System.nanoTime() - StartingClass.nanoclock;
+			//StartingClass.computationtime += System.nanoTime() - StartingClass.nanoclock;
 			try {
 				Thread.sleep(Math.abs(17 - System.currentTimeMillis() + StartingClass.clock));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			StartingClass.nanoclock = System.nanoTime();
+			//StartingClass.nanoclock = System.nanoTime();
 			StartingClass.clock = System.currentTimeMillis();
 			if (StartingClass.TESTMODE) {
 				if (StartingClass.clock > StartingClass.fpsclock+1000) {
 					StartingClass.fpsclock = StartingClass.clock;
 					StartingClass.fps = StartingClass.fpscount;
 					StartingClass.fpscount = 0;
-					StartingClass.cmptime = StartingClass.computationtime / StartingClass.fps / 1000;
-					StartingClass.computationtime = 0;
+					/*StartingClass.cmptime = StartingClass.computationtime / StartingClass.fps / 1000;
+					StartingClass.computationtime = 0;*/
 				} else {
 					StartingClass.fpscount++;
 				}

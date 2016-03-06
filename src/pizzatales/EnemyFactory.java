@@ -1,6 +1,6 @@
 package pizzatales;
 
-import java.applet.Applet;
+import javax.swing.JFrame;
 
 public class EnemyFactory {
 
@@ -12,7 +12,7 @@ public class EnemyFactory {
 		return acceptedEnemyTypes.contains(test);
 	}
 	
-	public static Enemy getEnemy(int x, int y, char c, Applet app) {
+	public static Enemy getEnemy(int x, int y, char c, JFrame app) {
 		Enemy e = null;
 		switch(c) {
 		case 'T':
