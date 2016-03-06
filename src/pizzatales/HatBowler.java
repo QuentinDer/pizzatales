@@ -22,4 +22,9 @@ public class HatBowler extends Hat {
 		player.getArmor().setDefense(player.getArmor().getDefense()+4);
 	}
 	
+	@Override
+	public void undoEffect(){
+		player.getArmor().setDefense(player.getArmor().getDefense()-4);
+	}
+	
 }

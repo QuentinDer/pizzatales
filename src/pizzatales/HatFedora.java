@@ -1,10 +1,12 @@
 package pizzatales;
 
 import java.awt.Image;
+import java.util.ArrayList;
 
 public class HatFedora extends Hat {
 	
 	private Player player = StartingClass.getPlayer();
+	private ArrayList<Firearm> playerweapons = StartingClass.playerweapons;
 
 	public static Image hatsprite;
 	
@@ -15,7 +17,12 @@ public class HatFedora extends Hat {
 	
 	@Override
 	public void effect(){
-		//player.getArmor().setDefense(player.getArmor().getDefense()+4);
+		playerweapons.get(index).setFireRate((int)(playerweapons.get(index).getFireRate()+2));
+	}
+	
+	@Override
+	public void undoEffect(){
+		playerweapons.get(index).setFireRate((int)(playerweapons.get(index).getFireRate()-2));
 	}
 	
 }

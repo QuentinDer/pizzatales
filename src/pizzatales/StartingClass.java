@@ -57,7 +57,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static final boolean TESTMODE = true;
 	public static int currentlevel = TESTMODE?1:0;
 
-	private int weaponindex;
+	public int weaponindex;
 	private int armorindex;
 	private int hatindex;
 	public static int bginitx;
@@ -1642,7 +1642,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			if (hatindex == playerhats.size())
 				hatindex = 0;
 			player.setHat(playerhats.get(hatindex));
+			playerhats.get(hatindex).index = weaponindex;
 			playerhats.get(hatindex).effect();
+			playerhats.get(hatindex-1).undoEffect();
 			break;
 		case KeyEvent.VK_SPACE:
 			if (state == GameState.Paused) {

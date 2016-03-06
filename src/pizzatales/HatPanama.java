@@ -17,5 +17,10 @@ public class HatPanama extends Hat {
 	public void effect(){
 		player.setHealth(25);
 	}
+	
+	@Override
+	public void undoEffect(){
+		player.setHealth(20);
+	}
 
 }
