@@ -1642,6 +1642,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			if (hatindex == playerhats.size())
 				hatindex = 0;
 			player.setHat(playerhats.get(hatindex));
+			playerhats.get(hatindex).effect();
 			break;
 		case KeyEvent.VK_SPACE:
 			if (state == GameState.Paused) {
