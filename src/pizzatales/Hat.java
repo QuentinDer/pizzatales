@@ -7,4 +7,6 @@ public abstract class Hat {
 	public int deltay;
 	
 	public abstract Image getSprite();
+	
+	public abstract void effect();
 }
