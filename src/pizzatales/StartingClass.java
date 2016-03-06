@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.AbstractMap.SimpleEntry;
 
+import javax.swing.JFrame;
+
 import pizzatales.framework.Animation;
 
 public class StartingClass extends Applet implements Runnable, KeyListener {
@@ -44,7 +46,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	
 	public static int difficultylevel = 2;
 	public static final boolean TESTMODE = true;
-	public static int currentlevel = TESTMODE?9:0;
+	public static int currentlevel = TESTMODE?12:0;
 
 	private int weaponindex;
 	private int armorindex;
@@ -250,6 +252,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		MushroomWizard.swipeUp = getImage(base, "data/mushroomwizardswipeup.png");
 		MushroomWizard.shooting = getImage(base, "data/mushroomwizardshooting.png");
 		MushroomWizard.summoning = getImage(base, "data/mushroomwizardlavasummon.png");
+		CarolinaReaper.staySprite = getImage(base, "data/reaper.png");
 		
 		BazookaBulletExplosion.bazookaexplosionsprite = getImage(base, "data/bazookaexplosion.png");
 		TomatoProjectileExplosion.tomatoexplosionsprite = getImage(base, "data/sirtomatoprojectileexplosion.png");

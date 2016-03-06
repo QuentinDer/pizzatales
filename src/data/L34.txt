@@ -75,7 +75,7 @@ ww00wwwwwkkddkkkkkkkkkkkkkkkkkkkkkkkwwwwwwwwwwwwwwwwwwwwwwwww
 00000000wbbb[bq][bq]bbbbbbbb[bq][bq]bbbbbbbbbbbbw00000000000000000000wooo
 0h000a00wbbbbbbbbbbbbbbbbbbbbb[bq]bbbbbw0t000000t0000t000000wooo
 00000000wbbbbbbbbbbbbbbbbbbbb[bq][bq]bbbbbw0000t000000000000000wooo
-wwwwwwwwwbb[bq][bq][bq]bbbbbbbbbTbbbbb[bq][bq]bbbbbw00000000000000000000wooo
+wwwwwwwwwbb[bq][bq][bq]bbbbbbbbbRbbbbb[bq][bq]bbbbbw00000000000000000000wooo
 000p0000wbbbb[bq][bq]bbbbbbbfbbbbbbbbbbbbbw000000t000000000t000wwww
 00000000wbbbbbbbbbbbbbbbbbbbbbbbbbbbw0t0000000000000000000000
 00000000wbbbbbbbbbbbbbbbbbbbb[bq][bq]bbbbbw0000t000t000000t0000t000

@@ -4,7 +4,7 @@ import java.applet.Applet;
 
 public class EnemyFactory {
 
-	private static String acceptedEnemyTypes = "TABPMSW";
+	private static String acceptedEnemyTypes = "TABPMSWR";
 	
 	public static boolean isTileTypeSupported(char type) {
 		String test = "";
@@ -35,6 +35,9 @@ public class EnemyFactory {
 			break;
 		case 'W':
 			e = new MushroomWizard(x*50+25,y*50+40,app);
+			break;
+		case 'R':
+			e = new CarolinaReaper(x*50+25,y*50+40);
 			break;
 		}
 		return e;
