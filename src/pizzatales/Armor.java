@@ -4,7 +4,6 @@ import java.awt.Image;
 
 public abstract class Armor {
 	
-	public Image currentSprite;
 	public int MAXDEF;
 	public float defense;
 	public int speed;

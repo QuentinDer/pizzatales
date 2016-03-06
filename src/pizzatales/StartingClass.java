@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.AbstractMap.SimpleEntry;
 
-import javax.swing.JFrame;
-
 import pizzatales.framework.Animation;
 
 public class StartingClass extends Applet implements Runnable, KeyListener {
@@ -41,15 +39,17 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private Animation anim;
 	public static ArrayList<Firearm> playerweapons;
 	public static ArrayList<Armor> playerarmor;
+	public static ArrayList<Hat> playerhats;
 	public static ArrayList<Explosion> explosions;
 	private AudioClip soundtrack;
 	
-	public static int difficultylevel = 2;
+	public static int difficultylevel = 4;
 	public static final boolean TESTMODE = true;
-	public static int currentlevel = TESTMODE?12:0;
+	public static int currentlevel = TESTMODE?8:0;
 
 	private int weaponindex;
 	private int armorindex;
+	private int hatindex;
 	public static int bginitx;
 	public static int bginity;
 	public static int fps;
@@ -268,6 +268,13 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		WoodBridge.sprite = getImage(base, "data/woodbridge.png");
 		PizzaBox.pizzaboxsprite = getImage(base, "data/pizzabox.png");
 		
+		HatBaseball.hatsprite = getImage(base, "data/hatbaseball.png");
+		HatBowler.hatsprite = getImage(base, "data/hatbowler.png");
+		HatFedora.hatsprite = getImage(base, "data/hatfedora.png");
+		HatPanama.hatsprite = getImage(base, "data/hatpanama.png");
+		HatSherlock.hatsprite = getImage(base, "data/hatsherlock.png");
+		HatTop.hatsprite = getImage(base, "data/hattop.png");
+		
 		/*
 		 anim = new Animation(); anim.addFrame(character1, 1250);
 		 anim.addFrame(character2, 50); currentSprite = anim.getImage();
@@ -305,6 +312,17 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		}
 		player.setArmor(playerarmor.get(armorindex));
 
+		playerhats = new ArrayList<Hat>();
+		playerhats.add(null);
+		if (TESTMODE) {
+			playerhats.add(new HatBaseball());
+			playerhats.add(new HatBowler());
+			playerhats.add(new HatFedora());
+			playerhats.add(new HatPanama());
+			playerhats.add(new HatSherlock());
+			playerhats.add(new HatTop());
+		}
+		
 		bg = new Background(0, 0);
 		player.setBackground(bg);
 		bginitx = bg.getCenterX();
@@ -1131,8 +1149,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 							if (player.isAimingUp()) {
 								g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
 								g.drawImage(player.currentSprite, player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey, this);
+								if (player.getHat() != null)
+									g.drawImage(player.getHat().getSprite(), player.getCenterX() - 31, player.getCenterY() - 31 + player.getHat().deltay,this);
 							} else {
 								g.drawImage(player.currentSprite, player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey, this);
+								if (player.getHat() != null)
+									g.drawImage(player.getHat().getSprite(), player.getCenterX() - 31, player.getCenterY() - 31 + player.getHat().deltay,this);
 								g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
 							}
 						} else
@@ -1498,6 +1520,12 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 			if (armorindex == playerarmor.size())
 				armorindex = 0;
 			player.setArmor(playerarmor.get(armorindex));
+			break;
+		case KeyEvent.VK_H:
+			hatindex++;
+			if (hatindex == playerhats.size())
+				hatindex = 0;
+			player.setHat(playerhats.get(hatindex));
 			break;
 		case KeyEvent.VK_SPACE:
 			if (state == GameState.Paused) {

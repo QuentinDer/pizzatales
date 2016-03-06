@@ -38,6 +38,15 @@ public class PizzaBox extends Item {
 				StartingClass.playerweapons.add(firearm);
 			}
 		}
+		ArrayList<Hat> hats = Level.getPizzaBoxHats(StartingClass.currentlevel);
+		for (Hat hat : hats) {
+			boolean toadd = true;
+			for (Hat playerhat : StartingClass.playerhats) {
+				toadd = toadd && (playerhat.getClass() != hat.getClass());
+			}
+			if (toadd)
+				StartingClass.playerhats.add(hat);
+		}
 	}
 
 	@Override

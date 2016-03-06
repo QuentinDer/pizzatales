@@ -30,6 +30,7 @@ public class Player extends BlockingStuff {
 	public boolean isAimingUp = true;
 	protected ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	public boolean showHealthBar;
+	private Hat hat;
 	
 	public Image currentSprite;
 
@@ -529,6 +530,14 @@ public class Player extends BlockingStuff {
 	public void setArmor(Armor armor) {
 		this.armor = armor;
 		setMOVESPEED(armor.getSpeed());
+	}
+	
+	public void setHat(Hat hat) {
+		this.hat = hat;
+	}
+	
+	public Hat getHat() {
+		return hat;
 	}
 
 	@Override

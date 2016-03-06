@@ -60,4 +60,12 @@ public class Level {
 		}
 		return armors;
 	}
+	
+	public static ArrayList<Hat> getPizzaBoxHats(int level) {
+		ArrayList<Hat> hats = new ArrayList<Hat>();
+		switch(level) {
+		
+		}
+		return hats;
+	}
 }

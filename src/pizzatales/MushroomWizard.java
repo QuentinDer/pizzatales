@@ -310,12 +310,17 @@ public class MushroomWizard extends Enemy {
 			}
 			if (bcd == 0 && (StartingClass.difficultylevel > 2 || Math.abs(diffx) + Math.abs(diffy) > 200)) {
 				bcd = ballcd;
+				if (phase % 2 == 0) {
+					diffx = player.getCenterX() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))/12*player.getSpeedX() - getCenterX();
+					diffy = player.getCenterY() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))/12*player.getSpeedY() - getCenterY();
+				}
 				float vectorx = (diffx-30) / ((float)(Math.abs(diffx-30)+Math.abs(diffy)));
 				float vectory = diffy / ((float)(Math.abs(diffx-30)+Math.abs(diffy)));
 				projectiles.add(new MushroomWizardBall(centerX + 30,centerY,vectorx,vectory,nextball,phase % 2 == 0));
-				if (phase > 2)
+				if (phase > 2) {
 					projectiles.add(new MushroomWizardBall(centerX + 30,centerY,vectorx,vectory,centerX,centerY,getNextBall(),phase % 2 == 0));
-				else {
+					nextball = getNextBall();
+				} else {
 					if (StartingClass.difficultylevel < 3)
 						stopMoving();
 					weapon.currentSprite = null;
@@ -648,6 +653,8 @@ public class MushroomWizard extends Enemy {
 		currentSprite = staySprite;
 		nextball = getNextBall();
 		if (phase > 2)
+			((FakeMushroomWeapon)weapon).setSpriteBall(1);
+		else
 			((FakeMushroomWeapon)weapon).setSpriteBall(nextball);
 	}
 	
