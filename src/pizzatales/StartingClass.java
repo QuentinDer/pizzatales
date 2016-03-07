@@ -40,6 +40,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	Container contentPane;
 	private boolean endlevelmenuloaded;
 	private boolean threadstarted;
+	private boolean azerty = false;
 	private static Player player;
 	public static int isGrinning;
 	private Image image, background;
@@ -373,6 +374,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 		JButton quitButton = new JButton("Quit");
 		JButton startButton = new JButton("Start");
+		JButton keyButton = new JButton("qwerty");
 		final JButton levelButton = new JButton("Level: " + currentlevel);
 		final JButton diffButton = new JButton("Difficulty: " + difficultylevel);
 
@@ -380,7 +382,22 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		diffButton.setBounds(680, 100, 100, 50);
 		startButton.setBounds(590, 250, 100, 50);
 		quitButton.setBounds(590, 300, 100, 50);
+		keyButton.setBounds(650, 100, 100, 50);		
 
+		keyButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if (azerty == false) {
+					azerty = true;
+					keyButton.setText("azerty");
+				} else {
+					azerty = false;
+					keyButton.setText("qwerty");
+				}
+				
+			}
+		});
+		
 		levelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -389,7 +406,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				} else {
 					currentlevel++;
 				}
-				levelButton.setText("Level: " + currentlevel);
+				keyButton.setText("Level: " + currentlevel);
 			}
 		});
 
@@ -445,6 +462,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		createLayout(diffButton);
 		createLayout(startButton);
 		createLayout(quitButton);
+		createLayout(keyButton);
 
 		setTitle("Pizza Tales");
 		setSize(1280, 800);
@@ -1690,7 +1708,13 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_Z:
-			player.moveUp();
+			if(azerty)
+				player.moveUp();
+			break;
+			
+		case KeyEvent.VK_W:
+			if(!azerty)
+				player.moveUp();
 			break;
 
 		case KeyEvent.VK_S:
@@ -1698,7 +1722,17 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			break;
 
 		case KeyEvent.VK_Q:
-			player.moveLeft();
+			if(azerty){
+				player.moveLeft();
+			}
+			
+			break;
+			
+		case KeyEvent.VK_A:
+			if(!azerty){
+				player.moveLeft();
+			}
+			
 			break;
 
 		case KeyEvent.VK_D:
@@ -1735,13 +1769,29 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public void keyReleased(KeyEvent e) {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_Z:
-			player.stopMovingUp();
+			if(azerty)
+				player.stopMovingUp();
+			break;
+		case KeyEvent.VK_W:
+			if(!azerty)
+				player.stopMovingUp();
 			break;
 		case KeyEvent.VK_S:
 			player.stopMovingDown();
 			break;
 		case KeyEvent.VK_Q:
-			player.stopMovingLeft();
+			if(azerty)
+				player.stopMovingLeft();
+			else{
+				armorindex++;
+				if (armorindex == playerarmor.size())
+					armorindex = 0;
+				if (player.getHat() != null)
+					player.getHat().undoEffectArmor();
+				player.setArmor(playerarmor.get(armorindex));
+				if (player.getHat() != null)
+					player.getHat().effectArmor();
+			}
 			break;
 		case KeyEvent.VK_D:
 			player.stopMovingRight();
@@ -1773,14 +1823,18 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				player.getHat().effectWeapon();
 			break;
 		case KeyEvent.VK_A:
-			armorindex++;
-			if (armorindex == playerarmor.size())
-				armorindex = 0;
-			if (player.getHat() != null)
-				player.getHat().undoEffectArmor();
-			player.setArmor(playerarmor.get(armorindex));
-			if (player.getHat() != null)
-				player.getHat().effectArmor();
+			if(azerty){
+				armorindex++;
+				if (armorindex == playerarmor.size())
+					armorindex = 0;
+				if (player.getHat() != null)
+					player.getHat().undoEffectArmor();
+				player.setArmor(playerarmor.get(armorindex));
+				if (player.getHat() != null)
+					player.getHat().effectArmor();
+			}else{
+				player.stopMovingLeft();
+			}
 			break;
 		case KeyEvent.VK_H:
 			if (playerhats.get(hatindex) != null)
