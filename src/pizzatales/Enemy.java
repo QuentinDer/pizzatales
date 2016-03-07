@@ -373,9 +373,10 @@ public abstract class Enemy extends BlockingStuff {
 	public void die() {
 		alive = false;
 		stopMoving();
-		if (ppdmg + pdmg + cdmg > 3)
+		if (ppdmg + pdmg + cdmg > 3) {
 			setGibsSprite();
-		else
+			StartingClass.isGrinning = 50;
+		} else
 			setDieSprite();
 		StartingClass.map[posx][posy] = null;
 	}

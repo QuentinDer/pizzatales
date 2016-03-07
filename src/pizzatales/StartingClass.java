@@ -41,8 +41,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	
 	private boolean gamelaunched;
 	private static Player player;
+	public static int isGrinning;
 	private Image image, background;
 	private Image blooddrop;
+	private Image grinningsprite;
 	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, 
 		tileCaveRock, tileGate, tileCaveExit, tileLavaPuddle, tileWaterFlow, 
 		tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel;
@@ -300,6 +302,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		HatPanama.hatsprite = new ImageIcon(getClass().getResource("/data/hatpanama.png")).getImage();
 		HatSherlock.hatsprite = new ImageIcon(getClass().getResource("/data/hatsherlock.png")).getImage();
 		HatTop.hatsprite = new ImageIcon(getClass().getResource("/data/hattop.png")).getImage();
+		
+		grinningsprite = new ImageIcon(getClass().getResource("/data/grin.png")).getImage();
 		
 		/*
 		 anim = new Animation(); anim.addFrame(character1, 1250);
@@ -1261,16 +1265,22 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 								g.fillRect(e.getCenterX()+e.halfbarx-lifetaken, e.getCenterY()-e.halfbary, lifetaken, 2);
 							}
 						} else if (Player.class.isInstance(map[x][y])) {
+							if (isGrinning > 0)
+								isGrinning--;
 							if (player.isAimingUp()) {
-								g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
+								g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey, this);
 								g.drawImage(player.currentSprite, player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey, this);
+								if (isGrinning > 0)
+									g.drawImage(grinningsprite, player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey, this);
 								if (player.getHat() != null)
-									g.drawImage(player.getHat().getSprite(), player.getCenterX() - 31, player.getCenterY() - 31 + player.getHat().deltay,this);
+									g.drawImage(player.getHat().getSprite(), player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey + player.getHat().deltay,this);
 							} else {
 								g.drawImage(player.currentSprite, player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey, this);
+								if (isGrinning > 0)
+									g.drawImage(grinningsprite, player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey, this);
 								if (player.getHat() != null)
-									g.drawImage(player.getHat().getSprite(), player.getCenterX() - 31, player.getCenterY() - 31 + player.getHat().deltay,this);
-								g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - 31, player.getCenterY() - 31, this);
+									g.drawImage(player.getHat().getSprite(), player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey + player.getHat().deltay,this);
+								g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey, this);
 							}
 						} else
 							g.drawImage(map[x][y].getSprite(),map[x][y].getCenterX() - map[x][y].halfrsizex, map[x][y].getCenterY() - map[x][y].halfsizey, this);

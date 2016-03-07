@@ -47,6 +47,7 @@ public class PizzaBox extends Item {
 			if (toadd)
 				StartingClass.playerhats.add(hat);
 		}
+		StartingClass.isGrinning = 50;
 	}
 
 	@Override
