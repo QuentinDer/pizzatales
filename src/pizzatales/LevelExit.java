@@ -17,7 +17,7 @@ public class LevelExit extends Item {
 
 	@Override
 	protected void doEffect() {
-		StartingClass.state = GameState.LevelEnded;
+		StartingClass.state = GameState.Menu;
 	}
 
 	@Override

@@ -38,9 +38,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private static final long serialVersionUID = 641656516622083167L;
 
 	Container contentPane;
-
-	private boolean gamelaunched;
-	private boolean levelended;
+	private boolean endlevelmenuloaded;
+	private boolean threadstarted;
 	private static Player player;
 	public static int isGrinning;
 	private Image image, background;
@@ -78,10 +77,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	 */
 
 	enum GameState {
-		Running, Dead, Paused, LevelEnded
+		Running, Dead, Paused, Menu
 	}
 
-	public static GameState state = GameState.Running;
+	public static GameState state = GameState.Menu;
 
 	public static BlockingStuff[][] map;
 	public static int width;
@@ -120,10 +119,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	public StartingClass() {
 		initUI();
+		loadResources();
 	}
 
-	// @Override
-	public void init() {
+	public void loadResources() {
 		setSize(1280, 800);
 		setBackground(Color.BLACK);
 		setFocusable(true);
@@ -321,106 +320,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		HatTop.hatsprite = new ImageIcon(getClass().getResource("/data/hattop.png")).getImage();
 
 		grinningsprite = new ImageIcon(getClass().getResource("/data/grin.png")).getImage();
-
-		/*
-		 * anim = new Animation(); anim.addFrame(character1, 1250);
-		 * anim.addFrame(character2, 50); currentSprite = anim.getImage();
-		 */
-	}
-
-	private void initUI() {
-
-		if (levelended) {
-			contentPane = getContentPane();
-			contentPane.removeAll();
-			contentPane.invalidate();
-			me.validate();
-			levelended = false;
-		}
-
-		JButton quitButton = new JButton("Quit");
-		JButton startButton = new JButton("Start");
-		final JButton levelButton = new JButton("Level: " + currentlevel);
-		final JButton diffButton = new JButton("Difficulty: " + difficultylevel);
-
-		levelButton.setBounds(500, 100, 100, 50);
-		diffButton.setBounds(680, 100, 100, 50);
-		startButton.setBounds(590, 250, 100, 50);
-		quitButton.setBounds(590, 300, 100, 50);
-
-		levelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if (currentlevel == 9) {
-					currentlevel = 1;
-				} else {
-					currentlevel++;
-				}
-				levelButton.setText("Level: " + currentlevel);
-			}
-		});
-
-		diffButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if (difficultylevel == 4) {
-					difficultylevel = 1;
-				} else {
-					difficultylevel++;
-				}
-				diffButton.setText("Difficulty: " + difficultylevel);
-			}
-		});
-
-		startButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				init();
-				start();
-				gamelaunched = true;
-				contentPane = getContentPane();
-				contentPane.removeAll();
-				contentPane.invalidate();
-				me.validate();
-			}
-		});
-
-		quitButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				System.exit(0);
-			}
-		});
-
-		createLayout(levelButton);
-		createLayout(diffButton);
-		createLayout(startButton);
-		createLayout(quitButton);
-
-		setTitle("Pizza Tales");
-		setSize(1280, 800);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-	}
-
-	private void createLayout(JComponent... arg) {
-
-		contentPane = getContentPane();
-		GroupLayout gl = new GroupLayout(contentPane);
-		contentPane.setLayout(gl);
-
-		gl.setAutoCreateContainerGaps(true);
-
-		gl.setHorizontalGroup(gl.createSequentialGroup().addComponent(arg[0]));
-
-		gl.setVerticalGroup(gl.createSequentialGroup().addComponent(arg[0]));
-	}
-
-	// @Override
-	public void start() {
-		Thread thread = new Thread(this);
-		thread.start();
-
+		
 		player = new Player();
 		pf = new PathFinder();
 		explosions = new ArrayList<Explosion>();
@@ -463,12 +363,113 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		bginitx = bg.getCenterX();
 		bginity = bg.getCenterY() - 15;
 
-		// Initialize Tiles
-		try {
-			loadMap("/data/" + Level.getMapName(currentlevel));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		/*
+		 * anim = new Animation(); anim.addFrame(character1, 1250);
+		 * anim.addFrame(character2, 50); currentSprite = anim.getImage();
+		 */
+	}
+
+	private void initUI() {
+
+		JButton quitButton = new JButton("Quit");
+		JButton startButton = new JButton("Start");
+		final JButton levelButton = new JButton("Level: " + currentlevel);
+		final JButton diffButton = new JButton("Difficulty: " + difficultylevel);
+
+		levelButton.setBounds(500, 100, 100, 50);
+		diffButton.setBounds(680, 100, 100, 50);
+		startButton.setBounds(590, 250, 100, 50);
+		quitButton.setBounds(590, 300, 100, 50);
+
+		levelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if (currentlevel == 9) {
+					currentlevel = 1;
+				} else {
+					currentlevel++;
+				}
+				levelButton.setText("Level: " + currentlevel);
+			}
+		});
+
+		diffButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if (difficultylevel == 4) {
+					difficultylevel = 1;
+				} else {
+					difficultylevel++;
+				}
+				diffButton.setText("Difficulty: " + difficultylevel);
+			}
+		});
+
+		startButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				state = GameState.Running;
+				endlevelmenuloaded = false;
+				clean();
+				// Initialize Tiles
+				bg.setCenterX(0);
+				bg.setCenterY(0);
+				bginity = bg.getCenterY() - 15;
+				background = new ImageIcon(getClass().getResource("/data/"+Level.getBackground(currentlevel))).getImage();
+				try {
+					loadMap("/data/" + Level.getMapName(currentlevel));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if (!threadstarted) {
+					start();
+				} else {
+					player.setHealth(player.getMaxHealth());
+					player.getArmor().setDefense(player.getArmor().MAXDEF);
+				}
+				contentPane = getContentPane();
+				contentPane.removeAll();
+				contentPane.invalidate();
+				me.validate();
+			}
+		});
+
+		quitButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				System.exit(0);
+			}
+		});
+
+		createLayout(levelButton);
+		createLayout(diffButton);
+		createLayout(startButton);
+		createLayout(quitButton);
+
+		setTitle("Pizza Tales");
+		setSize(1280, 800);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+
+	private void createLayout(JComponent... arg) {
+
+		contentPane = getContentPane();
+		GroupLayout gl = new GroupLayout(contentPane);
+		contentPane.setLayout(gl);
+
+		gl.setAutoCreateContainerGaps(true);
+
+		gl.setHorizontalGroup(gl.createSequentialGroup().addComponent(arg[0]));
+
+		gl.setVerticalGroup(gl.createSequentialGroup().addComponent(arg[0]));
+	}
+
+	// @Override
+	public void start() {
+		threadstarted = true;
+		Thread thread = new Thread(this);
+		thread.start();
 	}
 
 	private void loadMap(String filename) throws IOException {
@@ -713,7 +714,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public void run() {
 		if (state == GameState.Running) {
 			// TODO soundtrack.loop();
-			background = new ImageIcon(getClass().getResource("/data/" + Level.getBackground(currentlevel))).getImage();
 			while (true) {
 				while (state == GameState.Running) {
 					// computationtime += System.nanoTime() - nanoclock;
@@ -1205,26 +1205,14 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						clip.stop();
 					}
 				}
-				if (state == GameState.LevelEnded) {
+				if (state == GameState.Menu) {
 
-					this.clean();
-					levelended = true;
-					/*
-					 * contentPane = getContentPane(); contentPane.removeAll();
-					 * contentPane.invalidate(); me.validate();
-					 */
-
-					if (gamelaunched) {
+					if (!endlevelmenuloaded) {
+						this.clean();
 						initEndLevelScreen();
-						gamelaunched = false;
+						endlevelmenuloaded = true;
 					}
-
-					/*
-					 * setTitle("Pizza Tales"); setSize(1280, 800);
-					 * setLocationRelativeTo(null);
-					 * setDefaultCloseOperation(EXIT_ON_CLOSE);
-					 */
-
+					
 				}
 				repaint();
 				// computationtime += System.nanoTime() - nanoclock;
@@ -1264,16 +1252,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
         nextLevelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-            	clean();
-            	gamelaunched = true;
-            	
-                /*contentPane = getContentPane();
-                contentPane.removeAll();
-                contentPane.invalidate();
-                me.validate();*/
-                
             	currentlevel++;
-            	clean();
 				bg.setCenterX(0);
 				bg.setCenterY(0);
 				bginity = bg.getCenterY() - 15;
@@ -1283,19 +1262,24 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				state = GameState.Running;
-				
+				player.setHealth(player.getMaxHealth());
+				player.getArmor().setDefense(player.getArmor().MAXDEF);
+            	state = GameState.Running;
+            	endlevelmenuloaded = false;
+            	
+            	contentPane = getContentPane();
+				contentPane.removeAll();
+				contentPane.invalidate();
+				me.validate();
             }
         });
         
         menuButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-            	clean();
-            	/*contentPane = getContentPane();
-                contentPane.removeAll();
-                contentPane.invalidate();
-                me.validate();*/
+            	contentPane = getContentPane();
+    			contentPane.removeAll();
+    			contentPane.invalidate();
             	initUI();
             	//state = GameState.Running;
             }
@@ -1486,7 +1470,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	@Override
 	public void paint(Graphics g) {
-		if (gamelaunched) {
+		if (state != GameState.Menu) {
 			if (image == null) {
 				image = createImage(this.getWidth(), this.getHeight());
 				second = image.getGraphics();
@@ -1883,11 +1867,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		hitpoints.clear();
 		entrydoors.clear();
 		destroyabletiles.clear();
-		playerweapons.clear();
+		/*playerweapons.clear();
 		weaponindex = 0;
 		playerarmor.clear();
 		armorindex = 0;
-		playerhats.clear();
+		playerhats.clear();*/
 	}
 
 	public static void main(String[] args) {
