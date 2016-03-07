@@ -402,7 +402,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		levelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				if (currentlevel == 9) {
+				if (currentlevel == 12) {
 					currentlevel = 1;
 				} else {
 					currentlevel++;
@@ -1270,28 +1270,35 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
         menuButton.setBounds(590, 200, 100, 50);
         quitButton.setBounds(590, 300, 100, 50);
         
+        if(currentlevel >= 12){
+        	nextLevelButton.setText("No more levels");
+        	nextLevelButton.setBounds(575, 100, 150, 50);
+        }
+        
         nextLevelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-            	currentlevel++;
-				bg.setCenterX(0);
-				bg.setCenterY(0);
-				bginity = bg.getCenterY() - 15;
-				background = new ImageIcon(getClass().getResource("/data/"+Level.getBackground(currentlevel))).getImage();
-				try {
-					loadMap("/data/"+Level.getMapName(currentlevel));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				player.setHealth(player.getMaxHealth());
-				player.getArmor().setDefense(player.getArmor().MAXDEF);
-            	state = GameState.Running;
-            	endlevelmenuloaded = false;
-            	
-            	contentPane = getContentPane();
-				contentPane.removeAll();
-				contentPane.invalidate();
-				me.validate();
+            	if(currentlevel < 12){
+	            	currentlevel++;
+					bg.setCenterX(0);
+					bg.setCenterY(0);
+					bginity = bg.getCenterY() - 15;
+					background = new ImageIcon(getClass().getResource("/data/"+Level.getBackground(currentlevel))).getImage();
+					try {
+						loadMap("/data/"+Level.getMapName(currentlevel));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					player.setHealth(player.getMaxHealth());
+					player.getArmor().setDefense(player.getArmor().MAXDEF);
+	            	state = GameState.Running;
+	            	endlevelmenuloaded = false;
+	            	
+	            	contentPane = getContentPane();
+					contentPane.removeAll();
+					contentPane.invalidate();
+					me.validate();
+            	}
             }
         });
         
