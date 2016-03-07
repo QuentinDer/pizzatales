@@ -66,6 +66,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public int weaponindex;
 	private int armorindex;
 	private int hatindex;
+	private int deathCountdown;
 	public static int bginitx;
 	public static int bginity;
 	public static int fps;
@@ -371,7 +372,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	}
 
 	private void initUI() {
-
+		
 		JButton quitButton = new JButton("Quit");
 		JButton startButton = new JButton("Start");
 		JButton keyButton = new JButton("qwerty");
@@ -406,7 +407,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				} else {
 					currentlevel++;
 				}
-				keyButton.setText("Level: " + currentlevel);
+				levelButton.setText("Level: " + currentlevel);
 			}
 		});
 
@@ -444,6 +445,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					player.setHealth(player.getMaxHealth());
 					player.getArmor().setDefense(player.getArmor().MAXDEF);
 				}
+				deathCountdown = 180;
 				contentPane = getContentPane();
 				contentPane.removeAll();
 				contentPane.invalidate();
@@ -1231,7 +1233,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						endlevelmenuloaded = true;
 					}
 					
-				}
+				}				
+				
 				repaint();
 				// computationtime += System.nanoTime() - nanoclock;
 				try {
@@ -1311,6 +1314,63 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
         });
 
         createLayout(nextLevelButton);
+        createLayout(menuButton);
+        createLayout(quitButton);
+	}
+	
+	public void initDeathScreen(){
+		final JButton replayButton = new JButton("Replay Level");
+        final JButton quitButton = new JButton("Quit");
+        final JButton menuButton = new JButton("Main Menu");
+        
+        replayButton.setBounds(590, 100, 100, 50);
+        menuButton.setBounds(590, 200, 100, 50);
+        quitButton.setBounds(590, 300, 100, 50);
+        
+        replayButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+            	//currentlevel++;
+				bg.setCenterX(0);
+				bg.setCenterY(0);
+				bginity = bg.getCenterY() - 15;
+				background = new ImageIcon(getClass().getResource("/data/"+Level.getBackground(currentlevel))).getImage();
+				try {
+					loadMap("/data/"+Level.getMapName(currentlevel));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				player.setHealth(player.getMaxHealth());
+				player.getArmor().setDefense(player.getArmor().MAXDEF);
+            	state = GameState.Running;
+            	endlevelmenuloaded = false;
+            	
+            	contentPane = getContentPane();
+				contentPane.removeAll();
+				contentPane.invalidate();
+				me.validate();
+            }
+        });
+        
+        menuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+            	contentPane = getContentPane();
+    			contentPane.removeAll();
+    			contentPane.invalidate();
+            	initUI();
+            	//state = GameState.Running;
+            }
+        });
+
+        quitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                System.exit(0);
+            }
+        });
+
+        createLayout(replayButton);
         createLayout(menuButton);
         createLayout(quitButton);
 	}
@@ -1482,7 +1542,13 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, 800, 480);
 			g.setColor(Color.WHITE);
-			g.drawString("Dead", 360, 240);
+			g.drawString("Dead", 640, 240);
+			g.drawString("Going back to menu in 3...", 600, 340);
+			if(deathCountdown == 0){
+				state = GameState.Menu;
+				initUI();
+			}
+			deathCountdown--;
 		}
 	}
 
