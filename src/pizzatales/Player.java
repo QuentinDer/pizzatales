@@ -11,6 +11,7 @@ public class Player extends BlockingStuff {
 	private int scrollingSpeedY = 0;
 	private int scrollingSpeedX = 0;
 	private float health = 20;
+	private int maxhealth = 20;
 	private Armor armor;
 	private boolean ismovingup;
 	private boolean ismovingdown;
@@ -515,6 +516,14 @@ public class Player extends BlockingStuff {
 		this.health = health;
 	}
 	
+	public void setMaxHealth(int maxhealth) {
+		this.maxhealth = maxhealth;
+	}
+	
+	public int getMaxHealth() {
+		return maxhealth;
+	}
+	
 	public void setWeapon(Firearm weapon) {
 		this.weapon = weapon;
 	}
@@ -545,7 +554,7 @@ public class Player extends BlockingStuff {
 		return currentSprite;
 	}
 	
-	public void damage(int dmg) {
+	public void damage(float dmg) {
 		if (armor.getDefense() - dmg*2.0f/3.0f < 0) {
 			health -= dmg - armor.getDefense();
 			armor.setDefense(0.f);
@@ -555,4 +564,3 @@ public class Player extends BlockingStuff {
 		}
 	}
 }
-

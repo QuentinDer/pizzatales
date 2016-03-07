@@ -8,7 +8,8 @@ import java.util.ArrayList;
 
 public abstract class Enemy extends BlockingStuff {
 
-	protected int maxHealth, health;
+	protected int maxHealth;
+	protected float health;
 	//private int power;
 	protected boolean alive = true;
 	protected URL base;
@@ -37,9 +38,9 @@ public abstract class Enemy extends BlockingStuff {
 	public int halfbarx = 22;
 	public int halfbary = 25;
 	protected int range;
-	private int ppdmg;
-	private int pdmg;
-	private int cdmg;
+	private float ppdmg;
+	private float pdmg;
+	private float cdmg;
 	private int[][] waitingpattern;
 	
 	private final static int visionRange = 15;
@@ -65,12 +66,12 @@ public abstract class Enemy extends BlockingStuff {
 			weapon.setHolderProjectiles(projectiles);
 		}
 		this.health = health * StartingClass.difficultylevel;
-		this.maxHealth = this.health;
+		this.maxHealth = (int)this.health;
 		this.speed = speed;
 		setStaySprite();
 	}
 	
-	public void damage(int projdmg) {
+	public void damage(float projdmg) {
 		cdmg += projdmg;
 		health -= projdmg;
 		if (health < 0)
@@ -395,11 +396,11 @@ public abstract class Enemy extends BlockingStuff {
 		this.bg = bg;
 	}
 	
-	public int getHealth() {
+	public float getHealth() {
 		return health;
 	}
 
-	public void setHealth(int health) {
+	public void setHealth(float health) {
 		this.health = health;
 	}
 	

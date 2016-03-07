@@ -1,12 +1,10 @@
 package pizzatales;
 
 import java.awt.Image;
-import java.util.ArrayList;
 
 public class HatSherlock extends Hat {
 	
 	private Player player = StartingClass.getPlayer();
-	private ArrayList<Firearm> playerweapons = StartingClass.playerweapons;
 
 	public static Image hatsprite;
 	
@@ -17,12 +15,30 @@ public class HatSherlock extends Hat {
 	
 	@Override
 	public void effect(){
-		//playerweapons.get(index).setFireRate((int)(playerweapons.get(index).getFireRate()*1.2));
+		effectWeapon();
 	}
 	
 	@Override
 	public void undoEffect(){
-		//playerweapons.get(index).setFireRate((int)(playerweapons.get(index).getFireRate()-2));
+		undoEffectWeapon();
+	}
+
+	@Override
+	public void effectWeapon() {
+		player.getWeapon().range *= 1.2f;
+	}
+
+	@Override
+	public void undoEffectWeapon() {
+		player.getWeapon().range = (int)(player.getWeapon().range/1.2f);
+	}
+
+	@Override
+	public void effectArmor() {
+	}
+
+	@Override
+	public void undoEffectArmor() {
 	}
 	
 }

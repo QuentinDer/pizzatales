@@ -12,10 +12,10 @@ public abstract class Projectile extends Stuff {
 	protected int range;
 	protected int size;
 	protected int halfsize;
-	public int damage = 1;
+	public float damage = 1f;
 	private Background bg = StartingClass.getBg();
 
-	public Projectile(int startX, int startY, float vectorX, float vectorY, int speed, int damage, int size, int halfsize, int range) {
+	public Projectile(int startX, int startY, float vectorX, float vectorY, int speed, float damage, int size, int halfsize, int range) {
 		super(startX, startY);
 		speedX = (int)(vectorX * speed);
 		speedY = (int)(vectorY * speed);

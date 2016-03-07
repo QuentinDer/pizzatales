@@ -11,11 +11,15 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.AbstractMap.SimpleEntry;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -50,10 +54,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static ArrayList<Armor> playerarmor;
 	public static ArrayList<Hat> playerhats;
 	public static ArrayList<Explosion> explosions;
-	//TODO
-	//private AudioClip soundtrack;
 	
-	public static int difficultylevel = 4;
+	private Clip clip;
+	
+	public static int difficultylevel = 1;
 	public static final boolean TESTMODE = true;
 	public static int currentlevel = TESTMODE?1:0;
 
@@ -126,8 +130,16 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		addKeyListener(this);
 		setTitle("Pizza Tales");
 		
-		//TODO
-		//soundtrack = getAudioClip(base, "/data/Soundtrack1.wav");
+		URL url = getClass().getResource("/data/Soundtrack1.wav");
+		try {
+			clip = AudioSystem.getClip();
+			AudioInputStream ais = AudioSystem.getAudioInputStream( url );
+			clip.open(ais);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
 		
 		// Image Setups
 		
@@ -866,8 +878,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 												if (p.checkCollision(e) == true) {
 													p.doOnCollision(e);
 													e.damage(p.damage);
-													if (!e.alive && player.getHealth() < 20) {
-														player.setHealth(player.getHealth() + 1);
+													if (!e.alive) {
+														if (player.getHealth() + 1< player.getMaxHealth())
+															player.setHealth(player.getHealth()+1);
+														else
+															player.setHealth(player.getMaxHealth());
 													}
 												}
 											}
@@ -1147,7 +1162,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					}
 					if (player.getHealth() < 1) {
 						state = GameState.Dead;
-						//TODO soundtrack.stop();
+						clip.stop();
 					}
 				}
 				if (state == GameState.LevelEnded) {
@@ -1240,7 +1255,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 							}
 							if (e.showHealthBar) {
 								g.setColor(Color.GREEN);
-								int lifetaken = ((e.getMaxHealth()-e.getHealth())*e.halfbarx*2)/e.getMaxHealth();
+								int lifetaken = (int)((e.getMaxHealth()-e.getHealth())*e.halfbarx*2)/e.getMaxHealth();
 								g.fillRect(e.getCenterX()-e.halfbarx, e.getCenterY()-e.halfbary, 2*e.halfbarx-lifetaken, 2);
 								g.setColor(Color.RED);
 								g.fillRect(e.getCenterX()+e.halfbarx-lifetaken, e.getCenterY()-e.halfbary, lifetaken, 2);
@@ -1416,8 +1431,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						if (p.checkCollision(e) == true) {
 							p.doOnCollision(e);
 							e.damage(p.damage);
-							if (!e.alive && player.getHealth() < 20) {
-								player.setHealth(player.getHealth() + 1);
+							if (!e.alive) {
+								if (player.getHealth() + 1< player.getMaxHealth())
+									player.setHealth(player.getHealth()+1);
+								else
+									player.setHealth(player.getMaxHealth());
 							}
 						}
 					}
@@ -1623,37 +1641,50 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			weaponindex++;
 			if (weaponindex == playerweapons.size())
 				weaponindex = 0;
+			if (player.getHat() != null)
+				player.getHat().undoEffectWeapon();
 			player.setWeapon(playerweapons.get(weaponindex));
+			if (player.getHat() != null)
+				player.getHat().effectWeapon();
 			break;
 		case KeyEvent.VK_R:
 			weaponindex--;
 			if (weaponindex == -1)
 				weaponindex = playerweapons.size() - 1;
+			if (player.getHat() != null)
+				player.getHat().undoEffectWeapon();
 			player.setWeapon(playerweapons.get(weaponindex));
+			if (player.getHat() != null)
+				player.getHat().effectWeapon();
 			break;
 		case KeyEvent.VK_A:
 			armorindex++;
 			if (armorindex == playerarmor.size())
 				armorindex = 0;
+			if (player.getHat() != null)
+				player.getHat().undoEffectArmor();
 			player.setArmor(playerarmor.get(armorindex));
+			if (player.getHat() != null)
+				player.getHat().effectArmor();
 			break;
 		case KeyEvent.VK_H:
+			if (playerhats.get(hatindex) != null)
+				playerhats.get(hatindex).undoEffect();
 			hatindex++;
 			if (hatindex == playerhats.size())
 				hatindex = 0;
 			player.setHat(playerhats.get(hatindex));
-			playerhats.get(hatindex).index = weaponindex;
-			playerhats.get(hatindex).effect();
-			playerhats.get(hatindex-1).undoEffect();
+			if (player.getHat() != null)
+				player.getHat().effect();
 			break;
 		case KeyEvent.VK_SPACE:
 			if (state == GameState.Paused) {
 				state = GameState.Running;
-				//TODO soundtrack.loop();
+				clip.loop(Clip.LOOP_CONTINUOUSLY);
 			}
 			else if (state == GameState.Running) {
 				state = GameState.Paused;
-				//TODO soundtrack.stop();
+				clip.stop();
 			}	
 			break;
 		case KeyEvent.VK_C:

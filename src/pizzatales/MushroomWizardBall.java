@@ -134,7 +134,7 @@ public class MushroomWizardBall extends Projectile {
 		visible = false;
 		StartingClass.hitpoints.add(new HitPoint(p,(getCenterX()-p.getCenterX())/2,(getCenterY()-p.getCenterY())/2));
 		if (color == 4)
-			p.setHealth(20);
+			p.setHealth(p.getMaxHealth());
 		if (color == 3)
 			StartingClass.leavingitems.add(new FakeItemForSlow(90));
 	}

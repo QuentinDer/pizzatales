@@ -129,7 +129,7 @@ public class SirTomato extends Enemy {
 			}
 			int diffx = Math.abs(player.getCenterX() - getCenterX());
 			int diffy = player.getCenterY() - getCenterY();
-			if (diffx < 120 && diffy < 20 && diffy > -80) {
+			if (diffx < 100 && diffy < 20 && diffy > -80) {
 				stopMoving();
 				hasSlashed = false;
 				isSlashing = true;

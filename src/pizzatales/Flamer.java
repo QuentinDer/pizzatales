@@ -15,6 +15,9 @@ public class Flamer extends Firearm {
 	public Flamer() {
 		super();
 		this.setFireRate(25);
+		speed = 10;
+		projectiledmg = 1.0f;
+		range = 100;
 	}
 	
 	@Override
@@ -25,13 +28,13 @@ public class Flamer extends Firearm {
 		//holderprojectiles.add(new FlamerFlame(x, y, -cos45, -cos45));
 		//holderprojectiles.add(new FlamerFlame(x, y, -sin22, -cos22));
 		//holderprojectiles.add(new FlamerFlame(x, y, sin22, -cos22));
-		holderprojectiles.add(new FlamerFlame(x, y, 0, -1));
-		holderprojectiles.add(new FlamerFlame(x, y, xl, -1));
-		holderprojectiles.add(new FlamerFlame(x, y, -xl, -1));
-		holderprojectiles.add(new FlamerFlame(x, y, xm, -1));
-		holderprojectiles.add(new FlamerFlame(x, y, -xm, -1));
-		holderprojectiles.add(new FlamerFlame(x, y, -xs, -1));
-		holderprojectiles.add(new FlamerFlame(x, y, xs, -1));
+		holderprojectiles.add(new FlamerFlame(x, y, 0, -1, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, xl, -1, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, -xl, -1, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, xm, -1, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, -xm, -1, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, -xs, -1, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, xs, -1, speed, projectiledmg, range));
 	}
 
 	@Override
@@ -42,13 +45,13 @@ public class Flamer extends Firearm {
 		//holderprojectiles.add(new FlamerFlame(x, y, -cos45, cos45));
 		//holderprojectiles.add(new FlamerFlame(x, y, -sin22, cos22));
 		//holderprojectiles.add(new FlamerFlame(x, y, sin22, cos22));
-		holderprojectiles.add(new FlamerFlame(x, y, 0, 1));
-		holderprojectiles.add(new FlamerFlame(x, y, xl, 1));
-		holderprojectiles.add(new FlamerFlame(x, y, -xl, 1));
-		holderprojectiles.add(new FlamerFlame(x, y, xm, 1));
-		holderprojectiles.add(new FlamerFlame(x, y, -xm, 1));
-		holderprojectiles.add(new FlamerFlame(x, y, -xs, 1));
-		holderprojectiles.add(new FlamerFlame(x, y, xs, 1));
+		holderprojectiles.add(new FlamerFlame(x, y, 0, 1, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, xl, 1, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, -xl, 1, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, xm, 1, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, -xm, 1, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, -xs, 1, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, xs, 1, speed, projectiledmg, range));
 	}
 
 	@Override
@@ -59,13 +62,13 @@ public class Flamer extends Firearm {
 		//holderprojectiles.add(new FlamerFlame(x, y, -cos45, -cos45));
 		//holderprojectiles.add(new FlamerFlame(x, y, -cos22, sin22));
 		//holderprojectiles.add(new FlamerFlame(x, y, -cos22, -sin22));
-		holderprojectiles.add(new FlamerFlame(x, y, -1, 0));
-		holderprojectiles.add(new FlamerFlame(x, y, -1, xl));
-		holderprojectiles.add(new FlamerFlame(x, y, -1, -xl));
-		holderprojectiles.add(new FlamerFlame(x, y, -1, xm));
-		holderprojectiles.add(new FlamerFlame(x, y, -1, -xm));
-		holderprojectiles.add(new FlamerFlame(x, y, -1, xs));
-		holderprojectiles.add(new FlamerFlame(x, y, -1, -xs));
+		holderprojectiles.add(new FlamerFlame(x, y, -1, 0, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, -1, xl, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, -1, -xl, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, -1, xm, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, -1, -xm, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, -1, xs, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, -1, -xs, speed, projectiledmg, range));
 	}
 
 	@Override
@@ -76,13 +79,13 @@ public class Flamer extends Firearm {
 		//holderprojectiles.add(new FlamerFlame(x, y, cos45, -cos45));
 		//holderprojectiles.add(new FlamerFlame(x, y, cos22, sin22));
 		//holderprojectiles.add(new FlamerFlame(x, y, cos22, -sin22));
-		holderprojectiles.add(new FlamerFlame(x, y, 1, 0));
-		holderprojectiles.add(new FlamerFlame(x, y, 1, xl));
-		holderprojectiles.add(new FlamerFlame(x, y, 1, -xl));
-		holderprojectiles.add(new FlamerFlame(x, y, 1, xm));
-		holderprojectiles.add(new FlamerFlame(x, y, 1, -xm));
-		holderprojectiles.add(new FlamerFlame(x, y, 1, xs));
-		holderprojectiles.add(new FlamerFlame(x, y, 1, -xs));
+		holderprojectiles.add(new FlamerFlame(x, y, 1, 0, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, 1, xl, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, 1, -xl, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, 1, xm, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, 1, -xm, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, 1, xs, speed, projectiledmg, range));
+		holderprojectiles.add(new FlamerFlame(x, y, 1, -xs, speed, projectiledmg, range));
 	}
 	
 	@Override

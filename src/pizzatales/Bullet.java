@@ -6,8 +6,8 @@ public class Bullet extends Projectile {
 	
 	public static Image bulletsprite;
 	
-	public Bullet(int startX, int startY, int vectorX, int vectorY) {
-		super(startX, startY, vectorX, vectorY, 10, 1, 15, 7, 500);
+	public Bullet(int startX, int startY, int vectorX, int vectorY, int speed, float dmg, int range) {
+		super(startX, startY, vectorX, vectorY, speed, dmg, 15, 7, range);
 	}
 	
 	@Override

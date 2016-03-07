@@ -8,34 +8,37 @@ public class Smg extends Firearm {
 	public Smg() {
 		super();
 		this.setFireRate(10);
+		speed = 10;
+		projectiledmg = 1;
+		range = 400;
 	}
 	
 	@Override
 	public void shootUp(int x, int y) {
 		setSpriteUp();
 		shootingCounter++;
-		holderprojectiles.add(new SmgBullet(x, y, 0, -1));
+		holderprojectiles.add(new SmgBullet(x, y, 0, -1, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootDown(int x, int y) {
 		setSpriteDown();
 		shootingCounter++;
-		holderprojectiles.add(new SmgBullet(x, y, 0, 1));
+		holderprojectiles.add(new SmgBullet(x, y, 0, 1, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootLeft(int x, int y) {
 		setSpriteLeft();
 		shootingCounter++;
-		holderprojectiles.add(new SmgBullet(x, y, -1, 0));
+		holderprojectiles.add(new SmgBullet(x, y, -1, 0, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootRight(int x, int y) {
 		setSpriteRight();
 		shootingCounter++;
-		holderprojectiles.add(new SmgBullet(x, y, 1, 0));
+		holderprojectiles.add(new SmgBullet(x, y, 1, 0, speed, projectiledmg, range));
 	}
 
 	@Override

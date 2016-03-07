@@ -8,6 +8,9 @@ public abstract class Firearm {
 	public Image currentSprite;
 	protected int shootingCounter;
 	protected int firerate;
+	protected float projectiledmg;
+	protected int range;
+	protected int speed;
 	protected ArrayList<Projectile> holderprojectiles;
 	public int deltapx;
 	public int deltapy;
