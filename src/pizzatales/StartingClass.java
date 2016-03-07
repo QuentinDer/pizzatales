@@ -36,18 +36,18 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
-	
+
 	Container contentPane;
-	
+
 	private boolean gamelaunched;
+	private boolean levelended;
 	private static Player player;
 	public static int isGrinning;
 	private Image image, background;
 	private Image blooddrop;
 	private Image grinningsprite;
-	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, 
-		tileCaveRock, tileGate, tileCaveExit, tileLavaPuddle, tileWaterFlow, 
-		tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel;
+	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit,
+			tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel;
 	private Graphics second;
 	private static Background bg;
 	private static PathFinder pf;
@@ -56,12 +56,12 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static ArrayList<Armor> playerarmor;
 	public static ArrayList<Hat> playerhats;
 	public static ArrayList<Explosion> explosions;
-	
+
 	private Clip clip;
-	
+
 	public static int difficultylevel = 1;
 	public static final boolean TESTMODE = true;
-	public static int currentlevel = TESTMODE?1:0;
+	public static int currentlevel = TESTMODE ? 1 : 0;
 
 	public int weaponindex;
 	private int armorindex;
@@ -72,9 +72,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static int fpscount;
 	public static long fpsclock = System.currentTimeMillis();
 	public static long clock = System.currentTimeMillis();
-	/*public static long nanoclock = System.nanoTime();
-	public static int computationtime;
-	public static int cmptime;*/
+	/*
+	 * public static long nanoclock = System.nanoTime(); public static int
+	 * computationtime; public static int cmptime;
+	 */
 
 	enum GameState {
 		Running, Dead, Paused, LevelEnded
@@ -86,14 +87,14 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static int width;
 	public static int height;
 	private int[][] heightitemmap;
-	
+
 	private static ArrayList<Tile> tilearray = new ArrayList<Tile>();
 	public static ArrayList<Item> items = new ArrayList<Item>();
 	public static ArrayList<Item> leavingitems = new ArrayList<Item>();
 	public static ArrayList<Enemy> enemyarray = new ArrayList<Enemy>();
 	public static ArrayList<ArrayList<Enemy>> arenaenemies = new ArrayList<ArrayList<Enemy>>();
 	public static ArrayList<ArrayList<EntryDoor>> arenaentrydoors = new ArrayList<ArrayList<EntryDoor>>();
-	public static ArrayList<Entry<Integer,Integer>> arenacenters = new ArrayList<Entry<Integer,Integer>>();
+	public static ArrayList<Entry<Integer, Integer>> arenacenters = new ArrayList<Entry<Integer, Integer>>();
 	public static ArrayList<ArrayList<Integer>> arenainsidearea = new ArrayList<ArrayList<Integer>>();
 	public static ArrayList<HitPoint> hitpoints = new ArrayList<HitPoint>();
 	public static ArrayList<ArrayList<Enemy>> hiddenenemies = new ArrayList<ArrayList<Enemy>>();
@@ -110,41 +111,38 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private int blockmaxheight;
 	public static JFrame me;
 	/*
-	 * ScrollingMode :
-	 * 0 - noscrolling
-	 * 1 - dynamic
-	 * 2 - player centered
-	 * 3 - player controlled scrolling //TODO implement ?
+	 * ScrollingMode : 0 - noscrolling 1 - dynamic 2 - player centered 3 -
+	 * player controlled scrolling //TODO implement ?
 	 */
 	public static int ScrollingMode = 1;
 	public static boolean levelwithxscrolling = true;
 	public static boolean levelwithyscrolling = true;
-	
+
 	public StartingClass() {
 		initUI();
 	}
-	
-	//@Override
+
+	// @Override
 	public void init() {
 		setSize(1280, 800);
 		setBackground(Color.BLACK);
 		setFocusable(true);
 		addKeyListener(this);
 		setTitle("Pizza Tales");
-		
+
 		URL url = getClass().getResource("/data/Soundtrack1.wav");
 		try {
 			clip = AudioSystem.getClip();
-			AudioInputStream ais = AudioSystem.getAudioInputStream( url );
+			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
 			clip.open(ais);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
-		
+
 		// Image Setups
-		
+
 		CheeseArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/cheese1.png")).getImage();
 		CheeseArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/cheese2.png")).getImage();
 		CheeseArmor.movesprite1 = new ImageIcon(getClass().getResource("/data/cheese3.png")).getImage();
@@ -165,7 +163,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		PepperoniArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/pepperoni2.png")).getImage();
 		PepperoniArmor.movesprite1 = new ImageIcon(getClass().getResource("/data/pepperoni3.png")).getImage();
 		PepperoniArmor.movesprite2 = new ImageIcon(getClass().getResource("/data/pepperoni4.png")).getImage();
-		
+
 		tileTree = new ImageIcon(getClass().getResource("/data/tree.png")).getImage();
 		tileGrass = new ImageIcon(getClass().getResource("/data/grass.png")).getImage();
 		tileWall = new ImageIcon(getClass().getResource("/data/wall.png")).getImage();
@@ -179,7 +177,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		tilePikes = new ImageIcon(getClass().getResource("/data/pikes.png")).getImage();
 		tileFlag = new ImageIcon(getClass().getResource("/data/flag.png")).getImage();
 		tileBarrel = new ImageIcon(getClass().getResource("/data/barrel.png")).getImage();
-		
+
 		blooddrop = new ImageIcon(getClass().getResource("/data/blooddrop.png")).getImage();
 		Gun.leftSprite = new ImageIcon(getClass().getResource("/data/pistol1.png")).getImage();
 		Gun.rightSprite = new ImageIcon(getClass().getResource("/data/pistol2.png")).getImage();
@@ -205,20 +203,28 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Rocket.rightSprite = new ImageIcon(getClass().getResource("/data/rocket2.png")).getImage();
 		Rocket.downSprite = new ImageIcon(getClass().getResource("/data/rocket3.png")).getImage();
 		Rocket.upSprite = new ImageIcon(getClass().getResource("/data/rocket4.png")).getImage();
-		BazookaBullet.bulletspriteLeft = new ImageIcon(getClass().getResource("/data/rocketprojectileleft.png")).getImage();
-		BazookaBullet.bulletspriteRight = new ImageIcon(getClass().getResource("/data/rocketprojectileright.png")).getImage();
+		BazookaBullet.bulletspriteLeft = new ImageIcon(getClass().getResource("/data/rocketprojectileleft.png"))
+				.getImage();
+		BazookaBullet.bulletspriteRight = new ImageIcon(getClass().getResource("/data/rocketprojectileright.png"))
+				.getImage();
 		BazookaBullet.bulletspriteUp = new ImageIcon(getClass().getResource("/data/rocketprojectileup.png")).getImage();
-		BazookaBullet.bulletspriteDown = new ImageIcon(getClass().getResource("/data/rocketprojectiledown.png")).getImage();
+		BazookaBullet.bulletspriteDown = new ImageIcon(getClass().getResource("/data/rocketprojectiledown.png"))
+				.getImage();
 		Smg.leftSprite = new ImageIcon(getClass().getResource("/data/smg1.png")).getImage();
 		Smg.rightSprite = new ImageIcon(getClass().getResource("/data/smg2.png")).getImage();
 		Smg.downSprite = new ImageIcon(getClass().getResource("/data/smg3.png")).getImage();
 		Smg.upSprite = new ImageIcon(getClass().getResource("/data/smg4.png")).getImage();
 		SmgBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/smgprojectile.png")).getImage();
-		TomatoProjectile.tomatoprojectilesprite = new ImageIcon(getClass().getResource("/data/sirtomatoprojectile.png")).getImage();
-		MushroomWizardBall.greenball = new ImageIcon(getClass().getResource("/data/mushroomwizardgreenball.png")).getImage();
-		MushroomWizardBall.yellowball = new ImageIcon(getClass().getResource("/data/mushroomwizardyellowball.png")).getImage();
-		MushroomWizardBall.redball = new ImageIcon(getClass().getResource("/data/mushroomwizardredball.png")).getImage();
-		MushroomWizardBall.blueball = new ImageIcon(getClass().getResource("/data/mushroomwizardblueball.png")).getImage();
+		TomatoProjectile.tomatoprojectilesprite = new ImageIcon(getClass().getResource("/data/sirtomatoprojectile.png"))
+				.getImage();
+		MushroomWizardBall.greenball = new ImageIcon(getClass().getResource("/data/mushroomwizardgreenball.png"))
+				.getImage();
+		MushroomWizardBall.yellowball = new ImageIcon(getClass().getResource("/data/mushroomwizardyellowball.png"))
+				.getImage();
+		MushroomWizardBall.redball = new ImageIcon(getClass().getResource("/data/mushroomwizardredball.png"))
+				.getImage();
+		MushroomWizardBall.blueball = new ImageIcon(getClass().getResource("/data/mushroomwizardblueball.png"))
+				.getImage();
 
 		Tato.staySprite = new ImageIcon(getClass().getResource("/data/tato1.png")).getImage();
 		Tato.move1Sprite = new ImageIcon(getClass().getResource("/data/tato2.png")).getImage();
@@ -256,7 +262,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		SirTomato.move2SpriteRight = new ImageIcon(getClass().getResource("/data/sirtomatoright3.png")).getImage();
 		SirTomato.dieSprite = new ImageIcon(getClass().getResource("/data/sirtomatodead.png")).getImage();
 		SirTomato.sirtomatothrowleft = new ImageIcon(getClass().getResource("/data/sirtomatothrowleft.png")).getImage();
-		SirTomato.sirtomatothrowright = new ImageIcon(getClass().getResource("/data/sirtomatothrowright.png")).getImage();
+		SirTomato.sirtomatothrowright = new ImageIcon(getClass().getResource("/data/sirtomatothrowright.png"))
+				.getImage();
 		SirTomato.dashSpriteLeft = new ImageIcon(getClass().getResource("/data/sirtomatodashleft.png")).getImage();
 		SirTomato.dashSpriteRight = new ImageIcon(getClass().getResource("/data/sirtomatodashright.png")).getImage();
 		SirTomato.slashSpriteLeft = new ImageIcon(getClass().getResource("/data/sirtomatoswipeleft.png")).getImage();
@@ -264,26 +271,36 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		MushroomWizard.staySprite = new ImageIcon(getClass().getResource("/data/mushroomwizardleft1.png")).getImage();
 		MushroomWizard.move1Sprite = new ImageIcon(getClass().getResource("/data/mushroomwizardleft2.png")).getImage();
 		MushroomWizard.move2Sprite = new ImageIcon(getClass().getResource("/data/mushroomwizardleft3.png")).getImage();
-		MushroomWizard.staySpriteRight = new ImageIcon(getClass().getResource("/data/mushroomwizardright1.png")).getImage();
-		MushroomWizard.move1SpriteRight = new ImageIcon(getClass().getResource("/data/mushroomwizardright2.png")).getImage();
-		MushroomWizard.move2SpriteRight = new ImageIcon(getClass().getResource("/data/mushroomwizardright3.png")).getImage();
+		MushroomWizard.staySpriteRight = new ImageIcon(getClass().getResource("/data/mushroomwizardright1.png"))
+				.getImage();
+		MushroomWizard.move1SpriteRight = new ImageIcon(getClass().getResource("/data/mushroomwizardright2.png"))
+				.getImage();
+		MushroomWizard.move2SpriteRight = new ImageIcon(getClass().getResource("/data/mushroomwizardright3.png"))
+				.getImage();
 		MushroomWizard.dieSprite = new ImageIcon(getClass().getResource("/data/mushroomwizarddead.png")).getImage();
-		MushroomWizard.swipeLeft = new ImageIcon(getClass().getResource("/data/mushroomwizardswipeleft.png")).getImage();
-		MushroomWizard.swipeRight = new ImageIcon(getClass().getResource("/data/mushroomwizardswiperight.png")).getImage();
-		MushroomWizard.swipeDown = new ImageIcon(getClass().getResource("/data/mushroomwizardswipedown.png")).getImage();
+		MushroomWizard.swipeLeft = new ImageIcon(getClass().getResource("/data/mushroomwizardswipeleft.png"))
+				.getImage();
+		MushroomWizard.swipeRight = new ImageIcon(getClass().getResource("/data/mushroomwizardswiperight.png"))
+				.getImage();
+		MushroomWizard.swipeDown = new ImageIcon(getClass().getResource("/data/mushroomwizardswipedown.png"))
+				.getImage();
 		MushroomWizard.swipeUp = new ImageIcon(getClass().getResource("/data/mushroomwizardswipeup.png")).getImage();
 		MushroomWizard.shooting = new ImageIcon(getClass().getResource("/data/mushroomwizardshooting.png")).getImage();
-		MushroomWizard.summoning = new ImageIcon(getClass().getResource("/data/mushroomwizardlavasummon.png")).getImage();
+		MushroomWizard.summoning = new ImageIcon(getClass().getResource("/data/mushroomwizardlavasummon.png"))
+				.getImage();
 		CarolinaReaper.staySprite = new ImageIcon(getClass().getResource("/data/reaper.png")).getImage();
 		CarolinaReaper.firering = new ImageIcon(getClass().getResource("/data/reaperfirering.png")).getImage();
 		CarolinaReaper.streamleft = new ImageIcon(getClass().getResource("/data/reaperfirestreamleft.png")).getImage();
-		CarolinaReaper.streamright = new ImageIcon(getClass().getResource("/data/reaperfirestreamright.png")).getImage();
+		CarolinaReaper.streamright = new ImageIcon(getClass().getResource("/data/reaperfirestreamright.png"))
+				.getImage();
 		CarolinaReaper.streamup = new ImageIcon(getClass().getResource("/data/reaperfirestreamup.png")).getImage();
 		CarolinaReaper.streamdown = new ImageIcon(getClass().getResource("/data/reaperfirestreamdown.png")).getImage();
 		CarolinaReaper.dieSprite = new ImageIcon(getClass().getResource("/data/reaperdead.png")).getImage();
-		
-		BazookaBulletExplosion.bazookaexplosionsprite = new ImageIcon(getClass().getResource("/data/bazookaexplosion.png")).getImage();
-		TomatoProjectileExplosion.tomatoexplosionsprite = new ImageIcon(getClass().getResource("/data/sirtomatoprojectileexplosion.png")).getImage();
+
+		BazookaBulletExplosion.bazookaexplosionsprite = new ImageIcon(
+				getClass().getResource("/data/bazookaexplosion.png")).getImage();
+		TomatoProjectileExplosion.tomatoexplosionsprite = new ImageIcon(
+				getClass().getResource("/data/sirtomatoprojectileexplosion.png")).getImage();
 		BarrelExplosion.explosionsprite = new ImageIcon(getClass().getResource("/data/barrelexplosion.png")).getImage();
 
 		ArmorPotion.armorpotionsprite = new ImageIcon(getClass().getResource("/data/armor.png")).getImage();
@@ -295,111 +312,115 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		WaterPuddle.sprite = new ImageIcon(getClass().getResource("/data/puddle.png")).getImage();
 		WoodBridge.sprite = new ImageIcon(getClass().getResource("/data/woodbridge.png")).getImage();
 		PizzaBox.pizzaboxsprite = new ImageIcon(getClass().getResource("/data/pizzabox.png")).getImage();
-		
+
 		HatBaseball.hatsprite = new ImageIcon(getClass().getResource("/data/hatbaseball.png")).getImage();
 		HatBowler.hatsprite = new ImageIcon(getClass().getResource("/data/hatbowler.png")).getImage();
 		HatFedora.hatsprite = new ImageIcon(getClass().getResource("/data/hatfedora.png")).getImage();
 		HatPanama.hatsprite = new ImageIcon(getClass().getResource("/data/hatpanama.png")).getImage();
 		HatSherlock.hatsprite = new ImageIcon(getClass().getResource("/data/hatsherlock.png")).getImage();
 		HatTop.hatsprite = new ImageIcon(getClass().getResource("/data/hattop.png")).getImage();
-		
+
 		grinningsprite = new ImageIcon(getClass().getResource("/data/grin.png")).getImage();
-		
+
 		/*
-		 anim = new Animation(); anim.addFrame(character1, 1250);
-		 anim.addFrame(character2, 50); currentSprite = anim.getImage();
+		 * anim = new Animation(); anim.addFrame(character1, 1250);
+		 * anim.addFrame(character2, 50); currentSprite = anim.getImage();
 		 */
 	}
-	
+
 	private void initUI() {
 
-        JButton quitButton = new JButton("Quit");
-        JButton startButton = new JButton("Start");
-        final JButton levelButton = new JButton("Level: "+currentlevel);
-        final JButton diffButton = new JButton("Difficulty: "+difficultylevel);
-        
-        levelButton.setBounds(500, 100, 100, 50);
-        diffButton.setBounds(680, 100, 100, 50);
-        startButton.setBounds(590, 250, 100, 50);
-        quitButton.setBounds(590, 300, 100, 50);
-        
-        levelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                if(currentlevel == 9){
-                	currentlevel = 1;
-                } else {
-                	currentlevel++;
-                }
-                levelButton.setText("Level: "+currentlevel);
-            }
-        });
-        
-        diffButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-            	if(difficultylevel == 4){
-            		difficultylevel = 1;
-            	} else {
-            		difficultylevel++;
-            	}
-                diffButton.setText("Difficulty: "+difficultylevel);
-            }
-        });
-        
-        startButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-            	 init();
-                 start();
-                 gamelaunched = true;
-                 contentPane = getContentPane();
-                 contentPane.removeAll();
-                 contentPane.invalidate();
-                 me.validate();
-            }
-        });
+		if (levelended) {
+			contentPane = getContentPane();
+			contentPane.removeAll();
+			contentPane.invalidate();
+			me.validate();
+			levelended = false;
+		}
 
-        quitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                System.exit(0);
-            }
-        });
+		JButton quitButton = new JButton("Quit");
+		JButton startButton = new JButton("Start");
+		final JButton levelButton = new JButton("Level: " + currentlevel);
+		final JButton diffButton = new JButton("Difficulty: " + difficultylevel);
 
-        createLayout(levelButton);
-        createLayout(diffButton);
-        createLayout(startButton);
-        createLayout(quitButton);
+		levelButton.setBounds(500, 100, 100, 50);
+		diffButton.setBounds(680, 100, 100, 50);
+		startButton.setBounds(590, 250, 100, 50);
+		quitButton.setBounds(590, 300, 100, 50);
 
-        setTitle("Pizza Tales");
-        setSize(1280, 800);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-    }
-	
+		levelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if (currentlevel == 9) {
+					currentlevel = 1;
+				} else {
+					currentlevel++;
+				}
+				levelButton.setText("Level: " + currentlevel);
+			}
+		});
+
+		diffButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if (difficultylevel == 4) {
+					difficultylevel = 1;
+				} else {
+					difficultylevel++;
+				}
+				diffButton.setText("Difficulty: " + difficultylevel);
+			}
+		});
+
+		startButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				init();
+				start();
+				gamelaunched = true;
+				contentPane = getContentPane();
+				contentPane.removeAll();
+				contentPane.invalidate();
+				me.validate();
+			}
+		});
+
+		quitButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				System.exit(0);
+			}
+		});
+
+		createLayout(levelButton);
+		createLayout(diffButton);
+		createLayout(startButton);
+		createLayout(quitButton);
+
+		setTitle("Pizza Tales");
+		setSize(1280, 800);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+
 	private void createLayout(JComponent... arg) {
 
 		contentPane = getContentPane();
-        GroupLayout gl = new GroupLayout(contentPane);
-        contentPane.setLayout(gl);
+		GroupLayout gl = new GroupLayout(contentPane);
+		contentPane.setLayout(gl);
 
-        gl.setAutoCreateContainerGaps(true);
+		gl.setAutoCreateContainerGaps(true);
 
-        gl.setHorizontalGroup(gl.createSequentialGroup()
-                .addComponent(arg[0])
-        );
+		gl.setHorizontalGroup(gl.createSequentialGroup().addComponent(arg[0]));
 
-        gl.setVerticalGroup(gl.createSequentialGroup()
-                .addComponent(arg[0])
-        );
-    }
+		gl.setVerticalGroup(gl.createSequentialGroup().addComponent(arg[0]));
+	}
 
-	//@Override
+	// @Override
 	public void start() {
 		Thread thread = new Thread(this);
 		thread.start();
-		
+
 		player = new Player();
 		pf = new PathFinder();
 		explosions = new ArrayList<Explosion>();
@@ -436,7 +457,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			playerhats.add(new HatSherlock());
 			playerhats.add(new HatTop());
 		}
-		
+
 		bg = new Background(0, 0);
 		player.setBackground(bg);
 		bginitx = bg.getCenterX();
@@ -444,7 +465,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 		// Initialize Tiles
 		try {
-			loadMap("/data/"+Level.getMapName(currentlevel));
+			loadMap("/data/" + Level.getMapName(currentlevel));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -453,8 +474,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private void loadMap(String filename) throws IOException {
 		ArrayList<String> lines = new ArrayList<String>();
 		blockmaxheight = 0;
-		
-		
+
 		BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filename)));
 		String line;
 		width = Integer.MAX_VALUE;
@@ -476,15 +496,15 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			levelwithxscrolling = true;
 
 		map = new BlockingStuff[width][height];
-		char [][] charmap = new char[width][height];
+		char[][] charmap = new char[width][height];
 		heightitemmap = new int[width][height];
-		HashMap<Integer,EntryDoor> mentrydoors = new HashMap<Integer,EntryDoor>();
+		HashMap<Integer, EntryDoor> mentrydoors = new HashMap<Integer, EntryDoor>();
 		HashMap<Integer, Tile> doors = new HashMap<Integer, Tile>();
 		HashMap<Integer, HiddenTrigger> hiddentriggers = new HashMap<Integer, HiddenTrigger>();
-		
+
 		int posplayery = 0;
 		int posplayerx = 0;
-		
+
 		boolean inBlock = false;
 		for (int j = 0; j < height; j++) {
 			line = lines.get(j);
@@ -523,10 +543,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			bginity = -400;
 		else
 			bginity = 0;
-		bg.setCenterX(bginitx+50*deltapx);
-		bg.setCenterY(bginity+50*deltapy);
+		bg.setCenterX(bginitx + 50 * deltapx);
+		bg.setCenterY(bginity + 50 * deltapy);
 		bginity -= 15;
-		
+
 		for (int j = 0; j < height; j++) {
 			line = lines.get(j);
 			int widthl = width;
@@ -539,35 +559,35 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					inBlock = true;
 				}
 				if (ch == ']') {
-					heightitemmap[k][j] = itemheight-1;
+					heightitemmap[k][j] = itemheight - 1;
 					inBlock = false;
 					itemheight = 0;
 				}
-				if (ch =='U') {
-					player.setCenterX(50*(k+deltapx)+25);
-					player.setCenterY(50*(j+deltapy)+40);
+				if (ch == 'U') {
+					player.setCenterX(50 * (k + deltapx) + 25);
+					player.setCenterY(50 * (j + deltapy) + 40);
 					map[player.posx][player.posy] = player;
 				}
 				if (ItemFactory.isItemSupported(ch)) {
 					Item it = ItemFactory.getItem(k, j, deltapx, deltapy, ch, itemheight);
 					items.add(it);
 					if (ch == 'i') {
-						mentrydoors.put(height*k+j,(EntryDoor)it);
+						mentrydoors.put(height * k + j, (EntryDoor) it);
 					}
 					if (ch == 'm') {
-						hiddentriggers.put(height*k+j, (HiddenTrigger)it);
+						hiddentriggers.put(height * k + j, (HiddenTrigger) it);
 					}
 				}
 				if (TileFactory.isTileTypeSupported(ch)) {
-					Tile t = TileFactory.getTile(k+deltapx, j+deltapy, ch);
+					Tile t = TileFactory.getTile(k + deltapx, j + deltapy, ch);
 					tilearray.add(t);
 					if (ch == 'd')
-						doors.put(height*k+j,t);
+						doors.put(height * k + j, t);
 					if (DestroyableTile.class.isInstance(t))
-						destroyabletiles.add((DestroyableTile)t);
+						destroyabletiles.add((DestroyableTile) t);
 				}
 				if (EnemyFactory.isTileTypeSupported(ch)) {
-					getEnemyarray().add(EnemyFactory.getEnemy(k+deltapx, j+deltapy, ch, this));
+					getEnemyarray().add(EnemyFactory.getEnemy(k + deltapx, j + deltapy, ch, this));
 				}
 				if (inBlock) {
 					if (itemheight > blockmaxheight)
@@ -583,12 +603,12 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				if (charmap[i][j] == 'f') {
-					MapUtil.getAccessibleArea(i,j,100,charmap,nonobstacles,mentrydoors, doors, k);
+					MapUtil.getAccessibleArea(i, j, 100, charmap, nonobstacles, mentrydoors, doors, k);
 					if (!nonobstacles.isEmpty()) {
 						int l = 0;
 						ArrayList<Enemy> lenemies = new ArrayList<Enemy>();
 						while (l < enemyarray.size()) {
-							if (nonobstacles.contains(height*enemyarray.get(l).posx + enemyarray.get(l).posy)) {
+							if (nonobstacles.contains(height * enemyarray.get(l).posx + enemyarray.get(l).posy)) {
 								lenemies.add(enemyarray.get(l));
 								enemyarray.get(l).sleep();
 								enemyarray.get(l).setIsInArena(true);
@@ -597,7 +617,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						}
 						l = 0;
 						arenaenemies.add(lenemies);
-						arenacenters.add(new SimpleEntry<Integer,Integer>(i,j));
+						arenacenters.add(new SimpleEntry<Integer, Integer>(i, j));
 						arenainsidearea.add(nonobstacles);
 						k++;
 					}
@@ -610,17 +630,17 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			else
 				entrydoors.add(e);
 		}
-		k=0;
+		k = 0;
 		HashMap<Integer, Character> area = new HashMap<Integer, Character>();
-		for (int i=0; i < width; i++) {
+		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				if (charmap[i][j] == 'z') {
-					MapUtil.getHiddenAccesibleArea(i,j,100,charmap, area, hiddentriggers, k);
+					MapUtil.getHiddenAccesibleArea(i, j, 100, charmap, area, hiddentriggers, k);
 					if (!area.isEmpty()) {
 						int l = 0;
 						ArrayList<Enemy> lenemies = new ArrayList<Enemy>();
 						while (l < enemyarray.size()) {
-							if (area.containsKey(height*enemyarray.get(l).posx + enemyarray.get(l).posy)) {
+							if (area.containsKey(height * enemyarray.get(l).posx + enemyarray.get(l).posy)) {
 								lenemies.add(enemyarray.get(l));
 								enemyarray.remove(l);
 							} else
@@ -633,16 +653,17 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						while (l < tilearray.size()) {
 							int postx = (tilearray.get(l).getCenterX() - bg.getCenterX() + bginitx) / 50;
 							int posty = (tilearray.get(l).getCenterY() - bg.getCenterY() + bginity) / 50;
-							if (area.containsKey(height*postx+posty)) {
+							if (area.containsKey(height * postx + posty)) {
 								tilearray.get(l).hideImage(Level.getHidingImage(currentlevel));
 								ltiles.add(tilearray.get(l));
 								tilearray.remove(l);
 							} else
 								l++;
 						}
-						for (Entry<Integer,Character> entry : area.entrySet()) {
+						for (Entry<Integer, Character> entry : area.entrySet()) {
 							if (!TileFactory.isTileTypeSupported(entry.getValue())) {
-								Tile t = TileFactory.getTile(entry.getKey()/height+deltapx, entry.getKey()%height+deltapy, entry.getValue());
+								Tile t = TileFactory.getTile(entry.getKey() / height + deltapx,
+										entry.getKey() % height + deltapy, entry.getValue());
 								t.hideImage(Level.getHidingImage(currentlevel));
 								tilearray.add(t);
 								ltiles.add(t);
@@ -652,7 +673,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						while (l < items.size()) {
 							int posix = (items.get(l).getCenterX() - bg.getCenterX() + bginitx) / 50;
 							int posiy = (items.get(l).getCenterY() - bg.getCenterY() + bginity) / 50;
-							if (area.containsKey(height*posix+posiy)) {
+							if (area.containsKey(height * posix + posiy)) {
 								litems.add(items.get(l));
 								items.remove(l);
 							} else
@@ -680,43 +701,42 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		}
 	}
 
-	/*@Override
-	public void stop() {
-		super.stop();
-	}*/
+	/*
+	 * @Override public void stop() { super.stop(); }
+	 */
 
-	/*@Override
-	public void destroy() {
-		super.destroy();
-	}*/
+	/*
+	 * @Override public void destroy() { super.destroy(); }
+	 */
 
 	@Override
 	public void run() {
 		if (state == GameState.Running) {
-			//TODO soundtrack.loop();
-			background = new ImageIcon(getClass().getResource("/data/"+Level.getBackground(currentlevel))).getImage();
+			// TODO soundtrack.loop();
+			background = new ImageIcon(getClass().getResource("/data/" + Level.getBackground(currentlevel))).getImage();
 			while (true) {
 				while (state == GameState.Running) {
-					//computationtime += System.nanoTime() - nanoclock;
+					// computationtime += System.nanoTime() - nanoclock;
 					try {
 						Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					//nanoclock = System.nanoTime();
+					// nanoclock = System.nanoTime();
 					clock = System.currentTimeMillis();
 					if (TESTMODE) {
-						if (clock > fpsclock+1000) {
+						if (clock > fpsclock + 1000) {
 							fpsclock = clock;
 							fps = fpscount;
 							fpscount = 0;
-							/*cmptime = computationtime / fps / 1000;
-							computationtime = 0;*/
+							/*
+							 * cmptime = computationtime / fps / 1000;
+							 * computationtime = 0;
+							 */
 						} else {
 							fpscount++;
 						}
 					}
-					
 
 					int i = 0;
 					while (i < hitpoints.size()) {
@@ -725,7 +745,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						else {
 							hitpoints.get(i).timer--;
 							i++;
-						}	
+						}
 					}
 					player.canmovedown = true;
 					player.canmoveleft = true;
@@ -769,16 +789,18 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					updateTiles();
 					updateItems();
 					repaint(); // this calls paint
-				
+
 					if (isInArena < 0 && activatedentry != null) {
-						int playerposx = (player.getCenterX()-bg.getCenterX()+bginitx)/50;
-						int playerposy = (player.getCenterY()-bg.getCenterY()+bginity)/50;
+						int playerposx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
+						int playerposy = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
 						for (Tile t : activatedentry.getDoors()) {
 							map[t.posx][t.posy] = null;
 						}
 						int dirplace = 0;
-						int difPX = 50*player.posx+25+bg.getCenterX()-StartingClass.bginitx - player.getCenterX();
-						int difPY = 50*player.posy+40+bg.getCenterY()-StartingClass.bginity - player.getCenterY();
+						int difPX = 50 * player.posx + 25 + bg.getCenterX() - StartingClass.bginitx
+								- player.getCenterX();
+						int difPY = 50 * player.posy + 40 + bg.getCenterY() - StartingClass.bginity
+								- player.getCenterY();
 						if (Math.abs(difPX) > Math.abs(difPY)) {
 							if (difPX > 0)
 								dirplace = 3;
@@ -790,7 +812,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 							else
 								dirplace = 2;
 						}
-						if (pf.getDirection(playerposx, playerposy, activatedentry.getOut().getPosX(), activatedentry.getOut().getPosY(),10, player.canmoveleft, player.canmoveup, player.canmoveright, player.canmovedown, dirplace, true) > 0) {
+						if (pf.getDirection(playerposx, playerposy, activatedentry.getOut().getPosX(),
+								activatedentry.getOut().getPosY(), 10, player.canmoveleft, player.canmoveup,
+								player.canmoveright, player.canmovedown, dirplace, true) > 0) {
 							for (Enemy e : enemyarray) {
 								e.sleep();
 							}
@@ -805,9 +829,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 								tilearray.remove(t);
 							}
 							isInArena = activatedentry.isGoingIn();
-							
-							int arenacentery = arenacenters.get(isInArena).getValue() * 50 + 25 +bg.getCenterY() - bginity;
-							int arenacenterx = arenacenters.get(isInArena).getKey() * 50 + 25 + bg.getCenterX() - bginitx;
+
+							int arenacentery = arenacenters.get(isInArena).getValue() * 50 + 25 + bg.getCenterY()
+									- bginity;
+							int arenacenterx = arenacenters.get(isInArena).getKey() * 50 + 25 + bg.getCenterX()
+									- bginitx;
 							player.setScrollingSpeedX(0);
 							player.setScrollingSpeedY(0);
 							if (levelwithyscrolling) {
@@ -833,22 +859,26 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 								deltapy = -30;
 							if (activatedentry.getPosY() > activatedentry.getOut().getPosY())
 								deltapy = 30;
-							while ((levelwithyscrolling && Math.abs(arenacentery-400) > 20) || (levelwithxscrolling && Math.abs(arenacenterx-640)>20) || !foundposition) {
-								//computationtime += System.nanoTime() - nanoclock;
+							while ((levelwithyscrolling && Math.abs(arenacentery - 400) > 20)
+									|| (levelwithxscrolling && Math.abs(arenacenterx - 640) > 20) || !foundposition) {
+								// computationtime += System.nanoTime() -
+								// nanoclock;
 								try {
 									Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
-								//nanoclock = System.nanoTime();
+								// nanoclock = System.nanoTime();
 								clock = System.currentTimeMillis();
 								if (TESTMODE) {
-									if (clock > fpsclock+1000) {
+									if (clock > fpsclock + 1000) {
 										fpsclock = clock;
 										fps = fpscount;
 										fpscount = 0;
-										/*cmptime = computationtime / fps / 1000;
-										computationtime = 0;*/
+										/*
+										 * cmptime = computationtime / fps /
+										 * 1000; computationtime = 0;
+										 */
 									} else {
 										fpscount++;
 									}
@@ -860,9 +890,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 									else {
 										hitpoints.get(i).timer--;
 										i++;
-									}	
+									}
 								}
-								
+
 								player.canmovedown = true;
 								player.canmoveleft = true;
 								player.canmoveright = true;
@@ -883,8 +913,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 													p.doOnCollision(e);
 													e.damage(p.damage);
 													if (!e.alive) {
-														if (player.getHealth() + 1< player.getMaxHealth())
-															player.setHealth(player.getHealth()+1);
+														if (player.getHealth() + 1 < player.getMaxHealth())
+															player.setHealth(player.getHealth() + 1);
 														else
 															player.setHealth(player.getMaxHealth());
 													}
@@ -903,7 +933,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 										if (null != t) {
 											p.doOnCollision(t);
 											if (DestroyableTile.class.isInstance(t))
-												((DestroyableTile)t).damage(p.damage);
+												((DestroyableTile) t).damage(p.damage);
 										}
 										i++;
 									} else {
@@ -915,13 +945,15 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 										player.damage(e.damage);
 									}
 								}
-								playerposx = (player.getCenterX()-bg.getCenterX()+bginitx+deltapx)/50;
-								playerposy = (player.getCenterY()-bg.getCenterY()+bginity+deltapy)/50;
+								playerposx = (player.getCenterX() - bg.getCenterX() + bginitx + deltapx) / 50;
+								playerposy = (player.getCenterY() - bg.getCenterY() + bginity + deltapy) / 50;
 								map[player.posx][player.posy] = null;
 								if (!foundposition) {
 									dirplace = 0;
-									difPX = 50*player.posx+25+bg.getCenterX()-StartingClass.bginitx - player.getCenterX();
-									difPY = 50*player.posy+40+bg.getCenterY()-StartingClass.bginity - player.getCenterY();
+									difPX = 50 * player.posx + 25 + bg.getCenterX() - StartingClass.bginitx
+											- player.getCenterX();
+									difPY = 50 * player.posy + 40 + bg.getCenterY() - StartingClass.bginity
+											- player.getCenterY();
 									if (Math.abs(difPX) > Math.abs(difPY)) {
 										if (difPX > 0)
 											dirplace = 3;
@@ -933,7 +965,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 										else
 											dirplace = 2;
 									}
-									switch (pf.getDirection(playerposx, playerposy, activatedentry.getOut().getPosX(), activatedentry.getOut().getPosY(),10, player.canmoveleft, player.canmoveup, player.canmoveright, player.canmovedown, dirplace, true)) {
+									switch (pf.getDirection(playerposx, playerposy, activatedentry.getOut().getPosX(),
+											activatedentry.getOut().getPosY(), 10, player.canmoveleft, player.canmoveup,
+											player.canmoveright, player.canmovedown, dirplace, true)) {
 									case 0:
 										player.controlledstopMoving();
 										foundposition = true;
@@ -993,11 +1027,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 								repaint();
 								arenacentery = arenacenters.get(isInArena).getValue() * 50 + bg.getCenterY() - bginity;
 								arenacenterx = arenacenters.get(isInArena).getKey() * 50 + bg.getCenterX() - bginitx;
-								if (Math.abs(arenacentery-400) < 20)
+								if (Math.abs(arenacentery - 400) < 20)
 									player.setScrollingSpeedY(0);
-								if (Math.abs(arenacenterx-640) < 20)
+								if (Math.abs(arenacenterx - 640) < 20)
 									player.setScrollingSpeedX(0);
-								
+
 							}
 							for (Enemy e : arenaenemies.get(activatedentry.isGoingIn())) {
 								e.wakeup();
@@ -1042,103 +1076,105 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						int finaldeltax = 0;
 						int finaldeltay = 0;
 						if (levelwithxscrolling) {
-							deltax = (640 - player.getCenterX())/10;
-							finaldeltax = 640 - player.getCenterX() - deltax*9;
+							deltax = (640 - player.getCenterX()) / 10;
+							finaldeltax = 640 - player.getCenterX() - deltax * 9;
 						}
 						if (levelwithyscrolling) {
-							deltay = (400 - player.getCenterY())/10;
-							finaldeltay = 400 - player.getCenterY() - deltay*9;
+							deltay = (400 - player.getCenterY()) / 10;
+							finaldeltay = 400 - player.getCenterY() - deltay * 9;
 						}
 						for (int l = 0; l < 9; l++) {
-							bg.setCenterX(bg.getCenterX()+deltax);
-							bg.setCenterY(bg.getCenterY()+deltay);
+							bg.setCenterX(bg.getCenterX() + deltax);
+							bg.setCenterY(bg.getCenterY() + deltay);
 							for (Tile t : tilearray) {
-								t.setCenterX(t.getCenterX()+deltax);
-								t.setCenterY(t.getCenterY()+deltay);
+								t.setCenterX(t.getCenterX() + deltax);
+								t.setCenterY(t.getCenterY() + deltay);
 							}
 							for (Enemy e : enemyarray) {
-								e.setCenterX(e.getCenterX()+deltax);
-								e.setCenterY(e.getCenterY()+deltay);
+								e.setCenterX(e.getCenterX() + deltax);
+								e.setCenterY(e.getCenterY() + deltay);
 								for (Projectile p : e.getProjectiles()) {
-									p.setCenterX(p.getCenterX()+deltax);
-									p.setCenterY(p.getCenterY()+deltay);
+									p.setCenterX(p.getCenterX() + deltax);
+									p.setCenterY(p.getCenterY() + deltay);
 								}
 							}
 							for (Projectile p : player.getProjectiles()) {
-								p.setCenterX(p.getCenterX()+deltax);
-								p.setCenterY(p.getCenterY()+deltay);
+								p.setCenterX(p.getCenterX() + deltax);
+								p.setCenterY(p.getCenterY() + deltay);
 							}
 							for (Item it : items) {
-								it.setCenterX(it.getCenterX()+deltax);
-								it.setCenterY(it.getCenterY()+deltay);
+								it.setCenterX(it.getCenterX() + deltax);
+								it.setCenterY(it.getCenterY() + deltay);
 							}
 							for (Item it : leavingitems) {
-								it.setCenterX(it.getCenterX()+deltax);
-								it.setCenterY(it.getCenterY()+deltay);
+								it.setCenterX(it.getCenterX() + deltax);
+								it.setCenterY(it.getCenterY() + deltay);
 							}
 							for (Explosion e : explosions) {
-								e.setCenterX(e.getCenterX()+deltax);
-								e.setCenterY(e.getCenterY()+deltay);
+								e.setCenterX(e.getCenterX() + deltax);
+								e.setCenterY(e.getCenterY() + deltay);
 							}
-							player.setCenterX(player.getCenterX()+deltax);
-							player.setCenterY(player.getCenterY()+deltay);
+							player.setCenterX(player.getCenterX() + deltax);
+							player.setCenterY(player.getCenterY() + deltay);
 							repaint();
-							//computationtime += System.nanoTime() - nanoclock;
+							// computationtime += System.nanoTime() - nanoclock;
 							try {
 								Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
-							//nanoclock = System.nanoTime();
+							// nanoclock = System.nanoTime();
 							clock = System.currentTimeMillis();
 							if (TESTMODE) {
-								if (clock > fpsclock+1000) {
+								if (clock > fpsclock + 1000) {
 									fpsclock = clock;
 									fps = fpscount;
 									fpscount = 0;
-									/*cmptime = computationtime / fps / 1000;
-									computationtime = 0;*/
+									/*
+									 * cmptime = computationtime / fps / 1000;
+									 * computationtime = 0;
+									 */
 								} else {
 									fpscount++;
 								}
 							}
 						}
-						bg.setCenterX(bg.getCenterX()+finaldeltax);
-						bg.setCenterY(bg.getCenterY()+finaldeltay);
+						bg.setCenterX(bg.getCenterX() + finaldeltax);
+						bg.setCenterY(bg.getCenterY() + finaldeltay);
 						for (Tile t : tilearray) {
-							t.setCenterX(t.getCenterX()+finaldeltax);
-							t.setCenterY(t.getCenterY()+finaldeltay);
+							t.setCenterX(t.getCenterX() + finaldeltax);
+							t.setCenterY(t.getCenterY() + finaldeltay);
 						}
 						for (Enemy e : enemyarray) {
-							e.setCenterX(e.getCenterX()+finaldeltax);
-							e.setCenterY(e.getCenterY()+finaldeltay);
+							e.setCenterX(e.getCenterX() + finaldeltax);
+							e.setCenterY(e.getCenterY() + finaldeltay);
 							for (Projectile p : e.getProjectiles()) {
-								p.setCenterX(p.getCenterX()+finaldeltax);
-								p.setCenterY(p.getCenterY()+finaldeltay);
+								p.setCenterX(p.getCenterX() + finaldeltax);
+								p.setCenterY(p.getCenterY() + finaldeltay);
 							}
 						}
 						for (Projectile p : player.getProjectiles()) {
-							p.setCenterX(p.getCenterX()+finaldeltax);
-							p.setCenterY(p.getCenterY()+finaldeltay);
+							p.setCenterX(p.getCenterX() + finaldeltax);
+							p.setCenterY(p.getCenterY() + finaldeltay);
 						}
 						for (Item it : items) {
-							it.setCenterX(it.getCenterX()+finaldeltax);
-							it.setCenterY(it.getCenterY()+finaldeltay);
+							it.setCenterX(it.getCenterX() + finaldeltax);
+							it.setCenterY(it.getCenterY() + finaldeltay);
 						}
 						for (Item it : leavingitems) {
-							it.setCenterX(it.getCenterX()+finaldeltax);
-							it.setCenterY(it.getCenterY()+finaldeltay);
+							it.setCenterX(it.getCenterX() + finaldeltax);
+							it.setCenterY(it.getCenterY() + finaldeltay);
 						}
 						for (Explosion e : explosions) {
-							e.setCenterX(e.getCenterX()+finaldeltax);
-							e.setCenterY(e.getCenterY()+finaldeltay);
+							e.setCenterX(e.getCenterX() + finaldeltax);
+							e.setCenterY(e.getCenterY() + finaldeltay);
 						}
-						player.setCenterX(player.getCenterX()+finaldeltax);
-						player.setCenterY(player.getCenterY()+finaldeltay);
+						player.setCenterX(player.getCenterX() + finaldeltax);
+						player.setCenterY(player.getCenterY() + finaldeltay);
 						centeringOnPlayerRequest = false;
 					}
 					if (ScrollingMode > 0 && toggleScrollingModeRequest) {
-						ScrollingMode = 3-ScrollingMode;
+						ScrollingMode = 3 - ScrollingMode;
 						toggleScrollingModeRequest = false;
 					}
 					if (revealHidden >= 0) {
@@ -1150,13 +1186,13 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 							}
 						}
 						for (Item it : hiddenitems.get(revealHidden)) {
-							it.setCenterX(50*it.posx+bg.getCenterX()-bginitx);
-							it.setCenterY(50*it.posy+bg.getCenterY()-bginity);
+							it.setCenterX(50 * it.posx + bg.getCenterX() - bginitx);
+							it.setCenterY(50 * it.posy + bg.getCenterY() - bginity);
 							items.add(it);
 						}
 						for (Enemy e : hiddenenemies.get(revealHidden)) {
-							e.setCenterX(50*e.posx+bg.getCenterX()-bginitx);
-							e.setCenterY(50*e.posy+bg.getCenterY()-bginity);
+							e.setCenterX(50 * e.posx + bg.getCenterX() - bginitx);
+							e.setCenterY(50 * e.posy + bg.getCenterY() - bginity);
 							enemyarray.add(e);
 						}
 						hiddentiles.get(revealHidden).clear();
@@ -1170,35 +1206,44 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					}
 				}
 				if (state == GameState.LevelEnded) {
-					currentlevel++;
+
 					this.clean();
-					bg.setCenterX(0);
-					bg.setCenterY(0);
-					bginity = bg.getCenterY() - 15;
-					background = new ImageIcon(getClass().getResource("/data/"+Level.getBackground(currentlevel))).getImage();
-					try {
-						this.loadMap("/data/"+Level.getMapName(currentlevel));
-					} catch (IOException e) {
-						e.printStackTrace();
+					levelended = true;
+					/*
+					 * contentPane = getContentPane(); contentPane.removeAll();
+					 * contentPane.invalidate(); me.validate();
+					 */
+
+					if (gamelaunched) {
+						initEndLevelScreen();
+						gamelaunched = false;
 					}
-					state = GameState.Running;
+
+					/*
+					 * setTitle("Pizza Tales"); setSize(1280, 800);
+					 * setLocationRelativeTo(null);
+					 * setDefaultCloseOperation(EXIT_ON_CLOSE);
+					 */
+
 				}
 				repaint();
-				//computationtime += System.nanoTime() - nanoclock;
+				// computationtime += System.nanoTime() - nanoclock;
 				try {
 					Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				//nanoclock = System.nanoTime();
+				// nanoclock = System.nanoTime();
 				clock = System.currentTimeMillis();
 				if (TESTMODE) {
-					if (clock > fpsclock+1000) {
+					if (clock > fpsclock + 1000) {
 						fpsclock = clock;
 						fps = fpscount;
 						fpscount = 0;
-						/*cmptime = computationtime / fps / 1000;
-						computationtime = 0;*/
+						/*
+						 * cmptime = computationtime / fps / 1000;
+						 * computationtime = 0;
+						 */
 					} else {
 						fpscount++;
 					}
@@ -1206,20 +1251,78 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			}
 		}
 	}
-
-/*	public void update(Graphics g) {
-		if (image == null) {
-			image = createImage(this.getWidth(), this.getHeight());
-			second = image.getGraphics();
-		}
-		second.setColor(getBackground());
-		second.fillRect(0, 0, getWidth(), getHeight());
-		second.setColor(getForeground());
-		paint(second);
-
-		g.drawImage(image, 0, 0, this);
-	}*/
 	
+	public void initEndLevelScreen(){
+		final JButton nextLevelButton = new JButton("Next Level");
+        final JButton quitButton = new JButton("Quit");
+        final JButton menuButton = new JButton("Main Menu");
+        
+        nextLevelButton.setBounds(590, 100, 100, 50);
+        menuButton.setBounds(590, 200, 100, 50);
+        quitButton.setBounds(590, 300, 100, 50);
+        
+        nextLevelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+            	clean();
+            	gamelaunched = true;
+            	
+                /*contentPane = getContentPane();
+                contentPane.removeAll();
+                contentPane.invalidate();
+                me.validate();*/
+                
+            	currentlevel++;
+            	clean();
+				bg.setCenterX(0);
+				bg.setCenterY(0);
+				bginity = bg.getCenterY() - 15;
+				background = new ImageIcon(getClass().getResource("/data/"+Level.getBackground(currentlevel))).getImage();
+				try {
+					loadMap("/data/"+Level.getMapName(currentlevel));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				state = GameState.Running;
+				
+            }
+        });
+        
+        menuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+            	clean();
+            	/*contentPane = getContentPane();
+                contentPane.removeAll();
+                contentPane.invalidate();
+                me.validate();*/
+            	initUI();
+            	//state = GameState.Running;
+            }
+        });
+
+        quitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                System.exit(0);
+            }
+        });
+
+        createLayout(nextLevelButton);
+        createLayout(menuButton);
+        createLayout(quitButton);
+	}
+
+	/*
+	 * public void update(Graphics g) { if (image == null) { image =
+	 * createImage(this.getWidth(), this.getHeight()); second =
+	 * image.getGraphics(); } second.setColor(getBackground());
+	 * second.fillRect(0, 0, getWidth(), getHeight());
+	 * second.setColor(getForeground()); paint(second);
+	 * 
+	 * g.drawImage(image, 0, 0, this); }
+	 */
+
 	private void paintOffScreen(Graphics g) {
 		if (state != GameState.Dead) {
 			g.drawImage(background, bg.getCenterX(), bg.getCenterY(), this);
@@ -1229,87 +1332,101 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
 					for (int j = 0; j < e.getProjectiles().size(); j++) {
 						Projectile p = e.getProjectiles().get(j);
-						g.drawImage(p.getSprite(), p.getCenterX()-p.halfsize, p.getCenterY()-p.halfsize, this);
+						g.drawImage(p.getSprite(), p.getCenterX() - p.halfsize, p.getCenterY() - p.halfsize, this);
 					}
 				}
 				for (int j = 0; j < e.getProjectiles().size(); j++) {
 					Projectile p = e.getProjectiles().get(j);
-					g.drawImage(p.getSprite(), p.getCenterX()-p.halfsize, p.getCenterY()-p.halfsize, this);
+					g.drawImage(p.getSprite(), p.getCenterX() - p.halfsize, p.getCenterY() - p.halfsize, this);
 				}
 			}
-			int stx = Math.max(0,(- 50 - bg.getCenterX() + StartingClass.bginitx) / 50);
-			int sty = Math.max(0, (- 50 - bg.getCenterY() + StartingClass.bginity) / 50);
-			int fx = Math.min(width,(1330 - bg.getCenterX() + StartingClass.bginitx) / 50);
-			int fy = Math.min(height,(850 - bg.getCenterY() + StartingClass.bginity) / 50);
+			int stx = Math.max(0, (-50 - bg.getCenterX() + StartingClass.bginitx) / 50);
+			int sty = Math.max(0, (-50 - bg.getCenterY() + StartingClass.bginity) / 50);
+			int fx = Math.min(width, (1330 - bg.getCenterX() + StartingClass.bginitx) / 50);
+			int fy = Math.min(height, (850 - bg.getCenterY() + StartingClass.bginity) / 50);
 			for (int y = sty; y < fy; y++) {
 				for (int x = stx; x < fx; x++) {
 					if (null != map[x][y]) {
 						if (Enemy.class.isInstance(map[x][y])) {
-							Enemy e = (Enemy)map[x][y];
+							Enemy e = (Enemy) map[x][y];
 							if (null != e.getWeapon()) {
 								if (e.isAimingUp()) {
-									g.drawImage(e.getWeapon().currentSprite, e.getCenterX() + e.getWeapon().deltapx, e.getCenterY() + e.getWeapon().deltapy, this);
-									g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
+									g.drawImage(e.getWeapon().currentSprite, e.getCenterX() + e.getWeapon().deltapx,
+											e.getCenterY() + e.getWeapon().deltapy, this);
+									g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex,
+											e.getCenterY() - e.halfsizey, this);
 								} else {
-									g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
-									g.drawImage(e.getWeapon().currentSprite, e.getCenterX() + e.getWeapon().deltapx, e.getCenterY() + e.getWeapon().deltapy, this);
+									g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex,
+											e.getCenterY() - e.halfsizey, this);
+									g.drawImage(e.getWeapon().currentSprite, e.getCenterX() + e.getWeapon().deltapx,
+											e.getCenterY() + e.getWeapon().deltapy, this);
 								}
 							} else {
-								g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
+								g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey,
+										this);
 							}
 							if (e.showHealthBar) {
 								g.setColor(Color.GREEN);
-								int lifetaken = (int)((e.getMaxHealth()-e.getHealth())*e.halfbarx*2)/e.getMaxHealth();
-								g.fillRect(e.getCenterX()-e.halfbarx, e.getCenterY()-e.halfbary, 2*e.halfbarx-lifetaken, 2);
+								int lifetaken = (int) ((e.getMaxHealth() - e.getHealth()) * e.halfbarx * 2)
+										/ e.getMaxHealth();
+								g.fillRect(e.getCenterX() - e.halfbarx, e.getCenterY() - e.halfbary,
+										2 * e.halfbarx - lifetaken, 2);
 								g.setColor(Color.RED);
-								g.fillRect(e.getCenterX()+e.halfbarx-lifetaken, e.getCenterY()-e.halfbary, lifetaken, 2);
+								g.fillRect(e.getCenterX() + e.halfbarx - lifetaken, e.getCenterY() - e.halfbary,
+										lifetaken, 2);
 							}
 						} else if (Player.class.isInstance(map[x][y])) {
 							if (isGrinning > 0)
 								isGrinning--;
 							if (player.isAimingUp()) {
-								g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey, this);
-								g.drawImage(player.currentSprite, player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey, this);
+								g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - player.halfsizex,
+										player.getCenterY() - player.halfsizey, this);
+								g.drawImage(player.currentSprite, player.getCenterX() - player.halfsizex,
+										player.getCenterY() - player.halfsizey, this);
 								if (isGrinning > 0)
-									g.drawImage(grinningsprite, player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey, this);
+									g.drawImage(grinningsprite, player.getCenterX() - player.halfsizex,
+											player.getCenterY() - player.halfsizey, this);
 								if (player.getHat() != null)
-									g.drawImage(player.getHat().getSprite(), player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey + player.getHat().deltay,this);
+									g.drawImage(player.getHat().getSprite(), player.getCenterX() - player.halfsizex,
+											player.getCenterY() - player.halfsizey + player.getHat().deltay, this);
 							} else {
-								g.drawImage(player.currentSprite, player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey, this);
+								g.drawImage(player.currentSprite, player.getCenterX() - player.halfsizex,
+										player.getCenterY() - player.halfsizey, this);
 								if (isGrinning > 0)
-									g.drawImage(grinningsprite, player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey, this);
+									g.drawImage(grinningsprite, player.getCenterX() - player.halfsizex,
+											player.getCenterY() - player.halfsizey, this);
 								if (player.getHat() != null)
-									g.drawImage(player.getHat().getSprite(), player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey + player.getHat().deltay,this);
-								g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - player.halfsizex, player.getCenterY() - player.halfsizey, this);
+									g.drawImage(player.getHat().getSprite(), player.getCenterX() - player.halfsizex,
+											player.getCenterY() - player.halfsizey + player.getHat().deltay, this);
+								g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - player.halfsizex,
+										player.getCenterY() - player.halfsizey, this);
 							}
 						} else
-							g.drawImage(map[x][y].getSprite(),map[x][y].getCenterX() - map[x][y].halfrsizex, map[x][y].getCenterY() - map[x][y].halfsizey, this);
+							g.drawImage(map[x][y].getSprite(), map[x][y].getCenterX() - map[x][y].halfrsizex,
+									map[x][y].getCenterY() - map[x][y].halfsizey, this);
 					}
 				}
-			}/*
-			for (int i = 0; i < getEnemyarray().size(); i++) {
-				Enemy e = getEnemyarray().get(i);
-				if (e.alive) {
-					if (null != e.getWeapon()) {
-						if (e.isAimingUp()) {
-							g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
-							g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
-						} else {
-							g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
-							g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31, e.getCenterY() - 31, this);
-						}
-					} else {
-						g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
-					}
-					if (e.showHealthBar) {
-						g.setColor(Color.GREEN);
-						int lifetaken = ((e.getMaxHealth()-e.getHealth())*e.halfbar*2)/e.getMaxHealth();
-						g.fillRect(e.getCenterX()-e.halfbar, e.getCenterY()-e.halfsizey, 2*e.halfbar-lifetaken, 2);
-						g.setColor(Color.RED);
-						g.fillRect(e.getCenterX()+e.halfbar-lifetaken, e.getCenterY()-e.halfsizey, lifetaken, 2);
-					}
-				}
-			}*/
+			} /*
+				 * for (int i = 0; i < getEnemyarray().size(); i++) { Enemy e =
+				 * getEnemyarray().get(i); if (e.alive) { if (null !=
+				 * e.getWeapon()) { if (e.isAimingUp()) {
+				 * g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31,
+				 * e.getCenterY() - 31, this); g.drawImage(e.currentSprite,
+				 * e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey,
+				 * this); } else { g.drawImage(e.currentSprite, e.getCenterX() -
+				 * e.halfsizex, e.getCenterY() - e.halfsizey, this);
+				 * g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31,
+				 * e.getCenterY() - 31, this); } } else {
+				 * g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex,
+				 * e.getCenterY() - e.halfsizey, this); } if (e.showHealthBar) {
+				 * g.setColor(Color.GREEN); int lifetaken =
+				 * ((e.getMaxHealth()-e.getHealth())*e.halfbar*2)/e.getMaxHealth
+				 * (); g.fillRect(e.getCenterX()-e.halfbar,
+				 * e.getCenterY()-e.halfsizey, 2*e.halfbar-lifetaken, 2);
+				 * g.setColor(Color.RED);
+				 * g.fillRect(e.getCenterX()+e.halfbar-lifetaken,
+				 * e.getCenterY()-e.halfsizey, lifetaken, 2); } } }
+				 */
 			for (Explosion e : explosions) {
 				g.drawImage(e.getSprite(), e.getR().x, e.getR().y, this);
 			}
@@ -1319,37 +1436,45 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				// g.setColor(Color.YELLOW);
 				// g.fillRect(p.getR().x, p.getR().y, p.getR().width,
 				// p.getR().height);
-				g.drawImage(p.getSprite(), p.getCenterX()-p.halfsize, p.getCenterY()-p.halfsize, this);
+				g.drawImage(p.getSprite(), p.getCenterX() - p.halfsize, p.getCenterY() - p.halfsize, this);
 			}
 			if (showPlayerHealthBar) {
 				g.setColor(Color.GREEN);
-				int lifetaken = (int)((20+player.getArmor().MAXDEF-player.getHealth()-player.getArmor().getDefense())*44)/(20+player.getArmor().MAXDEF);
-				int armorp = (int)(player.getArmor().getDefense()*44)/(20+player.getArmor().MAXDEF);
-				g.fillRect(player.getCenterX()-22, player.getCenterY()-31, 44-lifetaken-armorp, 2);
+				int lifetaken = (int) ((20 + player.getArmor().MAXDEF - player.getHealth()
+						- player.getArmor().getDefense()) * 44) / (20 + player.getArmor().MAXDEF);
+				int armorp = (int) (player.getArmor().getDefense() * 44) / (20 + player.getArmor().MAXDEF);
+				g.fillRect(player.getCenterX() - 22, player.getCenterY() - 31, 44 - lifetaken - armorp, 2);
 				g.setColor(Color.BLUE);
-				g.fillRect(player.getCenterX()+22-lifetaken-armorp, player.getCenterY()-31, armorp, 2);
+				g.fillRect(player.getCenterX() + 22 - lifetaken - armorp, player.getCenterY() - 31, armorp, 2);
 				g.setColor(Color.RED);
-				g.fillRect(player.getCenterX()+22-lifetaken, player.getCenterY()-31, lifetaken, 2);
+				g.fillRect(player.getCenterX() + 22 - lifetaken, player.getCenterY() - 31, lifetaken, 2);
 			}
 			for (int i = 0; i < hitpoints.size(); i++) {
-				g.drawImage(blooddrop, hitpoints.get(i).getCenterX()-7, hitpoints.get(i).getCenterY()-7, this);
+				g.drawImage(blooddrop, hitpoints.get(i).getCenterX() - 7, hitpoints.get(i).getCenterY() - 7, this);
 			}
 			paintItemEffect(g);
 			g.setColor(Color.RED);
 			g.fillRect(32, 37, 20, 20);
 			g.setColor(Color.WHITE);
-			g.drawString(Integer.toString((int)player.getHealth()), 35, 51);
+			g.drawString(Integer.toString((int) player.getHealth()), 35, 51);
 			g.setColor(Color.BLUE);
 			g.fillRect(52, 37, 20, 20);
 			g.setColor(Color.WHITE);
-			g.drawString(Integer.toString((int)player.getArmor().defense),55, 51);
+			g.drawString(Integer.toString((int) player.getArmor().defense), 55, 51);
 			if (TESTMODE) {
 				g.setColor(Color.DARK_GRAY);
 				g.fillRect(1200, 37, 20, 20);
 				g.fillRect(1230, 37, 45, 20);
 				g.setColor(Color.WHITE);
 				g.drawString(Integer.toString(fps), 1203, 51);
-				//g.drawString(Integer.toString(cmptime), 1233, 51);
+				// g.drawString(Integer.toString(cmptime), 1233, 51);
+			}
+			if (state == GameState.Paused) {
+				g.setColor(Color.DARK_GRAY);
+				g.fillRect(0, 385, 1280, 20);
+				//g.fillRect(1230, 37, 45, 20);
+				g.setColor(Color.WHITE);
+				g.drawString("PAUSE", 620, 400);
 			}
 		} else {
 			g.setColor(Color.BLACK);
@@ -1390,7 +1515,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			}
 		}
 	}
-	
+
 	private void checkItemsCollision() {
 		int i = 0;
 		while (i < items.size()) {
@@ -1407,14 +1532,12 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			it.doLeavingEffect();
 		}
 	}
-/*
-	private void checkTileCollisions() {
-		for (int i = 0; i < tilearray.size(); i++) {
-			Tile t = tilearray.get(i);
-			t.checkCollisions();
-		}
-	}*/
-	
+	/*
+	 * private void checkTileCollisions() { for (int i = 0; i <
+	 * tilearray.size(); i++) { Tile t = tilearray.get(i); t.checkCollisions();
+	 * } }
+	 */
+
 	public static void updateExplosions() {
 		int i = 0;
 		while (i < explosions.size()) {
@@ -1442,8 +1565,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 							p.doOnCollision(e);
 							e.damage(p.damage);
 							if (!e.alive) {
-								if (player.getHealth() + 1< player.getMaxHealth())
-									player.setHealth(player.getHealth()+1);
+								if (player.getHealth() + 1 < player.getMaxHealth())
+									player.setHealth(player.getHealth() + 1);
 								else
 									player.setHealth(player.getMaxHealth());
 							}
@@ -1462,7 +1585,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				if (null != t) {
 					p.doOnCollision(t);
 					if (DestroyableTile.class.isInstance(t))
-						((DestroyableTile)t).damage(p.damage);
+						((DestroyableTile) t).damage(p.damage);
 				}
 				i++;
 			} else {
@@ -1494,7 +1617,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					if (null != t) {
 						p.doOnCollision(t);
 						if (DestroyableTile.class.isInstance(t))
-							((DestroyableTile)t).damage(p.damage);
+							((DestroyableTile) t).damage(p.damage);
 					}
 					if (p.canbedestroyed) {
 						for (Projectile pe : player.getProjectiles()) {
@@ -1525,30 +1648,27 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			t.update();
 		}
 	}
-	
+
 	public static void updateItems() {
 		for (Item i : items)
 			i.update();
 		for (Item i : leavingitems)
 			i.update();
 	}
-/*
-	private void paintBelowTiles(Graphics g) {
-		for (int i = 0; i < tilearray.size(); i++) {
-			Tile t = tilearray.get(i);
-			if (t.getCenterY() <= player.getCenterY() || !Tile.isTileBlocking(t.getType()))
-				g.drawImage(t.getSprite(), t.getCenterX() - 31, t.getCenterY() - 31, this);
-		}
-	}
-	
-	private void paintAboveTiles(Graphics g) {
-		for (int i = 0; i < tilearray.size(); i++) {
-			Tile t = tilearray.get(i);
-			if (t.getCenterY() > player.getCenterY() && Tile.isTileBlocking(t.getType()))
-				g.drawImage(t.getSprite(), t.getCenterX() - 31, t.getCenterY() - 31, this);
-		}
-	}*/
-	
+	/*
+	 * private void paintBelowTiles(Graphics g) { for (int i = 0; i <
+	 * tilearray.size(); i++) { Tile t = tilearray.get(i); if (t.getCenterY() <=
+	 * player.getCenterY() || !Tile.isTileBlocking(t.getType()))
+	 * g.drawImage(t.getSprite(), t.getCenterX() - 31, t.getCenterY() - 31,
+	 * this); } }
+	 * 
+	 * private void paintAboveTiles(Graphics g) { for (int i = 0; i <
+	 * tilearray.size(); i++) { Tile t = tilearray.get(i); if (t.getCenterY() >
+	 * player.getCenterY() && Tile.isTileBlocking(t.getType()))
+	 * g.drawImage(t.getSprite(), t.getCenterX() - 31, t.getCenterY() - 31,
+	 * this); } }
+	 */
+
 	private void paintItems(Graphics g) {
 		for (int hght = 0; hght <= blockmaxheight; hght++) {
 			for (int i = 0; i < items.size(); i++) {
@@ -1557,20 +1677,21 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					g.drawImage(it.getSprite(), it.getCenterX() - 31, it.getCenterY() - 31, this);
 			}
 		}
-		
+
 	}
-	
-	private void paintItemEffect(Graphics g){
-		for (int i =0; i < items.size(); i++){
+
+	private void paintItemEffect(Graphics g) {
+		for (int i = 0; i < items.size(); i++) {
 			Item it = items.get(i);
-			if(it.effectactive == true){
-				g.drawImage(it.getEffectSprite(), player.getCenterX()-31, player.getCenterY()-31, this);
+			if (it.effectactive == true) {
+				g.drawImage(it.getEffectSprite(), player.getCenterX() - 31, player.getCenterY() - 31, this);
 			}
 		}
 		int i = 0;
 		while (i < leavingitems.size()) {
 			if (leavingitems.get(i).effectactive) {
-				g.drawImage(leavingitems.get(i).getEffectSprite(), player.getCenterX()-31, player.getCenterY()-31, this);
+				g.drawImage(leavingitems.get(i).getEffectSprite(), player.getCenterX() - 31, player.getCenterY() - 31,
+						this);
 				i++;
 			} else
 				leavingitems.remove(i);
@@ -1691,11 +1812,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			if (state == GameState.Paused) {
 				state = GameState.Running;
 				clip.loop(Clip.LOOP_CONTINUOUSLY);
-			}
-			else if (state == GameState.Running) {
+			} else if (state == GameState.Running) {
 				state = GameState.Paused;
 				clip.stop();
-			}	
+			}
 			break;
 		case KeyEvent.VK_C:
 			if (ScrollingMode > 0)
@@ -1727,7 +1847,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static PathFinder getPathFinder() {
 		return pf;
 	}
-	
+
 	public static ArrayList<Explosion> getExplosions() {
 		return explosions;
 	}
@@ -1763,18 +1883,24 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		hitpoints.clear();
 		entrydoors.clear();
 		destroyabletiles.clear();
+		playerweapons.clear();
+		weaponindex = 0;
+		playerarmor.clear();
+		armorindex = 0;
+		playerhats.clear();
 	}
-	
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
-	        
-            @Override
-            public void run() {
-                me = new StartingClass();
-                me.setVisible(true);
-                /*sc.init();
-                sc.start();*/
-            }
-        });
+
+			@Override
+			public void run() {
+				me = new StartingClass();
+				me.setVisible(true);
+				/*
+				 * sc.init(); sc.start();
+				 */
+			}
+		});
 	}
 }
