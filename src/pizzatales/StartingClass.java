@@ -40,7 +40,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	Container contentPane;
 	private boolean endlevelmenuloaded;
 	private boolean threadstarted = false;
-	private boolean azerty = false;
+	private boolean azerty = true;
 	private static Player player;
 	public static int isGrinning;
 	private Image image, background;
@@ -62,6 +62,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static int difficultylevel = 1;
 	public static final boolean TESTMODE = true;
 	public static int currentlevel = TESTMODE ? 13 : 0;
+	private int maxlevel = 13;
 
 	public int weaponindex;
 	private int armorindex;
@@ -364,7 +365,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		
 		JButton quitButton = new JButton("Quit");
 		JButton startButton = new JButton("Start");
-		final JButton keyButton = new JButton("qwerty");
+		final JButton keyButton = (azerty)?new JButton("azerty"):new JButton("qwerty");
 		final JButton levelButton = new JButton("Level: " + currentlevel);
 		final JButton diffButton = new JButton("Difficulty: " + difficultylevel);
 
@@ -391,10 +392,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		levelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				if (currentlevel == 13) {
+				currentlevel++;
+				if (currentlevel > maxlevel) {
 					currentlevel = 1;
-				} else {
-					currentlevel++;
 				}
 				levelButton.setText("Level: " + currentlevel);
 			}
@@ -1285,7 +1285,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
         menuButton.setBounds(590, 200, 100, 50);
         quitButton.setBounds(590, 300, 100, 50);
         
-        if(currentlevel >= 12){
+        if(currentlevel >= maxlevel){
         	nextLevelButton.setText("No more levels");
         	nextLevelButton.setBounds(575, 100, 150, 50);
         }
@@ -1293,7 +1293,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
         nextLevelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
-            	if(currentlevel < 12){
+            	if(currentlevel < maxlevel){
 	            	currentlevel++;
 					bg.setCenterX(0);
 					bg.setCenterY(0);
