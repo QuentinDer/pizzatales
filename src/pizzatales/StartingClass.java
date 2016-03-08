@@ -61,7 +61,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	public static int difficultylevel = 1;
 	public static final boolean TESTMODE = true;
-	public static int currentlevel = TESTMODE ? 1 : 0;
+	public static int currentlevel = TESTMODE ? 13 : 0;
 
 	public int weaponindex;
 	private int armorindex;
@@ -391,7 +391,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		levelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				if (currentlevel == 12) {
+				if (currentlevel == 13) {
 					currentlevel = 1;
 				} else {
 					currentlevel++;
