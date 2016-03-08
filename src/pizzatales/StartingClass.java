@@ -39,14 +39,14 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	Container contentPane;
 	private boolean endlevelmenuloaded;
-	private boolean threadstarted;
+	private boolean threadstarted = false;
 	private boolean azerty = false;
 	private static Player player;
 	public static int isGrinning;
 	private Image image, background;
 	private Image blooddrop;
 	private Image grinningsprite;
-	public static Image tileTree, tileGrass, tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit,
+	public static Image tileTree, /*tileGrass, */tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit,
 			tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel;
 	private Graphics second;
 	private static Background bg;
@@ -131,17 +131,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		addKeyListener(this);
 		setTitle("Pizza Tales");
 
-		URL url = getClass().getResource("/data/Soundtrack1.wav");
-		try {
-			clip = AudioSystem.getClip();
-			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
-			clip.open(ais);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		clip.loop(Clip.LOOP_CONTINUOUSLY);
-
 		// Image Setups
 
 		CheeseArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/cheese1.png")).getImage();
@@ -166,7 +155,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		PepperoniArmor.movesprite2 = new ImageIcon(getClass().getResource("/data/pepperoni4.png")).getImage();
 
 		tileTree = new ImageIcon(getClass().getResource("/data/tree.png")).getImage();
-		tileGrass = new ImageIcon(getClass().getResource("/data/grass.png")).getImage();
+		//tileGrass = new ImageIcon(getClass().getResource("/data/grass.png")).getImage();
 		tileWall = new ImageIcon(getClass().getResource("/data/wall.png")).getImage();
 		tileCave = new ImageIcon(getClass().getResource("/data/cave.png")).getImage();
 		tileStalag = new ImageIcon(getClass().getResource("/data/stalagmites.png")).getImage();
@@ -375,7 +364,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		
 		JButton quitButton = new JButton("Quit");
 		JButton startButton = new JButton("Start");
-		JButton keyButton = new JButton("qwerty");
+		final JButton keyButton = new JButton("qwerty");
 		final JButton levelButton = new JButton("Level: " + currentlevel);
 		final JButton diffButton = new JButton("Difficulty: " + difficultylevel);
 
@@ -426,7 +415,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		startButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				state = GameState.Running;
 				endlevelmenuloaded = false;
 				clean();
 				// Initialize Tiles
@@ -445,6 +433,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					player.setHealth(player.getMaxHealth());
 					player.getArmor().setDefense(player.getArmor().MAXDEF);
 				}
+				state = GameState.Running;
 				deathCountdown = 180;
 				contentPane = getContentPane();
 				contentPane.removeAll();
@@ -495,6 +484,21 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private void loadMap(String filename) throws IOException {
 		ArrayList<String> lines = new ArrayList<String>();
 		blockmaxheight = 0;
+		
+		/*if (clip != null && clip.isOpen())
+			clip.close();*/
+		if (clip != null)
+			clip.close();
+		URL url = getClass().getResource("/data/"+Level.getClip(currentlevel));
+		try {
+			clip = AudioSystem.getClip();
+			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+			clip.open(ais);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filename)));
 		String line;
@@ -1229,11 +1233,22 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 					if (!endlevelmenuloaded) {
 						this.clean();
+						clip.stop();
 						initEndLevelScreen();
 						endlevelmenuloaded = true;
 					}
 					
-				}				
+				}
+				if (state == GameState.Dead) {
+					if(deathCountdown == 0){
+						state = GameState.Menu;
+						endlevelmenuloaded = true;
+						clean();
+						initUI();
+					}
+					deathCountdown--;
+				}
+				
 				
 				repaint();
 				// computationtime += System.nanoTime() - nanoclock;
@@ -1283,6 +1298,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					bg.setCenterX(0);
 					bg.setCenterY(0);
 					bginity = bg.getCenterY() - 15;
+					deathCountdown = 180;
 					background = new ImageIcon(getClass().getResource("/data/"+Level.getBackground(currentlevel))).getImage();
 					try {
 						loadMap("/data/"+Level.getMapName(currentlevel));
@@ -1551,11 +1567,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			g.setColor(Color.WHITE);
 			g.drawString("Dead", 640, 240);
 			g.drawString("Going back to menu in 3...", 600, 340);
-			if(deathCountdown == 0){
-				state = GameState.Menu;
-				initUI();
-			}
-			deathCountdown--;
 		}
 	}
 

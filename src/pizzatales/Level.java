@@ -11,6 +11,21 @@ public class Level {
 		return "L"+ ((level-1)/4+1) + ((level-1)%4+1)+".txt";
 	}
 	
+	public static String getClip(int level) {
+		String ans  = "";
+		switch ((level-1)/4+1) {
+		case 1:
+			ans = "Soundtrack1.wav";
+			break;
+		case 2:
+			ans = "Soundtrack2.wav";
+			break;
+		case 3:
+			ans = "Soundtrack3.wav";
+			break;
+		}
+		return ans;
+	}
 
 	public static String getBackground(int level) {
 		String ans = "";
