@@ -47,7 +47,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private Image blooddrop;
 	private Image grinningsprite;
 	public static Image tileTree, /*tileGrass, */tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit,
-			tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel;
+			tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel, tileCandelabrum, tileCrate, tileChest;
 	private Graphics second;
 	private static Background bg;
 	private static PathFinder pf;
@@ -61,8 +61,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	
 	public static final boolean TESTMODE = true;
-	public static int difficultylevel = TESTMODE ? 4 : 1;
-	public static int currentlevel = TESTMODE ? 12 : 1;
+	public static int difficultylevel = TESTMODE ? 1 : 1;
+	public static int currentlevel = TESTMODE ? 13 : 1;
 	private int maxlevel = 13;
 
 	public int weaponindex;
@@ -171,6 +171,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		tilePikes = new ImageIcon(getClass().getResource("/data/pikes.png")).getImage();
 		tileFlag = new ImageIcon(getClass().getResource("/data/flag.png")).getImage();
 		tileBarrel = new ImageIcon(getClass().getResource("/data/barrel.png")).getImage();
+		tileCandelabrum = new ImageIcon(getClass().getResource("/data/candelabrum.png")).getImage();
+		tileCrate = new ImageIcon(getClass().getResource("/data/crate.png")).getImage();
+		tileChest = new ImageIcon(getClass().getResource("/data/chest.png")).getImage();
 
 		blooddrop = new ImageIcon(getClass().getResource("/data/blooddrop.png")).getImage();
 		Gun.leftSprite = new ImageIcon(getClass().getResource("/data/pistol1.png")).getImage();
@@ -306,6 +309,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		WaterPuddle.sprite = new ImageIcon(getClass().getResource("/data/puddle.png")).getImage();
 		WoodBridge.sprite = new ImageIcon(getClass().getResource("/data/woodbridge.png")).getImage();
 		PizzaBox.pizzaboxsprite = new ImageIcon(getClass().getResource("/data/pizzabox.png")).getImage();
+		Carpet.sprite = new ImageIcon(getClass().getResource("/data/carpet.png")).getImage();
 
 		HatBaseball.hatsprite = new ImageIcon(getClass().getResource("/data/hatbaseball.png")).getImage();
 		HatBowler.hatsprite = new ImageIcon(getClass().getResource("/data/hatbowler.png")).getImage();
