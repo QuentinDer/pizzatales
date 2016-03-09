@@ -301,7 +301,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		TomatoProjectileExplosion.tomatoexplosionsprite = new ImageIcon(
 				getClass().getResource("/data/sirtomatoprojectileexplosion.png")).getImage();
 		BarrelExplosion.explosionsprite = new ImageIcon(getClass().getResource("/data/barrelexplosion.png")).getImage();
-
+		CrateExplosion.explosionsprite = new ImageIcon(getClass().getResource("/data/crateopen.png")).getImage();
+		ChestOpen.explosionsprite = new ImageIcon(getClass().getResource("/data/chestopen.png")).getImage();
+		
 		ArmorPotion.armorpotionsprite = new ImageIcon(getClass().getResource("/data/armor.png")).getImage();
 		HealthPotion.healthpotionsprite = new ImageIcon(getClass().getResource("/data/health.png")).getImage();
 		Lava.lavasprite = new ImageIcon(getClass().getResource("/data/puddlelava.png")).getImage();

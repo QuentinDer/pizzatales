@@ -54,9 +54,11 @@ public class TileFactory {
 			ans.setTileImage(StartingClass.tileCandelabrum);
 			break;
 		case 'E':
+			ans = new Crate(x,y);
 			ans.setTileImage(StartingClass.tileCrate);
 			break;
 		case 'H':
+			ans = new Chest(x,y);
 			ans.setTileImage(StartingClass.tileChest);
 			break;
 		case 'L':
