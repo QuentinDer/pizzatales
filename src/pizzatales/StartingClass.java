@@ -47,7 +47,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private Image blooddrop;
 	private Image grinningsprite;
 	public static Image tileTree, /*tileGrass, */tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit,
-			tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel, tileCandelabrum, tileCrate, tileChest;
+			tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel, tileCandelabrum, 
+			tileCrate, tileChest, tileBlack;
 	private Graphics second;
 	private static Background bg;
 	private static PathFinder pf;
@@ -174,6 +175,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		tileCandelabrum = new ImageIcon(getClass().getResource("/data/candelabrum.png")).getImage();
 		tileCrate = new ImageIcon(getClass().getResource("/data/crate.png")).getImage();
 		tileChest = new ImageIcon(getClass().getResource("/data/chest.png")).getImage();
+		tileBlack = new ImageIcon(getClass().getResource("/data/blacktile.png")).getImage();
 
 		blooddrop = new ImageIcon(getClass().getResource("/data/blooddrop.png")).getImage();
 		Gun.leftSprite = new ImageIcon(getClass().getResource("/data/pistol1.png")).getImage();

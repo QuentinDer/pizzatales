@@ -2,7 +2,7 @@ package pizzatales;
 
 public class TileFactory {
 
-	private final static String acceptedTileTypes = "twcsrdekgvyqDHE";
+	private final static String acceptedTileTypes = "twcsrdekgvyqDHEL";
 
 	public static boolean isTileTypeSupported(char type) {
 		String test = "";
@@ -58,6 +58,9 @@ public class TileFactory {
 			break;
 		case 'H':
 			ans.setTileImage(StartingClass.tileChest);
+			break;
+		case 'L':
+			ans.setTileImage(StartingClass.tileBlack);
 			break;
 		}
 		return ans;
