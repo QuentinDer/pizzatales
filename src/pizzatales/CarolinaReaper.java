@@ -13,6 +13,7 @@ public class CarolinaReaper extends Enemy {
 
 	@Override
 	public void callAI() {
+		
 	}
 	
 	@Override
@@ -22,12 +23,12 @@ public class CarolinaReaper extends Enemy {
 
 	@Override
 	public void setMove1Sprite() {
-		currentSprite = move1Sprite;
+		currentSprite = staySprite;
 	}
 
 	@Override
 	public void setMove2Sprite() {
-		currentSprite = move2Sprite;
+		currentSprite = staySprite;
 	}
 
 	@Override
@@ -37,17 +38,17 @@ public class CarolinaReaper extends Enemy {
 	
 	@Override
 	public void setStaySpriteAlt() {
-		currentSprite = staySpriteRight;
+		currentSprite = staySprite;
 	}
 
 	@Override
 	public void setMove1SpriteAlt() {
-		currentSprite = move1SpriteRight;
+		currentSprite = staySprite;
 	}
 
 	@Override
 	public void setMove2SpriteAlt() {
-		currentSprite = move2SpriteRight;
+		currentSprite = staySprite;
 	}
 	
 	@Override

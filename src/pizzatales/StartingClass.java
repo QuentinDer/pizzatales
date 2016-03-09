@@ -59,9 +59,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	private Clip clip;
 
-	public static int difficultylevel = 1;
+	
 	public static final boolean TESTMODE = true;
-	public static int currentlevel = TESTMODE ? 13 : 0;
+	public static int difficultylevel = TESTMODE ? 4 : 1;
+	public static int currentlevel = TESTMODE ? 12 : 1;
 	private int maxlevel = 13;
 
 	public int weaponindex;
@@ -80,7 +81,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	 */
 
 	enum GameState {
-		Running, Dead, Paused, Menu
+		Running, Dead, Paused, Menu, Exit
 	}
 
 	public static GameState state = GameState.Menu;
@@ -111,7 +112,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private boolean toggleScrollingModeRequest = false;
 	private boolean showPlayerHealthBar = TESTMODE;
 	private int blockmaxheight;
-	public static JFrame me;
+	public static StartingClass me;
 	/*
 	 * ScrollingMode : 0 - noscrolling 1 - dynamic 2 - player centered 3 -
 	 * player controlled scrolling //TODO implement ?
@@ -121,7 +122,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static boolean levelwithyscrolling = true;
 
 	public StartingClass() {
-		initUI();
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		if (!TESTMODE)
+			initUI();
 		loadResources();
 	}
 
@@ -445,6 +448,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		quitButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
+				state = GameState.Exit;
 				System.exit(0);
 			}
 		});
@@ -472,6 +476,22 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		gl.setHorizontalGroup(gl.createSequentialGroup().addComponent(arg[0]));
 
 		gl.setVerticalGroup(gl.createSequentialGroup().addComponent(arg[0]));
+	}
+	
+	public void teststart() {
+		bg.setCenterX(0);
+		bg.setCenterY(0);
+		bginity = bg.getCenterY() - 15;
+		background = new ImageIcon(getClass().getResource("/data/"+Level.getBackground(currentlevel))).getImage();
+		try {
+			loadMap("/data/" + Level.getMapName(currentlevel));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		start();
+		state = GameState.Running;
+		deathCountdown = 180;
+		me.validate();
 	}
 
 	// @Override
@@ -738,7 +758,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public void run() {
 		if (state == GameState.Running) {
 			// TODO soundtrack.loop();
-			while (true) {
+			while (state != GameState.Exit) {
 				while (state == GameState.Running) {
 					// computationtime += System.nanoTime() - nanoclock;
 					try {
@@ -1332,6 +1352,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
         quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
+            	state = GameState.Exit;
                 System.exit(0);
             }
         });
@@ -2018,6 +2039,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			@Override
 			public void run() {
 				me = new StartingClass();
+				if (TESTMODE)
+					me.teststart();
+					
 				me.setVisible(true);
 				/*
 				 * sc.init(); sc.start();
