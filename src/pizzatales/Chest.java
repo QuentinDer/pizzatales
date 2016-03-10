@@ -8,6 +8,10 @@ public class Chest extends DestroyableTile {
 
 	@Override
 	public void doOnDestruction() {
-		StartingClass.getExplosions().add(new ChestOpen(this.centerX,this.centerY));
+		int tcenterX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx;
+		int tcenterY = 50*posy+25+bg.getCenterY()-StartingClass.bginity;
+		Tile t = new Tile(tcenterX,tcenterY);
+		t.setTileImage(StartingClass.tileChestOpen);
+		StartingClass.getTilearray().add(t);
 	}
 }

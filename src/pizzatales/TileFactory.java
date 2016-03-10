@@ -11,7 +11,7 @@ public class TileFactory {
 	}
 	
 	public static Tile getTile(int x, int y, char typeInt) {
-		Tile ans = new Tile(x,y);
+		Tile ans = new Tile((x * 50) + 25, (y * 50) + 40);
 		switch(typeInt) {
 		case 't':
 			ans.setTileImage(StartingClass.tileTree);
@@ -47,18 +47,18 @@ public class TileFactory {
 			ans.setTileImage(StartingClass.tileDecoy);
 			break;
 		case 'q':
-			ans = new Barrel(x,y);
+			ans = new Barrel((x * 50) + 25, (y * 50) + 40);
 			ans.setTileImage(StartingClass.tileBarrel);
 			break;
 		case 'D':
 			ans.setTileImage(StartingClass.tileCandelabrum);
 			break;
 		case 'E':
-			ans = new Crate(x,y);
+			ans = new Crate((x * 50) + 25, (y * 50) + 40);
 			ans.setTileImage(StartingClass.tileCrate);
 			break;
 		case 'H':
-			ans = new Chest(x,y);
+			ans = new Chest((x * 50) + 25, (y * 50) + 40);
 			ans.setTileImage(StartingClass.tileChest);
 			break;
 		case 'L':

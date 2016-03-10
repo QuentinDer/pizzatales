@@ -15,6 +15,7 @@ public abstract class DestroyableTile extends Tile {
 			StartingClass.getTilearray().remove(this);
 			StartingClass.destroyabletiles.remove(this);
 			StartingClass.map[posx][posy] = null;
+			StartingClass.heightitemmap[posx][posy]--;
 			doOnDestruction();
 			return true;
 		}

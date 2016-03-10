@@ -48,7 +48,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private Image grinningsprite;
 	public static Image tileTree, /*tileGrass, */tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit,
 			tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel, tileCandelabrum, 
-			tileCrate, tileChest, tileBlack;
+			tileCrate, tileChest, tileBlack, tileChestOpen;
 	private Graphics second;
 	private static Background bg;
 	private static PathFinder pf;
@@ -90,7 +90,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static BlockingStuff[][] map;
 	public static int width;
 	public static int height;
-	private int[][] heightitemmap;
+	public static int[][] heightitemmap;
 
 	private static ArrayList<Tile> tilearray = new ArrayList<Tile>();
 	public static ArrayList<Item> items = new ArrayList<Item>();
@@ -112,7 +112,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private boolean centeringOnPlayerRequest = false;
 	private boolean toggleScrollingModeRequest = false;
 	private boolean showPlayerHealthBar = TESTMODE;
-	private int blockmaxheight;
+	public static int blockmaxheight;
 	public static StartingClass me;
 	/*
 	 * ScrollingMode : 0 - noscrolling 1 - dynamic 2 - player centered 3 -
@@ -176,6 +176,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		tileCrate = new ImageIcon(getClass().getResource("/data/crate.png")).getImage();
 		tileChest = new ImageIcon(getClass().getResource("/data/chest.png")).getImage();
 		tileBlack = new ImageIcon(getClass().getResource("/data/blacktile.png")).getImage();
+		tileChestOpen = new ImageIcon(getClass().getResource("/data/chestopen.png")).getImage();
 
 		blooddrop = new ImageIcon(getClass().getResource("/data/blooddrop.png")).getImage();
 		Gun.leftSprite = new ImageIcon(getClass().getResource("/data/pistol1.png")).getImage();
@@ -301,8 +302,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		TomatoProjectileExplosion.tomatoexplosionsprite = new ImageIcon(
 				getClass().getResource("/data/sirtomatoprojectileexplosion.png")).getImage();
 		BarrelExplosion.explosionsprite = new ImageIcon(getClass().getResource("/data/barrelexplosion.png")).getImage();
-		CrateExplosion.explosionsprite = new ImageIcon(getClass().getResource("/data/crateopen.png")).getImage();
-		ChestOpen.explosionsprite = new ImageIcon(getClass().getResource("/data/chestopen.png")).getImage();
 		
 		ArmorPotion.armorpotionsprite = new ImageIcon(getClass().getResource("/data/armor.png")).getImage();
 		HealthPotion.healthpotionsprite = new ImageIcon(getClass().getResource("/data/health.png")).getImage();
@@ -314,6 +313,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		WoodBridge.sprite = new ImageIcon(getClass().getResource("/data/woodbridge.png")).getImage();
 		PizzaBox.pizzaboxsprite = new ImageIcon(getClass().getResource("/data/pizzabox.png")).getImage();
 		Carpet.sprite = new ImageIcon(getClass().getResource("/data/carpet.png")).getImage();
+		CrateOpen.sprite = new ImageIcon(getClass().getResource("/data/crateopen.png")).getImage();
 
 		HatBaseball.hatsprite = new ImageIcon(getClass().getResource("/data/hatbaseball.png")).getImage();
 		HatBowler.hatsprite = new ImageIcon(getClass().getResource("/data/hatbowler.png")).getImage();

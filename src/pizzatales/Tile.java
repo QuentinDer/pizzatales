@@ -8,7 +8,7 @@ public class Tile extends BlockingStuff {
 	private Image hiddenImage;
 
 	public Tile(int x, int y) {
-		super((x * 50) + 25, (y * 50) + 40, 31, 31, 25, 25);
+		super(x, y, 31, 31, 25, 25);
 	}
 	
 	public void hideImage(Image replacing) {
