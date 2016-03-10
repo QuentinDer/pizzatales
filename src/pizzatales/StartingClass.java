@@ -610,6 +610,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				char ch = line.charAt(i);
 				if (ch == '[') {
 					inBlock = true;
+					itemheight = -1;
 				}
 				if (ch == ']') {
 					heightitemmap[k][j] = itemheight - 1;
@@ -1788,7 +1789,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		for (int hght = 0; hght <= blockmaxheight; hght++) {
 			for (int i = 0; i < items.size(); i++) {
 				Item it = items.get(i);
-				if (items.get(i).height == hght)
+				if (it.height == hght && !Tile.class.isInstance(StartingClass.map[it.posx][it.posy]))
 					g.drawImage(it.getSprite(), it.getCenterX() - 31, it.getCenterY() - 31, this);
 			}
 		}
