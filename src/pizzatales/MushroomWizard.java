@@ -214,7 +214,8 @@ public class MushroomWizard extends Enemy {
 					weapon.currentSprite = null;
 					currentSprite = shooting;
 					ballInAnimation = maxBallInAnimation;
-				}
+				} else
+					((FakeMushroomWeapon)weapon).setSpriteBall(nextball);
 			}
 		}
 	}

@@ -15,8 +15,8 @@ public abstract class Projectile extends Stuff {
 	public float damage = 1f;
 	protected float fspeedX;
 	protected float fspeedY;
-	private float fcenterX;
-	private float fcenterY;
+	protected float fcenterX;
+	protected float fcenterY;
 	private Background bg = StartingClass.getBg();
 
 	public Projectile(int startX, int startY, float vectorX, float vectorY, int speed, float damage, int size, int halfsize, int range) {
