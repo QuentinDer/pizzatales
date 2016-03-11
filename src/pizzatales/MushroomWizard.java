@@ -196,7 +196,10 @@ public class MushroomWizard extends Enemy {
 				projectiles.add(new MushroomWizardBall(centerX + 30,centerY,0.f,-1.f,centerX,centerY,getNextBall(),phase % 2 == 0));
 			}
 			if (bcd2 == 0 && (StartingClass.difficultylevel > 2 || Math.abs(diffx) + Math.abs(diffy) > 200)) {
-				bcd2 = (2 - (phase % 2))*ballcd;
+				if (StartingClass.difficultylevel > 2)
+					bcd2 = (2 - (phase % 2))*ballcd;
+				else
+					bcd2 = ballcd;
 				if (phase % 2 == 0) {
 					diffx = player.getCenterX() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))*player.getSpeedX()/12 - getCenterX();
 					diffy = player.getCenterY() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))*player.getSpeedY()/12 - getCenterY();
