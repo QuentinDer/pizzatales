@@ -10,7 +10,7 @@ public class MushroomWizardBall extends Projectile {
 	private int color;
 	private int cX, cY;
 	private boolean newpattern;
-	private int speed = 10;
+	private float speed = 10.f;
 	private int movementTime;
 	
 	public MushroomWizardBall(int startX, int startY, float vectorX,
@@ -31,8 +31,8 @@ public class MushroomWizardBall extends Projectile {
 				speed = 5;
 				range = 600;
 			}
-			speedX = (int)(vectorX * speed);
-			speedY = (int)(vectorY * speed);
+			fspeedX = (int)(vectorX * speed);
+			fspeedY = (int)(vectorY * speed);
 			
 			break;
 		case 3:
@@ -41,16 +41,16 @@ public class MushroomWizardBall extends Projectile {
 			if (newpattern)
 				speed = 14;
 			damage = 0;
-			speedX = (int)(vectorX * speed);
-			speedY = (int)(vectorY * speed);
+			fspeedX = (int)(vectorX * speed);
+			fspeedY = (int)(vectorY * speed);
 			break;
 		case 4:
 			currentball = redball;
 			speed = 5;
 			damage = 0;
 			if (newpattern) {
-				speedX = (int)(vectorX * speed) + (int)(Math.random()*3)-1;
-				speedY = (int)(vectorY * speed) + (int)(Math.random()*3)-1;
+				fspeedX = (int)(vectorX * speed) + (int)(Math.random()*3)-1;
+				fspeedY = (int)(vectorY * speed) + (int)(Math.random()*3)-1;
 			}
 			break;
 		}
@@ -88,8 +88,8 @@ public class MushroomWizardBall extends Projectile {
 			damage = 0;
 			break;
 		}
-		speedX = (int)(vectorX * speed);
-		speedY = (int)(vectorY * speed);
+		fspeedX = (int)(vectorX * speed);
+		fspeedY = (int)(vectorY * speed);
 	}
 	
 	@Override
@@ -97,29 +97,29 @@ public class MushroomWizardBall extends Projectile {
 		if (color == 2 && newpattern) {
 			int diffX = player.centerX - centerX;
 			int diffY = player.centerY - centerY;
-			speedX = speed * diffX / (Math.abs(diffX)+Math.abs(diffY));
-			speedY = speed * diffY / (Math.abs(diffX)+Math.abs(diffY));
+			fspeedX = speed * diffX / (Math.abs(diffX)+Math.abs(diffY));
+			fspeedY = speed * diffY / (Math.abs(diffX)+Math.abs(diffY));
 			super.update();
 		} else if (type == 1) {
 			int diffX = centerX - cX;
 			int diffY = centerY - cY;
-			speedX = (diffY*speed) / (Math.abs(diffX)+Math.abs(diffY));
-			speedY = - (diffX*speed) / (Math.abs(diffX)+Math.abs(diffY));
+			fspeedX = (diffY*speed) / (Math.abs(diffX)+Math.abs(diffY));
+			fspeedY = - (diffX*speed) / (Math.abs(diffX)+Math.abs(diffY));
 			super.update();
 		} else if (color == 1 && newpattern) {
-			int basespeedX = speedX;
-			int basespeedY = speedY;
+			float basefspeedX = fspeedX;
+			float basefspeedY = fspeedY;
 			if (movementTime % 20 < 10) {
-				speedX += speedY*4/speed;
-				speedY -= speedX*4/speed;
+				fspeedX += fspeedY*4/speed;
+				fspeedY -= fspeedX*4/speed;
 			} else {
-				speedX -= speedY*4/speed;
-				speedY += speedX*4/speed;
+				fspeedX -= fspeedY*4/speed;
+				fspeedY += fspeedX*4/speed;
 			}
 			movementTime++;
 			super.update();
-			speedX = basespeedX;
-			speedY = basespeedY;
+			fspeedX = basefspeedX;
+			fspeedY = basefspeedY;
 		} else
 			super.update();
 	}

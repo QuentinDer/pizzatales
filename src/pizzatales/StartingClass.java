@@ -62,9 +62,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	
 	public static final boolean TESTMODE = true;
-	public static int difficultylevel = TESTMODE ? 1 : 1;
-	public static int currentlevel = TESTMODE ? 13 : 1;
-	private int maxlevel = 13;
+	public static int difficultylevel = TESTMODE ? 4 : 1;
+	public static int currentlevel = TESTMODE ? 12 : 1;
+	private int maxlevel = 15;
 
 	public int weaponindex;
 	private int armorindex;
@@ -1854,27 +1854,19 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			break;
 
 		case KeyEvent.VK_UP:
-			if (0 == player.isShooting()) {
-				player.setShooting(2);
-			}
+			player.wannashootup = true;
 			break;
 
 		case KeyEvent.VK_DOWN:
-			if (0 == player.isShooting()) {
-				player.setShooting(4);
-			}
+			player.wannashootdown = true;
 			break;
 
 		case KeyEvent.VK_LEFT:
-			if (0 == player.isShooting()) {
-				player.setShooting(1);
-			}
+			player.wannashootleft = true;
 			break;
 
 		case KeyEvent.VK_RIGHT:
-			if (0 == player.isShooting()) {
-				player.setShooting(3);
-			}
+			player.wannashootright = true;
 			break;
 		}
 	}
@@ -1911,10 +1903,16 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			player.stopMovingRight();
 			break;
 		case KeyEvent.VK_UP:
+			player.wannashootup = false;
+			break;
 		case KeyEvent.VK_DOWN:
+			player.wannashootdown = false;
+			break;
 		case KeyEvent.VK_LEFT:
+			player.wannashootleft = false;
+			break;
 		case KeyEvent.VK_RIGHT:
-			player.setShooting(0);
+			player.wannashootright = false;
 			break;
 		case KeyEvent.VK_E:
 			weaponindex++;

@@ -25,6 +25,7 @@ public class Player extends BlockingStuff {
 	public boolean canmoveleft = true;
 	public boolean canmoveup = true;
 	public boolean canmovedown = true;
+	public boolean wannashootleft, wannashootright, wannashootup, wannashootdown;
 	private boolean isMoving;
 	
 	protected Firearm weapon;
@@ -186,7 +187,25 @@ public class Player extends BlockingStuff {
 		if (ismovingright && canmoveright) {
 			speedX += MOVESPEED;
 		}
-		
+		isShooting = 0;
+		if (wannashootup)
+			isShooting = 2;
+		if (wannashootdown)
+			isShooting = 4;
+		if (wannashootleft) {
+			isShooting = 1;
+			if (wannashootup)
+				isShooting = 5;
+			if (wannashootdown)
+				isShooting = 8;
+		}
+		if (wannashootright) {
+			isShooting = 3;
+			if (wannashootup)
+				isShooting = 6;
+			if (wannashootdown)
+				isShooting = 7;
+		}
 		if (0 == isShooting) {
 			if (speedX > 0) {
 				weapon.setSpriteRight();
@@ -299,6 +318,22 @@ public class Player extends BlockingStuff {
 					weapon.shootDown(centerX, centerY);
 					isAimingUp = false;
 					break;
+				case 5:
+					weapon.shootUpLeft(centerX, centerY);
+					isAimingUp = false;
+					break;
+				case 6:
+					weapon.shootUpRight(centerX, centerY);
+					isAimingUp = false;
+					break;
+				case 7:
+					weapon.shootDownRight(centerX, centerY);
+					isAimingUp = false;
+					break;
+				case 8:
+					weapon.shootDownLeft(centerX, centerY);
+					isAimingUp = false;
+					break;
 				}
 			}
 		}
@@ -325,6 +360,22 @@ public class Player extends BlockingStuff {
 		}
 		if (controlledismovingdown && canmovedown) {
 			speedY = MOVESPEED;
+		}
+		if (speedX > 0) {
+			weapon.setSpriteRight();
+			isAimingUp = false;
+		}
+		if (speedX < 0) {
+			weapon.setSpriteLeft();
+			isAimingUp = false;
+		}
+		if (speedY > 0) {
+			weapon.setSpriteDown();
+			isAimingUp = false;
+		}
+		if (speedY < 0) {
+			weapon.setSpriteUp();
+			isAimingUp = true;
 		}
 		speedY -= scrollingSpeedY;
 		speedX -= scrollingSpeedX;
@@ -370,10 +421,10 @@ public class Player extends BlockingStuff {
 	public int isShooting() {
 		return isShooting;
 	}
-
+/*
 	public void setShooting(int isShooting) {
 		this.isShooting = isShooting;
-	}
+	}*/
 
 	public ArrayList<Projectile> getProjectiles() {
 		return projectiles;

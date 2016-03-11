@@ -15,6 +15,7 @@ public class MushroomWizard extends Enemy {
 	private int maxBallInAnimation;
 	private int ballcd;
 	private int bcd;
+	private int bcd2;
 	private int slashdmg;
 	private int randg, randy, randb,randr;
 	private int phase = 1;
@@ -97,163 +98,44 @@ public class MushroomWizard extends Enemy {
 		}
 		if (bcd > 0)
 			bcd--;
+		if (bcd2 > 0)
+			bcd2--;
 		if (inAnimation == 0) {
-			switch (StartingClass.difficultylevel) {
+			int pathresult = 0;
+			ArrayList<Integer> tox = new ArrayList<Integer>();
+			ArrayList<Integer> toy = new ArrayList<Integer>();
+			if (player.posx != StartingClass.width && StartingClass.map[player.posx+1][player.posy] == null) {
+				tox.add(player.posx+1);
+				toy.add(player.posy);
+			}
+			if (player.posx != 0 && StartingClass.map[player.posx-1][player.posy] == null) {
+				tox.add(player.posx-1);
+				toy.add(player.posy);
+			}
+			if (player.posy != StartingClass.height && StartingClass.map[player.posx][player.posy+1] == null) {
+				tox.add(player.posx);
+				toy.add(player.posy+1);
+			}
+			if (player.posy != 0 && StartingClass.map[player.posx][player.posy-1] == null) {
+				tox.add(player.posx);
+				toy.add(player.posy-1);
+			}
+			pathresult = pf.getDirectionToShoot(posx, posy, tox, toy, 50, canmoveleft, canmoveup, canmoveright, canmovedown, 0, false);
+			switch (pathresult) {
+			case 0:
+				stopMoving();
+				break;
 			case 1:
-				int pathresult = 0;
-				ArrayList<Integer> tox = new ArrayList<Integer>();
-				ArrayList<Integer> toy = new ArrayList<Integer>();
-				if (player.posx != StartingClass.width && StartingClass.map[player.posx+1][player.posy] == null) {
-					tox.add(player.posx+1);
-					toy.add(player.posy);
-				}
-				if (player.posx != 0 && StartingClass.map[player.posx-1][player.posy] == null) {
-					tox.add(player.posx-1);
-					toy.add(player.posy);
-				}
-				if (player.posy != StartingClass.height && StartingClass.map[player.posx][player.posy+1] == null) {
-					tox.add(player.posx);
-					toy.add(player.posy+1);
-				}
-				if (player.posy != 0 && StartingClass.map[player.posx][player.posy-1] == null) {
-					tox.add(player.posx);
-					toy.add(player.posy-1);
-				}
-				pathresult = pf.getDirectionToShoot(posx, posy, tox, toy, 50, canmoveleft, canmoveup, canmoveright, canmovedown, 0, false);
-				switch (pathresult) {
-				case 0:
-					stopMoving();
-					break;
-				case 1:
-					moveLeft();
-					break;
-				case 2:
-					moveUp();
-					break;
-				case 3:
-					moveRight();
-					break;
-				case 4:
-					moveDown();
-					break;
-				}
+				moveLeft();
 				break;
 			case 2:
-				pathresult = 0;
-				tox = new ArrayList<Integer>();
-				toy = new ArrayList<Integer>();
-				if (player.posx != StartingClass.width && StartingClass.map[player.posx+1][player.posy] == null) {
-					tox.add(player.posx+1);
-					toy.add(player.posy);
-				}
-				if (player.posx != 0 && StartingClass.map[player.posx-1][player.posy] == null) {
-					tox.add(player.posx-1);
-					toy.add(player.posy);
-				}
-				if (player.posy != StartingClass.height && StartingClass.map[player.posx][player.posy+1] == null) {
-					tox.add(player.posx);
-					toy.add(player.posy+1);
-				}
-				if (player.posy != 0 && StartingClass.map[player.posx][player.posy-1] == null) {
-					tox.add(player.posx);
-					toy.add(player.posy-1);
-				}
-				pathresult = pf.getDirectionToShoot(posx, posy, tox, toy, 50, canmoveleft, canmoveup, canmoveright, canmovedown, 0, false);
-				switch (pathresult) {
-				case 0:
-					stopMoving();
-					break;
-				case 1:
-					moveLeft();
-					break;
-				case 2:
-					moveUp();
-					break;
-				case 3:
-					moveRight();
-					break;
-				case 4:
-					moveDown();
-					break;
-				}
+				moveUp();
 				break;
 			case 3:
-				pathresult = 0;
-				tox = new ArrayList<Integer>();
-				toy = new ArrayList<Integer>();
-				if (player.posx != StartingClass.width && StartingClass.map[player.posx+1][player.posy] == null) {
-					tox.add(player.posx+1);
-					toy.add(player.posy);
-				}
-				if (player.posx != 0 && StartingClass.map[player.posx-1][player.posy] == null) {
-					tox.add(player.posx-1);
-					toy.add(player.posy);
-				}
-				if (player.posy != StartingClass.height && StartingClass.map[player.posx][player.posy+1] == null) {
-					tox.add(player.posx);
-					toy.add(player.posy+1);
-				}
-				if (player.posy != 0 && StartingClass.map[player.posx][player.posy-1] == null) {
-					tox.add(player.posx);
-					toy.add(player.posy-1);
-				}
-				pathresult = pf.getDirectionToShoot(posx, posy, tox, toy, 50, canmoveleft, canmoveup, canmoveright, canmovedown, 0, false);
-				switch (pathresult) {
-				case 0:
-					stopMoving();
-					break;
-				case 1:
-					moveLeft();
-					break;
-				case 2:
-					moveUp();
-					break;
-				case 3:
-					moveRight();
-					break;
-				case 4:
-					moveDown();
-					break;
-				}
+				moveRight();
 				break;
 			case 4:
-				pathresult = 0;
-				tox = new ArrayList<Integer>();
-				toy = new ArrayList<Integer>();
-				if (player.posx != StartingClass.width && StartingClass.map[player.posx+1][player.posy] == null) {
-					tox.add(player.posx+1);
-					toy.add(player.posy);
-				}
-				if (player.posx != 0 && StartingClass.map[player.posx-1][player.posy] == null) {
-					tox.add(player.posx-1);
-					toy.add(player.posy);
-				}
-				if (player.posy != StartingClass.height && StartingClass.map[player.posx][player.posy+1] == null) {
-					tox.add(player.posx);
-					toy.add(player.posy+1);
-				}
-				if (player.posy != 0 && StartingClass.map[player.posx][player.posy-1] == null) {
-					tox.add(player.posx);
-					toy.add(player.posy-1);
-				}
-				pathresult = pf.getDirectionToShoot(posx, posy, tox, toy, 50, canmoveleft, canmoveup, canmoveright, canmovedown, 0, false);
-				switch (pathresult) {
-				case 0:
-					stopMoving();
-					break;
-				case 1:
-					moveLeft();
-					break;
-				case 2:
-					moveUp();
-					break;
-				case 3:
-					moveRight();
-					break;
-				case 4:
-					moveDown();
-					break;
-				}
+				moveDown();
 				break;
 			}
 			if (health < maxHealth/5 && phase < StartingClass.difficultylevel)
@@ -309,19 +191,21 @@ public class MushroomWizard extends Enemy {
 					slashDirection = 1;
 				}
 			}
-			if (bcd == 0 && (StartingClass.difficultylevel > 2 || Math.abs(diffx) + Math.abs(diffy) > 200)) {
+			if (bcd == 0 && phase > 2) {
 				bcd = ballcd;
+				projectiles.add(new MushroomWizardBall(centerX + 30,centerY,0.f,-1.f,centerX,centerY,getNextBall(),phase % 2 == 0));
+			}
+			if (bcd2 == 0 && (StartingClass.difficultylevel > 2 || Math.abs(diffx) + Math.abs(diffy) > 200)) {
+				bcd2 = (2 - (phase % 2))*ballcd;
 				if (phase % 2 == 0) {
-					diffx = player.getCenterX() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))/12*player.getSpeedX() - getCenterX();
-					diffy = player.getCenterY() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))/12*player.getSpeedY() - getCenterY();
+					diffx = player.getCenterX() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))*player.getSpeedX()/12 - getCenterX();
+					diffy = player.getCenterY() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))*player.getSpeedY()/12 - getCenterY();
 				}
 				float vectorx = (diffx-30) / ((float)(Math.abs(diffx-30)+Math.abs(diffy)));
 				float vectory = diffy / ((float)(Math.abs(diffx-30)+Math.abs(diffy)));
 				projectiles.add(new MushroomWizardBall(centerX + 30,centerY,vectorx,vectory,nextball,phase % 2 == 0));
-				if (phase > 2) {
-					projectiles.add(new MushroomWizardBall(centerX + 30,centerY,vectorx,vectory,centerX,centerY,getNextBall(),phase % 2 == 0));
-					nextball = getNextBall();
-				} else {
+				nextball = getNextBall();
+				if (phase <= 2) {
 					if (StartingClass.difficultylevel < 3)
 						stopMoving();
 					weapon.currentSprite = null;

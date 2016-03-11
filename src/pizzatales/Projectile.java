@@ -8,17 +8,23 @@ public abstract class Projectile extends Stuff {
 	protected boolean visible;
 	protected boolean canbedestroyed;
 	protected Rectangle rectP;
-	private int travelleddist;
+	private float travelleddist;
 	protected int range;
 	protected int size;
 	protected int halfsize;
 	public float damage = 1f;
+	protected float fspeedX;
+	protected float fspeedY;
+	private float fcenterX;
+	private float fcenterY;
 	private Background bg = StartingClass.getBg();
 
 	public Projectile(int startX, int startY, float vectorX, float vectorY, int speed, float damage, int size, int halfsize, int range) {
 		super(startX, startY);
-		speedX = (int)(vectorX * speed);
-		speedY = (int)(vectorY * speed);
+		fcenterX = centerX;
+		fcenterY = centerY;
+		fspeedX = vectorX * speed;
+		fspeedY = vectorY * speed;
 		visible = true;
 		this.damage = damage;
 		this.size = size;
@@ -29,19 +35,22 @@ public abstract class Projectile extends Stuff {
 	
 	@Override
 	public void update() {
-		super.update();
+		fcenterX += fspeedX - player.getScrollingSpeedX();
+		fcenterY += fspeedY - player.getScrollingSpeedY();
+		centerX = (int)fcenterX;
+		centerY = (int)fcenterY;
 		rectP.setBounds(getCenterX() - halfsize, getCenterY() - halfsize, size, size);
-		travelleddist += Math.abs(speedX)+Math.abs(speedY);
+		travelleddist += Math.abs(fspeedX)+Math.abs(fspeedY);
 		if (travelleddist > range) {
 			doOnLimitRange();
 		}
 		if (travelleddist > range) {
 			doOnLimitRange();
 		}
-		if (centerX > 1280 && speedX > 0) {
+		if (centerX > 1280 && fspeedX > 0) {
 			doOnLimitRange();
 		}
-		if (centerX < 0 && speedX < 0) {
+		if (centerX < 0 && fspeedX < 0) {
 			doOnLimitRange();
 		}
 	}

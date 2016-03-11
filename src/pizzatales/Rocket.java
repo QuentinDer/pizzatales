@@ -60,4 +60,24 @@ public class Rocket extends Firearm {
 	public void setSpriteDown() {
 		currentSprite = downSprite;
 	}
+
+	@Override
+	public void shootUpLeft(int x, int y) {
+		shootLeft(x,y);
+	}
+
+	@Override
+	public void shootUpRight(int x, int y) {
+		shootRight(x,y);
+	}
+
+	@Override
+	public void shootDownLeft(int x, int y) {
+		shootLeft(x,y);
+	}
+
+	@Override
+	public void shootDownRight(int x, int y) {
+		shootRight(x,y);
+	}
 }

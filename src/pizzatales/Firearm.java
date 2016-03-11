@@ -28,7 +28,6 @@ public abstract class Firearm {
 	public void setHolderProjectiles(ArrayList<Projectile> holderprojectiles) {
 		this.holderprojectiles = holderprojectiles;
 		setSpriteDown();
-		
 	}
 	
 	public abstract void shootUp(int x, int y);
@@ -38,6 +37,11 @@ public abstract class Firearm {
 	public abstract void shootLeft(int x, int y);
 	
 	public abstract void shootRight(int x, int y);
+	
+	public abstract void shootUpLeft(int x, int y);
+	public abstract void shootUpRight(int x, int y);
+	public abstract void shootDownLeft(int x, int y);
+	public abstract void shootDownRight(int x, int y);
 	
 	public abstract void setSpriteLeft();
 	public abstract void setSpriteRight();

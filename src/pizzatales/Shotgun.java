@@ -8,7 +8,7 @@ public class Shotgun extends Firearm {
 	
 	/*private float cos45 = 0.7f;
 	private float cos22 = 0.9f;
-	private float sin22 = 0.4f;*/
+	private float sin22 = 0.45f;*/
 	private float xl = 0.3f;
 	//private float xm = 0.2f;
 	private float xs = 0.1f;
@@ -109,4 +109,43 @@ public class Shotgun extends Firearm {
 		currentSprite = downSprite;
 	}
 
+	@Override
+	public void shootUpLeft(int x, int y) {
+		setSpriteLeft();
+		shootingCounter++;
+		holderprojectiles.add(new ShotgunBullet(x, y, -0.45f, -0.9f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x, y, -0.6f, -0.8f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x, y, -0.8f, -0.6f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x, y, -0.9f, -0.45f, speed, projectiledmg, range));
+	}
+
+	@Override
+	public void shootUpRight(int x, int y) {
+		setSpriteRight();
+		shootingCounter++;
+		holderprojectiles.add(new ShotgunBullet(x, y, 0.45f, -0.9f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x, y, 0.6f, -0.8f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x, y, 0.8f, -0.6f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x, y, 0.9f, -0.45f, speed, projectiledmg, range));
+	}
+
+	@Override
+	public void shootDownLeft(int x, int y) {
+		setSpriteLeft();
+		shootingCounter++;
+		holderprojectiles.add(new ShotgunBullet(x, y, -0.45f, 0.9f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x, y, -0.6f, 0.8f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x, y, -0.8f, 0.6f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x, y, -0.9f, 0.45f, speed, projectiledmg, range));
+	}
+
+	@Override
+	public void shootDownRight(int x, int y) {
+		setSpriteRight();
+		shootingCounter++;
+		holderprojectiles.add(new ShotgunBullet(x, y, 0.45f, 0.9f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x, y, 0.6f, 0.8f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x, y, 0.8f, 0.6f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x, y, 0.9f, 0.45f, speed, projectiledmg, range));
+	}
 }

@@ -55,4 +55,20 @@ public class FakeMushroomWeapon extends Firearm {
 			break;
 		}
 	}
+
+	@Override
+	public void shootUpLeft(int x, int y) {
+	}
+
+	@Override
+	public void shootUpRight(int x, int y) {
+	}
+
+	@Override
+	public void shootDownLeft(int x, int y) {
+	}
+
+	@Override
+	public void shootDownRight(int x, int y) {
+	}
 }

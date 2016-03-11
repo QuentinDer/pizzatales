@@ -60,4 +60,32 @@ public class Rifle extends Firearm {
 	public void setSpriteDown() {
 		currentSprite = downSprite;
 	}
+
+	@Override
+	public void shootUpLeft(int x, int y) {
+		setSpriteLeft();
+		shootingCounter++;
+		holderprojectiles.add(new RifleBullet(x, y, -0.7f, -0.7f, speed, projectiledmg, range));
+	}
+
+	@Override
+	public void shootUpRight(int x, int y) {
+		setSpriteRight();
+		shootingCounter++;
+		holderprojectiles.add(new RifleBullet(x, y, 0.7f, -0.7f, speed, projectiledmg, range));
+	}
+
+	@Override
+	public void shootDownLeft(int x, int y) {
+		setSpriteLeft();
+		shootingCounter++;
+		holderprojectiles.add(new RifleBullet(x, y, -0.7f, 0.7f, speed, projectiledmg, range));
+	}
+
+	@Override
+	public void shootDownRight(int x, int y) {
+		setSpriteRight();
+		shootingCounter++;
+		holderprojectiles.add(new RifleBullet(x, y, 0.7f, 0.7f, speed, projectiledmg, range));
+	}
 }
