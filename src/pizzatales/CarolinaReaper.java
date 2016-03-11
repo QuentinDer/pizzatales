@@ -18,7 +18,7 @@ public class CarolinaReaper extends Enemy {
 	private int leftx, rightx, upy, downy;
 	
 	public CarolinaReaper(int centerX, int centerY) {
-		super(centerX, centerY, null, 100, 3, 31, 31, 25, 25);
+		super(centerX, centerY, null, 100, 2, 31, 31, 25, 25);
 		movementTime = ((int) (Math.random() * 50));
 		streamrate = 4;
 		switch (StartingClass.difficultylevel) {
