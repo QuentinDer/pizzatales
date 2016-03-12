@@ -570,15 +570,17 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			inBlock = false;
 			int k = 0;
 			for (int i = 0; i < widthl; i++) {
-				charmap[k][j] = line.charAt(i);
+				char c = line.charAt(i);
+				if (c != '[' && c != ']')
+					charmap[k][j] = line.charAt(i);
 				if (charmap[k][j] == 'U') {
 					posplayerx = k;
 					posplayery = j;
 				}
-				if (charmap[k][j] == '[') {
+				if (c == '[') {
 					inBlock = true;
 				}
-				if (charmap[k][j] == ']') {
+				if (c == ']') {
 					inBlock = false;
 				}
 				if (inBlock) {

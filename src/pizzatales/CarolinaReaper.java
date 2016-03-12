@@ -308,9 +308,28 @@ public class CarolinaReaper extends Enemy {
 				}
 			}
 			if (!possiblespawningpos.isEmpty()) {
+				
 				int randpos = (int)(Math.random()*possiblespawningpos.size());
 				int postx = possiblespawningpos.get(randpos) / StartingClass.height;
 				int posty = possiblespawningpos.get(randpos) % StartingClass.height;
+				if ((int)(Math.random()*20) == 0) {
+					StartingClass.heightitemmap[postx][posty]++;
+					StartingClass.blockmaxheight = Math.max(StartingClass.blockmaxheight, StartingClass.heightitemmap[postx][posty]);
+					if ((int)(Math.random()*3) == 0) {
+						ArmorPotion potion = new ArmorPotion(postx,posty,0,0,true,StartingClass.heightitemmap[postx][posty]);
+						potion.setCenterX(50*postx+25+bg.getCenterX()-StartingClass.bginitx);
+						potion.setCenterY(50*posty+25+bg.getCenterY()-StartingClass.bginity);
+						potion.r.setBounds(potion.getCenterX() - 22, potion.getCenterY() - 22, 45, 45);
+						StartingClass.items.add(potion);
+					} else {
+						HealthPotion potion = new HealthPotion(postx,posty,0,0,true,StartingClass.heightitemmap[postx][posty]);
+						potion.setCenterX(50*postx+25+bg.getCenterX()-StartingClass.bginitx);
+						potion.setCenterY(50*posty+25+bg.getCenterY()-StartingClass.bginity);
+						potion.r.setBounds(potion.getCenterX() - 22, potion.getCenterY() - 22, 45, 45);
+						StartingClass.items.add(potion);
+					}
+				}
+				
 				int tcenterX = 50*postx+25+bg.getCenterX()-StartingClass.bginitx;
 				int tcenterY = 50*posty+25+bg.getCenterY()-StartingClass.bginity;
 				Barrel b = new Barrel(tcenterX,tcenterY);
@@ -518,10 +537,10 @@ public class CarolinaReaper extends Enemy {
 		
 		//int pathresult = 
 	}
-	
+	/*
 	private boolean isCorner(int x, int y) {
 		return ((x == rightx && y == downy) || (x == rightx && y == upy) || (x == leftx && y == downy) || (x == leftx && y == upy));
-	}
+	}*/
 	
 	private void incrementWaitingTimes() {
 		streamcd += getNextWaitingTime();
