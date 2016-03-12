@@ -62,7 +62,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	
 	public static final boolean TESTMODE = true;
-	public static int difficultylevel = TESTMODE ? 4 : 1;
+	public static int difficultylevel = TESTMODE ? 3 : 1;
 	public static int currentlevel = TESTMODE ? 12 : 1;
 	private int maxlevel = 15;
 
@@ -1719,7 +1719,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				}
 				if (p.canbedestroyed) {
 					for (Projectile pe : player.getProjectiles()) {
-						if (pe.isVisible() && p.checkCollision(pe)) {
+						if (!p.equals(pe) && pe.isVisible() && p.checkCollision(pe)) {
 							p.doOnCollision(pe);
 							pe.doOnCollision(p);
 						}
