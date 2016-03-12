@@ -8,9 +8,9 @@ public class Gun extends Firearm {
 	public Gun() {
 		super();
 		this.setFireRate(25);
-		speed = 10;
-		projectiledmg = 1;
-		range = 500;
+		speed = 12;
+		projectiledmg = 2;
+		range = 550;
 	}
 	
 	@Override
