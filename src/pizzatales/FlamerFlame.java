@@ -43,4 +43,9 @@ public class FlamerFlame extends Projectile {
 	public void doOnCollision(Projectile p) {
 		visible = false;
 	}
+
+	@Override
+	public void doOnLimitScreen() {
+		visible = false;
+	}
 }

@@ -22,7 +22,7 @@ public class MapUtil {
 				int xj = current / height;
 				int yj = current % height;
 				if (!nonobstacles.contains(current-height) && !todiscover.contains(current-height) && 0 != xj) {
-					if (!TileFactory.isTileTypeSupported(map[xj-1][yj])) {
+					if (!TileFactory.isNonDestroyableTile(map[xj-1][yj])) {
 						todiscover.add(current-height);
 					} else {
 						if (1 != xj && entrydoors.containsKey(current) && entrydoors.containsKey(current - height - height) && doors.containsKey(current - height)) {
@@ -45,7 +45,7 @@ public class MapUtil {
 					}
 				}
 				if (!nonobstacles.contains(current+height) && !todiscover.contains(current+height) && width -1 != xj) {
-					if (!TileFactory.isTileTypeSupported(map[xj+1][yj])) {
+					if (!TileFactory.isNonDestroyableTile(map[xj+1][yj])) {
 						todiscover.add(current+height);
 					} else {
 						if (width - 2 != xj && entrydoors.containsKey(current) && entrydoors.containsKey(current + height + height) && doors.containsKey(current + height)) {
@@ -68,7 +68,7 @@ public class MapUtil {
 					}
 				}
 				if (!nonobstacles.contains(current-1) && !todiscover.contains(current-1) && 0 != yj) {
-					if (!TileFactory.isTileTypeSupported(map[xj][yj-1])) {
+					if (!TileFactory.isNonDestroyableTile(map[xj][yj-1])) {
 						todiscover.add(current-1);
 					} else {
 						if (1 != yj && entrydoors.containsKey(current) && entrydoors.containsKey(current - 2) && doors.containsKey(current - 1)) {
@@ -95,7 +95,7 @@ public class MapUtil {
 					}
 				}
 				if (!nonobstacles.contains(current+1) && !todiscover.contains(current+1) && height-1 != yj) {
-					if (!TileFactory.isTileTypeSupported(map[xj][yj+1])) {
+					if (!TileFactory.isNonDestroyableTile(map[xj][yj+1])) {
 						todiscover.add(current+1);
 					} else {
 						if (height - 2 != yj && entrydoors.containsKey(current) && entrydoors.containsKey(current + 2) && doors.containsKey(current + 1)) {

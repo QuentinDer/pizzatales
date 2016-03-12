@@ -2,7 +2,7 @@ package pizzatales;
 
 import java.awt.Image;
 
-public class WaterFlow extends Item {
+public class WaterFlow extends BackgroundItem {
 	
 	public WaterFlow(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
 		super(x, y, deltapx, deltapy, onetimeeffect, height);

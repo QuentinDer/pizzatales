@@ -2,7 +2,7 @@ package pizzatales;
 
 import java.awt.Image;
 
-public class WaterPuddle extends Item {
+public class WaterPuddle extends BackgroundItem {
 
 	public static Image sprite;
 	

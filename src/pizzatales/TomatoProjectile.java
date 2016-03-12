@@ -8,7 +8,7 @@ public class TomatoProjectile extends Projectile {
 	private int life;
 	
 	public TomatoProjectile(int startX, int startY, int vectorX, int vectorY) {
-		super(startX, startY, vectorX, vectorY, 7, 6, 62, 31, 350);
+		super(startX, startY, vectorX, vectorY, 7, 6, 40, 20, 350);
 		canbedestroyed = true;
 		life = 3;
 	}
@@ -86,6 +86,21 @@ public class TomatoProjectile extends Projectile {
 				visible = false;
 				StartingClass.getExplosions().add(new TomatoProjectileExplosion(this.centerX,this.centerY));
 			}
+		}
+	}
+
+	@Override
+	public void doOnLimitScreen() {
+		if (visible) {
+			visible = false;
+			Tato t = new Tato(this.centerX,this.centerY);
+			if (StartingClass.difficultylevel > 3) {
+				t.setWeapon(new Shotgun());
+				t.range = 220;
+				if (StartingClass.TESTMODE)
+					t.showHealthBar = true;
+			}
+			StartingClass.getEnemyarray().add(t);
 		}
 	}
 }

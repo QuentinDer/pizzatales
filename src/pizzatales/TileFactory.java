@@ -3,11 +3,18 @@ package pizzatales;
 public class TileFactory {
 
 	private final static String acceptedTileTypes = "twcsrdekgvyqDHEL";
+	private final static String nonDestroyableTileTypes = "twcsrdekgvyDHL";
 
 	public static boolean isTileTypeSupported(char type) {
 		String test = "";
 		test += type;
 		return acceptedTileTypes.contains(test);
+	}
+	
+	public static boolean isNonDestroyableTile(char type) {
+		String test = "";
+		test += type;
+		return nonDestroyableTileTypes.contains(test);
 	}
 	
 	public static Tile getTile(int x, int y, char typeInt) {

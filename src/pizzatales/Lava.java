@@ -2,7 +2,7 @@ package pizzatales;
 
 import java.awt.Image;
 
-public class Lava extends Item {
+public class Lava extends BackgroundItem {
 
 	int timer = 0;
 	int freq = 30;

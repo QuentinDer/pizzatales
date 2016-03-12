@@ -162,4 +162,9 @@ public class MushroomWizardBall extends Projectile {
 		visible = false;
 	}
 
+	@Override
+	public void doOnLimitScreen() {
+		visible = false;
+	}
+
 }

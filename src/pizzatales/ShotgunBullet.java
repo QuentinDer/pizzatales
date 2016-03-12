@@ -48,4 +48,9 @@ public class ShotgunBullet extends Projectile {
 		visible = false;
 	}
 
+	@Override
+	public void doOnLimitScreen() {
+		visible = false;
+	}
+
 }

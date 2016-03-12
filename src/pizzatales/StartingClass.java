@@ -225,6 +225,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				.getImage();
 		MushroomWizardBall.blueball = new ImageIcon(getClass().getResource("/data/mushroomwizardblueball.png"))
 				.getImage();
+		ReaperBarrelProjectile.sprite = new ImageIcon(getClass().getResource("/data/barrelprojectile.png")).getImage();
 
 		Tato.staySprite = new ImageIcon(getClass().getResource("/data/tato1.png")).getImage();
 		Tato.move1Sprite = new ImageIcon(getClass().getResource("/data/tato2.png")).getImage();
@@ -314,6 +315,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		PizzaBox.pizzaboxsprite = new ImageIcon(getClass().getResource("/data/pizzabox.png")).getImage();
 		Carpet.sprite = new ImageIcon(getClass().getResource("/data/carpet.png")).getImage();
 		CrateOpen.sprite = new ImageIcon(getClass().getResource("/data/crateopen.png")).getImage();
+		ReaperBlinkingItem.sprite = new ImageIcon(getClass().getResource("/data/reaperblinkingpos.png")).getImage();
+		ReaperTrap.pizzatrap = new ImageIcon(getClass().getResource("/data/pizzatrap.png")).getImage();
+		ReaperTrap.potiontrap = new ImageIcon(getClass().getResource("/data/potiontrap.png")).getImage();
+		ReaperTrap.potiontrap1 = new ImageIcon(getClass().getResource("/data/potiontrap1.png")).getImage();
 
 		HatBaseball.hatsprite = new ImageIcon(getClass().getResource("/data/hatbaseball.png")).getImage();
 		HatBowler.hatsprite = new ImageIcon(getClass().getResource("/data/hatbowler.png")).getImage();
@@ -883,10 +888,22 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 							}
 							isInArena = activatedentry.isGoingIn();
 
-							int arenacentery = arenacenters.get(isInArena).getValue() * 50 + 25 + bg.getCenterY()
+							/*int arenacentery = arenacenters.get(isInArena).getValue() * 50 + 25 + bg.getCenterY()
 									- bginity;
 							int arenacenterx = arenacenters.get(isInArena).getKey() * 50 + 25 + bg.getCenterX()
-									- bginitx;
+									- bginitx;*/
+							long sumx = 0;
+							long sumy = 0;
+							for (int ii : arenainsidearea.get(isInArena)) {
+								sumx += (ii / height);
+								sumy += (ii % height);
+							}
+							int cix = (int)(sumx/((float)arenainsidearea.get(isInArena).size())* 50 + 25)  + bg.getCenterX() - bginitx;
+							int ciy = (int)(sumy/((float)arenainsidearea.get(isInArena).size())* 50 + 25)  + bg.getCenterY() - bginity;
+							int arenacenterx = cix;
+							int arenacentery = ciy;
+							int bgaix = bg.getCenterX();
+							int bgaiy = bg.getCenterY();
 							player.setScrollingSpeedX(0);
 							player.setScrollingSpeedY(0);
 							if (levelwithyscrolling) {
@@ -912,8 +929,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 								deltapy = -30;
 							if (activatedentry.getPosY() > activatedentry.getOut().getPosY())
 								deltapy = 30;
-							while ((levelwithyscrolling && Math.abs(arenacentery - 400) > 20)
-									|| (levelwithxscrolling && Math.abs(arenacenterx - 640) > 20) || !foundposition) {
+							while ((levelwithyscrolling && Math.abs(arenacentery - 400) > 6)
+									|| (levelwithxscrolling && Math.abs(arenacenterx - 640) > 6) || !foundposition) {
 								// computationtime += System.nanoTime() -
 								// nanoclock;
 								try {
@@ -1078,11 +1095,14 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 									t.update();
 								updateItems();
 								repaint();
-								arenacentery = arenacenters.get(isInArena).getValue() * 50 + bg.getCenterY() - bginity;
-								arenacenterx = arenacenters.get(isInArena).getKey() * 50 + bg.getCenterX() - bginitx;
-								if (Math.abs(arenacentery - 400) < 20)
+								/*
+								arenacentery = arenacenters.get(isInArena).getValue() * 50 + 25 + bg.getCenterY() - bginity;
+								arenacenterx = arenacenters.get(isInArena).getKey() * 50 + 25 + bg.getCenterX() - bginitx;*/
+								arenacenterx = cix + bg.getCenterX() - bgaix;
+								arenacentery = ciy + bg.getCenterY() - bgaiy;
+								if (Math.abs(arenacentery - 400) < 6)
 									player.setScrollingSpeedY(0);
-								if (Math.abs(arenacenterx - 640) < 20)
+								if (Math.abs(arenacenterx - 640) < 6)
 									player.setScrollingSpeedX(0);
 
 							}
@@ -1638,7 +1658,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			Item it = items.get(i);
 			if (it.height == heightitemmap[it.posx][it.posy] && it.checkCollisionPlayer(player)) {
 				leavingitems.add(items.get(i));
-				heightitemmap[it.posx][it.posy]--;
+				heightitemmap[it.posx][it.posy] = Math.max(heightitemmap[it.posx][it.posy]-1, 0);
 				items.remove(i);
 			} else {
 				i++;
@@ -1697,6 +1717,14 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						}
 					}
 				}
+				if (p.canbedestroyed) {
+					for (Projectile pe : player.getProjectiles()) {
+						if (pe.isVisible() && p.checkCollision(pe)) {
+							p.doOnCollision(pe);
+							pe.doOnCollision(p);
+						}
+					}
+				}
 				Tile t = p.checkCollisionTile();
 				if (null != t) {
 					p.doOnCollision(t);
@@ -1740,6 +1768,14 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 							if (pe.isVisible() && p.checkCollision(pe)) {
 								p.doOnCollision(pe);
 								pe.doOnCollision(p);
+							}
+						}
+						for (Enemy e2 : getEnemyarray()) {
+							for (Projectile pe : e2.getProjectiles()) {
+								if (!pe.equals(p) && pe.isVisible() && p.checkCollision(pe)) {
+									p.doOnCollision(pe);
+									pe.doOnCollision(p);
+								}
 							}
 						}
 					}
@@ -1789,7 +1825,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		for (int hght = 0; hght <= blockmaxheight; hght++) {
 			for (int i = 0; i < items.size(); i++) {
 				Item it = items.get(i);
-				if (it.height == hght && !Tile.class.isInstance(StartingClass.map[it.posx][it.posy]))
+				if (it.height == hght && (BackgroundItem.class.isInstance(it) || !Tile.class.isInstance(StartingClass.map[it.posx][it.posy])))
 					g.drawImage(it.getSprite(), it.getCenterX() - 31, it.getCenterY() - 31, this);
 			}
 		}

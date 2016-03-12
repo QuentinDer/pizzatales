@@ -82,4 +82,12 @@ public class BazookaBullet extends Projectile {
 			}
 		}
 	}
+
+	@Override
+	public void doOnLimitScreen() {
+		if (visible) {
+			visible = false;
+			StartingClass.getExplosions().add(new BazookaBulletExplosion(this.centerX,this.centerY));
+		}
+	}
 }

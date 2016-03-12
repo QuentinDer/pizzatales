@@ -13,6 +13,7 @@ public class SirTomato extends Enemy {
 	private boolean isDashing;
 	private boolean isSlashing;
 	private boolean isSlashingRight;
+	private int slashCd;
 	private boolean hasSlashed;
 	private int dashSpeedX;
 	
@@ -63,8 +64,11 @@ public class SirTomato extends Enemy {
 				speed = basicspeed;
 				currentSprite = staySprite;
 				isSlashing = false;
+				slashCd = 30;
 			}
 		}
+		if (slashCd > 0)
+			slashCd--;
 		if (isDashing && speedX != dashSpeedX) {
 			halfsizex = 50;
 			halfsizey = 50;
@@ -129,7 +133,7 @@ public class SirTomato extends Enemy {
 			}
 			int diffx = Math.abs(player.getCenterX() - getCenterX());
 			int diffy = player.getCenterY() - getCenterY();
-			if (diffx < 100 && diffy < 20 && diffy > -80) {
+			if (slashCd == 0 && diffx < 100 && diffy < 20 && diffy > -80) {
 				stopMoving();
 				hasSlashed = false;
 				isSlashing = true;

@@ -8,7 +8,7 @@ public abstract class Projectile extends Stuff {
 	protected boolean visible;
 	protected boolean canbedestroyed;
 	protected Rectangle rectP;
-	private float travelleddist;
+	protected float travelleddist;
 	protected int range;
 	protected int size;
 	protected int halfsize;
@@ -40,18 +40,21 @@ public abstract class Projectile extends Stuff {
 		centerX = (int)fcenterX;
 		centerY = (int)fcenterY;
 		rectP.setBounds(getCenterX() - halfsize, getCenterY() - halfsize, size, size);
-		travelleddist += Math.abs(fspeedX)+Math.abs(fspeedY);
-		if (travelleddist > range) {
-			doOnLimitRange();
-		}
+		travelleddist += Math.sqrt(Math.abs(fspeedX)*Math.abs(fspeedX)+Math.abs(fspeedY)*Math.abs(fspeedY));
 		if (travelleddist > range) {
 			doOnLimitRange();
 		}
 		if (centerX > 1280 && fspeedX > 0) {
-			doOnLimitRange();
+			doOnLimitScreen();
 		}
 		if (centerX < 0 && fspeedX < 0) {
-			doOnLimitRange();
+			doOnLimitScreen();
+		}
+		if (centerY > 800 && fspeedY > 0) {
+			doOnLimitScreen();
+		}
+		if (centerY < 0 && fspeedY < 0) {
+			doOnLimitScreen();
 		}
 	}
 	
@@ -130,5 +133,6 @@ public abstract class Projectile extends Stuff {
 	public abstract void doOnCollision(Enemy e);
 	public abstract void doOnCollision(Tile t);
 	public abstract void doOnLimitRange();
+	public abstract void doOnLimitScreen();
 	public abstract void doOnCollision(Projectile p);
 }

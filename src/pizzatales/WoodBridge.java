@@ -2,7 +2,7 @@ package pizzatales;
 
 import java.awt.Image;
 
-public class WoodBridge extends Item {
+public class WoodBridge extends BackgroundItem {
 
 	public static Image sprite;
 	
