@@ -273,7 +273,7 @@ public class SirTomato extends Enemy {
 				speed = basicspeed;
 			}
 			if (isSlashing && !hasSlashed) {
-				if ((isSlashingRight && player.getCenterX() > centerX - 20 && player.getCenterY() < centerY + 10) || (!isSlashingRight && player.getCenterX() < centerX + 20 && player.getCenterY() < centerY + 10)) {
+				if ((isSlashingRight && player.getCenterX() > centerX - 20 && player.getCenterY() < centerY + 60) || (!isSlashingRight && player.getCenterX() < centerX + 20 && player.getCenterY() < centerY + 60)) {
 					hasSlashed = true;
 					if (player.getArmor().defense - slashdmg < 0) {
 						player.setHealth(player.getHealth() - slashdmg + player.getArmor().defense);
