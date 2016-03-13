@@ -2,6 +2,7 @@ package pizzatales;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Composite;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -1667,6 +1668,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		}
 		if (state == GameState.Dead) {
 			Graphics2D g2d = (Graphics2D) g;
+			Composite c = g2d.getComposite();
 			g2d.setColor(Color.DARK_GRAY);
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 			g2d.fillRect(0, 0, 1280, 800);
@@ -1674,9 +1676,12 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			int style = Font.BOLD | Font.ITALIC;
 
 			Font font = new Font ("Garamond", style , 60);
+			Font pfont = g2d.getFont();
 			g2d.setFont(font);
 			g2d.setColor(Color.RED);
 			g2d.drawString("YOU DIED", 640-g2d.getFontMetrics().stringWidth("YOU DIED")/2, 400);
+			g2d.setComposite(c);
+			g2d.setFont(pfont);
 		}
 	}
 
@@ -1885,7 +1890,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		for (int hght = 0; hght <= blockmaxheight; hght++) {
 			for (int i = 0; i < items.size(); i++) {
 				Item it = items.get(i);
-				if (it.height == hght && (BackgroundItem.class.isInstance(it) || !Tile.class.isInstance(StartingClass.map[it.posx][it.posy])))
+				if (it.height == hght && (BackgroundItem.class.isInstance(it) || StartingClass.map[it.posx][it.posy] == null || !Tile.class.isInstance(StartingClass.map[it.posx][it.posy])))
 					g.drawImage(it.getSprite(), it.getCenterX() - 31, it.getCenterY() - 31, this);
 			}
 		}
@@ -2128,6 +2133,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		hitpoints.clear();
 		entrydoors.clear();
 		destroyabletiles.clear();
+		isInArena = -1;
 		/*playerweapons.clear();
 		weaponindex = 0;
 		playerarmor.clear();

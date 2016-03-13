@@ -312,7 +312,7 @@ public class CarolinaReaper extends Enemy {
 				int randpos = (int)(Math.random()*possiblespawningpos.size());
 				int postx = possiblespawningpos.get(randpos) / StartingClass.height;
 				int posty = possiblespawningpos.get(randpos) % StartingClass.height;
-				if ((int)(Math.random()*20) == 0) {
+				if (health > 0.15f * maxHealth && (int)(Math.random()*20) == 0) {
 					StartingClass.heightitemmap[postx][posty]++;
 					StartingClass.blockmaxheight = Math.max(StartingClass.blockmaxheight, StartingClass.heightitemmap[postx][posty]);
 					if ((int)(Math.random()*3) == 0) {
@@ -701,5 +701,13 @@ public class CarolinaReaper extends Enemy {
 	public void die() {
 		super.die();
 		projectiles.clear();
+		int i = 0;
+		while(i < StartingClass.items.size()) {
+			if (ReaperTrap.class.isInstance(StartingClass.items.get(i)) || ReaperBlinkingItem.class.isInstance(StartingClass.items.get(i)))
+				StartingClass.items.remove(i);
+			else
+				i++;
+		}
+		blinkingitem = null;
 	}
 }
