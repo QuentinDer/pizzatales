@@ -66,8 +66,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	
 	public static final boolean TESTMODE = true;
-	public static int difficultylevel = TESTMODE ? 4 : 1;
-	public static int currentlevel = TESTMODE ? 12 : 1;
+	public static int difficultylevel = TESTMODE ? 3 : 1;
+	public static int currentlevel = TESTMODE ? 12: 1;
 	private int maxlevel = 16;
 
 	public int weaponindex;
@@ -467,6 +467,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				contentPane.removeAll();
 				contentPane.invalidate();
 				me.validate();
+				me.repaint();
 			}
 		});
 
@@ -1427,6 +1428,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					contentPane.removeAll();
 					contentPane.invalidate();
 					me.validate();
+					me.repaint();
             	}
             }
         });
@@ -1858,7 +1860,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					e.getProjectiles().remove(i);
 				}
 			}
-			for (Explosion ex : explosions) {
+			for (int exi = 0; exi < explosions.size(); exi++) {
+				Explosion ex = explosions.get(exi);
 				if (ex.isProcing() && e.alive && e.R.intersects(ex.getR())) {
 					e.damage(ex.damage);
 					if (!e.alive)

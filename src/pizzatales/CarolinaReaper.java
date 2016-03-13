@@ -709,5 +709,13 @@ public class CarolinaReaper extends Enemy {
 				i++;
 		}
 		blinkingitem = null;
+		fireRing();
+		for (int j : StartingClass.arenainsidearea.get(StartingClass.isInArena)) {
+			int jx = j / StartingClass.height;
+			int jy = j % StartingClass.height;
+			if (StartingClass.map[jx][jy] != null && Barrel.class.isInstance(StartingClass.map[jx][jy])) {
+				((Barrel)StartingClass.map[jx][jy]).damage(10.0f);
+			}
+		}
 	}
 }
