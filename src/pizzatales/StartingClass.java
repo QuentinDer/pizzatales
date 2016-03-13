@@ -66,9 +66,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	
 	public static final boolean TESTMODE = true;
-	public static int difficultylevel = TESTMODE ? 3 : 1;
-	public static int currentlevel = TESTMODE ? 12 : 1;
-	private int maxlevel = 15;
+	public static int difficultylevel = TESTMODE ? 2 : 1;
+	public static int currentlevel = TESTMODE ? 16 : 1;
+	private int maxlevel = 16;
 
 	public int weaponindex;
 	private int armorindex;
@@ -301,6 +301,14 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		CarolinaReaper.streamup = new ImageIcon(getClass().getResource("/data/reaperfirestreamup.png")).getImage();
 		CarolinaReaper.streamdown = new ImageIcon(getClass().getResource("/data/reaperfirestreamdown.png")).getImage();
 		CarolinaReaper.dieSprite = new ImageIcon(getClass().getResource("/data/reaperdead.png")).getImage();
+		Oniough.staySprite = new ImageIcon(getClass().getResource("/data/oniough1.png")).getImage();
+		Oniough.move1Sprite = new ImageIcon(getClass().getResource("/data/onioughWalk1.png")).getImage();
+		Oniough.move2Sprite = new ImageIcon(getClass().getResource("/data/onioughWalk2.png")).getImage();
+		//Oniough.dieSprite = new ImageIcon(getClass().getResource("/data/oniough.png")).getImage();
+		Garlnstein.staySprite = new ImageIcon(getClass().getResource("/data/garlnstein.png")).getImage();
+		Garlnstein.move1Sprite = new ImageIcon(getClass().getResource("/data/garlnsteinWalk1.png")).getImage();
+		Garlnstein.move2Sprite = new ImageIcon(getClass().getResource("/data/garlnsteinWalk2.png")).getImage();
+		Garlnstein.dieSprite = new ImageIcon(getClass().getResource("/data/garlnsteinDead.png")).getImage();
 
 		BazookaBulletExplosion.bazookaexplosionsprite = new ImageIcon(
 				getClass().getResource("/data/bazookaexplosion.png")).getImage();
@@ -1695,6 +1703,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			second.setColor(getBackground());
 			second.fillRect(0, 0, getWidth(), getHeight());
 			second.setColor(getForeground());
+		
 			paintOffScreen(second);
 
 			g.drawImage(image, 0, 0, this);

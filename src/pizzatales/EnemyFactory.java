@@ -1,10 +1,8 @@
 package pizzatales;
 
-import javax.swing.JFrame;
-
 public class EnemyFactory {
 
-	private static String acceptedEnemyTypes = "TABPMSWR";
+	private static String acceptedEnemyTypes = "TABPMSWROG";
 	
 	public static boolean isTileTypeSupported(char type) {
 		String test = "";
@@ -12,7 +10,7 @@ public class EnemyFactory {
 		return acceptedEnemyTypes.contains(test);
 	}
 	
-	public static Enemy getEnemy(int x, int y, char c, JFrame app) {
+	public static Enemy getEnemy(int x, int y, char c, StartingClass app) {
 		Enemy e = null;
 		switch(c) {
 		case 'T':
@@ -38,6 +36,12 @@ public class EnemyFactory {
 			break;
 		case 'R':
 			e = new CarolinaReaper(x*50+25,y*50+40);
+			break;
+		case 'O':
+			e = new Oniough(x*50+25,y*50+40);
+			break;
+		case 'G':
+			e = new Garlnstein(x*50+25,y*50+40);
 			break;
 		}
 		return e;

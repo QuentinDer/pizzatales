@@ -3,8 +3,6 @@ package pizzatales;
 import java.awt.Image;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-
 public class MushroomWizard extends Enemy {
 
 	private int inAnimation;
@@ -22,10 +20,10 @@ public class MushroomWizard extends Enemy {
 	private boolean isSlashing;
 	private int slashDirection;
 	private boolean hasSlashed;
-	private JFrame applet;
+	private StartingClass applet;
 	private int nextball;
 	
-	public MushroomWizard(int centerX, int centerY, JFrame applet) {
+	public MushroomWizard(int centerX, int centerY, StartingClass applet) {
 		super(centerX, centerY, new FakeMushroomWeapon(25,-12), 75, (StartingClass.difficultylevel>2)?1:2, 50, 50, 45, 45);
 		movementTime = ((int) (Math.random() * 50));
 		halfbarx = 45;
