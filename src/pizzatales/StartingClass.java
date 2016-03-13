@@ -1,8 +1,11 @@
 package pizzatales;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -62,8 +65,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	
 	public static final boolean TESTMODE = true;
-	public static int difficultylevel = TESTMODE ? 1 : 1;
-	public static int currentlevel = TESTMODE ? 4 : 1;
+	public static int difficultylevel = TESTMODE ? 3 : 1;
+	public static int currentlevel = TESTMODE ? 12 : 1;
 	private int maxlevel = 15;
 
 	public int weaponindex;
@@ -1277,6 +1280,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					}
 					if (player.getHealth() < 1) {
 						state = GameState.Dead;
+						player.controlledstopMoving();
 						clip.stop();
 					}
 				}
@@ -1291,6 +1295,55 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					
 				}
 				if (state == GameState.Dead) {
+
+					int i = 0;
+					while (i < StartingClass.hitpoints.size()) {
+						if (StartingClass.hitpoints.get(i).timer == 0)
+							StartingClass.hitpoints.remove(i);
+						else {
+							StartingClass.hitpoints.get(i).timer--;
+							i++;
+						}	
+					}
+					
+					player.canmovedown = true;
+					player.canmoveleft = true;
+					player.canmoveright = true;
+					player.canmoveup = true;
+					for (Explosion e : StartingClass.explosions) {
+						if (e.isProcing() && player.R.intersects(e.getR())) {
+							if (player.getArmor().defense - e.damage < 0) {
+								player.setHealth(player.getHealth() - e.damage + player.getArmor().defense);
+								player.getArmor().setDefense(0);
+							} else {
+								player.getArmor().setDefense(player.getArmor().getDefense() - e.damage);
+							}
+						}
+					}
+					player.controlledupdate();
+					updateExplosions();
+					callEnemiesAIs();
+					for (Enemy e : getEnemyarray()) {
+						if (e.alive)
+							map[e.posx][e.posy] = null;
+					}
+					updateEnemies();
+					int exi = 0;
+					int exsize = 0;
+					while (exi < exsize) {
+						Explosion e = StartingClass.explosions.get(exi);
+						int dt = 0;
+						while (dt < StartingClass.destroyabletiles.size()) {
+							if (e.isProcing() && e.getR().intersects(StartingClass.destroyabletiles.get(dt).R)) {
+								if (!StartingClass.destroyabletiles.get(dt).damage(e.damage))
+									dt++;
+							} else
+								dt++;
+						}
+						exi++;
+					}
+					bg.update();
+					
 					if(deathCountdown == 0){
 						state = GameState.Menu;
 						endlevelmenuloaded = true;
@@ -1461,164 +1514,169 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	 */
 
 	private void paintOffScreen(Graphics g) {
-		if (state != GameState.Dead) {
-			g.drawImage(background, bg.getCenterX(), bg.getCenterY(), this);
-			paintItems(g);
-			for (Enemy e : getEnemyarray()) {
-				if (!e.alive) {
-					g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
-					for (int j = 0; j < e.getProjectiles().size(); j++) {
-						Projectile p = e.getProjectiles().get(j);
-						g.drawImage(p.getSprite(), p.getCenterX() - p.halfsize, p.getCenterY() - p.halfsize, this);
-					}
-				}
+		g.drawImage(background, bg.getCenterX(), bg.getCenterY(), this);
+		paintItems(g);
+		for (Enemy e : getEnemyarray()) {
+			if (!e.alive) {
+				g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
 				for (int j = 0; j < e.getProjectiles().size(); j++) {
 					Projectile p = e.getProjectiles().get(j);
 					g.drawImage(p.getSprite(), p.getCenterX() - p.halfsize, p.getCenterY() - p.halfsize, this);
 				}
 			}
-			int stx = Math.max(0, (-50 - bg.getCenterX() + StartingClass.bginitx) / 50);
-			int sty = Math.max(0, (-50 - bg.getCenterY() + StartingClass.bginity) / 50);
-			int fx = Math.min(width, (1330 - bg.getCenterX() + StartingClass.bginitx) / 50);
-			int fy = Math.min(height, (850 - bg.getCenterY() + StartingClass.bginity) / 50);
-			for (int y = sty; y < fy; y++) {
-				for (int x = stx; x < fx; x++) {
-					if (null != map[x][y]) {
-						if (Enemy.class.isInstance(map[x][y])) {
-							Enemy e = (Enemy) map[x][y];
-							if (null != e.getWeapon()) {
-								if (e.isAimingUp()) {
-									g.drawImage(e.getWeapon().currentSprite, e.getCenterX() + e.getWeapon().deltapx,
-											e.getCenterY() + e.getWeapon().deltapy, this);
-									g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex,
-											e.getCenterY() - e.halfsizey, this);
-								} else {
-									g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex,
-											e.getCenterY() - e.halfsizey, this);
-									g.drawImage(e.getWeapon().currentSprite, e.getCenterX() + e.getWeapon().deltapx,
-											e.getCenterY() + e.getWeapon().deltapy, this);
-								}
-							} else {
-								g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey,
-										this);
-							}
-							if (e.showHealthBar) {
-								g.setColor(Color.GREEN);
-								int lifetaken = (int) ((e.getMaxHealth() - e.getHealth()) * e.halfbarx * 2)
-										/ e.getMaxHealth();
-								g.fillRect(e.getCenterX() - e.halfbarx, e.getCenterY() - e.halfbary,
-										2 * e.halfbarx - lifetaken, 2);
-								g.setColor(Color.RED);
-								g.fillRect(e.getCenterX() + e.halfbarx - lifetaken, e.getCenterY() - e.halfbary,
-										lifetaken, 2);
-							}
-						} else if (Player.class.isInstance(map[x][y])) {
-							if (isGrinning > 0)
-								isGrinning--;
-							if (player.isAimingUp()) {
-								g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - player.halfsizex,
-										player.getCenterY() - player.halfsizey, this);
-								g.drawImage(player.currentSprite, player.getCenterX() - player.halfsizex,
-										player.getCenterY() - player.halfsizey, this);
-								if (isGrinning > 0)
-									g.drawImage(grinningsprite, player.getCenterX() - player.halfsizex,
-											player.getCenterY() - player.halfsizey, this);
-								if (player.getHat() != null)
-									g.drawImage(player.getHat().getSprite(), player.getCenterX() - player.halfsizex,
-											player.getCenterY() - player.halfsizey + player.getHat().deltay, this);
-							} else {
-								g.drawImage(player.currentSprite, player.getCenterX() - player.halfsizex,
-										player.getCenterY() - player.halfsizey, this);
-								if (isGrinning > 0)
-									g.drawImage(grinningsprite, player.getCenterX() - player.halfsizex,
-											player.getCenterY() - player.halfsizey, this);
-								if (player.getHat() != null)
-									g.drawImage(player.getHat().getSprite(), player.getCenterX() - player.halfsizex,
-											player.getCenterY() - player.halfsizey + player.getHat().deltay, this);
-								g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - player.halfsizex,
-										player.getCenterY() - player.halfsizey, this);
-							}
-						} else
-							g.drawImage(map[x][y].getSprite(), map[x][y].getCenterX() - map[x][y].halfrsizex,
-									map[x][y].getCenterY() - map[x][y].halfsizey, this);
-					}
-				}
-			} /*
-				 * for (int i = 0; i < getEnemyarray().size(); i++) { Enemy e =
-				 * getEnemyarray().get(i); if (e.alive) { if (null !=
-				 * e.getWeapon()) { if (e.isAimingUp()) {
-				 * g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31,
-				 * e.getCenterY() - 31, this); g.drawImage(e.currentSprite,
-				 * e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey,
-				 * this); } else { g.drawImage(e.currentSprite, e.getCenterX() -
-				 * e.halfsizex, e.getCenterY() - e.halfsizey, this);
-				 * g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31,
-				 * e.getCenterY() - 31, this); } } else {
-				 * g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex,
-				 * e.getCenterY() - e.halfsizey, this); } if (e.showHealthBar) {
-				 * g.setColor(Color.GREEN); int lifetaken =
-				 * ((e.getMaxHealth()-e.getHealth())*e.halfbar*2)/e.getMaxHealth
-				 * (); g.fillRect(e.getCenterX()-e.halfbar,
-				 * e.getCenterY()-e.halfsizey, 2*e.halfbar-lifetaken, 2);
-				 * g.setColor(Color.RED);
-				 * g.fillRect(e.getCenterX()+e.halfbar-lifetaken,
-				 * e.getCenterY()-e.halfsizey, lifetaken, 2); } } }
-				 */
-			for (Explosion e : explosions) {
-				g.drawImage(e.getSprite(), e.getR().x, e.getR().y, this);
-			}
-			ArrayList<Projectile> projectiles = player.getProjectiles();
-			for (int i = 0; i < projectiles.size(); i++) {
-				Projectile p = projectiles.get(i);
-				// g.setColor(Color.YELLOW);
-				// g.fillRect(p.getR().x, p.getR().y, p.getR().width,
-				// p.getR().height);
+			for (int j = 0; j < e.getProjectiles().size(); j++) {
+				Projectile p = e.getProjectiles().get(j);
 				g.drawImage(p.getSprite(), p.getCenterX() - p.halfsize, p.getCenterY() - p.halfsize, this);
 			}
-			if (showPlayerHealthBar) {
-				g.setColor(Color.GREEN);
-				int lifetaken = (int) ((20 + player.getArmor().MAXDEF - player.getHealth()
-						- player.getArmor().getDefense()) * 44) / (20 + player.getArmor().MAXDEF);
-				int armorp = (int) (player.getArmor().getDefense() * 44) / (20 + player.getArmor().MAXDEF);
-				g.fillRect(player.getCenterX() - 22, player.getCenterY() - 31, 44 - lifetaken - armorp, 2);
-				g.setColor(Color.BLUE);
-				g.fillRect(player.getCenterX() + 22 - lifetaken - armorp, player.getCenterY() - 31, armorp, 2);
-				g.setColor(Color.RED);
-				g.fillRect(player.getCenterX() + 22 - lifetaken, player.getCenterY() - 31, lifetaken, 2);
+		}
+		int stx = Math.max(0, (-50 - bg.getCenterX() + StartingClass.bginitx) / 50);
+		int sty = Math.max(0, (-50 - bg.getCenterY() + StartingClass.bginity) / 50);
+		int fx = Math.min(width, (1330 - bg.getCenterX() + StartingClass.bginitx) / 50);
+		int fy = Math.min(height, (850 - bg.getCenterY() + StartingClass.bginity) / 50);
+		for (int y = sty; y < fy; y++) {
+			for (int x = stx; x < fx; x++) {
+				if (null != map[x][y]) {
+					if (Enemy.class.isInstance(map[x][y])) {
+						Enemy e = (Enemy) map[x][y];
+						if (null != e.getWeapon()) {
+							if (e.isAimingUp()) {
+								g.drawImage(e.getWeapon().currentSprite, e.getCenterX() + e.getWeapon().deltapx,
+										e.getCenterY() + e.getWeapon().deltapy, this);
+								g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex,
+										e.getCenterY() - e.halfsizey, this);
+							} else {
+								g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex,
+										e.getCenterY() - e.halfsizey, this);
+								g.drawImage(e.getWeapon().currentSprite, e.getCenterX() + e.getWeapon().deltapx,
+										e.getCenterY() + e.getWeapon().deltapy, this);
+							}
+						} else {
+							g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey,
+									this);
+						}
+						if (e.showHealthBar) {
+							g.setColor(Color.GREEN);
+							int lifetaken = (int) ((e.getMaxHealth() - e.getHealth()) * e.halfbarx * 2)
+									/ e.getMaxHealth();
+							g.fillRect(e.getCenterX() - e.halfbarx, e.getCenterY() - e.halfbary,
+									2 * e.halfbarx - lifetaken, 2);
+							g.setColor(Color.RED);
+							g.fillRect(e.getCenterX() + e.halfbarx - lifetaken, e.getCenterY() - e.halfbary,
+									lifetaken, 2);
+						}
+					} else if (Player.class.isInstance(map[x][y])) {
+						if (isGrinning > 0)
+							isGrinning--;
+						if (player.isAimingUp()) {
+							g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - player.halfsizex,
+									player.getCenterY() - player.halfsizey, this);
+							g.drawImage(player.currentSprite, player.getCenterX() - player.halfsizex,
+									player.getCenterY() - player.halfsizey, this);
+							if (isGrinning > 0)
+								g.drawImage(grinningsprite, player.getCenterX() - player.halfsizex,
+										player.getCenterY() - player.halfsizey, this);
+							if (player.getHat() != null)
+								g.drawImage(player.getHat().getSprite(), player.getCenterX() - player.halfsizex,
+										player.getCenterY() - player.halfsizey + player.getHat().deltay, this);
+						} else {
+							g.drawImage(player.currentSprite, player.getCenterX() - player.halfsizex,
+									player.getCenterY() - player.halfsizey, this);
+							if (isGrinning > 0)
+								g.drawImage(grinningsprite, player.getCenterX() - player.halfsizex,
+										player.getCenterY() - player.halfsizey, this);
+							if (player.getHat() != null)
+								g.drawImage(player.getHat().getSprite(), player.getCenterX() - player.halfsizex,
+										player.getCenterY() - player.halfsizey + player.getHat().deltay, this);
+							g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - player.halfsizex,
+									player.getCenterY() - player.halfsizey, this);
+						}
+					} else
+						g.drawImage(map[x][y].getSprite(), map[x][y].getCenterX() - map[x][y].halfrsizex,
+								map[x][y].getCenterY() - map[x][y].halfsizey, this);
+				}
 			}
-			for (int i = 0; i < hitpoints.size(); i++) {
-				g.drawImage(blooddrop, hitpoints.get(i).getCenterX() - 7, hitpoints.get(i).getCenterY() - 7, this);
-			}
-			paintItemEffect(g);
-			g.setColor(Color.RED);
-			g.fillRect(32, 37, 20, 20);
-			g.setColor(Color.WHITE);
-			g.drawString(Integer.toString((int) player.getHealth()), 35, 51);
+		} /*
+			 * for (int i = 0; i < getEnemyarray().size(); i++) { Enemy e =
+			 * getEnemyarray().get(i); if (e.alive) { if (null !=
+			 * e.getWeapon()) { if (e.isAimingUp()) {
+			 * g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31,
+			 * e.getCenterY() - 31, this); g.drawImage(e.currentSprite,
+			 * e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey,
+			 * this); } else { g.drawImage(e.currentSprite, e.getCenterX() -
+			 * e.halfsizex, e.getCenterY() - e.halfsizey, this);
+			 * g.drawImage(e.getWeapon().currentSprite, e.getCenterX() - 31,
+			 * e.getCenterY() - 31, this); } } else {
+			 * g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex,
+			 * e.getCenterY() - e.halfsizey, this); } if (e.showHealthBar) {
+			 * g.setColor(Color.GREEN); int lifetaken =
+			 * ((e.getMaxHealth()-e.getHealth())*e.halfbar*2)/e.getMaxHealth
+			 * (); g.fillRect(e.getCenterX()-e.halfbar,
+			 * e.getCenterY()-e.halfsizey, 2*e.halfbar-lifetaken, 2);
+			 * g.setColor(Color.RED);
+			 * g.fillRect(e.getCenterX()+e.halfbar-lifetaken,
+			 * e.getCenterY()-e.halfsizey, lifetaken, 2); } } }
+			 */
+		for (Explosion e : explosions) {
+			g.drawImage(e.getSprite(), e.getR().x, e.getR().y, this);
+		}
+		ArrayList<Projectile> projectiles = player.getProjectiles();
+		for (int i = 0; i < projectiles.size(); i++) {
+			Projectile p = projectiles.get(i);
+			// g.setColor(Color.YELLOW);
+			// g.fillRect(p.getR().x, p.getR().y, p.getR().width,
+			// p.getR().height);
+			g.drawImage(p.getSprite(), p.getCenterX() - p.halfsize, p.getCenterY() - p.halfsize, this);
+		}
+		if (showPlayerHealthBar) {
+			g.setColor(Color.GREEN);
+			int lifetaken = (int) ((20 + player.getArmor().MAXDEF - player.getHealth()
+					- player.getArmor().getDefense()) * 44) / (20 + player.getArmor().MAXDEF);
+			int armorp = (int) (player.getArmor().getDefense() * 44) / (20 + player.getArmor().MAXDEF);
+			g.fillRect(player.getCenterX() - 22, player.getCenterY() - 31, 44 - lifetaken - armorp, 2);
 			g.setColor(Color.BLUE);
-			g.fillRect(52, 37, 20, 20);
+			g.fillRect(player.getCenterX() + 22 - lifetaken - armorp, player.getCenterY() - 31, armorp, 2);
+			g.setColor(Color.RED);
+			g.fillRect(player.getCenterX() + 22 - lifetaken, player.getCenterY() - 31, lifetaken, 2);
+		}
+		for (int i = 0; i < hitpoints.size(); i++) {
+			g.drawImage(blooddrop, hitpoints.get(i).getCenterX() - 7, hitpoints.get(i).getCenterY() - 7, this);
+		}
+		paintItemEffect(g);
+		g.setColor(Color.RED);
+		g.fillRect(32, 37, 20, 20);
+		g.setColor(Color.WHITE);
+		g.drawString(Integer.toString((int) player.getHealth()), 35, 51);
+		g.setColor(Color.BLUE);
+		g.fillRect(52, 37, 20, 20);
+		g.setColor(Color.WHITE);
+		g.drawString(Integer.toString((int) player.getArmor().defense), 55, 51);
+		if (TESTMODE) {
+			g.setColor(Color.DARK_GRAY);
+			g.fillRect(1200, 37, 20, 20);
+			g.fillRect(1230, 37, 45, 20);
 			g.setColor(Color.WHITE);
-			g.drawString(Integer.toString((int) player.getArmor().defense), 55, 51);
-			if (TESTMODE) {
-				g.setColor(Color.DARK_GRAY);
-				g.fillRect(1200, 37, 20, 20);
-				g.fillRect(1230, 37, 45, 20);
-				g.setColor(Color.WHITE);
-				g.drawString(Integer.toString(fps), 1203, 51);
-				// g.drawString(Integer.toString(cmptime), 1233, 51);
-			}
-			if (state == GameState.Paused) {
-				g.setColor(Color.DARK_GRAY);
-				g.fillRect(0, 385, 1280, 20);
-				//g.fillRect(1230, 37, 45, 20);
-				g.setColor(Color.WHITE);
-				g.drawString("PAUSE", 620, 400);
-			}
-		} else {
-			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, 800, 480);
+			g.drawString(Integer.toString(fps), 1203, 51);
+			// g.drawString(Integer.toString(cmptime), 1233, 51);
+		}
+		if (state == GameState.Paused) {
+			g.setColor(Color.DARK_GRAY);
+			g.fillRect(0, 385, 1280, 20);
+			//g.fillRect(1230, 37, 45, 20);
 			g.setColor(Color.WHITE);
-			g.drawString("Dead", 640, 240);
-			g.drawString("Going back to menu in 3...", 600, 340);
+			g.drawString("PAUSE", 620, 400);
+		}
+		if (state == GameState.Dead) {
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setColor(Color.DARK_GRAY);
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+			g2d.fillRect(0, 0, 1280, 800);
+			//g.fillRect(1230, 37, 45, 20);
+			int style = Font.BOLD | Font.ITALIC;
+
+			Font font = new Font ("Garamond", style , 60);
+			g2d.setFont(font);
+			g2d.setColor(Color.RED);
+			g2d.drawString("YOU DIED", 640-g2d.getFontMetrics().stringWidth("YOU DIED")/2, 400);
 		}
 	}
 
@@ -1831,7 +1889,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					g.drawImage(it.getSprite(), it.getCenterX() - 31, it.getCenterY() - 31, this);
 			}
 		}
-
 	}
 
 	private void paintItemEffect(Graphics g) {
