@@ -8,7 +8,7 @@ public class Oniough extends Enemy {
 	dashSpriteRight, dashSpriteLeft, slashSpriteLeft, slashSpriteRight;
 	
 	public Oniough(int centerX, int centerY) {
-		super(centerX, centerY, null, 75, 2, 50, 50, 45, 45);
+		super(centerX, centerY, null, 75, 1, 50, 50, 45, 45);
 		halfbarx = 45;
 		movementTime = ((int) (Math.random() * 50));
 	}

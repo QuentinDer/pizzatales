@@ -66,8 +66,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	
 	public static final boolean TESTMODE = true;
-	public static int difficultylevel = TESTMODE ? 2 : 1;
-	public static int currentlevel = TESTMODE ? 16 : 1;
+	public static int difficultylevel = TESTMODE ? 4 : 1;
+	public static int currentlevel = TESTMODE ? 12 : 1;
 	private int maxlevel = 16;
 
 	public int weaponindex;
@@ -2143,6 +2143,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		entrydoors.clear();
 		destroyabletiles.clear();
 		isInArena = -1;
+		ScrollingMode = 1;
 		/*playerweapons.clear();
 		weaponindex = 0;
 		playerarmor.clear();
