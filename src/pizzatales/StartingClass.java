@@ -1679,11 +1679,15 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		if (state == GameState.Dead) {
 			Graphics2D g2d = (Graphics2D) g;
 			Composite c = g2d.getComposite();
-			g2d.setColor(Color.DARK_GRAY);
-			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-			g2d.fillRect(0, 0, 1280, 800);
+			g2d.setColor(Color.BLACK);
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+			g2d.fillRect(0, 300, 1280, 200);
 			//g.fillRect(1230, 37, 45, 20);
 			int style = Font.BOLD | Font.ITALIC;
+			
+			/*
+			g2d.setColor(Color.BLACK);
+			g2d.fillRect(0, 300, 1280, 200);*/
 
 			Font font = new Font ("Garamond", style , 60);
 			Font pfont = g2d.getFont();
