@@ -7,6 +7,10 @@ public class SnowBank extends BackgroundItem {
 	public static Image sprite;
 	public static Image snoweffectsprite;
 	private boolean wasActive;
+	private int icY;
+	private int icX;
+	private int ieY;
+	private int ieX;
 	
 	public SnowBank(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
 		super(x, y, deltapx, deltapy, onetimeeffect, height);
@@ -38,7 +42,7 @@ public class SnowBank extends BackgroundItem {
 	
 	@Override
 	public boolean checkCollisionPlayer(Player p) {
-		if (r.contains(p.getCenterX(), p.getCenterY()+27)) {
+		if (r.contains(p.getCenterX(), p.getCenterY())) {
 			doEffect();
 			wasActive = true;
 			return false;
@@ -46,6 +50,10 @@ public class SnowBank extends BackgroundItem {
 			if (wasActive) {
 				effectTimer = 120;
 				effectactive = true;
+				icX = centerX;
+				icY = centerY;
+				ieX = Math.max(centerX-15, Math.min(centerX+15, player.getCenterX()));
+				ieY = Math.max(centerY-50, Math.min(centerY, player.getCenterY()));
 				wasActive = false;
 			}
 			return false;
@@ -54,12 +62,12 @@ public class SnowBank extends BackgroundItem {
 
 	@Override
 	protected int getEffectCenterX() {
-		return centerX;
+		return ieX + centerX - icX;
 	}
 
 	@Override
 	protected int getEffectCenterY() {
-		return centerY;
+		return ieY + centerY - icY;
 	}
 
 	@Override
