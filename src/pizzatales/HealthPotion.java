@@ -13,11 +13,11 @@ public class HealthPotion extends Item {
 
 
 	@Override
-	protected void doEffect() {
-		if (player.getHealth() + 5 > player.getMaxHealth()) {
-			player.setHealth(player.getMaxHealth());
+	protected void doEffect(Player p) {
+		if (p.getHealth() + 5 > p.getMaxHealth()) {
+			p.setHealth(p.getMaxHealth());
 		} else {
-			player.setHealth(player.getHealth() + 5);
+			p.setHealth(p.getHealth() + 5);
 		} 
 		effectactive = true;
 		effectTimer = 30;
@@ -34,8 +34,8 @@ public class HealthPotion extends Item {
 	}
 
 	@Override
-	protected boolean canDoEffect() {
-		return player.getHealth() != 20;
+	protected boolean canDoEffect(Player p) {
+		return p.getHealth() != 20;
 	}
 
 	@Override
@@ -55,5 +55,17 @@ public class HealthPotion extends Item {
 	@Override
 	protected boolean isEffectAbove() {
 		return false;
+	}
+
+	@Override
+	protected boolean canDoEffect(Enemy e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	protected void doEffect(Enemy e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

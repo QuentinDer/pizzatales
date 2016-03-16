@@ -35,8 +35,19 @@ public abstract class Item extends Stuff {
 	}
 	
 	public boolean checkCollisionPlayer(Player p) {
-		if (p.R.intersects(r) && canDoEffect()) {
-			doEffect();
+		if (canDoEffect(p) && p.R.intersects(r)) {
+			doEffect(p);
+			if (onetimeeffect)
+				return true;
+			else
+				return false;
+		} else
+			return false;
+	}
+	
+	public boolean checkCollisionEnemy(Enemy e) {
+		if (canDoEffect(e) && e.R.intersects(r)) {
+			doEffect(e);
 			if (onetimeeffect)
 				return true;
 			else
@@ -45,8 +56,10 @@ public abstract class Item extends Stuff {
 			return false;
 	}
 
-	protected abstract boolean canDoEffect();
-	protected abstract void doEffect();
+	protected abstract boolean canDoEffect(Player p);
+	protected abstract boolean canDoEffect(Enemy e);
+	protected abstract void doEffect(Player p);
+	protected abstract void doEffect(Enemy e);
 	protected abstract void doLeavingEffect();
 	
 	protected abstract Image getSprite();

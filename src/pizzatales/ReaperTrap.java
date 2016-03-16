@@ -21,12 +21,12 @@ public class ReaperTrap extends Item {
 	}
 
 	@Override
-	protected boolean canDoEffect() {
+	protected boolean canDoEffect(Player p) {
 		return true;
 	}
 
 	@Override
-	protected void doEffect() {
+	protected void doEffect(Player p) {
 		if (StartingClass.map[posx-1][posy] == null) {
 			int postx = posx-1;
 			int posty = posy;
@@ -123,7 +123,7 @@ public class ReaperTrap extends Item {
 	@Override
 	public boolean checkCollisionPlayer(Player p) {
 		if (Math.abs(p.getCenterX()-centerX) < 20 && Math.abs(p.getCenterY()-centerY) < 20) {
-			doEffect();
+			doEffect(p);
 			return true;
 		} else
 			return false;
@@ -156,5 +156,17 @@ public class ReaperTrap extends Item {
 	@Override
 	protected boolean isEffectAbove() {
 		return false;
+	}
+
+	@Override
+	protected boolean canDoEffect(Enemy e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	protected void doEffect(Enemy e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

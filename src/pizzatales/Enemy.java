@@ -42,6 +42,9 @@ public abstract class Enemy extends BlockingStuff {
 	private float pdmg;
 	private float cdmg;
 	private int[][] waitingpattern;
+	public boolean sliding;
+	private int slidingSpeedY;
+	private int slidingSpeedX;
 	
 	private final static int visionRange = 15;
 	private final static float slightincrease = (float)0.5;
@@ -52,6 +55,7 @@ public abstract class Enemy extends BlockingStuff {
 	public boolean showHealthBar;
 	
 	//protected Animation anim;
+	private int defaultspeed;
 	protected int speed;
 	
 	protected Image currentSprite;
@@ -67,6 +71,7 @@ public abstract class Enemy extends BlockingStuff {
 		}
 		this.health = health * StartingClass.difficultylevel;
 		this.maxHealth = (int)this.health;
+		this.defaultspeed = speed;
 		this.speed = speed;
 		setStaySprite();
 	}
@@ -155,20 +160,47 @@ public abstract class Enemy extends BlockingStuff {
 	@Override
 	public void update() {
 		
-		setSpeedX(0);
-		setSpeedY(0);
-		if (ismovingright && canmoveright) {
-			setSpeedX(speed);
+		speedY = 0;
+		speedX = 0;
+		
+		if (sliding) {
+			speedX = slidingSpeedX;
+			speedY = slidingSpeedY;
 		}
-		if (ismovingleft && canmoveleft) {
-			setSpeedX(-speed);
+		if (ismovingup) {
+			if (!sliding)
+				speedY += -speed;
+			else if (walkCounter % 30 == 0)
+				speedY -= 1;
 		}
-		if (ismovingup && canmoveup) {
-			setSpeedY(-speed);
+		if (ismovingdown) {
+			if (!sliding)
+				speedY += speed;
+			else if (walkCounter % 30 == 0)
+				speedY += 1;
 		}
-		if (ismovingdown && canmovedown) {
-			setSpeedY(speed);
+		if (ismovingleft) {
+			if (!sliding)
+				speedX += -speed;
+			else if (walkCounter % 30 == 0)
+				speedX -= 1;
 		}
+		if (ismovingright) {
+			if (!sliding)
+				speedX += speed;
+			else if (walkCounter % 30 == 0)
+				speedX += 1;
+		}
+		if (speedY > 0 && !canmovedown)
+			speedY = 0;
+		if (speedY < 0 && !canmoveup)
+			speedY = 0;
+		if (speedX > 0 && !canmoveright)
+			speedX = 0;
+		if (speedX < 0 && !canmoveleft)
+			speedX = 0;
+		slidingSpeedX = speedX;
+		slidingSpeedY = speedY;
 		
 		super.update();
 		
@@ -593,5 +625,17 @@ public abstract class Enemy extends BlockingStuff {
 			}
 		}
 		return ans;
+	}
+	
+	public void setDefaultSpeed() {
+		speed = defaultspeed;
+	}
+	
+	public void setSpeed(int speed) {
+		this.speed = speed;
+	}
+	
+	public int getDefaultSpeed() {
+		return defaultspeed;
 	}
 }

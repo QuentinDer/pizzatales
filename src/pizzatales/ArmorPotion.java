@@ -12,11 +12,11 @@ public class ArmorPotion extends Item {
 	public static Image armorpotioneffectsprite;
 
 	@Override
-	protected void doEffect() {
-		if (player.getArmor().defense + 5 < player.getArmor().MAXDEF) {
-			player.getArmor().setDefense(player.getArmor().getDefense()+5);
+	protected void doEffect(Player p) {
+		if (p.getArmor().defense + 5 < p.getArmor().MAXDEF) {
+			p.getArmor().setDefense(p.getArmor().getDefense()+5);
 		} else
-			player.getArmor().setDefense(player.getArmor().MAXDEF);
+			p.getArmor().setDefense(p.getArmor().MAXDEF);
 		effectactive = true;
 		effectTimer = 30;
 	}
@@ -32,8 +32,8 @@ public class ArmorPotion extends Item {
 	}
 
 	@Override
-	protected boolean canDoEffect() {
-		return player.getArmor().defense != player.getArmor().MAXDEF;
+	protected boolean canDoEffect(Player p) {
+		return p.getArmor().defense != p.getArmor().MAXDEF;
 	}
 
 	@Override
@@ -53,6 +53,18 @@ public class ArmorPotion extends Item {
 	@Override
 	protected boolean isEffectAbove() {
 		return false;
+	}
+
+	@Override
+	protected boolean canDoEffect(Enemy e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	protected void doEffect(Enemy e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

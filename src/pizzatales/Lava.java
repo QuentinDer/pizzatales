@@ -15,7 +15,7 @@ public class Lava extends BackgroundItem {
 	public static Image lavaeffectsprite;
 
 	@Override
-	protected void doEffect() {
+	protected void doEffect(Player p) {
 		if(timer % freq == 0){
 			player.setHealth((int)player.getHealth()-1);
 		}
@@ -35,7 +35,7 @@ public class Lava extends BackgroundItem {
 	}
 
 	@Override
-	protected boolean canDoEffect() {
+	protected boolean canDoEffect(Player p) {
 		return true;
 	}
 
@@ -56,5 +56,17 @@ public class Lava extends BackgroundItem {
 	@Override
 	protected boolean isEffectAbove() {
 		return true;
+	}
+
+	@Override
+	protected boolean canDoEffect(Enemy e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	protected void doEffect(Enemy e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

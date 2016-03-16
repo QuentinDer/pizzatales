@@ -23,12 +23,12 @@ public class EntryDoor extends Item {
 	}
 
 	@Override
-	protected boolean canDoEffect() {
+	protected boolean canDoEffect(Player p) {
 		return true;
 	}
 
 	@Override
-	protected void doEffect() {
+	protected void doEffect(Player p) {
 		StartingClass.activatedentry = this;
 	}
 
@@ -102,5 +102,17 @@ public class EntryDoor extends Item {
 	@Override
 	protected boolean isEffectAbove() {
 		return false;
+	}
+
+	@Override
+	protected boolean canDoEffect(Enemy e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	protected void doEffect(Enemy e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

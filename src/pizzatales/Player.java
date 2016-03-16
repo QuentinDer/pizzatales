@@ -22,8 +22,8 @@ public class Player extends BlockingStuff {
 	private boolean controlledismovingleft;
 	private boolean controlledismovingright;
 	public boolean sliding;
-	public int slidingSpeedY;
-	public int slidingSpeedX;
+	private int slidingSpeedY;
+	private int slidingSpeedX;
 	public boolean canmoveright = true;
 	public boolean canmoveleft = true;
 	public boolean canmoveup = true;

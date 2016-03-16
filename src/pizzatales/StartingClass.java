@@ -67,7 +67,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	
 	public static final boolean TESTMODE = true;
 	public static int difficultylevel = TESTMODE ? 1 : 1;
-	public static int currentlevel = TESTMODE ? 18: 1;
+	public static int currentlevel = TESTMODE ? 8: 1;
 	private int maxlevel = 19;
 
 	public int weaponindex;
@@ -837,6 +837,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						e.canmoveleft = true;
 						e.canmoveright = true;
 						e.canmoveup = true;
+						e.sliding = false;
 					}
 					checkEnemiesCollision();
 					player.checkCollisionsWithBlockingStuff();
@@ -1322,11 +1323,21 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 							i++;
 						}	
 					}
-					
 					player.canmovedown = true;
 					player.canmoveleft = true;
 					player.canmoveright = true;
 					player.canmoveup = true;
+					player.sliding = false;
+					player.setMOVESPEED(player.getArmor().speed);
+					for (Enemy e : enemyarray) {
+						e.canmovedown = true;
+						e.canmoveleft = true;
+						e.canmoveright = true;
+						e.canmoveup = true;
+						e.sliding = false;
+						e.setDefaultSpeed();
+					}
+					checkItemsCollision();
 					for (Explosion e : StartingClass.explosions) {
 						if (e.isProcing() && player.R.intersects(e.getR())) {
 							if (player.getArmor().defense - e.damage < 0) {
@@ -1744,10 +1755,26 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		int i = 0;
 		while (i < items.size()) {
 			Item it = items.get(i);
-			if (it.height == heightitemmap[it.posx][it.posy] && it.checkCollisionPlayer(player)) {
-				leavingitems.add(items.get(i));
-				heightitemmap[it.posx][it.posy] = Math.max(heightitemmap[it.posx][it.posy]-1, 0);
-				items.remove(i);
+			if (it.height == heightitemmap[it.posx][it.posy]) {
+				if (it.checkCollisionPlayer(player)) {
+					leavingitems.add(items.get(i));
+					heightitemmap[it.posx][it.posy] = Math.max(heightitemmap[it.posx][it.posy]-1, 0);
+					items.remove(i);
+				} else {
+					boolean toremove = false;
+					int j = 0;
+					while(!toremove && j < enemyarray.size()) {
+						if (it.checkCollisionEnemy(enemyarray.get(j))) {
+							leavingitems.add(items.get(i));
+							heightitemmap[it.posx][it.posy] = Math.max(heightitemmap[it.posx][it.posy]-1, 0);
+							items.remove(i);
+							toremove = true;
+						}
+						j++;
+					}
+					if (!toremove)
+						i++;
+				}
 			} else {
 				i++;
 			}

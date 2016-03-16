@@ -17,12 +17,12 @@ public class SnowBank extends BackgroundItem {
 	}
 
 	@Override
-	protected boolean canDoEffect() {
+	protected boolean canDoEffect(Player p) {
 		return true;
 	}
 
 	@Override
-	protected void doEffect() {
+	protected void doEffect(Player p) {
 		player.setMOVESPEED(player.getArmor().speed-1);
 	}
 
@@ -43,7 +43,7 @@ public class SnowBank extends BackgroundItem {
 	@Override
 	public boolean checkCollisionPlayer(Player p) {
 		if (r.contains(p.getCenterX(), p.getCenterY())) {
-			doEffect();
+			doEffect(p);
 			wasActive = true;
 			return false;
 		} else {
@@ -59,6 +59,15 @@ public class SnowBank extends BackgroundItem {
 			return false;
 		}
 	}
+	
+	@Override
+	public boolean checkCollisionEnemy(Enemy e) {
+		if (canDoEffect(e) && e.R.intersects(r)) {
+			doEffect(e);
+			return false;
+		} else
+			return false;
+	}
 
 	@Override
 	protected int getEffectCenterX() {
@@ -73,5 +82,15 @@ public class SnowBank extends BackgroundItem {
 	@Override
 	protected boolean isEffectAbove() {
 		return false;
+	}
+
+	@Override
+	protected boolean canDoEffect(Enemy e) {
+		return true;
+	}
+
+	@Override
+	protected void doEffect(Enemy e) {
+		e.setSpeed(Math.max(1, e.getDefaultSpeed() - 1));
 	}
 }

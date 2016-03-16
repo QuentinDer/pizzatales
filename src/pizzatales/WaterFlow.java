@@ -12,9 +12,8 @@ public class WaterFlow extends BackgroundItem {
 	public static Image watereffectsprite;
 
 	@Override
-	protected void doEffect() {
-		if (player.getArmor().speed >= 4)
-			player.setMOVESPEED(player.getArmor().speed/2);
+	protected void doEffect(Player p) {
+		player.setMOVESPEED(Math.max(1, player.getArmor().speed/2));
 		effectTimer = 3;
 		effectactive = true;
 	}
@@ -30,7 +29,7 @@ public class WaterFlow extends BackgroundItem {
 	}
 
 	@Override
-	protected boolean canDoEffect() {
+	protected boolean canDoEffect(Player p) {
 		return true;
 	}
 
@@ -51,5 +50,15 @@ public class WaterFlow extends BackgroundItem {
 	@Override
 	protected boolean isEffectAbove() {
 		return false;
+	}
+
+	@Override
+	protected boolean canDoEffect(Enemy e) {
+		return true;
+	}
+
+	@Override
+	protected void doEffect(Enemy e) {
+		e.setSpeed(Math.max(1, e.getDefaultSpeed()/2));
 	}
 }
