@@ -19,6 +19,7 @@ public class MushroomWizard extends Enemy {
 	private int phase = 1;
 	private boolean isSlashing;
 	private int slashDirection;
+	private int slashCd;
 	private boolean hasSlashed;
 	private StartingClass applet;
 	private int nextball;
@@ -75,6 +76,8 @@ public class MushroomWizard extends Enemy {
 
 	@Override
 	public void callAI() {
+		if (slashCd > 0)
+			slashCd--;
 		if (ballInAnimation>0) {
 			ballInAnimation--;
 			if (ballInAnimation == 0) {
@@ -92,6 +95,7 @@ public class MushroomWizard extends Enemy {
 				halfrsizey = 45;
 				currentSprite = staySprite;
 				isSlashing = false;
+				slashCd = 30;
 			}
 		}
 		if (bcd > 0)
@@ -140,7 +144,7 @@ public class MushroomWizard extends Enemy {
 				animationNextPhase();
 			int diffx = player.getCenterX() - getCenterX();
 			int diffy = player.getCenterY() - getCenterY();
-			if (Math.abs(diffx) < 20 && Math.abs(diffy) < 100) {
+			if (slashCd == 0 && Math.abs(diffx) < 20 && Math.abs(diffy) < 100) {
 				if (diffy > 0) {
 					stopMoving();
 					hasSlashed = false;
@@ -164,7 +168,7 @@ public class MushroomWizard extends Enemy {
 					currentSprite = swipeUp;
 					slashDirection = 2;
 				}
-			} else if (Math.abs(diffy) < 20 && Math.abs(diffx) < 100) {
+			} else if (slashCd == 0 && Math.abs(diffy) < 20 && Math.abs(diffx) < 100) {
 				if (diffx > 0) {
 					stopMoving();
 					hasSlashed = false;

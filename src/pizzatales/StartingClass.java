@@ -2177,6 +2177,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		destroyabletiles.clear();
 		isInArena = -1;
 		ScrollingMode = 1;
+		player.projectiles.clear();
 		/*playerweapons.clear();
 		weaponindex = 0;
 		playerarmor.clear();
