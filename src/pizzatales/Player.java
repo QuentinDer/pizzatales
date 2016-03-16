@@ -21,6 +21,9 @@ public class Player extends BlockingStuff {
 	private boolean controlledismovingdown;
 	private boolean controlledismovingleft;
 	private boolean controlledismovingright;
+	public boolean sliding;
+	public int slidingSpeedY;
+	public int slidingSpeedX;
 	public boolean canmoveright = true;
 	public boolean canmoveleft = true;
 	public boolean canmoveup = true;
@@ -174,19 +177,44 @@ public class Player extends BlockingStuff {
 		if (centerY + MOVESPEED >= 769) {
 			canmovedown = false;
 		}
-		
-		if (ismovingup && canmoveup) {
-			speedY += -MOVESPEED;
+		if (sliding) {
+			speedX = slidingSpeedX;
+			speedY = slidingSpeedY;
 		}
-		if (ismovingdown && canmovedown) {
-			speedY += MOVESPEED;
+		if (ismovingup) {
+			if (!sliding)
+				speedY += -MOVESPEED;
+			else if (walkCounter % 30 == 0)
+				speedY -= 1;
 		}
-		if (ismovingleft && canmoveleft) {
-			speedX += -MOVESPEED;
+		if (ismovingdown) {
+			if (!sliding)
+				speedY += MOVESPEED;
+			else if (walkCounter % 30 == 0)
+				speedY += 1;
 		}
-		if (ismovingright && canmoveright) {
-			speedX += MOVESPEED;
+		if (ismovingleft) {
+			if (!sliding)
+				speedX += -MOVESPEED;
+			else if (walkCounter % 30 == 0)
+				speedX -= 1;
 		}
+		if (ismovingright) {
+			if (!sliding)
+				speedX += MOVESPEED;
+			else if (walkCounter % 30 == 0)
+				speedX += 1;
+		}
+		if (speedY > 0 && !canmovedown)
+			speedY = 0;
+		if (speedY < 0 && !canmoveup)
+			speedY = 0;
+		if (speedX > 0 && !canmoveright)
+			speedX = 0;
+		if (speedX < 0 && !canmoveleft)
+			speedX = 0;
+		slidingSpeedX = speedX;
+		slidingSpeedY = speedY;
 		isShooting = 0;
 		if (wannashootup)
 			isShooting = 2;

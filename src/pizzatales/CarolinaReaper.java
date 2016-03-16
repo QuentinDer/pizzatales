@@ -328,6 +328,29 @@ public class CarolinaReaper extends Enemy {
 						potion.r.setBounds(potion.getCenterX() - 22, potion.getCenterY() - 22, 45, 45);
 						StartingClass.items.add(potion);
 					}
+				} else if (trapsenabled && trapscd == 0 && trapscount < maxtraps) {
+					trapscount++;
+					int height = 0;
+					int maxheight = 0;
+					for (Item it : StartingClass.items) {
+						if (it.posx == postx && it.posy == posty) {
+							if (BackgroundItem.class.isInstance(it))
+								height++;
+							else {
+								it.height++;
+								maxheight = Math.max(maxheight, it.height);
+							}
+						}
+					}
+					maxheight = Math.max(maxheight, height);
+					StartingClass.heightitemmap[postx][posty] = maxheight;
+					StartingClass.blockmaxheight = Math.max(StartingClass.blockmaxheight, maxheight);
+					ReaperTrap trap = new ReaperTrap(postx,posty,0,0,true,height);
+					trap.setCenterX(50*postx+25+bg.getCenterX()-StartingClass.bginitx);
+					trap.setCenterY(50*posty+25+bg.getCenterY()-StartingClass.bginity);
+					trap.r.setBounds(trap.getCenterX() - 22, trap.getCenterY() - 22, 45, 45);
+					StartingClass.items.add(trap);
+					trapscd = trapsmaxcd;
 				}
 				
 				int tcenterX = 50*postx+25+bg.getCenterX()-StartingClass.bginitx;
@@ -370,47 +393,6 @@ public class CarolinaReaper extends Enemy {
 			waitmin = waitmin / 2;
 			waitmax = waitmax / 2;
 			spawningmaxcd = spawningmaxcd / 3;
-		}
-		if (trapsenabled && trapscd == 0 && trapscount < maxtraps) {
-			int tmpx;
-			int tmpy;
-			ArrayList<Integer> possibletrappositions = new ArrayList<Integer>();
-			for (int i : StartingClass.arenainsidearea.get(StartingClass.isInArena)) {
-				tmpx = i / StartingClass.height;
-				tmpy = i % StartingClass.height;
-				int dist = Math.abs(player.posx-tmpx)+Math.abs(player.posy-tmpy);
-				if (tmpx != rightx && tmpx != leftx && tmpy != upy && tmpy != downy && (tmpx != player.posx || tmpy != player.posy) && dist>3 && StartingClass.map[tmpx][tmpy] == null) {
-					possibletrappositions.add(i);
-				}
-			}
-			if (!possibletrappositions.isEmpty()) {
-				int randpos = (int)(Math.random() * possibletrappositions.size());
-				int trapposx = possibletrappositions.get(randpos) / StartingClass.height;
-				int trapposy = possibletrappositions.get(randpos) % StartingClass.height;
-				trapscount++;
-				int height = 0;
-				int maxheight = 0;
-				for (Item it : StartingClass.items) {
-					if (it.posx == trapposx && it.posy == trapposy) {
-						if (BackgroundItem.class.isInstance(it))
-							height++;
-						else {
-							it.height++;
-							maxheight = Math.max(maxheight, it.height);
-						}
-					}
-				}
-				maxheight = Math.max(maxheight, height);
-				StartingClass.heightitemmap[trapposx][trapposy] = maxheight;
-				StartingClass.blockmaxheight = Math.max(StartingClass.blockmaxheight, maxheight);
-				ReaperTrap trap = new ReaperTrap(trapposx,trapposy,0,0,true,height);
-				trap.setCenterX(50*trapposx+25+bg.getCenterX()-StartingClass.bginitx);
-				trap.setCenterY(50*trapposy+25+bg.getCenterY()-StartingClass.bginity);
-				trap.r.setBounds(trap.getCenterX() - 22, trap.getCenterY() - 22, 45, 45);
-				StartingClass.items.add(trap);
-				trapscd = trapsmaxcd;
-			}
-			possibletrappositions.clear();
 		}
 		if (!isThrowingBarrels && blinkenabled && blinkcd == 0 && streaming == 0 && blinking == 0) {
 			int tmpx;

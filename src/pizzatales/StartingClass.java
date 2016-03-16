@@ -67,8 +67,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	
 	public static final boolean TESTMODE = true;
 	public static int difficultylevel = TESTMODE ? 1 : 1;
-	public static int currentlevel = TESTMODE ? 17: 1;
-	private int maxlevel = 16;
+	public static int currentlevel = TESTMODE ? 18: 1;
+	private int maxlevel = 19;
 
 	public int weaponindex;
 	private int armorindex;
@@ -829,6 +829,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					player.canmoveleft = true;
 					player.canmoveright = true;
 					player.canmoveup = true;
+					player.sliding = false;
 					player.setMOVESPEED(player.getArmor().speed);
 					for (Enemy e : enemyarray) {
 						e.canmovedown = true;
@@ -837,8 +838,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						e.canmoveup = true;
 					}
 					checkEnemiesCollision();
-					checkItemsCollision();
 					player.checkCollisionsWithBlockingStuff();
+					checkItemsCollision();
 					map[player.posx][player.posy] = null;
 					updatePlayer();
 					updateExplosions();

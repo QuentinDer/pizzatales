@@ -41,7 +41,7 @@ public class EnemyFactory {
 			e = new Oniough(x*50+25,y*50+40);
 			break;
 		case 'G':
-			e = new Garlnstein(x*50+25,y*50+40);
+			e = new Garlnstein(x*50+25,y*50+40,app);
 			break;
 		}
 		return e;

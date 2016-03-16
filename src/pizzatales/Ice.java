@@ -12,11 +12,12 @@ public class Ice extends BackgroundItem {
 
 	@Override
 	protected boolean canDoEffect() {
-		return false;
+		return true;
 	}
 
 	@Override
 	protected void doEffect() {
+		player.sliding = true;
 	}
 
 	@Override
