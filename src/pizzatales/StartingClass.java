@@ -335,6 +335,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		ReaperTrap.potiontrap = new ImageIcon(getClass().getResource("/data/potiontrap.png")).getImage();
 		ReaperTrap.potiontrap1 = new ImageIcon(getClass().getResource("/data/potiontrap1.png")).getImage();
 		SnowBank.sprite = new ImageIcon(getClass().getResource("/data/snowbank.png")).getImage();
+		SnowBank.snoweffectsprite = new ImageIcon(getClass().getResource("/data/snowbankeffect.png")).getImage();
 		Ice.sprite = new ImageIcon(getClass().getResource("/data/ice.png")).getImage();
 
 		HatBaseball.hatsprite = new ImageIcon(getClass().getResource("/data/hatbaseball.png")).getImage();
@@ -1922,7 +1923,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		for (int i = 0; i < items.size(); i++) {
 			Item it = items.get(i);
 			if (it.effectactive == true) {
-				g.drawImage(it.getEffectSprite(), player.getCenterX() - 31, player.getCenterY() - 31, this);
+				g.drawImage(it.getEffectSprite(), it.getCenterX() - 31, it.getCenterY() - 31, this);
 			}
 		}
 		int i = 0;
