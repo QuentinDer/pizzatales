@@ -2,8 +2,8 @@ package pizzatales;
 
 public class TileFactory {
 
-	private final static String acceptedTileTypes = "twcsrdekgvyqDHEL";
-	private final static String nonDestroyableTileTypes = "twcsrdekgvyDHL";
+	private final static String acceptedTileTypes = "twcsrdekgvyqDHELFQV";
+	private final static String nonDestroyableTileTypes = "twcsrdekgvyDHLFQV";
 
 	public static boolean isTileTypeSupported(char type) {
 		String test = "";
@@ -70,6 +70,15 @@ public class TileFactory {
 			break;
 		case 'L':
 			ans.setTileImage(StartingClass.tileBlack);
+			break;
+		case 'F':
+			ans.setTileImage(StartingClass.tilePineTree);
+			break;
+		case 'Q':
+			ans.setTileImage(StartingClass.tileSnowRock);
+			break;
+		case 'V':
+			ans.setTileImage(StartingClass.tileMudWall);
 			break;
 		}
 		return ans;

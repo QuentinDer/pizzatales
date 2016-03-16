@@ -52,7 +52,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private Image grinningsprite;
 	public static Image tileTree, /*tileGrass, */tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit,
 			tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel, tileCandelabrum, 
-			tileCrate, tileChest, tileBlack, tileChestOpen;
+			tileCrate, tileChest, tileBlack, tileChestOpen, tilePineTree, tileMudWall, tileSnowRock;
 	private Graphics second;
 	private static Background bg;
 	private static PathFinder pf;
@@ -66,8 +66,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	
 	public static final boolean TESTMODE = true;
-	public static int difficultylevel = TESTMODE ? 3 : 1;
-	public static int currentlevel = TESTMODE ? 12: 1;
+	public static int difficultylevel = TESTMODE ? 1 : 1;
+	public static int currentlevel = TESTMODE ? 17: 1;
 	private int maxlevel = 16;
 
 	public int weaponindex;
@@ -181,6 +181,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		tileChest = new ImageIcon(getClass().getResource("/data/chest.png")).getImage();
 		tileBlack = new ImageIcon(getClass().getResource("/data/blacktile.png")).getImage();
 		tileChestOpen = new ImageIcon(getClass().getResource("/data/chestopen.png")).getImage();
+		tilePineTree = new ImageIcon(getClass().getResource("/data/pinetree.png")).getImage();
+		tileSnowRock = new ImageIcon(getClass().getResource("/data/snowrock.png")).getImage();
+		tileMudWall = new ImageIcon(getClass().getResource("/data/mudwall.png")).getImage();
 
 		blooddrop = new ImageIcon(getClass().getResource("/data/blooddrop.png")).getImage();
 		Gun.leftSprite = new ImageIcon(getClass().getResource("/data/pistol1.png")).getImage();
@@ -331,6 +334,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		ReaperTrap.pizzatrap = new ImageIcon(getClass().getResource("/data/pizzatrap.png")).getImage();
 		ReaperTrap.potiontrap = new ImageIcon(getClass().getResource("/data/potiontrap.png")).getImage();
 		ReaperTrap.potiontrap1 = new ImageIcon(getClass().getResource("/data/potiontrap1.png")).getImage();
+		SnowBank.sprite = new ImageIcon(getClass().getResource("/data/snowbank.png")).getImage();
+		Ice.sprite = new ImageIcon(getClass().getResource("/data/ice.png")).getImage();
 
 		HatBaseball.hatsprite = new ImageIcon(getClass().getResource("/data/hatbaseball.png")).getImage();
 		HatBowler.hatsprite = new ImageIcon(getClass().getResource("/data/hatbowler.png")).getImage();

@@ -42,6 +42,9 @@ public class Level {
 		case 4:
 			ans = "background4.png";
 			break;
+		case 5:
+			ans = "background5.png";
+			break;
 		}
 		return ans;
 	}
