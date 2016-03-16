@@ -16,7 +16,7 @@ public abstract class Item extends Stuff {
 	public Item(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
 		super((x + deltapx) * 50 + 25,(y + deltapy)* 50 + 40);
 		this.onetimeeffect = onetimeeffect;
-		r = new Rectangle(getCenterX() - 22, getCenterY() - 22, 45, 45);
+		r = new Rectangle(getCenterX() - 25, getCenterY() - 25, 50, 50);
 		posx = x;
 		posy = y;
 		this.height = height;
@@ -25,7 +25,7 @@ public abstract class Item extends Stuff {
 	@Override
 	public void update() {
 		super.update();	
-		r.setBounds(getCenterX() - 22, getCenterY() - 22, 45, 45);
+		r.setBounds(getCenterX() - 25, getCenterY() - 25, 50, 50);
 		if(effectTimer > 0){
 			effectTimer--;
 		}

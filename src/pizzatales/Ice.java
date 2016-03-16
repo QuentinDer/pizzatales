@@ -19,6 +19,15 @@ public class Ice extends BackgroundItem {
 	protected void doEffect() {
 		player.sliding = true;
 	}
+	
+	@Override
+	public boolean checkCollisionPlayer(Player p) {
+		if (r.contains(p.getCenterX(), p.getCenterY())) {
+			doEffect();
+			return false;
+		} else
+			return false;
+	}
 
 	@Override
 	protected Image getSprite() {
