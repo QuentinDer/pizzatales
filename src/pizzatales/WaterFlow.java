@@ -38,4 +38,18 @@ public class WaterFlow extends BackgroundItem {
 	protected void doLeavingEffect() {
 	}
 
+	@Override
+	protected int getEffectCenterX() {
+		return player.getCenterX();
+	}
+
+	@Override
+	protected int getEffectCenterY() {
+		return player.getCenterY();
+	}
+
+	@Override
+	protected boolean isEffectAbove() {
+		return false;
+	}
 }

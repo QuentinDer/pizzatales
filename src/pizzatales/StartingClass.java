@@ -67,7 +67,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	
 	public static final boolean TESTMODE = true;
 	public static int difficultylevel = TESTMODE ? 1 : 1;
-	public static int currentlevel = TESTMODE ? 18: 1;
+	public static int currentlevel = TESTMODE ? 8: 1;
 	private int maxlevel = 19;
 
 	public int weaponindex;
@@ -1534,6 +1534,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private void paintOffScreen(Graphics g) {
 		g.drawImage(background, bg.getCenterX(), bg.getCenterY(), this);
 		paintItems(g);
+		paintItemEffectBelow(g);
 		for (Enemy e : getEnemyarray()) {
 			if (!e.alive) {
 				g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
@@ -1659,7 +1660,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		for (int i = 0; i < hitpoints.size(); i++) {
 			g.drawImage(blooddrop, hitpoints.get(i).getCenterX() - 7, hitpoints.get(i).getCenterY() - 7, this);
 		}
-		paintItemEffect(g);
+		paintItemsEffectAbove(g);
 		g.setColor(Color.RED);
 		g.fillRect(32, 37, 20, 20);
 		g.setColor(Color.WHITE);
@@ -1918,18 +1919,36 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			}
 		}
 	}
-
-	private void paintItemEffect(Graphics g) {
+	
+	private void paintItemsEffectAbove(Graphics g) {
 		for (int i = 0; i < items.size(); i++) {
 			Item it = items.get(i);
-			if (it.effectactive == true) {
-				g.drawImage(it.getEffectSprite(), it.getCenterX() - 31, it.getCenterY() - 31, this);
+			if (it.effectactive == true && it.isEffectAbove()) {
+				g.drawImage(it.getEffectSprite(), it.getEffectCenterX() - 31, it.getEffectCenterY() - 31, this);
 			}
 		}
 		int i = 0;
 		while (i < leavingitems.size()) {
-			if (leavingitems.get(i).effectactive) {
-				g.drawImage(leavingitems.get(i).getEffectSprite(), player.getCenterX() - 31, player.getCenterY() - 31,
+			if (leavingitems.get(i).effectactive && leavingitems.get(i).isEffectAbove()) {
+				g.drawImage(leavingitems.get(i).getEffectSprite(), leavingitems.get(i).getEffectCenterX() - 31, leavingitems.get(i).getEffectCenterY() - 31,
+						this);
+				i++;
+			} else
+				leavingitems.remove(i);
+		}
+	}
+
+	private void paintItemEffectBelow(Graphics g) {
+		for (int i = 0; i < items.size(); i++) {
+			Item it = items.get(i);
+			if (it.effectactive == true && !it.isEffectAbove()) {
+				g.drawImage(it.getEffectSprite(), it.getEffectCenterX() - 31, it.getEffectCenterY() - 31, this);
+			}
+		}
+		int i = 0;
+		while (i < leavingitems.size()) {
+			if (leavingitems.get(i).effectactive && !leavingitems.get(i).isEffectAbove()) {
+				g.drawImage(leavingitems.get(i).getEffectSprite(), leavingitems.get(i).getEffectCenterX() - 31, leavingitems.get(i).getEffectCenterY() - 31,
 						this);
 				i++;
 			} else

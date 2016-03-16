@@ -43,4 +43,18 @@ public class Ice extends BackgroundItem {
 	protected void doLeavingEffect() {
 	}
 
+	@Override
+	protected int getEffectCenterX() {
+		return 0;
+	}
+
+	@Override
+	protected int getEffectCenterY() {
+		return 0;
+	}
+
+	@Override
+	protected boolean isEffectAbove() {
+		return false;
+	}
 }

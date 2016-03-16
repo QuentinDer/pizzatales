@@ -43,4 +43,18 @@ public class Lava extends BackgroundItem {
 	protected void doLeavingEffect() {
 	}
 
+	@Override
+	protected int getEffectCenterX() {
+		return player.getCenterX();
+	}
+
+	@Override
+	protected int getEffectCenterY() {
+		return player.getCenterY();
+	}
+
+	@Override
+	protected boolean isEffectAbove() {
+		return true;
+	}
 }

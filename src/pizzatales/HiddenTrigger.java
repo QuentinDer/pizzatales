@@ -37,5 +37,19 @@ public class HiddenTrigger extends Item {
 	@Override
 	protected void doLeavingEffect() {
 	}
+
+	@Override
+	protected int getEffectCenterX() {
+		return 0;
+	}
+
+	@Override
+	protected int getEffectCenterY() {
+		return 0;
+	}
 	
+	@Override
+	protected boolean isEffectAbove() {
+		return false;
+	}
 }

@@ -36,4 +36,18 @@ public class FakeItemForSlow extends Item {
 			player.setMOVESPEED(player.getArmor().speed/2);
 	}
 
+	@Override
+	protected int getEffectCenterX() {
+		return 0;
+	}
+
+	@Override
+	protected int getEffectCenterY() {
+		return 0;
+	}
+
+	@Override
+	protected boolean isEffectAbove() {
+		return false;
+	}
 }

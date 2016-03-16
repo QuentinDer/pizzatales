@@ -51,4 +51,7 @@ public abstract class Item extends Stuff {
 	
 	protected abstract Image getSprite();
 	protected abstract Image getEffectSprite();
+	protected abstract int getEffectCenterX();
+	protected abstract int getEffectCenterY();
+	protected abstract boolean isEffectAbove();
 }
