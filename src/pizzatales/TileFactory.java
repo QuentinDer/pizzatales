@@ -7,6 +7,7 @@ public class TileFactory {
 
 	public static boolean isTileTypeSupported(char type) {
 		String test = "";
+		test += type;
 		return acceptedTileTypes.contains(test);
 	}
 	
