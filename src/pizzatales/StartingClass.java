@@ -52,7 +52,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private Image grinningsprite;
 	public static Image tileTree, /*tileGrass, */tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit,
 			tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel, tileCandelabrum, 
-			tileCrate, tileChest, tileBlack, tileChestOpen, tilePineTree, tileMudWall, tileSnowRock;
+			tileCrate, tileChest, tileBlack, tileChestOpen, tilePineTree, tileMudWall, tileSnowRock, tileSky;
 	private Graphics second;
 	private static Background bg;
 	private static PathFinder pf;
@@ -67,8 +67,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	
 	public static final boolean TESTMODE = true;
 	public static int difficultylevel = TESTMODE ? 1 : 1;
-	public static int currentlevel = TESTMODE ? 18: 1;
-	private int maxlevel = 19;
+	public static int currentlevel = TESTMODE ? 20: 1;
+	private int maxlevel = 20;
 
 	public int weaponindex;
 	private int armorindex;
@@ -184,6 +184,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		tilePineTree = new ImageIcon(getClass().getResource("/data/pinetree.png")).getImage();
 		tileSnowRock = new ImageIcon(getClass().getResource("/data/snowrock.png")).getImage();
 		tileMudWall = new ImageIcon(getClass().getResource("/data/mudwall.png")).getImage();
+		tileSky = new ImageIcon(getClass().getResource("/data/sky.png")).getImage();
 
 		blooddrop = new ImageIcon(getClass().getResource("/data/blooddrop.png")).getImage();
 		Gun.leftSprite = new ImageIcon(getClass().getResource("/data/pistol1.png")).getImage();
