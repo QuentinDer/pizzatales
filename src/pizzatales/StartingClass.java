@@ -67,7 +67,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	
 	public static final boolean TESTMODE = true;
 	public static int difficultylevel = TESTMODE ? 1 : 1;
-	public static int currentlevel = TESTMODE ? 8: 1;
+	public static int currentlevel = TESTMODE ? 18: 1;
 	private int maxlevel = 19;
 
 	public int weaponindex;
@@ -1764,7 +1764,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					boolean toremove = false;
 					int j = 0;
 					while(!toremove && j < enemyarray.size()) {
-						if (it.checkCollisionEnemy(enemyarray.get(j))) {
+						if (enemyarray.get(j).alive && it.checkCollisionEnemy(enemyarray.get(j))) {
 							leavingitems.add(items.get(i));
 							heightitemmap[it.posx][it.posy] = Math.max(heightitemmap[it.posx][it.posy]-1, 0);
 							items.remove(i);

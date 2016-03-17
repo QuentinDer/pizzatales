@@ -184,25 +184,25 @@ public class Player extends BlockingStuff {
 		if (ismovingup) {
 			if (!sliding)
 				speedY += -MOVESPEED;
-			else if (walkCounter % 30 == 0)
+			else if (walkCounter % (armor.MAXDEF*3) == 0)
 				speedY -= 1;
 		}
 		if (ismovingdown) {
 			if (!sliding)
 				speedY += MOVESPEED;
-			else if (walkCounter % 30 == 0)
+			else if (walkCounter % (armor.MAXDEF*3) == 0)
 				speedY += 1;
 		}
 		if (ismovingleft) {
 			if (!sliding)
 				speedX += -MOVESPEED;
-			else if (walkCounter % 30 == 0)
+			else if (walkCounter % (armor.MAXDEF*3) == 0)
 				speedX -= 1;
 		}
 		if (ismovingright) {
 			if (!sliding)
 				speedX += MOVESPEED;
-			else if (walkCounter % 30 == 0)
+			else if (walkCounter % (armor.MAXDEF*3) == 0)
 				speedX += 1;
 		}
 		if (speedY > 0 && !canmovedown)
