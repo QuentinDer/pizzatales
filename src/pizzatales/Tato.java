@@ -30,7 +30,7 @@ public class Tato extends Enemy {
 					int toshootx2 = (absdifX<=range)?posx:((difX>0)?((player.getCenterX() - range - bg.getCenterX() + StartingClass.bginitx) / 50):((player.getCenterX() + range - bg.getCenterX() + StartingClass.bginitx) / 50));
 					int dirplace = 0;
 					int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
-					int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
+					int difPY = 50*posy+25+bg.getCenterY()-StartingClass.bginity - centerY;
 					if (Math.abs(difPX) < 2) {
 						if (difPY > 0)
 							dirplace = 4;
@@ -157,7 +157,7 @@ public class Tato extends Enemy {
 					}
 					int dirplace = 0;
 					int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
-					int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
+					int difPY = 50*posy+25+bg.getCenterY()-StartingClass.bginity - centerY;
 					if (Math.abs(difPX) < 2) {
 						if (difPY > 0)
 							dirplace = 4;
@@ -284,7 +284,7 @@ public class Tato extends Enemy {
 					}
 					int dirplace = 0;
 					int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
-					int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
+					int difPY = 50*posy+25+bg.getCenterY()-StartingClass.bginity - centerY;
 					if (Math.abs(difPX) < 2) {
 						if (difPY > 0)
 							dirplace = 4;
@@ -367,7 +367,7 @@ public class Tato extends Enemy {
 					}
 					int dirplace = 0;
 					int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
-					int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
+					int difPY = 50*posy+25+bg.getCenterY()-StartingClass.bginity - centerY;
 					if (Math.abs(difPX) < 2) {
 						if (difPY > 0)
 							dirplace = 4;

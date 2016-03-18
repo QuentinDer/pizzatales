@@ -23,7 +23,7 @@ public class Pepper extends Enemy {
 				StartingClass.map[player.posx][player.posy] = null;
 				int dirplace = 0;
 				int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
-				int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
+				int difPY = 50*posy+25+bg.getCenterY()-StartingClass.bginity - centerY;
 				if (Math.abs(difPX) < 2) {
 					if (difPY > 0)
 						dirplace = 4;
@@ -85,7 +85,7 @@ public class Pepper extends Enemy {
 				StartingClass.map[player.posx][player.posy] = null;
 				int dirplace = 0;
 				int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
-				int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
+				int difPY = 50*posy+25+bg.getCenterY()-StartingClass.bginity - centerY;
 				if (Math.abs(difPX) < 2) {
 					if (difPY > 0)
 						dirplace = 4;
@@ -147,7 +147,7 @@ public class Pepper extends Enemy {
 				StartingClass.map[player.posx][player.posy] = null;
 				int dirplace = 0;
 				int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
-				int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
+				int difPY = 50*posy+25+bg.getCenterY()-StartingClass.bginity - centerY;
 				if (Math.abs(difPX) < 2) {
 					if (difPY > 0)
 						dirplace = 4;
@@ -209,7 +209,7 @@ public class Pepper extends Enemy {
 				StartingClass.map[player.posx][player.posy] = null;
 				int dirplace = 0;
 				int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
-				int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
+				int difPY = 50*posy+25+bg.getCenterY()-StartingClass.bginity - centerY;
 				if (Math.abs(difPX) < 2) {
 					if (difPY > 0)
 						dirplace = 4;

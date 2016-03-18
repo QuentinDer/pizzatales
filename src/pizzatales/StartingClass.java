@@ -66,8 +66,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	
 	public static final boolean TESTMODE = true;
-	public static int difficultylevel = TESTMODE ? 1 : 1;
-	public static int currentlevel = TESTMODE ? 20: 1;
+	public static int difficultylevel = TESTMODE ? 4 : 1;
+	public static int currentlevel = TESTMODE ? 16: 1;
 	private int maxlevel = 20;
 
 	public int weaponindex;
@@ -234,6 +234,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		MushroomWizardBall.blueball = new ImageIcon(getClass().getResource("/data/mushroomwizardblueball.png"))
 				.getImage();
 		ReaperBarrelProjectile.sprite = new ImageIcon(getClass().getResource("/data/barrelprojectile.png")).getImage();
+		OnioughProjectile.sprite = new ImageIcon(getClass().getResource("/data/onioughProjectile.png")).getImage();
 
 		Tato.staySprite = new ImageIcon(getClass().getResource("/data/tato1.png")).getImage();
 		Tato.move1Sprite = new ImageIcon(getClass().getResource("/data/tato2.png")).getImage();
@@ -313,6 +314,15 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Garlnstein.move1Sprite = new ImageIcon(getClass().getResource("/data/garlnsteinWalk1.png")).getImage();
 		Garlnstein.move2Sprite = new ImageIcon(getClass().getResource("/data/garlnsteinWalk2.png")).getImage();
 		Garlnstein.dieSprite = new ImageIcon(getClass().getResource("/data/garlnsteinDead.png")).getImage();
+		Garlnstein.slashDown = new ImageIcon(getClass().getResource("/data/garlnsteinSwipeDown.png")).getImage();
+		Garlnstein.slashUp = new ImageIcon(getClass().getResource("/data/garlnsteinSwipeUp.png")).getImage();
+		Garlnstein.slashRight = new ImageIcon(getClass().getResource("/data/garlnsteinSwipeRight.png")).getImage();
+		Garlnstein.slashLeft = new ImageIcon(getClass().getResource("/data/garlnsteinDashLeft.png")).getImage();
+		Garlnstein.dashDown = new ImageIcon(getClass().getResource("/data/garlnsteinDashDown.png")).getImage();
+		Garlnstein.dashUp = new ImageIcon(getClass().getResource("/data/garlnsteinDashUp.png")).getImage();
+		Garlnstein.dashRight = new ImageIcon(getClass().getResource("/data/garlnsteinDashRight.png")).getImage();
+		Garlnstein.dashLeft = new ImageIcon(getClass().getResource("/data/garlnsteinDashLeft.png")).getImage();
+		Garlnstein.dashBlinking = new ImageIcon(getClass().getResource("/data/garlnsteinReadyToDash.png")).getImage();
 
 		BazookaBulletExplosion.bazookaexplosionsprite = new ImageIcon(
 				getClass().getResource("/data/bazookaexplosion.png")).getImage();
@@ -879,20 +889,30 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 							map[t.posx][t.posy] = null;
 						}
 						int dirplace = 0;
-						int difPX = 50 * player.posx + 25 + bg.getCenterX() - StartingClass.bginitx
-								- player.getCenterX();
-						int difPY = 50 * player.posy + 40 + bg.getCenterY() - StartingClass.bginity
-								- player.getCenterY();
-						if (Math.abs(difPX) > Math.abs(difPY)) {
+						int difPX = 50*player.posx+25+bg.getCenterX()-StartingClass.bginitx - player.getCenterX();
+						int difPY = 50*player.posy+25+bg.getCenterY()-StartingClass.bginity - player.getCenterY();
+						if (Math.abs(difPX) < 2) {
+							if (difPY > 0)
+								dirplace = 4;
+							else
+								dirplace = 2;
+						} else if (Math.abs(difPY) < 2) {
 							if (difPX > 0)
 								dirplace = 3;
 							else
 								dirplace = 1;
 						} else {
-							if (difPY > 0)
-								dirplace = 4;
-							else
-								dirplace = 2;
+							if (difPX > 0) {
+								if (difPY > 0)
+									dirplace = 7;
+								else
+									dirplace = 6;
+							} else {
+								if (difPY > 0)
+									dirplace = 8;
+								else
+									dirplace = 5;
+							}
 						}
 						if (pf.getDirection(playerposx, playerposy, activatedentry.getOut().getPosX(),
 								activatedentry.getOut().getPosY(), 10, player.canmoveleft, player.canmoveup,
@@ -1044,20 +1064,30 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 								map[player.posx][player.posy] = null;
 								if (!foundposition) {
 									dirplace = 0;
-									difPX = 50 * player.posx + 25 + bg.getCenterX() - StartingClass.bginitx
-											- player.getCenterX();
-									difPY = 50 * player.posy + 40 + bg.getCenterY() - StartingClass.bginity
-											- player.getCenterY();
-									if (Math.abs(difPX) > Math.abs(difPY)) {
+									difPX = 50*player.posx+25+bg.getCenterX()-StartingClass.bginitx - player.getCenterX();
+									difPY = 50*player.posy+25+bg.getCenterY()-StartingClass.bginity - player.getCenterY();
+									if (Math.abs(difPX) < 2) {
+										if (difPY > 0)
+											dirplace = 4;
+										else
+											dirplace = 2;
+									} else if (Math.abs(difPY) < 2) {
 										if (difPX > 0)
 											dirplace = 3;
 										else
 											dirplace = 1;
 									} else {
-										if (difPY > 0)
-											dirplace = 4;
-										else
-											dirplace = 2;
+										if (difPX > 0) {
+											if (difPY > 0)
+												dirplace = 7;
+											else
+												dirplace = 6;
+										} else {
+											if (difPY > 0)
+												dirplace = 8;
+											else
+												dirplace = 5;
+										}
 									}
 									switch (pf.getDirection(playerposx, playerposy, activatedentry.getOut().getPosX(),
 											activatedentry.getOut().getPosY(), 10, player.canmoveleft, player.canmoveup,

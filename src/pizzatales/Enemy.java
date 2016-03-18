@@ -29,12 +29,12 @@ public abstract class Enemy extends BlockingStuff {
 	public boolean canmovedown = true;
 	public boolean canmoveright = true;
 	public boolean canmoveleft = true;
-	private boolean ismovingright;
-	private boolean ismovingleft;
-	private boolean ismovingup;
-	private boolean ismovingdown;
+	protected boolean ismovingright;
+	protected boolean ismovingleft;
+	protected boolean ismovingup;
+	protected boolean ismovingdown;
 	private boolean sleepy = false;
-	private boolean hasSeenU = false;
+	protected boolean hasSeenU = false;
 	public int halfbarx = 22;
 	public int halfbary = 25;
 	protected int range;
@@ -259,7 +259,7 @@ public abstract class Enemy extends BlockingStuff {
 					if (movementTime % 05 == 0) {
 						int dirplace = 0;
 						int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
-						int difPY = 50*posy+40+bg.getCenterY()-StartingClass.bginity - centerY;
+						int difPY = 50*posy+25+bg.getCenterY()-StartingClass.bginity - centerY;
 						if (Math.abs(difPX) < 2) {
 							if (difPY > 0)
 								dirplace = 4;
@@ -591,7 +591,7 @@ public abstract class Enemy extends BlockingStuff {
 	public abstract void setMove1SpriteAlt();
 	public abstract void setMove2SpriteAlt();
 	
-	private boolean canSeePlayer() {
+	protected boolean canSeePlayer() {
 		if (Math.abs(posx-player.posx)+Math.abs(posy-player.posy) > visionRange)
 			return false;
 		boolean ans = true;
