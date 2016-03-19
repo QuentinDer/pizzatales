@@ -14,8 +14,17 @@ public class WaterFlow extends BackgroundItem {
 	@Override
 	protected void doEffect(Player p) {
 		player.setMOVESPEED(Math.max(1, player.getArmor().speed/2));
-		effectTimer = 3;
+		effectTimer = 20;
 		effectactive = true;
+	}
+	
+	@Override
+	public boolean checkCollisionPlayer(Player p) {
+		if (r.contains(p.getCenterX(), p.getCenterY())) {
+			doEffect(p);
+			return false;
+		} else
+			return false;
 	}
 
 	@Override
@@ -35,6 +44,7 @@ public class WaterFlow extends BackgroundItem {
 
 	@Override
 	protected void doLeavingEffect() {
+		player.setMOVESPEED(Math.max(1, player.getArmor().speed/2));
 	}
 
 	@Override

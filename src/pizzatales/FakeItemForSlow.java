@@ -4,10 +4,13 @@ import java.awt.Image;
 
 public class FakeItemForSlow extends Item {
 	
-	public FakeItemForSlow(int slowDuration) {
+	private int slow;
+	
+	public FakeItemForSlow(int slowDuration, int slow) {
 		super(0, 0, 0, 0, true, 0);
 		effectTimer = slowDuration;
 		effectactive = true;
+		this.slow = slow;
 	}
 
 	@Override
@@ -32,8 +35,10 @@ public class FakeItemForSlow extends Item {
 
 	@Override
 	protected void doLeavingEffect() {
-		if (player.getArmor().speed >= 4)
-			player.setMOVESPEED(player.getArmor().speed/2);
+		if (slow == 0)
+			player.setMOVESPEED(Math.max(1, player.getArmor().speed/2));
+		else
+			player.setMOVESPEED(Math.max(1, player.getArmor().speed-slow));
 	}
 
 	@Override

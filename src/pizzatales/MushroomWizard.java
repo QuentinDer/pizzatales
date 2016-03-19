@@ -198,16 +198,19 @@ public class MushroomWizard extends Enemy {
 				projectiles.add(new MushroomWizardBall(centerX + 30,centerY,0.f,-1.f,centerX,centerY,getNextBall(),phase % 2 == 0));
 			}
 			if (bcd2 == 0 && (StartingClass.difficultylevel > 2 || Math.abs(diffx) + Math.abs(diffy) > 200)) {
+				diffx -= 30;
+				float dist = (float)(Math.sqrt(Math.abs(diffx)*Math.abs(diffx)+Math.abs(diffy)*Math.abs(diffy)));
 				if (StartingClass.difficultylevel > 2)
 					bcd2 = (2 - (phase % 2))*ballcd;
 				else
 					bcd2 = ballcd;
 				if (phase % 2 == 0) {
-					diffx = player.getCenterX() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))*player.getSpeedX()/12 - getCenterX();
-					diffy = player.getCenterY() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))*player.getSpeedY()/12 - getCenterY();
+					diffx = player.getCenterX() + (int)(dist*player.getSpeedX()/10.f) - getCenterX();
+					diffy = player.getCenterY() + (int)(dist*player.getSpeedY()/10.f) - getCenterY();
+					dist = (float)(Math.sqrt(Math.abs(diffx)*Math.abs(diffx)+Math.abs(diffy)*Math.abs(diffy)));
 				}
-				float vectorx = (diffx-30) / ((float)(Math.abs(diffx-30)+Math.abs(diffy)));
-				float vectory = diffy / ((float)(Math.abs(diffx-30)+Math.abs(diffy)));
+				float vectorx = diffx / dist;
+				float vectory = diffy / dist;
 				projectiles.add(new MushroomWizardBall(centerX + 30,centerY,vectorx,vectory,nextball,phase % 2 == 0));
 				nextball = getNextBall();
 				if (phase <= 2) {
@@ -311,12 +314,7 @@ public class MushroomWizard extends Enemy {
 				}
 				if (test) {
 					hasSlashed = true;
-					if (player.getArmor().defense - slashdmg < 0) {
-						player.setHealth(player.getHealth() - slashdmg + player.getArmor().defense);
-						player.getArmor().setDefense(0);
-					} else {
-						player.getArmor().setDefense(player.getArmor().getDefense() - slashdmg);
-					}
+					player.damage(slashdmg);
 				}
 			}
 		}

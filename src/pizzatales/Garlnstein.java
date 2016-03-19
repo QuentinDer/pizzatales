@@ -7,19 +7,23 @@ public class Garlnstein extends Enemy {
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
 	public static Image slashRight, slashLeft, slashUp, slashDown;
 	public static Image dashRight, dashLeft, dashUp, dashDown, dashBlinking;
+	public static Image cloning1, cloning2, cloning3;
 	
-	private int slashcd, repelcd;
+	private int slashcd;
 	private int maxInAnimation;
 	private boolean isDashing;
 	private boolean isSlashing;
 	private boolean hasSlashed;
 	private int slashDirection;
-	private int dashcd, revivecd;
+	public int dashcd;
+	private int cloningcd;
+	private int cloningmaxcd;
+	private int cloningtime;
+	private int cloning;
 	private int dashblinking;
 	private int dashblinkingtime;
 	private int inAnimation;
-	private int dashmaxcd, revivemaxcd;
-	private Oniough buddy;
+	public int dashmaxcd;
 	private int basicspeed = 2;
 	private int slashdmg = 3;
 	private int dashdmg = 4;
@@ -30,34 +34,47 @@ public class Garlnstein extends Enemy {
 	private float fspeedY;
 	private float fcenterX;
 	private float fcenterY;
+	public boolean fake;
+	private boolean cloningenabled, dashingenabled;
 	
 	public Garlnstein(int centerX, int centerY, boolean fake) {
-		super(centerX, centerY, null, fake?10:75, 3, 31, 31,
+		super(centerX, centerY, null, fake?10:65, 3, 31, 31,
 				25, 25);
 		movementTime = ((int) (Math.random() * 50));
+		if (fake)
+			dashingenabled = true;
+		this.fake = fake;
 		switch(StartingClass.difficultylevel) {
 		case 1:
 			maxInAnimation = 60;
 			dashmaxcd = 600;
 			dashblinkingtime = 90;
+			cloningmaxcd = 1800;
+			cloningtime = 120;
 			dashspeed = 10;
 			break;
 		case 2:
 			maxInAnimation = 50;
 			dashmaxcd = 450;
 			dashblinkingtime = 80;
+			cloningtime = 100;
+			cloningmaxcd = 1500;
 			dashspeed = 12;
 			break;
 		case 3:
 			maxInAnimation = 40;
 			dashmaxcd = 300;
 			dashblinkingtime = 70;
+			cloningtime = 80;
+			cloningmaxcd = 1200;
 			dashspeed = 14;
 			break;
 		case 4:
 			maxInAnimation = 30;
 			dashmaxcd = 150;
 			dashblinkingtime = 60;
+			cloningtime = 60;
+			cloningmaxcd = 900;
 			dashspeed = 16;
 			break;
 		}
@@ -80,8 +97,8 @@ public class Garlnstein extends Enemy {
 		if (dashblinking > 0) {
 			dashblinking--;
 			if (dashblinking == 0) {
-				float diffx = player.getCenterX() - getCenterX();
-				float diffy = player.getCenterY() - getCenterY();
+				float diffx = player.getCenterX() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))*player.getSpeedX()/dashspeed - getCenterX();
+				float diffy = player.getCenterY() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))*player.getSpeedY()/dashspeed - getCenterY();
 				dashSpeedX = diffx * dashspeed / (Math.abs(diffx)+Math.abs(diffy));
 				dashSpeedY = diffy * dashspeed / (Math.abs(diffx)+Math.abs(diffy));
 				if (Math.abs(dashSpeedX)>Math.abs(dashSpeedY)) {
@@ -106,7 +123,8 @@ public class Garlnstein extends Enemy {
 				fcenterX = centerX;
 				fcenterY = centerY;
 				isDashing = true;
-				dashcd = dashmaxcd;
+				paintoverride = true;
+				dashcd = dashmaxcd + (int)(Math.random()*60-30);
 			} else {
 				if (movementTime % 6 < 3)
 					moveLeft();
@@ -114,13 +132,51 @@ public class Garlnstein extends Enemy {
 					moveRight();
 			}
 		}
+		if (cloning > 0) {
+			cloning--;
+			if (cloning == 0) {
+				showHealthBar = true;
+				halfsizex = 31;
+				halfsizey = 31;
+				halfrsizex = 25;
+				halfrsizey = 25;
+				currentSprite = staySprite;
+				Garlnstein clone = new Garlnstein(centerX+50,centerY,true);
+				clone.showHealthBar = true;
+				clone.dashcd = (int)(Math.random()*clone.dashmaxcd);
+				clone.hasSeenU = true;
+				StartingClass.map[posx+1][posy] = clone;
+				StartingClass.enemyarray.add(clone);
+				StartingClass.arenaenemies.get(StartingClass.isInArena).add(clone);
+				//TODO
+			} else {
+				switch(cloning*4/cloningtime) {
+				case 0:
+					currentSprite = cloning3;
+					break;
+				case 1:
+					currentSprite = cloning2;
+					break;
+				case 2:
+					currentSprite = cloning1;
+					halfsizex = 75;
+					halfsizey = 31;
+					halfrsizex = 70;
+					halfrsizey = 25;
+					break;
+				case 3:
+					currentSprite = staySprite;
+					break;
+				}
+			}
+		}
+		if (cloningcd > 0)
+			cloningcd--;
 		if (!isDashing && dashcd > 0)
 			dashcd--;
 		if (slashcd > 0)
 			slashcd --;
-		if (buddy != null && !buddy.alive && revivecd == 0 && dashblinking == 0 && inAnimation == 0 && movementTime % 3 == 0) {
-			
-		} else if (inAnimation == 0 && dashblinking == 0 && movementTime % 3 == 0) {
+		if (inAnimation == 0 && cloning == 0 && dashblinking == 0 && movementTime % 3 == 0) {
 			StartingClass.map[player.posx][player.posy] = null;
 			int dirplace = 0;
 			int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
@@ -180,9 +236,28 @@ public class Garlnstein extends Enemy {
 				break;
 			}
 		}
+		if (!cloningenabled && !fake) {
+			boolean test = false;
+			for (Enemy e : StartingClass.arenaenemies.get(StartingClass.isInArena)) {
+				if (Oniough.class.isInstance(e) && e.health < 0.6f*e.maxHealth)
+					test = true;
+			}
+			if (test || health < 0.6f*maxHealth)
+				cloningenabled = true;
+		}
+		if (!dashingenabled && health < 0.8f*maxHealth)
+			dashingenabled = true;
 		int diffx = player.getCenterX() - centerX;
 		int diffy = player.getCenterY() - centerY;
-		if (inAnimation == 0 && slashcd == 0 && Math.abs(diffx) < 20 && Math.abs(diffy) < 60) {
+		if (cloningenabled && inAnimation == 0 && !isDashing && dashblinking == 0 && cloningcd == 0) {
+			if (StartingClass.map[posx+1][posy] == null) {
+				stopMoving();
+				showHealthBar = false;
+				cloning = cloningtime;
+				cloningcd = cloningmaxcd;
+			}
+		}
+		if (!isDashing && inAnimation == 0 && dashblinking == 0 && cloning == 0 && slashcd == 0 && Math.abs(diffx) < 20 && Math.abs(diffy) < 60) {
 			if (diffy > 0) {
 				stopMoving();
 				hasSlashed = false;
@@ -206,7 +281,7 @@ public class Garlnstein extends Enemy {
 				currentSprite = slashUp;
 				slashDirection = 2;
 			}
-		} else if (inAnimation == 0 && slashcd == 0 && Math.abs(diffy) < 20 && Math.abs(diffx) < 60) {
+		} else if (!isDashing && inAnimation == 0 && dashblinking == 0 && cloning == 0 && slashcd == 0 && Math.abs(diffy) < 20 && Math.abs(diffx) < 60) {
 			if (diffx > 0) {
 				stopMoving();
 				hasSlashed = false;
@@ -231,12 +306,64 @@ public class Garlnstein extends Enemy {
 				slashDirection = 1;
 			}
 		}
-		if (inAnimation == 0 && dashblinking == 0 && dashcd == 0) {
+		if (dashingenabled && inAnimation == 0 && cloning == 0 && dashblinking == 0 && dashcd == 0) {
 			stopMoving();
 			dashblinking = dashblinkingtime;
 			halfsizex = 40;
 			halfsizey = 40;
 			currentSprite = dashBlinking;
+		}
+	}
+	
+	@Override
+	public void checkCollisionsWithBlockingStuff() {
+		if (posx != 0) {
+			if (null != StartingClass.map[posx-1][posy] && (Tile.class.isInstance( StartingClass.map[posx-1][posy]) || !isDashing) && R.intersects(StartingClass.map[posx-1][posy].R)) {
+				canmoveleft = false;
+			}
+			if (posy != 0 && null != StartingClass.map[posx-1][posy-1] && (Tile.class.isInstance( StartingClass.map[posx-1][posy-1]) || !isDashing) && R.intersects(StartingClass.map[posx-1][posy-1].R)) {
+				int diffX = Math.abs(StartingClass.map[posx-1][posy-1].getCenterX()-centerX);
+				int diffY = Math.abs(StartingClass.map[posx-1][posy-1].getCenterY()-centerY);
+				if (diffX > diffY && diffY < 42)
+					canmoveleft = false;
+				else if (diffX < diffY && diffX < 42)
+					canmoveup = false;
+			}
+			if (posy != StartingClass.height - 1 && null != StartingClass.map[posx-1][posy+1] && (Tile.class.isInstance( StartingClass.map[posx-1][posy+1]) || !isDashing) && R.intersects(StartingClass.map[posx-1][posy+1].R)) {
+				int diffX = Math.abs(StartingClass.map[posx-1][posy+1].getCenterX()-centerX);
+				int diffY = Math.abs(StartingClass.map[posx-1][posy+1].getCenterY()-centerY);
+				if (diffX > diffY && diffY < 42)
+					canmoveleft = false;
+				else if (diffX < diffY && diffX < 42)
+					canmovedown = false;
+			}
+		}
+		if (posx != StartingClass.width - 1) {
+			if (null != StartingClass.map[posx+1][posy] && (Tile.class.isInstance( StartingClass.map[posx+1][posy]) || !isDashing) && R.intersects(StartingClass.map[posx+1][posy].R)) {
+				canmoveright = false;
+			}
+			if (posy != 0 && null != StartingClass.map[posx+1][posy-1] && (Tile.class.isInstance( StartingClass.map[posx+1][posy-1]) || !isDashing) && R.intersects(StartingClass.map[posx+1][posy-1].R)) {
+				int diffX = Math.abs(StartingClass.map[posx+1][posy-1].getCenterX()-centerX);
+				int diffY = Math.abs(StartingClass.map[posx+1][posy-1].getCenterY()-centerY);
+				if (diffX > diffY && diffY < 42)
+					canmoveright = false;
+				else if (diffX < diffY && diffX < 42)
+					canmoveup = false;
+			}
+			if (posy != StartingClass.height - 1 && null != StartingClass.map[posx+1][posy+1] && (Tile.class.isInstance( StartingClass.map[posx+1][posy+1]) || !isDashing) && R.intersects(StartingClass.map[posx+1][posy+1].R)) {
+				int diffX = Math.abs(StartingClass.map[posx+1][posy+1].getCenterX()-centerX);
+				int diffY = Math.abs(StartingClass.map[posx+1][posy+1].getCenterY()-centerY);
+				if (diffX > diffY && diffY < 42)
+					canmoveright = false;
+				else if (diffX < diffY && diffX < 42)
+					canmovedown = false;
+			}
+		}
+		if (posy != 0 && null != StartingClass.map[posx][posy-1] && (Tile.class.isInstance( StartingClass.map[posx][posy-1]) || !isDashing) && R.intersects(StartingClass.map[posx][posy-1].R)) {
+			canmoveup = false;
+		}
+		if (posy != StartingClass.height - 1 && null != StartingClass.map[posx][posy+1] && (Tile.class.isInstance( StartingClass.map[posx][posy+1]) || !isDashing) && R.intersects(StartingClass.map[posx][posy+1].R)) {
+			canmovedown = false;
 		}
 	}
 	
@@ -249,6 +376,7 @@ public class Garlnstein extends Enemy {
 		if (isDashing) {
 			if ((dashSpeedX > 0 && !canmoveright) || (dashSpeedX < 0 && !canmoveleft) || (dashSpeedY > 0 && !canmovedown) || (dashSpeedY < 0 && !canmoveup)) {
 				isDashing = false;
+				paintoverride = false;
 				halfsizex = 31;
 				halfsizey = 31;
 				halfrsizex = 25;
@@ -256,6 +384,31 @@ public class Garlnstein extends Enemy {
 				speed = basicspeed;
 				currentSprite = staySprite;
 				slashcd = 30;
+				for (int ix = -1; ix <= 1; ix++) {
+					for (int iy = -1; iy <= 1; iy++) {
+						if (StartingClass.map[posx+ix][posy+iy] != null && Tile.class.isInstance(StartingClass.map[posx+ix][posy+iy])) {
+							Tile t = (Tile)StartingClass.map[posx+ix][posy+iy];
+							int count = 0;
+							if (StartingClass.arenainsidearea.get(StartingClass.isInArena).contains((posx+ix+1)*StartingClass.height+posy+iy)) {
+								count++;
+							}
+							if (StartingClass.arenainsidearea.get(StartingClass.isInArena).contains((posx+ix-1)*StartingClass.height+posy+iy)) {
+								count++;
+							}
+							if (StartingClass.arenainsidearea.get(StartingClass.isInArena).contains((posx+ix)*StartingClass.height+posy+iy+1)) {
+								count++;
+							}
+							if (StartingClass.arenainsidearea.get(StartingClass.isInArena).contains((posx+ix)*StartingClass.height+posy+iy-1)) {
+								count++;
+							}
+							if (count > 2) {
+								StartingClass.map[posx+ix][posy+iy] = null;
+								StartingClass.getTilearray().remove(t);
+								StartingClass.heightitemmap[posx+ix][posy+iy]--;
+							}
+						}
+					}
+				}
 			} else {
 				fspeedY = 0;
 				fspeedX = 0;
@@ -355,12 +508,7 @@ public class Garlnstein extends Enemy {
 				}
 			}
 			if (isDashing) {
-				if (player.getArmor().defense - dashdmg < 0) {
-					player.setHealth(player.getHealth() - dashdmg + player.getArmor().defense);
-					player.getArmor().setDefense(0);
-				} else {
-					player.getArmor().setDefense(player.getArmor().getDefense() - dashdmg);
-				}
+				player.damage(dashdmg);
 				halfsizex = 31;
 				halfsizey = 31;
 				halfrsizex = 25;
@@ -392,15 +540,23 @@ public class Garlnstein extends Enemy {
 				}
 				if (test) {
 					hasSlashed = true;
-					if (player.getArmor().defense - slashdmg < 0) {
-						player.setHealth(player.getHealth() - slashdmg + player.getArmor().defense);
-						player.getArmor().setDefense(0);
-					} else {
-						player.getArmor().setDefense(player.getArmor().getDefense() - slashdmg);
-					}
+					player.damage(slashdmg);
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void die() {
+		super.die();
+		isDashing = false;
+		halfsizex = 31;
+		halfsizey = 31;
+		halfrsizex = 25;
+		halfrsizey = 25;
+		dashblinking = 0;
+		inAnimation = 0;
+		dashcd = (int)(Math.random()*dashmaxcd);
 	}
 
 	@Override

@@ -6,45 +6,115 @@ public class Oniough extends Enemy {
 
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite,
 	dashSpriteRight, dashSpriteLeft, slashSpriteLeft, slashSpriteRight;
+	public static Image onioughStomp1, onioughStomp2;
 	
-	private Garlnstein buddy;
-	private int inAnimation;
-	private int maxInAnimation;
 	private int firecd;
 	private int firemaxcd0, firemaxcd1, firemaxcd2;
 	private int firingmode;
+	private int firingmodecd;
+	private int firingmodemaxcd;
+	private int revivedGarlnsteinHealth;
+	private int earthshaking;
+	private int earthshakingcd;
+	private int earthshakingmaxcd;
+	private boolean earthshakingenabled;
+	private int earthshakingduration;
+	private int earthshakingtime;
+	private int shaking;
+	private boolean slowlaunched;
 	
 	public Oniough(int centerX, int centerY) {
-		super(centerX, centerY, null, 75, 1, 50, 50, 45, 45);
+		super(centerX, centerY, null, 60, 1, 50, 50, 45, 45);
 		halfbarx = 45;
+		firingmodemaxcd = 300;
 		movementTime = ((int) (Math.random() * 50));
 		switch(StartingClass.difficultylevel) {
 		case 1:
-			firemaxcd0 = 40;
+			firemaxcd0 = 60;
+			firemaxcd1 = 35;
+			firemaxcd2 = 120;
+			earthshakingmaxcd = 3600;
+			earthshakingduration = 180;
+			earthshakingtime = 180;
+			revivedGarlnsteinHealth = 4;
 			break;
 		case 2:
-			firemaxcd0 = 35;
+			firemaxcd0 = 55;
+			firemaxcd1 = 30;
+			firemaxcd2 = 110;
+			earthshakingmaxcd = 3000;
+			earthshakingduration = 240;
+			earthshakingtime = 160;
+			revivedGarlnsteinHealth = 8;
 			break;
 		case 3:
-			firemaxcd0 = 30;
+			firemaxcd0 = 50;
+			firemaxcd1 = 25;
+			firemaxcd2 = 100;
+			earthshakingmaxcd = 2400;
+			earthshakingduration = 300;
+			earthshakingtime = 140;
+			revivedGarlnsteinHealth = 12;
 			break;
 		case 4:
-			firemaxcd0 = 25;
+			firemaxcd0 = 45;
+			firemaxcd1 = 20;
+			firemaxcd2 = 90;
+			earthshakingmaxcd = 1800;
+			earthshakingduration = 360;
+			earthshakingtime = 120;
+			revivedGarlnsteinHealth = 16;
 			break;
 		}
+		firingmodecd = firingmodemaxcd;
 	}
 
 	@Override
 	public void callAI() {
-		if (inAnimation > 0) {
-			inAnimation--;
-			if (inAnimation == 0) {
-				//TODO
-			}
-		}
+		
+		if (firingmodecd > 0)
+			firingmodecd--;
 		if (firecd > 0)
 			firecd--;
-		if (inAnimation == 0 && movementTime % 3 == 0) {
+		if (earthshakingcd > 0)
+			earthshakingcd--;
+		if (earthshaking > 0) {
+			earthshaking--;
+			if (earthshaking == 0) {
+				halfsizex = 50;
+				currentSprite = staySprite;
+			} else {
+				switch(earthshaking*3/earthshakingtime) {
+				case 0:
+					halfsizex = 75;
+					currentSprite = onioughStomp2;
+					if (!slowlaunched) {
+						slowlaunched = true;
+						shaking = earthshakingduration;
+						StartingClass.leavingitems.add(new FakeItemForSlow(earthshakingduration,1));
+					}
+					break;
+				case 1:
+					currentSprite = onioughStomp1;
+					break;
+				case 2:
+					slowlaunched = false;
+					break;
+				}
+			}
+		}
+		if (shaking > 0) {
+			shaking--;
+			if (shaking == 0) {
+				player.setScrollingSpeedY(0);
+			} else {
+				if (movementTime % 10 < 5)
+					player.setScrollingSpeedY(4);
+				else
+					player.setScrollingSpeedY(-4);
+			}
+		}
+		if (earthshaking == 0 && movementTime % 3 == 0) {
 			StartingClass.map[player.posx][player.posy] = null;
 			int dirplace = 0;
 			int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
@@ -104,21 +174,65 @@ public class Oniough extends Enemy {
 				break;
 			}
 		}
-		if (firecd == 0) {
+		if (!earthshakingenabled) {
+			boolean test = false;
+			for (Enemy e : StartingClass.arenaenemies.get(StartingClass.isInArena)) {
+				if (Garlnstein.class.isInstance(e) && !((Garlnstein)e).fake && e.health < e.maxHealth*0.7f) {
+					test = true;
+				}
+			}
+			if (test || health < maxHealth*0.7f)
+				earthshakingenabled = true;
+		}
+		if (earthshakingenabled && earthshakingcd == 0) {
+			stopMoving();
+			earthshaking = earthshakingtime;
+			earthshakingcd = earthshakingmaxcd;
+		}
+		if (firingmodecd == 0) {
+			firingmode = (firingmode+1)%3;
+			firingmodecd = firingmodemaxcd;
+		}
+		if (firecd == 0 && earthshaking == 0) {
+			float diffx = player.getCenterX() - getCenterX();
+			float diffy = player.getCenterY() - getCenterY();
+			float dist = (float)Math.sqrt(Math.abs(diffx)*Math.abs(diffx)+Math.abs(diffy)*Math.abs(diffy));
+			float vectorx = diffx / dist;
+			float vectory = diffy / dist;
 			switch(firingmode) {
 			case 0:
-				float diffx = player.getCenterX() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))*player.getSpeedX()/10.f - getCenterX();
-				float diffy = player.getCenterY() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))*player.getSpeedY()/10.f - getCenterY();
-				float vectorx = diffx / (Math.abs(diffx)+Math.abs(diffy));
-				float vectory = diffy / (Math.abs(diffx)+Math.abs(diffy));
-				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory));
+				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,10,500));
 				firecd = firemaxcd0;
 				break;
 			case 1:
-				//TODO
+				diffx = player.getCenterX() - getCenterX();
+				diffy = player.getCenterY() - getCenterY();
+				dist = (float)Math.sqrt(Math.abs(diffx)*Math.abs(diffx)+Math.abs(diffy)*Math.abs(diffy));
+				vectorx = diffx / dist;
+				vectory = diffy / dist;
+				double angle = Math.toDegrees(Math.acos(vectorx));
+				if (vectory < 0)
+					angle = 360-angle;
+				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,10,300));
+				projectiles.add(new OnioughProjectile(centerX,centerY,(float)(Math.cos(Math.toRadians(angle+10))),(float)(Math.sin(Math.toRadians(angle+10))),10,300));
+				projectiles.add(new OnioughProjectile(centerX,centerY,(float)(Math.cos(Math.toRadians(angle-10))),(float)(Math.sin(Math.toRadians(angle-10))),10,300));
+				firecd = firemaxcd1;
 				break;
 			case 2:
-				//TODO
+				diffx = player.getCenterX() + dist*player.getSpeedX()/(5.f+StartingClass.difficultylevel) - getCenterX();
+				diffy = player.getCenterY() + dist*player.getSpeedY()/(5.f+StartingClass.difficultylevel) - getCenterY();
+				dist = (float)Math.sqrt(Math.abs(diffx)*Math.abs(diffx)+Math.abs(diffy)*Math.abs(diffy));
+				vectorx = diffx / dist;
+				vectory = diffy / dist;
+				OnioughProjectile center = new OnioughProjectile(centerX,centerY,vectorx,vectory,5+StartingClass.difficultylevel,1000);
+				projectiles.add(center);
+				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,5+StartingClass.difficultylevel,0,15+7*StartingClass.difficultylevel));
+				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,5+StartingClass.difficultylevel,60,15+7*StartingClass.difficultylevel));
+				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,5+StartingClass.difficultylevel,120,15+7*StartingClass.difficultylevel));
+				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,5+StartingClass.difficultylevel,180,15+7*StartingClass.difficultylevel));
+				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,5+StartingClass.difficultylevel,240,15+7*StartingClass.difficultylevel));
+				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,5+StartingClass.difficultylevel,300,15+7*StartingClass.difficultylevel));
+				firecd = firemaxcd2;
 				break;
 			}
 		}
@@ -165,8 +279,20 @@ public class Oniough extends Enemy {
 	}
 	
 	@Override
+	public void die() {
+		super.die();
+		for (Enemy e : StartingClass.enemyarray) {
+			if (Garlnstein.class.isInstance(e) && !e.alive) {
+				e.alive = true;
+				e.setHealth(revivedGarlnsteinHealth);
+				((Garlnstein)e).dashcd = (int)(Math.random()*((Garlnstein)e).dashmaxcd);
+			}
+		}
+	}
+	
+	@Override
 	public void animate(){
-		if (isMoving && inAnimation == 0) {
+		if (earthshaking == 0 && isMoving) {
 			walkCounter++;
 			if (getSpeedX() <= 0) {
 				if (walkCounter == 1000)

@@ -257,12 +257,7 @@ public class SirTomato extends Enemy {
 				}
 			}
 			if (isDashing) {
-				if (player.getArmor().defense - dashdmg < 0) {
-					player.setHealth(player.getHealth() - dashdmg + player.getArmor().defense);
-					player.getArmor().setDefense(0);
-				} else {
-					player.getArmor().setDefense(player.getArmor().getDefense() - dashdmg);
-				}
+				player.damage(dashdmg);
 				halfsizex = 50;
 				halfsizey = 50;
 				halfrsizex = 45;
@@ -275,12 +270,7 @@ public class SirTomato extends Enemy {
 			if (isSlashing && !hasSlashed) {
 				if ((isSlashingRight && player.getCenterX() > centerX - 20 && player.getCenterY() < centerY + 60) || (!isSlashingRight && player.getCenterX() < centerX + 20 && player.getCenterY() < centerY + 60)) {
 					hasSlashed = true;
-					if (player.getArmor().defense - slashdmg < 0) {
-						player.setHealth(player.getHealth() - slashdmg + player.getArmor().defense);
-						player.getArmor().setDefense(0);
-					} else {
-						player.getArmor().setDefense(player.getArmor().getDefense() - slashdmg);
-					}
+					player.damage(slashdmg);
 				}
 			}
 		}

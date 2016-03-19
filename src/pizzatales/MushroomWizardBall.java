@@ -136,7 +136,7 @@ public class MushroomWizardBall extends Projectile {
 		if (color == 4)
 			p.setHealth(p.getMaxHealth());
 		if (color == 3)
-			StartingClass.leavingitems.add(new FakeItemForSlow(90));
+			StartingClass.leavingitems.add(new FakeItemForSlow(90,0));
 	}
 
 	@Override

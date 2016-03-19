@@ -25,6 +25,7 @@ public abstract class Enemy extends BlockingStuff {
 	protected Player player = StartingClass.getPlayer();
 	protected PathFinder pf = StartingClass.getPathFinder();
 	
+	public boolean paintoverride;
 	public boolean canmoveup = true;
 	public boolean canmovedown = true;
 	public boolean canmoveright = true;

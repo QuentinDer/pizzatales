@@ -309,6 +309,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Oniough.staySprite = new ImageIcon(getClass().getResource("/data/oniough1.png")).getImage();
 		Oniough.move1Sprite = new ImageIcon(getClass().getResource("/data/onioughWalk1.png")).getImage();
 		Oniough.move2Sprite = new ImageIcon(getClass().getResource("/data/onioughWalk2.png")).getImage();
+		Oniough.onioughStomp1 = new ImageIcon(getClass().getResource("/data/onioughStomp1.png")).getImage();
+		Oniough.onioughStomp2 = new ImageIcon(getClass().getResource("/data/onioughStomp2.png")).getImage();
 		//Oniough.dieSprite = new ImageIcon(getClass().getResource("/data/oniough.png")).getImage();
 		Garlnstein.staySprite = new ImageIcon(getClass().getResource("/data/garlnstein.png")).getImage();
 		Garlnstein.move1Sprite = new ImageIcon(getClass().getResource("/data/garlnsteinWalk1.png")).getImage();
@@ -323,6 +325,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Garlnstein.dashRight = new ImageIcon(getClass().getResource("/data/garlnsteinDashRight.png")).getImage();
 		Garlnstein.dashLeft = new ImageIcon(getClass().getResource("/data/garlnsteinDashLeft.png")).getImage();
 		Garlnstein.dashBlinking = new ImageIcon(getClass().getResource("/data/garlnsteinReadyToDash.png")).getImage();
+		Garlnstein.cloning1 = new ImageIcon(getClass().getResource("/data/garlnsteinCloning1.png")).getImage();
+		Garlnstein.cloning2 = new ImageIcon(getClass().getResource("/data/garlnsteinCloning2.png")).getImage();
+		Garlnstein.cloning3 = new ImageIcon(getClass().getResource("/data/garlnsteinCloning3.png")).getImage();
 
 		BazookaBulletExplosion.bazookaexplosionsprite = new ImageIcon(
 				getClass().getResource("/data/bazookaexplosion.png")).getImage();
@@ -1578,7 +1583,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		paintItems(g);
 		paintItemEffectBelow(g);
 		for (Enemy e : getEnemyarray()) {
-			if (!e.alive) {
+			if (!e.alive || e.paintoverride) {
 				g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
 				for (int j = 0; j < e.getProjectiles().size(); j++) {
 					Projectile p = e.getProjectiles().get(j);
@@ -1768,9 +1773,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	}
 
 	private void callEnemiesAIs() {
-		for (Enemy e : getEnemyarray()) {
-			e.launchAI();
-		}
+		for (int i = 0; i < enemyarray.size(); i++)
+			enemyarray.get(i).launchAI();
 	}
 
 	private void checkEnemiesCollision() {
@@ -1987,8 +1991,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		}
 		int i = 0;
 		while (i < leavingitems.size()) {
-			if (leavingitems.get(i).effectactive && leavingitems.get(i).isEffectAbove()) {
-				g.drawImage(leavingitems.get(i).getEffectSprite(), leavingitems.get(i).getEffectCenterX() - 31, leavingitems.get(i).getEffectCenterY() - 31,
+			if (leavingitems.get(i).effectactive) {
+				if (leavingitems.get(i).isEffectAbove())
+					g.drawImage(leavingitems.get(i).getEffectSprite(), leavingitems.get(i).getEffectCenterX() - 31, leavingitems.get(i).getEffectCenterY() - 31,
 						this);
 				i++;
 			} else
@@ -2005,8 +2010,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		}
 		int i = 0;
 		while (i < leavingitems.size()) {
-			if (leavingitems.get(i).effectactive && !leavingitems.get(i).isEffectAbove()) {
-				g.drawImage(leavingitems.get(i).getEffectSprite(), leavingitems.get(i).getEffectCenterX() - 31, leavingitems.get(i).getEffectCenterY() - 31,
+			if (leavingitems.get(i).effectactive) {
+				if (!leavingitems.get(i).isEffectAbove())
+					g.drawImage(leavingitems.get(i).getEffectSprite(), leavingitems.get(i).getEffectCenterX() - 31, leavingitems.get(i).getEffectCenterY() - 31,
 						this);
 				i++;
 			} else
