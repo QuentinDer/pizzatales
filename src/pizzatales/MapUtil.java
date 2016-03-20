@@ -1,5 +1,6 @@
 package pizzatales;
 
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -187,4 +188,32 @@ public class MapUtil {
 		}
 	}
 	
+	public static void bitmask(Image[][] background, Image path, Image outside, Image[] cornerset) {
+		if (cornerset.length != 16)
+			return;
+		int tmp;
+		boolean [][] bitmap = new boolean[StartingClass.width][StartingClass.height];
+		for (int i = 0; i < StartingClass.width; i++) {
+			for (int j = 0; j < StartingClass.height; j++) {
+				if (outside.equals(background[i][j]))
+					bitmap[i][j] = true;
+			}
+		}
+		for (int i = 0; i < StartingClass.width; i++) {
+			for (int j = 0; j < StartingClass.height; j++) {
+				tmp = 0;
+				if (path.equals(background[i][j])) {
+					if (j > 0 && !bitmap[i][j-1])
+						tmp++;
+					if (j < StartingClass.height-1 && !bitmap[i][j+1])
+						tmp += 8;
+					if (i > 0 && !bitmap[i-1][j])
+						tmp += 2;
+					if (i < StartingClass.width-1 && !bitmap[i+1][j])
+						tmp += 4;
+					background[i][j] = cornerset[tmp];
+				}
+			}
+		}
+	}
 }

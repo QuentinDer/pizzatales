@@ -47,7 +47,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private boolean azerty = true;
 	private static Player player;
 	public static int isGrinning;
-	private Image image, background;
+	private Image image;
 	private Image blooddrop;
 	private Image grinningsprite;
 	public static Image tileTree, /*tileGrass, */tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit,
@@ -319,7 +319,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Oniough.move2Sprite = new ImageIcon(getClass().getResource("/data/onioughWalk2.png")).getImage();
 		Oniough.onioughStomp1 = new ImageIcon(getClass().getResource("/data/onioughStomp1.png")).getImage();
 		Oniough.onioughStomp2 = new ImageIcon(getClass().getResource("/data/onioughStomp2.png")).getImage();
-		//Oniough.dieSprite = new ImageIcon(getClass().getResource("/data/oniough.png")).getImage();
+		Oniough.dieSprite = new ImageIcon(getClass().getResource("/data/onioughdead.png")).getImage();
 		Garlnstein.staySprite = new ImageIcon(getClass().getResource("/data/garlnstein.png")).getImage();
 		Garlnstein.move1Sprite = new ImageIcon(getClass().getResource("/data/garlnsteinWalk1.png")).getImage();
 		Garlnstein.move2Sprite = new ImageIcon(getClass().getResource("/data/garlnsteinWalk2.png")).getImage();
@@ -479,7 +479,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				bg.setCenterX(0);
 				bg.setCenterY(0);
 				bginity = bg.getCenterY() - 15;
-				background = new ImageIcon(getClass().getResource("/data/"+Level.getBackground(currentlevel))).getImage();
 				try {
 					loadMap("/data/" + Level.getMapName(currentlevel));
 				} catch (IOException e) {
@@ -538,7 +537,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		bg.setCenterX(0);
 		bg.setCenterY(0);
 		bginity = bg.getCenterY() - 15;
-		background = new ImageIcon(getClass().getResource("/data/"+Level.getBackground(currentlevel))).getImage();
 		try {
 			loadMap("/data/" + Level.getMapName(currentlevel));
 		} catch (IOException e) {
@@ -600,6 +598,12 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		char[][] charmap = new char[width][height];
 		heightitemmap = new int[width][height];
 		backgroundmap = new Image[width][height];
+		Image background = new ImageIcon(getClass().getResource("/data/"+Level.getBackground(currentlevel))).getImage();
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				backgroundmap[i][j] = background;
+			}
+		}
 		HashMap<Integer, EntryDoor> mentrydoors = new HashMap<Integer, EntryDoor>();
 		HashMap<Integer, Tile> doors = new HashMap<Integer, Tile>();
 		HashMap<Integer, HiddenTrigger> hiddentriggers = new HashMap<Integer, HiddenTrigger>();
@@ -686,6 +690,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				if (BackgroundFactory.isBackgroundImage(ch)) {
 					backgroundmap[k][j] = BackgroundFactory.getBackground(ch);
 				}
+				
 				if (TileFactory.isTileTypeSupported(ch)) {
 					Tile t = TileFactory.getTile(k + deltapx, j + deltapy, ch);
 					tilearray.add(t);
@@ -706,6 +711,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					k++;
 			}
 		}
+		Level.bitmask(currentlevel, backgroundmap);
 		ArrayList<Integer> nonobstacles = new ArrayList<Integer>();
 		int k = 0;
 		for (int i = 0; i < width; i++) {
@@ -1347,6 +1353,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					if (player.getHealth() < 1) {
 						state = GameState.Dead;
 						player.controlledstopMoving();
+						player.setScrollingSpeedY(0);
+						player.setScrollingSpeedX(0);
 						clip.stop();
 					}
 				}
@@ -1479,7 +1487,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					bg.setCenterY(0);
 					bginity = bg.getCenterY() - 15;
 					deathCountdown = 180;
-					background = new ImageIcon(getClass().getResource("/data/"+Level.getBackground(currentlevel))).getImage();
 					try {
 						loadMap("/data/"+Level.getMapName(currentlevel));
 					} catch (IOException e) {
@@ -1539,7 +1546,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				bg.setCenterX(0);
 				bg.setCenterY(0);
 				bginity = bg.getCenterY() - 15;
-				background = new ImageIcon(getClass().getResource("/data/"+Level.getBackground(currentlevel))).getImage();
 				try {
 					loadMap("/data/"+Level.getMapName(currentlevel));
 				} catch (IOException e) {
@@ -1599,10 +1605,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		int bby = bg.getCenterY() - bginity;
 		for (int y = sty; y < fy; y++) {
 			for (int x = stx; x < fx; x++) {
-				if (backgroundmap[x][y] == null)
-					g.drawImage(background, 50*x+bbx, 50*y+bby, this);
-				else
-					g.drawImage(backgroundmap[x][y], 50*x+bbx, 50*y+bby, this);
+				g.drawImage(backgroundmap[x][y], 50*x+bbx, 50*y+bby, this);
 			}
 		}
 		//g.drawImage(background, bg.getCenterX(), bg.getCenterY(), this);

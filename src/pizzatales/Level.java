@@ -3,6 +3,8 @@ package pizzatales;
 import java.awt.Image;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+
 public class Level {
 
 	public static String getMapName(int level) {
@@ -89,5 +91,38 @@ public class Level {
 		
 		}
 		return hats;
+	}
+	
+	public static void bitmask(int level, Image[][] background) {
+		switch ((level-1)/4+1) {
+		case 1:
+			Image[] cornerset = new Image[16];
+			cornerset[0] = new ImageIcon(StartingClass.class.getResource("/data/dirt0.png")).getImage();
+			cornerset[1] = new ImageIcon(StartingClass.class.getResource("/data/dirt1.png")).getImage();
+			cornerset[2] = new ImageIcon(StartingClass.class.getResource("/data/dirt2.png")).getImage();
+			cornerset[3] = new ImageIcon(StartingClass.class.getResource("/data/dirt3.png")).getImage();
+			cornerset[4] = new ImageIcon(StartingClass.class.getResource("/data/dirt4.png")).getImage();
+			cornerset[5] = new ImageIcon(StartingClass.class.getResource("/data/dirt5.png")).getImage();
+			cornerset[6] = new ImageIcon(StartingClass.class.getResource("/data/dirt6.png")).getImage();
+			cornerset[7] = new ImageIcon(StartingClass.class.getResource("/data/dirt7.png")).getImage();
+			cornerset[8] = new ImageIcon(StartingClass.class.getResource("/data/dirt8.png")).getImage();
+			cornerset[9] = new ImageIcon(StartingClass.class.getResource("/data/dirt9.png")).getImage();
+			cornerset[10] = new ImageIcon(StartingClass.class.getResource("/data/dirt10.png")).getImage();
+			cornerset[11] = new ImageIcon(StartingClass.class.getResource("/data/dirt11.png")).getImage();
+			cornerset[12] = new ImageIcon(StartingClass.class.getResource("/data/dirt12.png")).getImage();
+			cornerset[13] = new ImageIcon(StartingClass.class.getResource("/data/dirt13.png")).getImage();
+			cornerset[14] = new ImageIcon(StartingClass.class.getResource("/data/dirt14.png")).getImage();
+			cornerset[15] = BackgroundFactory.dirt;
+			MapUtil.bitmask(background, BackgroundFactory.dirt, BackgroundFactory.grass, cornerset);
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		}
 	}
 }
