@@ -32,19 +32,19 @@ public class Level {
 		switch ((level-1)/4+1) {
 		case 1:
 			//ans = "background1.png";
-			ans = "back1.png";
+			ans = "grass.png";
 			break;
 		case 2:
-			ans = "background2.png";
+			ans = "cavefloor.png";
 			break;
 		case 3:
-			ans = "background3.png";
+			ans = "dirt.png";
 			break;
 		case 4:
-			ans = "background4.png";
+			ans = "bricktile.png";
 			break;
 		case 5:
-			ans = "background5.png";
+			ans = "mountainfloor.png";
 			break;
 		}
 		return ans;
