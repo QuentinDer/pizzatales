@@ -65,7 +65,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private Clip clip;
 
 	
-	public static final boolean TESTMODE = false;
+	public static final boolean TESTMODE = true;
 	public static int difficultylevel = TESTMODE ? 3 : 1;
 	public static int currentlevel = TESTMODE ? 1: 1;
 	private int maxlevel = 20;
@@ -92,6 +92,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static GameState state = GameState.Menu;
 
 	public static BlockingStuff[][] map;
+	private Image[][] backgroundmap; 
+	
 	public static int width;
 	public static int height;
 	public static int[][] heightitemmap;
@@ -185,6 +187,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		tileSnowRock = new ImageIcon(getClass().getResource("/data/snowrock.png")).getImage();
 		tileMudWall = new ImageIcon(getClass().getResource("/data/mudwall.png")).getImage();
 		tileSky = new ImageIcon(getClass().getResource("/data/sky.png")).getImage();
+		
+		BackgroundFactory.dirt = new ImageIcon(getClass().getResource("/data/dirt.png")).getImage();
 
 		blooddrop = new ImageIcon(getClass().getResource("/data/blooddrop.png")).getImage();
 		Gun.leftSprite = new ImageIcon(getClass().getResource("/data/pistol1.png")).getImage();
@@ -591,6 +595,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		map = new BlockingStuff[width][height];
 		char[][] charmap = new char[width][height];
 		heightitemmap = new int[width][height];
+		backgroundmap = new Image[width][height];
 		HashMap<Integer, EntryDoor> mentrydoors = new HashMap<Integer, EntryDoor>();
 		HashMap<Integer, Tile> doors = new HashMap<Integer, Tile>();
 		HashMap<Integer, HiddenTrigger> hiddentriggers = new HashMap<Integer, HiddenTrigger>();
@@ -673,6 +678,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					if (ch == 'm') {
 						hiddentriggers.put(height * k + j, (HiddenTrigger) it);
 					}
+				}
+				if (BackgroundFactory.isBackgroundImage(ch)) {
+					backgroundmap[k][j] = BackgroundFactory.getBackground(ch);
 				}
 				if (TileFactory.isTileTypeSupported(ch)) {
 					Tile t = TileFactory.getTile(k + deltapx, j + deltapy, ch);
@@ -1587,7 +1595,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		int bby = bg.getCenterY() - bginity;
 		for (int y = sty; y < fy; y++) {
 			for (int x = stx; x < fx; x++) {
-				g.drawImage(background, 50*x+bbx, 50*y+bby, this);
+				if (backgroundmap[x][y] == null)
+					g.drawImage(background, 50*x+bbx, 50*y+bby, this);
+				else
+					g.drawImage(backgroundmap[x][y], 50*x+bbx, 50*y+bby, this);
 			}
 		}
 		//g.drawImage(background, bg.getCenterX(), bg.getCenterY(), this);
