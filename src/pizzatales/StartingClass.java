@@ -188,7 +188,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		tileMudWall = new ImageIcon(getClass().getResource("/data/mudwall.png")).getImage();
 		tileSky = new ImageIcon(getClass().getResource("/data/sky.png")).getImage();
 		
+		BackgroundFactory.grass = new ImageIcon(getClass().getResource("/data/grass.png")).getImage();
+		BackgroundFactory.cave = new ImageIcon(getClass().getResource("/data/cavefloor.png")).getImage();
 		BackgroundFactory.dirt = new ImageIcon(getClass().getResource("/data/dirt.png")).getImage();
+		BackgroundFactory.brick = new ImageIcon(getClass().getResource("/data/bricktile.png")).getImage();
+		BackgroundFactory.mountain = new ImageIcon(getClass().getResource("/data/mountainfloor.png")).getImage();
 
 		blooddrop = new ImageIcon(getClass().getResource("/data/blooddrop.png")).getImage();
 		Gun.leftSprite = new ImageIcon(getClass().getResource("/data/pistol1.png")).getImage();
