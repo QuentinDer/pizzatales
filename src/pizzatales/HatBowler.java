@@ -37,14 +37,14 @@ public class HatBowler extends Hat {
 
 	@Override
 	public void effectArmor() {
-		player.getArmor().setDefense(player.getArmor().getDefense()+4);
-		player.getArmor().MAXDEF += 4;
+		player.getArmor().setDefense(player.getArmor().getDefense()+8);
+		player.getArmor().MAXDEF += 8;
 	}
 
 	@Override
 	public void undoEffectArmor() {
-		player.getArmor().setDefense(Math.max(0, player.getArmor().getDefense()-4));
-		player.getArmor().MAXDEF -= 4;
+		player.getArmor().setDefense(Math.max(0, player.getArmor().getDefense()-8));
+		player.getArmor().MAXDEF -= 8;
 	}
 	
 }

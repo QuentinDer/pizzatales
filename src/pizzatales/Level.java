@@ -68,8 +68,20 @@ public class Level {
 	public static ArrayList<Firearm> getPizzaBoxFirearms(int level) {
 		ArrayList<Firearm> firearms = new ArrayList<Firearm>();
 		switch (level) {
-		case 0:
+		case 1:
 			firearms.add(new Shotgun());
+			break;
+		case 5:
+			firearms.add(new Rifle());
+			break;
+		case 10:
+			firearms.add(new Smg());
+			break;
+		case 14:
+			firearms.add(new Rocket());
+			break;
+		case 17:
+			firearms.add(new Flamer());
 			break;
 		}
 		return firearms;
@@ -78,8 +90,17 @@ public class Level {
 	public static ArrayList<Armor> getPizzaBoxArmors(int level) {
 		ArrayList<Armor> armors = new ArrayList<Armor>();
 		switch(level) {
-		case 0:
+		case 4:
 			armors.add(new CheeseArmor());
+			break;
+		case 8:
+			armors.add(new HawaiiArmor());
+			break;
+		case 12:
+			armors.add(new ChicagoArmor());
+			break;
+		case 16:
+			armors.add(new MargheritaArmor());
 			break;
 		}
 		return armors;
@@ -88,7 +109,24 @@ public class Level {
 	public static ArrayList<Hat> getPizzaBoxHats(int level) {
 		ArrayList<Hat> hats = new ArrayList<Hat>();
 		switch(level) {
-		
+		case 2:
+			hats.add(new HatBowler());
+			break;
+		case 6:
+			hats.add(new HatBaseball());
+			break;
+		case 11:
+			hats.add(new HatFedora());
+			break;
+		case 13:
+			hats.add(new HatSherlock());
+			break;
+		case 15:
+			hats.add(new HatPanama());
+			break;
+		case 19:
+			hats.add(new HatTop());
+			break;
 		}
 		return hats;
 	}

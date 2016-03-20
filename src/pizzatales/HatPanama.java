@@ -15,14 +15,14 @@ public class HatPanama extends Hat {
 	
 	@Override
 	public void effect(){
-		player.setHealth(player.getHealth()+5);
-		player.setMaxHealth(player.getMaxHealth()+5);
+		player.setHealth(player.getHealth()+10);
+		player.setMaxHealth(player.getMaxHealth()+10);
 	}
 	
 	@Override
 	public void undoEffect(){
-		player.setHealth(Math.max(1.0f, player.getHealth()-5));
-		player.setMaxHealth(player.getMaxHealth()-5);
+		player.setHealth(Math.max(1.0f, player.getHealth()-10));
+		player.setMaxHealth(player.getMaxHealth()-10);
 	}
 
 	@Override
