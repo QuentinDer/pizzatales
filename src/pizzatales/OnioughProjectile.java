@@ -19,7 +19,7 @@ public class OnioughProjectile extends Projectile {
 	}
 	
 	public OnioughProjectile(int startX, int startY, float vectorX, float vectorY, int cspeed, int angle, int dist) {
-		super(startX, startY, vectorX, vectorY, 10, 0.7f, 15, 7, 10000);
+		super(startX, startY, vectorX, vectorY, 10, 1.0f, 15, 7, 10000);
 		this.angle = angle;
 		this.dist = dist;
 		type = 1;

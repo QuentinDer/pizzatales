@@ -31,7 +31,8 @@ public class Level {
 		String ans = "";
 		switch ((level-1)/4+1) {
 		case 1:
-			ans = "background1.png";
+			//ans = "background1.png";
+			ans = "back1.png";
 			break;
 		case 2:
 			ans = "background2.png";

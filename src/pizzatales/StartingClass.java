@@ -65,9 +65,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private Clip clip;
 
 	
-	public static final boolean TESTMODE = true;
-	public static int difficultylevel = TESTMODE ? 4 : 1;
-	public static int currentlevel = TESTMODE ? 16: 1;
+	public static final boolean TESTMODE = false;
+	public static int difficultylevel = TESTMODE ? 3 : 1;
+	public static int currentlevel = TESTMODE ? 1: 1;
 	private int maxlevel = 20;
 
 	public int weaponindex;
@@ -1579,7 +1579,18 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	 */
 
 	private void paintOffScreen(Graphics g) {
-		g.drawImage(background, bg.getCenterX(), bg.getCenterY(), this);
+		int stx = Math.max(0, (-50 - bg.getCenterX() + StartingClass.bginitx) / 50);
+		int sty = Math.max(0, (-50 - bg.getCenterY() + StartingClass.bginity) / 50);
+		int fx = Math.min(width, (1330 - bg.getCenterX() + StartingClass.bginitx) / 50);
+		int fy = Math.min(height, (850 - bg.getCenterY() + StartingClass.bginity) / 50);
+		int bbx = bg.getCenterX() - bginitx;
+		int bby = bg.getCenterY() - bginity;
+		for (int y = sty; y < fy; y++) {
+			for (int x = stx; x < fx; x++) {
+				g.drawImage(background, 50*x+bbx, 50*y+bby, this);
+			}
+		}
+		//g.drawImage(background, bg.getCenterX(), bg.getCenterY(), this);
 		paintItems(g);
 		paintItemEffectBelow(g);
 		for (Enemy e : getEnemyarray()) {
@@ -1595,10 +1606,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				g.drawImage(p.getSprite(), p.getCenterX() - p.halfsize, p.getCenterY() - p.halfsize, this);
 			}
 		}
-		int stx = Math.max(0, (-50 - bg.getCenterX() + StartingClass.bginitx) / 50);
-		int sty = Math.max(0, (-50 - bg.getCenterY() + StartingClass.bginity) / 50);
-		int fx = Math.min(width, (1330 - bg.getCenterX() + StartingClass.bginitx) / 50);
-		int fy = Math.min(height, (850 - bg.getCenterY() + StartingClass.bginity) / 50);
 		for (int y = sty; y < fy; y++) {
 			for (int x = stx; x < fx; x++) {
 				if (null != map[x][y]) {
