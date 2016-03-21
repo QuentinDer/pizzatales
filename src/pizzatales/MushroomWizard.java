@@ -363,7 +363,6 @@ public class MushroomWizard extends Enemy {
 		int posl;
 		int poslx;
 		int posly;
-		boolean test;
 		
 		int toheal = maxHealth * (StartingClass.difficultylevel-phase)/StartingClass.difficultylevel;
 		float deltaheal = (toheal-health)/(240.0f);
@@ -451,15 +450,13 @@ public class MushroomWizard extends Enemy {
 					posl = (int)(Math.random()*insideareasize);
 					poslx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) / StartingClass.height;
 					posly = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) % StartingClass.height;
-					test = false;
-					for (Item it : StartingClass.items)
-						test = test || (it.posx == poslx && it.posy == posly);
-				} while (test || Math.abs(player.posx-poslx) <=1 || Math.abs(player.posy-posly) <= 1);
+				} while (StartingClass.heightitemmap[poslx][posly]>=0 || Math.abs(player.posx-poslx) <=1 || Math.abs(player.posy-posly) <= 1);
 				Lava l1 = new Lava(poslx,posly,0,0,false,0);
 				l1.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
 				l1.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
 				l1.r.setBounds(l1.getCenterX() - 22, l1.getCenterY() - 22, 45, 45);
-				StartingClass.items.add(l1);
+				StartingClass.items[poslx][posly][0] = l1;
+				StartingClass.heightitemmap[poslx][posly]++;
 				summoningstep++;
 			}
 			if (summoningstep == 1 && fhealth > toheal - 5 * summoningdelta) {
@@ -468,15 +465,13 @@ public class MushroomWizard extends Enemy {
 					posl = (int)(Math.random()*insideareasize);
 					poslx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) / StartingClass.height;
 					posly = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) % StartingClass.height;
-					test = false;
-					for (Item it : StartingClass.items)
-						test = test || (it.posx == poslx && it.posy == posly);
-				} while (test || Math.abs(player.posx-poslx) >3 || Math.abs(player.posy-posly) > 3);
+				} while (StartingClass.heightitemmap[poslx][posly]>=0 || Math.abs(player.posx-poslx) >3 || Math.abs(player.posy-posly) > 3);
 				HealthPotion h1 = new HealthPotion(poslx,posly,0,0,true,0);
 				h1.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
 				h1.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
 				h1.r.setBounds(h1.getCenterX() - 22, h1.getCenterY() - 22, 45, 45);
-				StartingClass.items.add(h1);
+				StartingClass.items[poslx][posly][0] = h1;
+				StartingClass.heightitemmap[poslx][posly]++;
 				summoningstep++;
 			}
 			if (summoningstep == 3 && fhealth > toheal - 4 * summoningdelta) {
@@ -485,15 +480,13 @@ public class MushroomWizard extends Enemy {
 					posl = (int)(Math.random()*insideareasize);
 					poslx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) / StartingClass.height;
 					posly = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) % StartingClass.height;
-					test = false;
-					for (Item it : StartingClass.items)
-						test = test || (it.posx == poslx && it.posy == posly);
-				} while (test || Math.abs(player.posx-poslx) <=1 || Math.abs(player.posy-posly) <= 1);
+				} while (StartingClass.heightitemmap[poslx][posly]>=0 || Math.abs(player.posx-poslx) <=1 || Math.abs(player.posy-posly) <= 1);
 				Lava l2 = new Lava(poslx,posly,0,0,false,0);
 				l2.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
 				l2.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
 				l2.r.setBounds(l2.getCenterX() - 22, l2.getCenterY() - 22, 45, 45);
-				StartingClass.items.add(l2);
+				StartingClass.items[poslx][posly][0] = l2;
+				StartingClass.heightitemmap[poslx][posly]++;
 				summoningstep++;
 			}
 			if (summoningstep == 2 && fhealth > toheal - 3 * summoningdelta) {
@@ -502,15 +495,13 @@ public class MushroomWizard extends Enemy {
 					posl = (int)(Math.random()*insideareasize);
 					poslx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) / StartingClass.height;
 					posly = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) % StartingClass.height;
-					test = false;
-					for (Item it : StartingClass.items)
-						test = test || (it.posx == poslx && it.posy == posly);
-				} while (test || Math.abs(player.posx-poslx) <=1 || Math.abs(player.posy-posly) <= 1);
+				} while (StartingClass.heightitemmap[poslx][posly]>=0 || Math.abs(player.posx-poslx) <=1 || Math.abs(player.posy-posly) <= 1);
 				WaterFlow w1 = new WaterFlow(poslx,posly,0,0,false,0);
 				w1.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
 				w1.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
 				w1.r.setBounds(w1.getCenterX() - 22, w1.getCenterY() - 22, 45, 45);
-				StartingClass.items.add(w1);
+				StartingClass.items[poslx][posly][0] = w1;
+				StartingClass.heightitemmap[poslx][posly]++;
 				summoningstep++;
 			}
 			if (summoningstep == 3 && fhealth > toheal - 2 * summoningdelta) {
@@ -519,15 +510,13 @@ public class MushroomWizard extends Enemy {
 					posl = (int)(Math.random()*insideareasize);
 					poslx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) / StartingClass.height;
 					posly = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) % StartingClass.height;
-					test = false;
-					for (Item it : StartingClass.items)
-						test = test || (it.posx == poslx && it.posy == posly);
-				} while (test || Math.abs(player.posx-poslx) <=1 || Math.abs(player.posy-posly) <= 1);
+				} while (StartingClass.heightitemmap[poslx][posly]>=0 || Math.abs(player.posx-poslx) <=1 || Math.abs(player.posy-posly) <= 1);
 				Lava l3 = new Lava(poslx,posly,0,0,false,0);
 				l3.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
 				l3.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
 				l3.r.setBounds(l3.getCenterX() - 22, l3.getCenterY() - 22, 45, 45);
-				StartingClass.items.add(l3);
+				StartingClass.items[poslx][posly][0] = l3;
+				StartingClass.heightitemmap[poslx][posly]++;
 				summoningstep++;
 			}
 			if (summoningstep == 4 && fhealth > toheal - 1 * summoningdelta) {
@@ -536,15 +525,13 @@ public class MushroomWizard extends Enemy {
 					posl = (int)(Math.random()*insideareasize);
 					poslx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) / StartingClass.height;
 					posly = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(posl) % StartingClass.height;
-					test = false;
-					for (Item it : StartingClass.items)
-						test = test || (it.posx == poslx && it.posy == posly);
-				} while (test || Math.abs(player.posx-poslx) > 3 || Math.abs(player.posy-posly) > 3);
+				} while (StartingClass.heightitemmap[poslx][posly]>=0 || Math.abs(player.posx-poslx) > 3 || Math.abs(player.posy-posly) > 3);
 				ArmorPotion a1 = new ArmorPotion(poslx,posly,0,0,true,0);
 				a1.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
 				a1.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
 				a1.r.setBounds(a1.getCenterX() - 22, a1.getCenterY() - 22, 45, 45);
-				StartingClass.items.add(a1);
+				StartingClass.items[poslx][posly][0] = a1;
+				StartingClass.heightitemmap[poslx][posly]++;
 				summoningstep++;
 			}
 			if (animcounter % 20 < 10)

@@ -67,6 +67,40 @@ public class Player extends BlockingStuff {
 		super.setCenterY(centerY);
 		posy = (centerY - bg.getCenterY() + StartingClass.bginity) / 50;
 	}
+	
+	private final void chekCollisionsWithItems(int x, int y) {
+		if (StartingClass.map[x][y] == null || !Tile.class.isInstance(StartingClass.map[x][y])) {
+			int h = 0;
+			while (h <= StartingClass.heightitemmap[x][y]) {
+				if (StartingClass.items[x][y][h].checkCollisionPlayer(this))
+					StartingClass.removeItem(StartingClass.items[x][y][h]);
+				else
+					h++;
+			}
+		}
+	}
+	
+	public void checkCollisionsWithItems() {
+		chekCollisionsWithItems(posx,posy);
+		if (posx != 0) {
+			chekCollisionsWithItems(posx-1,posy);
+			if (posy != 0)
+				chekCollisionsWithItems(posx-1,posy-1);
+			if (posy != StartingClass.height - 1)
+				chekCollisionsWithItems(posx-1,posy+1);
+		}
+		if (posx != StartingClass.width - 1) {
+			chekCollisionsWithItems(posx+1,posy);
+			if (posy != 0)
+				chekCollisionsWithItems(posx+1,posy-1);
+			if (posy != StartingClass.height - 1)
+				chekCollisionsWithItems(posx+1,posy+1);
+		}
+		if (posy != 0)
+			chekCollisionsWithItems(posx,posy-1);
+		if (posy != StartingClass.height - 1)
+			chekCollisionsWithItems(posx,posy+1);
+	}
 
 	public void checkCollisionsWithBlockingStuff() {
 		/*if (diffX > diffY && diffY < 45) {

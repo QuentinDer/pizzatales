@@ -5,18 +5,17 @@ import java.awt.Image;
 public class CrateOpen extends Item {
 
 	public static Image sprite;
-	private int counter;
 	
 	public CrateOpen(int x, int y, int deltapx, int deltapy,
 			boolean onetimeeffect, int height) {
 		super(x, y, deltapx, deltapy, onetimeeffect, height);
-		counter = 300;
+		effectactive = true;
+		effectTimer = 300;
 	}
 	
 	@Override
 	public boolean checkCollisionPlayer(Player p) {
-		counter--;
-		return counter <= 0;
+		return false;
 	}
 	
 	@Override
@@ -34,23 +33,22 @@ public class CrateOpen extends Item {
 
 	@Override
 	protected Image getSprite() {
-		return sprite;
-	}
-
-	@Override
-	protected Image getEffectSprite() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
+	protected Image getEffectSprite() {
+		return sprite;
+	}
+
+	@Override
 	protected int getEffectCenterX() {
-		return 0;
+		return centerX;
 	}
 
 	@Override
 	protected int getEffectCenterY() {
-		return 0;
+		return centerY;
 	}
 
 	@Override

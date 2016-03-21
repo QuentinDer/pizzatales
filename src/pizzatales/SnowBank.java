@@ -4,7 +4,6 @@ import java.awt.Image;
 
 public class SnowBank extends BackgroundItem {
 
-	public static Image sprite;
 	public static Image snoweffectsprite;
 	private boolean wasActive;
 	private int icY;
@@ -28,7 +27,7 @@ public class SnowBank extends BackgroundItem {
 
 	@Override
 	protected Image getSprite() {
-		return sprite;
+		return null;
 	}
 
 	@Override

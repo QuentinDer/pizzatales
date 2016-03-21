@@ -26,17 +26,17 @@ public class Chest extends DestroyableTile {
 				nposy--;
 		} else
 			nposy++;
-		for (Item it : StartingClass.items) {
-			if (it.posx == posx && it.posy == posy) {
-				it.posx = nposx;
-				it.posy = nposy;
-				it.setCenterX(tcenterX+50*(nposx-posx));
-				it.setCenterY(tcenterY+50*(nposy-posy));
-				it.r.setBounds(it.getCenterX() - 22, it.getCenterY() - 22, 45, 45);
-			}
+		for (int h = 0; h <= StartingClass.heightitemmap[posx][posy]; h++) {
+			StartingClass.items[nposx][nposy][h] = StartingClass.items[posx][posy][h];
+			StartingClass.items[posx][posy][h] = null;
+			StartingClass.items[nposx][nposy][h].setCenterX(tcenterX+50*(nposx-posx));
+			StartingClass.items[nposx][nposy][h].setCenterY(tcenterY+50*(nposy-posy));
+			StartingClass.items[nposx][nposy][h].r.setBounds(StartingClass.items[nposx][nposy][h].getCenterX() - 22, StartingClass.items[nposx][nposy][h].getCenterY() - 22, 45, 45);
+			StartingClass.items[nposx][nposy][h].posx = nposx;
+			StartingClass.items[nposx][nposy][h].posy = nposy;
 		}
 		int tmp = StartingClass.heightitemmap[posx][posy];
-		StartingClass.heightitemmap[posx][posy] = 0;
+		StartingClass.heightitemmap[posx][posy] = -1;
 		StartingClass.heightitemmap[nposx][nposy] = tmp;
 	}
 }

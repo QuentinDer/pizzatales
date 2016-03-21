@@ -404,7 +404,6 @@ public class Garlnstein extends Enemy {
 							if (count > 2) {
 								StartingClass.map[posx+ix][posy+iy] = null;
 								StartingClass.getTilearray().remove(t);
-								StartingClass.heightitemmap[posx+ix][posy+iy]--;
 							}
 						}
 					}

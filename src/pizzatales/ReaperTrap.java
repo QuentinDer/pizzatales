@@ -36,7 +36,6 @@ public class ReaperTrap extends Item {
 			b.setTileImage(StartingClass.tileBarrel);
 			StartingClass.getTilearray().add(b);
 			StartingClass.destroyabletiles.add(b);
-			StartingClass.heightitemmap[postx][posty]++;
 		}
 		if (StartingClass.map[posx+1][posy] == null) {
 			int postx = posx+1;
@@ -47,7 +46,6 @@ public class ReaperTrap extends Item {
 			b.setTileImage(StartingClass.tileBarrel);
 			StartingClass.getTilearray().add(b);
 			StartingClass.destroyabletiles.add(b);
-			StartingClass.heightitemmap[postx][posty]++;
 		}
 		if (StartingClass.map[posx][posy-1] == null) {
 			int postx = posx;
@@ -58,7 +56,6 @@ public class ReaperTrap extends Item {
 			b.setTileImage(StartingClass.tileBarrel);
 			StartingClass.getTilearray().add(b);
 			StartingClass.destroyabletiles.add(b);
-			StartingClass.heightitemmap[postx][posty]++;
 		}
 		if (StartingClass.map[posx][posy+1] == null) {
 			int postx = posx;
@@ -69,7 +66,6 @@ public class ReaperTrap extends Item {
 			b.setTileImage(StartingClass.tileBarrel);
 			StartingClass.getTilearray().add(b);
 			StartingClass.destroyabletiles.add(b);
-			StartingClass.heightitemmap[postx][posty]++;
 		}
 		if (StartingClass.map[posx-1][posy-1] == null) {
 			int postx = posx-1;
@@ -80,7 +76,6 @@ public class ReaperTrap extends Item {
 			b.setTileImage(StartingClass.tileBarrel);
 			StartingClass.getTilearray().add(b);
 			StartingClass.destroyabletiles.add(b);
-			StartingClass.heightitemmap[postx][posty]++;
 		}
 		if (StartingClass.map[posx-1][posy+1] == null) {
 			int postx = posx-1;
@@ -91,7 +86,6 @@ public class ReaperTrap extends Item {
 			b.setTileImage(StartingClass.tileBarrel);
 			StartingClass.getTilearray().add(b);
 			StartingClass.destroyabletiles.add(b);
-			StartingClass.heightitemmap[postx][posty]++;
 		}
 		if (StartingClass.map[posx+1][posy-1] == null) {
 			int postx = posx+1;
@@ -102,7 +96,6 @@ public class ReaperTrap extends Item {
 			b.setTileImage(StartingClass.tileBarrel);
 			StartingClass.getTilearray().add(b);
 			StartingClass.destroyabletiles.add(b);
-			StartingClass.heightitemmap[postx][posty]++;
 		}
 		if (StartingClass.map[posx+1][posy+1] == null) {
 			int postx = posx+1;
@@ -113,7 +106,6 @@ public class ReaperTrap extends Item {
 			b.setTileImage(StartingClass.tileBarrel);
 			StartingClass.getTilearray().add(b);
 			StartingClass.destroyabletiles.add(b);
-			StartingClass.heightitemmap[postx][posty]++;
 		}
 		CarolinaReaper.trapscount--;
 		CarolinaReaper.notifytrap = true;

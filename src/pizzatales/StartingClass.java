@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.AbstractMap.SimpleEntry;
@@ -66,8 +67,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	
 	public static final boolean TESTMODE = true;
-	public static int difficultylevel = TESTMODE ? 3 : 1;
-	public static int currentlevel = TESTMODE ? 3: 1;
+	public static int difficultylevel = TESTMODE ? 1 : 1;
+	public static int currentlevel = TESTMODE ? 19 : 1;
 	private int maxlevel = 20;
 
 	public int weaponindex;
@@ -99,7 +100,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static int[][] heightitemmap;
 
 	private static ArrayList<Tile> tilearray = new ArrayList<Tile>();
-	public static ArrayList<Item> items = new ArrayList<Item>();
+	//public static ArrayList<Item> items = new ArrayList<Item>();
+	public static Item[][][] items;
 	public static ArrayList<Item> leavingitems = new ArrayList<Item>();
 	public static ArrayList<Enemy> enemyarray = new ArrayList<Enemy>();
 	public static ArrayList<ArrayList<Enemy>> arenaenemies = new ArrayList<ArrayList<Enemy>>();
@@ -358,7 +360,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		ReaperTrap.pizzatrap = new ImageIcon(getClass().getResource("/data/pizzatrap.png")).getImage();
 		ReaperTrap.potiontrap = new ImageIcon(getClass().getResource("/data/potiontrap.png")).getImage();
 		ReaperTrap.potiontrap1 = new ImageIcon(getClass().getResource("/data/potiontrap1.png")).getImage();
-		SnowBank.sprite = new ImageIcon(getClass().getResource("/data/snowbank.png")).getImage();
+		BackgroundFactory.snow = new ImageIcon(getClass().getResource("/data/snowbank.png")).getImage();
 		SnowBank.snoweffectsprite = new ImageIcon(getClass().getResource("/data/snowbankeffect.png")).getImage();
 		Ice.sprite = new ImageIcon(getClass().getResource("/data/ice.png")).getImage();
 
@@ -597,6 +599,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		map = new BlockingStuff[width][height];
 		char[][] charmap = new char[width][height];
 		heightitemmap = new int[width][height];
+		for (int i = 0; i < width; i++)
+			Arrays.fill(heightitemmap[i], -1);
 		backgroundmap = new Image[width][height];
 		Image background = new ImageIcon(getClass().getResource("/data/"+Level.getBackground(currentlevel))).getImage();
 		for (int i = 0; i < width; i++) {
@@ -617,6 +621,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			int widthl = width;
 			inBlock = false;
 			int k = 0;
+			int itemheight = 0;
 			for (int i = 0; i < widthl; i++) {
 				char c = line.charAt(i);
 				if (c != '[' && c != ']')
@@ -627,16 +632,22 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				}
 				if (c == '[') {
 					inBlock = true;
+					itemheight = -1;
 				}
 				if (c == ']') {
 					inBlock = false;
+					itemheight = 0;
 				}
 				if (inBlock) {
+					if (itemheight > blockmaxheight)
+						blockmaxheight = itemheight;
+					itemheight++;
 					widthl++;
 				} else
 					k++;
 			}
 		}
+		items = new Item[width][height][blockmaxheight+10];
 		int deltapx = 0;
 		int deltapy = 0;
 		if (levelwithxscrolling)
@@ -665,7 +676,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				char ch = line.charAt(i);
 				if (ch == '[') {
 					inBlock = true;
-					itemheight = -1;
+					itemheight = 0;
 				}
 				if (ch == ']') {
 					heightitemmap[k][j] = itemheight - 1;
@@ -679,13 +690,17 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				}
 				if (ItemFactory.isItemSupported(ch)) {
 					Item it = ItemFactory.getItem(k, j, deltapx, deltapy, ch, itemheight);
-					items.add(it);
+					items[k][j][itemheight] = it;
 					if (ch == 'i') {
 						mentrydoors.put(height * k + j, (EntryDoor) it);
 					}
 					if (ch == 'm') {
 						hiddentriggers.put(height * k + j, (HiddenTrigger) it);
 					}
+					if (inBlock)
+						itemheight++;
+					else
+						heightitemmap[k][j] = 0;
 				}
 				if (BackgroundFactory.isBackgroundImage(ch)) {
 					backgroundmap[k][j] = BackgroundFactory.getBackground(ch);
@@ -703,9 +718,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					getEnemyarray().add(EnemyFactory.getEnemy(k + deltapx, j + deltapy, ch, this));
 				}
 				if (inBlock) {
-					if (itemheight > blockmaxheight)
-						blockmaxheight = itemheight;
-					itemheight++;
 					widthl++;
 				} else
 					k++;
@@ -740,7 +752,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		}
 		for (EntryDoor e : mentrydoors.values()) {
 			if (e.isGoingIn() < 0)
-				items.remove(e);
+				removeItem(e);
 			else
 				entrydoors.add(e);
 		}
@@ -784,14 +796,16 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 							}
 						}
 						l = 0;
-						while (l < items.size()) {
-							int posix = (items.get(l).getCenterX() - bg.getCenterX() + bginitx) / 50;
-							int posiy = (items.get(l).getCenterY() - bg.getCenterY() + bginity) / 50;
-							if (area.containsKey(height * posix + posiy)) {
-								litems.add(items.get(l));
-								items.remove(l);
-							} else
-								l++;
+						for (int m = 0; m < width; m++) {
+							for (int n = 0; n < height; n++) {
+								if (area.containsKey(height * m + n)) {
+									for (int h = 0; h <= heightitemmap[m][n]; h++) {
+										litems.add(items[m][n][h]);
+										items[m][n][h] = null;
+									}
+									heightitemmap[m][n] = -1;
+								}
+							}
 						}
 						hiddentiles.add(ltiles);
 						hiddenitems.add(litems);
@@ -946,7 +960,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 							int l = 0;
 							while (l < entrydoors.size()) {
 								if (entrydoors.get(l).isGoingIn() == activatedentry.isGoingIn()) {
-									items.remove(entrydoors.get(l));
+									removeItem(entrydoors.get(l));
 								}
 								l++;
 							}
@@ -1252,9 +1266,13 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 								p.setCenterX(p.getCenterX() + deltax);
 								p.setCenterY(p.getCenterY() + deltay);
 							}
-							for (Item it : items) {
-								it.setCenterX(it.getCenterX() + deltax);
-								it.setCenterY(it.getCenterY() + deltay);
+							for (int itx = 0; itx < width; itx++) {
+								for (int ity = 0; ity < height; ity++) {
+									for (int ith = 0; ith <= heightitemmap[itx][ity]; ith++) {
+										items[itx][ity][ith].setCenterX(items[itx][ity][ith].getCenterX() + deltax);
+										items[itx][ity][ith].setCenterY(items[itx][ity][ith].getCenterY() + deltay);
+									}
+								}
 							}
 							for (Item it : leavingitems) {
 								it.setCenterX(it.getCenterX() + deltax);
@@ -1307,9 +1325,13 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 							p.setCenterX(p.getCenterX() + finaldeltax);
 							p.setCenterY(p.getCenterY() + finaldeltay);
 						}
-						for (Item it : items) {
-							it.setCenterX(it.getCenterX() + finaldeltax);
-							it.setCenterY(it.getCenterY() + finaldeltay);
+						for (int itx = 0; itx < width; itx++) {
+							for (int ity = 0; ity < height; ity++) {
+								for (int ith = 0; ith <= heightitemmap[itx][ity]; ith++) {
+									items[itx][ity][ith].setCenterX(items[itx][ity][ith].getCenterX() + finaldeltax);
+									items[itx][ity][ith].setCenterY(items[itx][ity][ith].getCenterY() + finaldeltay);
+								}
+							}
 						}
 						for (Item it : leavingitems) {
 							it.setCenterX(it.getCenterX() + finaldeltax);
@@ -1338,7 +1360,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						for (Item it : hiddenitems.get(revealHidden)) {
 							it.setCenterX(50 * it.posx + bg.getCenterX() - bginitx);
 							it.setCenterY(50 * it.posy + bg.getCenterY() - bginity);
-							items.add(it);
+							items[it.posx][it.posy][it.height] = it;
+							heightitemmap[it.posx][it.posy] = Math.max(heightitemmap[it.posx][it.posy], it.height);
 						}
 						for (Enemy e : hiddenenemies.get(revealHidden)) {
 							e.setCenterX(50 * e.posx + bg.getCenterX() - bginitx);
@@ -1609,8 +1632,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			}
 		}
 		//g.drawImage(background, bg.getCenterX(), bg.getCenterY(), this);
-		paintItems(g);
-		paintItemEffectBelow(g);
+		paintItems(g,stx,fx,sty,fy);
+		paintItemEffectBelow(g,stx,fx,sty,fy);
 		for (Enemy e : getEnemyarray()) {
 			if (!e.alive || e.paintoverride) {
 				g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
@@ -1732,7 +1755,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		for (int i = 0; i < hitpoints.size(); i++) {
 			g.drawImage(blooddrop, hitpoints.get(i).getCenterX() - 7, hitpoints.get(i).getCenterY() - 7, this);
 		}
-		paintItemsEffectAbove(g);
+		paintItemsEffectAbove(g,stx,fx,sty,fy);
 		g.setColor(Color.RED);
 		g.fillRect(32, 37, 20, 20);
 		g.setColor(Color.WHITE);
@@ -1812,33 +1835,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	}
 
 	private void checkItemsCollision() {
-		int i = 0;
-		while (i < items.size()) {
-			Item it = items.get(i);
-			if (it.height == heightitemmap[it.posx][it.posy]) {
-				if (it.checkCollisionPlayer(player)) {
-					leavingitems.add(items.get(i));
-					heightitemmap[it.posx][it.posy] = Math.max(heightitemmap[it.posx][it.posy]-1, 0);
-					items.remove(i);
-				} else {
-					boolean toremove = false;
-					int j = 0;
-					while(!toremove && j < enemyarray.size()) {
-						if (enemyarray.get(j).alive && it.checkCollisionEnemy(enemyarray.get(j))) {
-							leavingitems.add(items.get(i));
-							heightitemmap[it.posx][it.posy] = Math.max(heightitemmap[it.posx][it.posy]-1, 0);
-							items.remove(i);
-							toremove = true;
-						}
-						j++;
-					}
-					if (!toremove)
-						i++;
-				}
-			} else {
-				i++;
-			}
+		for (Enemy e : enemyarray) {
+			if (e.alive)
+				e.checkCollisionsWithItems();
 		}
+		player.checkCollisionsWithItems();
 		for (Item it : leavingitems) {
 			it.doLeavingEffect();
 		}
@@ -1978,8 +1979,15 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	}
 
 	public static void updateItems() {
-		for (Item i : items)
-			i.update();
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				for (int h = 0; h <= heightitemmap[i][j]; h++) {
+					/*if (items[i][j][h] == null)
+						System.out.println("Error : height=" +heightitemmap[i][j]+" x="+i+" y="+j);*/
+					items[i][j][h].update();
+				}
+			}
+		}
 		for (Item i : leavingitems)
 			i.update();
 	}
@@ -1997,21 +2005,25 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	 * this); } }
 	 */
 
-	private void paintItems(Graphics g) {
-		for (int hght = 0; hght <= blockmaxheight; hght++) {
-			for (int i = 0; i < items.size(); i++) {
-				Item it = items.get(i);
-				if (it.height == hght && (BackgroundItem.class.isInstance(it) || StartingClass.map[it.posx][it.posy] == null || !Tile.class.isInstance(StartingClass.map[it.posx][it.posy])))
-					g.drawImage(it.getSprite(), it.getCenterX() - 31, it.getCenterY() - 31, this);
+	private void paintItems(Graphics g,int stx,int fx,int sty,int fy) {
+		for (int j = sty; j < fy; j++) {
+			for (int i = stx; i < fx; i++) {
+				for (int h = 0; h <= heightitemmap[i][j]; h++) {
+					if (BackgroundItem.class.isInstance(items[i][j][h]) || StartingClass.map[i][j] == null || !Tile.class.isInstance(StartingClass.map[i][j]))
+						g.drawImage(items[i][j][h].getSprite(), items[i][j][h].getCenterX() - 31, items[i][j][h].getCenterY() - 31, this);
+				}
 			}
 		}
 	}
 	
-	private void paintItemsEffectAbove(Graphics g) {
-		for (int i = 0; i < items.size(); i++) {
-			Item it = items.get(i);
-			if (it.effectactive == true && it.isEffectAbove()) {
-				g.drawImage(it.getEffectSprite(), it.getEffectCenterX() - 31, it.getEffectCenterY() - 31, this);
+	private void paintItemsEffectAbove(Graphics g,int stx,int fx,int sty,int fy) {
+		for (int j = sty; j < fy; j++) {
+			for (int i = stx; i < fx; i++) {
+				for (int h = 0; h <= heightitemmap[i][j]; h++) {
+					if (items[i][j][h].effectactive == true && items[i][j][h].isEffectAbove()) {
+						g.drawImage(items[i][j][h].getEffectSprite(), items[i][j][h].getEffectCenterX() - 31, items[i][j][h].getEffectCenterY() - 31, this);
+					}
+				}
 			}
 		}
 		int i = 0;
@@ -2026,11 +2038,14 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		}
 	}
 
-	private void paintItemEffectBelow(Graphics g) {
-		for (int i = 0; i < items.size(); i++) {
-			Item it = items.get(i);
-			if (it.effectactive == true && !it.isEffectAbove()) {
-				g.drawImage(it.getEffectSprite(), it.getEffectCenterX() - 31, it.getEffectCenterY() - 31, this);
+	private void paintItemEffectBelow(Graphics g,int stx,int fx,int sty,int fy) {
+		for (int j = sty; j < fy; j++) {
+			for (int i = stx; i < fx; i++) {
+				for (int h = 0; h <= heightitemmap[i][j]; h++) {
+					if (items[i][j][h].effectactive == true && !items[i][j][h].isEffectAbove()) {
+						g.drawImage(items[i][j][h].getEffectSprite(), items[i][j][h].getEffectCenterX() - 31, items[i][j][h].getEffectCenterY() - 31, this);
+					}
+				}
 			}
 		}
 		int i = 0;
@@ -2256,7 +2271,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public void clean() {
 		explosions.clear();
 		tilearray.clear();
-		items.clear();
+		//items.clear();
 		leavingitems.clear();
 		enemyarray.clear();
 		arenaenemies.clear();
@@ -2289,5 +2304,15 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				 */
 			}
 		});
+	}
+	
+	public static void removeItem(Item i) {
+		//System.out.println("Removing item: " + i.getClass().getName());
+		for (int h = i.height+1; h <= heightitemmap[i.posx][i.posy]; h++) {
+			items[i.posx][i.posy][h-1] = items[i.posx][i.posy][h];
+			items[i.posx][i.posy][h-1].height--;
+		}	
+		heightitemmap[i.posx][i.posy]--;
+		//TODO
 	}
 }

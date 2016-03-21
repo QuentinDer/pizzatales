@@ -132,9 +132,9 @@ public class Level {
 	}
 	
 	public static void bitmask(int level, Image[][] background) {
+		Image[] cornerset = new Image[16];
 		switch ((level-1)/4+1) {
 		case 1:
-			Image[] cornerset = new Image[16];
 			cornerset[0] = new ImageIcon(StartingClass.class.getResource("/data/dirt0.png")).getImage();
 			cornerset[1] = new ImageIcon(StartingClass.class.getResource("/data/dirt1.png")).getImage();
 			cornerset[2] = new ImageIcon(StartingClass.class.getResource("/data/dirt2.png")).getImage();
@@ -160,6 +160,23 @@ public class Level {
 		case 4:
 			break;
 		case 5:
+			cornerset[0] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor0.png")).getImage();
+			cornerset[1] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor1.png")).getImage();
+			cornerset[2] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor2.png")).getImage();
+			cornerset[3] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor3.png")).getImage();
+			cornerset[4] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor4.png")).getImage();
+			cornerset[5] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor5.png")).getImage();
+			cornerset[6] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor6.png")).getImage();
+			cornerset[7] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor7.png")).getImage();
+			cornerset[8] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor8.png")).getImage();
+			cornerset[9] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor9.png")).getImage();
+			cornerset[10] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor10.png")).getImage();
+			cornerset[11] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor11.png")).getImage();
+			cornerset[12] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor12.png")).getImage();
+			cornerset[13] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor13.png")).getImage();
+			cornerset[14] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor14.png")).getImage();
+			cornerset[15] = BackgroundFactory.mountain;
+			MapUtil.bitmask(background, BackgroundFactory.mountain, BackgroundFactory.snow, cornerset);
 			break;
 		}
 	}

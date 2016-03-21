@@ -142,7 +142,7 @@ public class CarolinaReaper extends Enemy {
 		if (blinking > 0) {
 			blinking--;
 			if (blinking == 0) {
-				StartingClass.items.remove(blinkingitem);
+				StartingClass.removeItem(blinkingitem);
 				if (StartingClass.map[blinkingitem.posx][blinkingitem.posy] == null) {
 					StartingClass.map[posx][posy] = null;
 					setCenterX(50*blinkingitem.posx+25+bg.getCenterX()-StartingClass.bginitx);
@@ -320,26 +320,24 @@ public class CarolinaReaper extends Enemy {
 						potion.setCenterX(50*postx+25+bg.getCenterX()-StartingClass.bginitx);
 						potion.setCenterY(50*posty+25+bg.getCenterY()-StartingClass.bginity);
 						potion.r.setBounds(potion.getCenterX() - 22, potion.getCenterY() - 22, 45, 45);
-						StartingClass.items.add(potion);
+						StartingClass.items[postx][posty][StartingClass.heightitemmap[postx][posty]] = potion;
 					} else {
 						HealthPotion potion = new HealthPotion(postx,posty,0,0,true,StartingClass.heightitemmap[postx][posty]);
 						potion.setCenterX(50*postx+25+bg.getCenterX()-StartingClass.bginitx);
 						potion.setCenterY(50*posty+25+bg.getCenterY()-StartingClass.bginity);
 						potion.r.setBounds(potion.getCenterX() - 22, potion.getCenterY() - 22, 45, 45);
-						StartingClass.items.add(potion);
+						StartingClass.items[postx][posty][StartingClass.heightitemmap[postx][posty]] = potion;
 					}
 				} else if (trapsenabled && trapscd == 0 && trapscount < maxtraps) {
 					trapscount++;
 					int height = 0;
 					int maxheight = 0;
-					for (Item it : StartingClass.items) {
-						if (it.posx == postx && it.posy == posty) {
-							if (BackgroundItem.class.isInstance(it))
-								height++;
-							else {
-								it.height++;
-								maxheight = Math.max(maxheight, it.height);
-							}
+					for (int h = 0; h <= StartingClass.heightitemmap[postx][posty]; h++) {
+						if (BackgroundItem.class.isInstance(StartingClass.items[postx][posty][h]))
+							height++;
+						else {
+							StartingClass.items[postx][posty][h].height++;
+							maxheight = Math.max(maxheight, StartingClass.items[postx][posty][h].height);
 						}
 					}
 					maxheight = Math.max(maxheight, height);
@@ -349,7 +347,7 @@ public class CarolinaReaper extends Enemy {
 					trap.setCenterX(50*postx+25+bg.getCenterX()-StartingClass.bginitx);
 					trap.setCenterY(50*posty+25+bg.getCenterY()-StartingClass.bginity);
 					trap.r.setBounds(trap.getCenterX() - 22, trap.getCenterY() - 22, 45, 45);
-					StartingClass.items.add(trap);
+					StartingClass.items[postx][posty][height] = trap;
 					trapscd = trapsmaxcd;
 				}
 				
@@ -359,7 +357,6 @@ public class CarolinaReaper extends Enemy {
 				b.setTileImage(StartingClass.tileBarrel);
 				StartingClass.getTilearray().add(b);
 				StartingClass.destroyabletiles.add(b);
-				StartingClass.heightitemmap[postx][posty]++;
 				spawningcd = spawningmaxcd;
 			}
 			possiblespawningpos.clear();
@@ -418,7 +415,8 @@ public class CarolinaReaper extends Enemy {
 				blinkingitem.setCenterX(50*blinkposx+25+bg.getCenterX()-StartingClass.bginitx);
 				blinkingitem.setCenterY(50*blinkposy+25+bg.getCenterY()-StartingClass.bginity);
 				blinkingitem.r.setBounds(blinkingitem.getCenterX() - 22, blinkingitem.getCenterY() - 22, 45, 45);
-				StartingClass.items.add(blinkingitem);
+				StartingClass.items[blinkposx][blinkposy][StartingClass.heightitemmap[blinkposx][blinkposy]] = blinkingitem;
+				//System.out.println("Blinking item: "+blinkposx+":"+blinkposy+" "+StartingClass.heightitemmap[blinkposx][blinkposy]);
 				currentSprite = firering;
 			}
 			possibleblinkpositions.clear();
@@ -683,12 +681,16 @@ public class CarolinaReaper extends Enemy {
 	public void die() {
 		super.die();
 		projectiles.clear();
-		int i = 0;
-		while(i < StartingClass.items.size()) {
-			if (ReaperTrap.class.isInstance(StartingClass.items.get(i)) || ReaperBlinkingItem.class.isInstance(StartingClass.items.get(i)))
-				StartingClass.items.remove(i);
-			else
-				i++;
+		for (int i = 0; i < StartingClass.width; i++) {
+			for (int j = 0; j < StartingClass.height; j++) {
+				int h = 0;
+				while (h<= StartingClass.heightitemmap[i][j]) {
+					if (ReaperTrap.class.isInstance(StartingClass.items[i][j][h]) || ReaperBlinkingItem.class.isInstance(StartingClass.items[i][j][h]))
+						StartingClass.removeItem(StartingClass.items[i][j][h]);
+					else
+						h++;
+				}
+			}
 		}
 		blinkingitem = null;
 		fireRing();

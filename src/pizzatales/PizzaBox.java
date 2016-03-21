@@ -42,7 +42,7 @@ public class PizzaBox extends Item {
 		for (Hat hat : hats) {
 			boolean toadd = true;
 			for (Hat playerhat : StartingClass.playerhats) {
-				toadd = toadd && (playerhat.getClass() != hat.getClass());
+				toadd = toadd && (playerhat == null || playerhat.getClass() != hat.getClass());
 			}
 			if (toadd)
 				StartingClass.playerhats.add(hat);
