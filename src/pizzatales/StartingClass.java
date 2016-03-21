@@ -362,7 +362,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		ReaperTrap.potiontrap1 = new ImageIcon(getClass().getResource("/data/potiontrap1.png")).getImage();
 		BackgroundFactory.snow = new ImageIcon(getClass().getResource("/data/snowbank.png")).getImage();
 		SnowBank.snoweffectsprite = new ImageIcon(getClass().getResource("/data/snowbankeffect.png")).getImage();
-		Ice.sprite = new ImageIcon(getClass().getResource("/data/ice.png")).getImage();
+		BackgroundFactory.ice = new ImageIcon(getClass().getResource("/data/ice.png")).getImage();
 
 		HatBaseball.hatsprite = new ImageIcon(getClass().getResource("/data/hatbaseball.png")).getImage();
 		HatBowler.hatsprite = new ImageIcon(getClass().getResource("/data/hatbowler.png")).getImage();
