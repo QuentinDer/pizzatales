@@ -5,6 +5,11 @@
 ! r - tileCaveRock
 ! c - tileCave
 ! capital lessers = enemies
+ss000sr00s0000su0s0sus00s0
+00r000000000000000000rs000
+000s00r0000s0000s0r0s00ss0
+ru00sr00s00u000s0r0s000s0s
+00000r0sr00s00r00000s0000u
 sss0sssssssussssssssssssss
 sssssssuss00ssusssrssssuss
 0srssr00r000s0rs0s00s0s0r0
