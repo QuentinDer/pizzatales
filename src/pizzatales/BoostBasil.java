@@ -7,7 +7,6 @@ public class BoostBasil extends BackgroundItem {
 	int timer = 0;
 	int freq = 30;
 	boolean taken = false;
-	private int previousfirerate = player.getWeapon().getFireRate();
 	private boolean effectStarted=false;
 	
 	public BoostBasil(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
@@ -39,7 +38,6 @@ public class BoostBasil extends BackgroundItem {
 		for(Firearm firearm : StartingClass.playerweapons){
 			firearm.setFireRate((int) (firearm.getBaseFirerate()*0.5));
 		}
-		//player.getWeapon().setFireRate((int)(p.getWeapon().getFireRate()*0.5f));
 		effectactive = true;
 		effectTimer = 1800;
 		StartingClass.isGrinning = 1800;
@@ -70,7 +68,6 @@ public class BoostBasil extends BackgroundItem {
 		for(Firearm firearm : StartingClass.playerweapons){
 			firearm.setFireRate(firearm.getBaseFirerate());
 		}
-		//player.getWeapon().setFireRate(player.getWeapon().getBaseFirerate());
 	}
 
 	@Override

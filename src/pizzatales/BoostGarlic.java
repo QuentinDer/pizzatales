@@ -7,7 +7,6 @@ public class BoostGarlic extends BackgroundItem {
 	int timer = 0;
 	int freq = 30;
 	boolean taken = false;
-	private float previousprojectiledmg = player.getWeapon().getProjectiledmg();
 	private boolean effectStarted=false;
 	
 	public BoostGarlic(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {

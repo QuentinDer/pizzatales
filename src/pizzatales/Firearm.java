@@ -31,6 +31,14 @@ public abstract class Firearm {
 		setSpriteDown();
 	}
 	
+	public int getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(int speed) {
+		this.speed = speed;
+	}
+
 	public abstract void shootUp(int x, int y);
 	
 	public abstract void shootDown(int x, int y);
