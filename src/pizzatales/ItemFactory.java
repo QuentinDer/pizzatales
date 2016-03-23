@@ -1,7 +1,7 @@
 package pizzatales;
 
 public class ItemFactory {
-	private final static String itemslist = "phailoxmubCNI";
+	private final static String itemslist = "phailoxmubCNI6789";
 	
 	public static boolean isItemSupported(char type) {
 		String test = "";
@@ -50,6 +50,18 @@ public class ItemFactory {
 			break;
 		case 'I':
 			i = new Ice(x, y,deltapx, deltapy, false, height);
+			break;
+		case '6':
+			i = new BoostCheese(x, y,deltapx, deltapy, false, height);
+			break;
+		case '7':
+			i = new BoostBacon(x, y,deltapx, deltapy, false, height);
+			break;
+		case '8':
+			i = new BoostGarlic(x, y,deltapx, deltapy, false, height);
+			break;
+		case '9':
+			i = new BoostBasil(x, y,deltapx, deltapy, false, height);
 			break;
 		}
 		return i;
