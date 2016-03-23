@@ -68,7 +68,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	
 	public static final boolean TESTMODE = true;
 	public static int difficultylevel = TESTMODE ? 1 : 1;
-	public static int currentlevel = TESTMODE ? 19 : 1;
+	public static int currentlevel = TESTMODE ? -1 : 1;
 	private int maxlevel = 20;
 
 	public int weaponindex;
@@ -363,7 +363,15 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		BackgroundFactory.snow = new ImageIcon(getClass().getResource("/data/snowbank.png")).getImage();
 		SnowBank.snoweffectsprite = new ImageIcon(getClass().getResource("/data/snowbankeffect.png")).getImage();
 		BackgroundFactory.ice = new ImageIcon(getClass().getResource("/data/ice.png")).getImage();
-
+		BoostCheese.boostsprite = new ImageIcon(getClass().getResource("/data/cheese.png")).getImage();
+		BoostCheese.boosteffectsprite = new ImageIcon(getClass().getResource("/data/cheeseeffect.png")).getImage();
+		BoostBacon.boostsprite = new ImageIcon(getClass().getResource("/data/bacon.png")).getImage();
+		BoostBacon.boosteffectsprite = new ImageIcon(getClass().getResource("/data/baconeffect.png")).getImage();
+		BoostBasil.boostsprite = new ImageIcon(getClass().getResource("/data/basil.png")).getImage();
+		BoostBasil.boosteffectsprite = new ImageIcon(getClass().getResource("/data/basileffect.png")).getImage();
+		BoostGarlic.boostsprite = new ImageIcon(getClass().getResource("/data/garlicbread.png")).getImage();
+		BoostGarlic.boosteffectsprite = new ImageIcon(getClass().getResource("/data/garlicbreadeffect.png")).getImage();
+		
 		HatBaseball.hatsprite = new ImageIcon(getClass().getResource("/data/hatbaseball.png")).getImage();
 		HatBowler.hatsprite = new ImageIcon(getClass().getResource("/data/hatbowler.png")).getImage();
 		HatFedora.hatsprite = new ImageIcon(getClass().getResource("/data/hatfedora.png")).getImage();
