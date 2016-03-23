@@ -18,6 +18,7 @@ public class Flamer extends Firearm {
 		speed = 10;
 		projectiledmg = 1.0f;
 		range = 100;
+		setBaseFirerate(getFireRate());
 	}
 	
 	@Override

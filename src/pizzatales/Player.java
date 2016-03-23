@@ -13,6 +13,7 @@ public class Player extends BlockingStuff {
 	private float health = 20;
 	private int maxhealth = 20;
 	private Armor armor;
+	private float defBoost = 1;
 	private boolean ismovingup;
 	private boolean ismovingdown;
 	private boolean ismovingleft;
@@ -668,12 +669,20 @@ public class Player extends BlockingStuff {
 	}
 	
 	public void damage(float dmg) {
-		if (armor.getDefense() - dmg*2.0f/3.0f < 0) {
-			health -= dmg - armor.getDefense();
+		if (armor.getDefense() - dmg*2.0f*defBoost/3.0f < 0) {
+			health -= dmg*defBoost - armor.getDefense();
 			armor.setDefense(0.f);
 		} else {
-			armor.setDefense(armor.getDefense() - dmg*2.0f/3.0f);
-			health -= dmg/3.0f;
+			armor.setDefense(armor.getDefense() - dmg*2.0f*defBoost/3.0f);
+			health -= dmg*defBoost/3.0f;
 		}
+	}
+
+	public float getDefBoost() {
+		return defBoost;
+	}
+
+	public void setDefBoost(float defBoost) {
+		this.defBoost = defBoost;
 	}
 }

@@ -36,8 +36,10 @@ public class BoostBasil extends BackgroundItem {
 	@Override
 	protected void doEffect(Player p) {
 		timer++;
-		previousfirerate = player.getWeapon().getFireRate();
-		player.getWeapon().setFireRate((int)(p.getWeapon().getFireRate()*0.5f));
+		for(Firearm firearm : StartingClass.playerweapons){
+			firearm.setFireRate((int) (firearm.getBaseFirerate()*0.5));
+		}
+		//player.getWeapon().setFireRate((int)(p.getWeapon().getFireRate()*0.5f));
 		effectactive = true;
 		effectTimer = 1800;
 		StartingClass.isGrinning = 1800;
@@ -65,7 +67,10 @@ public class BoostBasil extends BackgroundItem {
 	
 	@Override
 	protected void undoEffect(Player p){
-		player.getWeapon().setFireRate(previousfirerate);
+		for(Firearm firearm : StartingClass.playerweapons){
+			firearm.setFireRate(firearm.getBaseFirerate());
+		}
+		//player.getWeapon().setFireRate(player.getWeapon().getBaseFirerate());
 	}
 
 	@Override

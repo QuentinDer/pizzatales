@@ -7,6 +7,7 @@ public abstract class Firearm {
 	
 	public Image currentSprite;
 	protected int shootingCounter;
+	protected int baseFirerate;
 	protected int firerate;
 	protected float projectiledmg;
 	protected int range;
@@ -56,6 +57,14 @@ public abstract class Firearm {
 		this.firerate = firerate;
 	}
 	
+	public int getBaseFirerate() {
+		return baseFirerate;
+	}
+
+	public void setBaseFirerate(int baseFirerate) {
+		this.baseFirerate = baseFirerate;
+	}
+
 	public void increaseShootingCounter() {
 		if (!isReady2Fire()) {
 			shootingCounter++;

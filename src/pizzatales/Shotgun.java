@@ -19,6 +19,7 @@ public class Shotgun extends Firearm {
 		speed = 10;
 		projectiledmg = 2;
 		range = 250;
+		setBaseFirerate(getFireRate());
 	}
 	
 	@Override

@@ -7,6 +7,8 @@ public class BoostGarlic extends BackgroundItem {
 	int timer = 0;
 	int freq = 30;
 	boolean taken = false;
+	private float previousprojectiledmg = player.getWeapon().getProjectiledmg();
+	private boolean effectStarted=false;
 	
 	public BoostGarlic(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
 		super(x, y, deltapx, deltapy, onetimeeffect, height);
@@ -14,16 +16,31 @@ public class BoostGarlic extends BackgroundItem {
 
 	public static Image boostsprite;
 	public static Image boosteffectsprite;
+	
+	@Override
+	public void update(){
+		super.update();	
+		r.setBounds(getCenterX() - 25, getCenterY() - 25, 50, 50);
+		if(effectTimer > 0){
+			effectTimer--;
+		}
+		if(effectTimer == 0){
+			effectactive = false;
+			if(effectStarted){
+				undoEffect(player);
+				effectStarted = false;
+			}
+		}
+	}
 
 	@Override
 	protected void doEffect(Player p) {
-		if(timer % freq == 0){
-			//player.setHealth((int)player.getHealth()-1);
-		}
 		timer++;
+		player.setDefBoost(0.5f);
 		effectactive = true;
 		effectTimer = 1800;
 		StartingClass.isGrinning = 1800;
+		effectStarted = true;
 		taken = true;
 	}
 
@@ -47,6 +64,7 @@ public class BoostGarlic extends BackgroundItem {
 	
 	@Override
 	protected void undoEffect(Player p){
+		player.setDefBoost(1.0f);
 	}
 
 	@Override

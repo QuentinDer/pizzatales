@@ -11,6 +11,7 @@ public class Rifle extends Firearm {
 		speed = 14;
 		range = 700;
 		projectiledmg = 3;
+		setBaseFirerate(getFireRate());
 	}
 	
 	@Override

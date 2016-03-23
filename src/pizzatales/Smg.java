@@ -11,6 +11,7 @@ public class Smg extends Firearm {
 		speed = 10;
 		projectiledmg = 1;
 		range = 400;
+		setBaseFirerate(getFireRate());
 	}
 	
 	@Override

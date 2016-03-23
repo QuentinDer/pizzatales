@@ -11,6 +11,7 @@ public class Rocket extends Firearm {
 		range = 750;
 		projectiledmg = 4;
 		speed = 5;
+		setBaseFirerate(getFireRate());
 	}
 	
 	@Override
