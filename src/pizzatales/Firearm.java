@@ -67,4 +67,14 @@ public abstract class Firearm {
 	public boolean isReady2Fire() {
 		return (shootingCounter % firerate == 0);
 	}
+
+	public float getProjectiledmg() {
+		return projectiledmg;
+	}
+
+	public void setProjectiledmg(float projectiledmg) {
+		this.projectiledmg = projectiledmg;
+	}
+	
+	
 }
