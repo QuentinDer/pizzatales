@@ -23,6 +23,7 @@ public class BoostCheese extends BackgroundItem {
 		timer++;
 		effectactive = true;
 		effectTimer = 1800;
+		StartingClass.isGrinning = 1800;
 		taken = true;
 	}
 
@@ -42,6 +43,10 @@ public class BoostCheese extends BackgroundItem {
 	@Override
 	protected boolean canDoEffect(Player p) {
 		return !taken;
+	}
+	
+	@Override
+	protected void undoEffect(Player p){
 	}
 
 	@Override

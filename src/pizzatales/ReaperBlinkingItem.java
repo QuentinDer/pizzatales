@@ -20,6 +20,10 @@ public class ReaperBlinkingItem extends Item {
 	protected void doEffect(Player p) {
 		CarolinaReaper.canblink = false;
 	}
+	
+	@Override
+	protected void undoEffect(Player p){
+	}
 
 	@Override
 	protected void doLeavingEffect() {

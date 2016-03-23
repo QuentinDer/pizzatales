@@ -39,6 +39,10 @@ public class HealthPotion extends Item {
 	}
 
 	@Override
+	protected void undoEffect(Player p){
+	}
+	
+	@Override
 	protected void doLeavingEffect() {
 	}
 

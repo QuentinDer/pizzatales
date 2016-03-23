@@ -19,6 +19,10 @@ public class LevelExit extends Item {
 	protected void doEffect(Player p) {
 		StartingClass.state = GameState.Menu;
 	}
+	
+	@Override
+	protected void undoEffect(Player p){
+	}
 
 	@Override
 	protected Image getSprite() {

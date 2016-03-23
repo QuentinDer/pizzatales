@@ -35,6 +35,10 @@ public class ArmorPotion extends Item {
 	protected boolean canDoEffect(Player p) {
 		return p.getArmor().defense != p.getArmor().MAXDEF;
 	}
+	
+	@Override
+	protected void undoEffect(Player p){
+	}
 
 	@Override
 	protected void doLeavingEffect() {

@@ -18,6 +18,10 @@ public class WoodBridge extends BackgroundItem {
 	@Override
 	protected void doEffect(Player p) {
 	}
+	
+	@Override
+	protected void undoEffect(Player p){
+	}
 
 	@Override
 	protected Image getSprite() {

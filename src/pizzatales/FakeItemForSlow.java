@@ -22,6 +22,10 @@ public class FakeItemForSlow extends Item {
 	protected void doEffect(Player p) {
 		
 	}
+	
+	@Override
+	protected void undoEffect(Player p){
+	}
 
 	@Override
 	protected Image getSprite() {

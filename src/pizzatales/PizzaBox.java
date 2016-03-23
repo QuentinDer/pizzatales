@@ -59,6 +59,10 @@ public class PizzaBox extends Item {
 	protected Image getEffectSprite() {
 		return null;
 	}
+	
+	@Override
+	protected void undoEffect(Player p){
+	}
 
 	@Override
 	protected void doLeavingEffect() {

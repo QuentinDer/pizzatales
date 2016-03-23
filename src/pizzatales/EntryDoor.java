@@ -31,6 +31,10 @@ public class EntryDoor extends Item {
 	protected void doEffect(Player p) {
 		StartingClass.activatedentry = this;
 	}
+	
+	@Override
+	protected void undoEffect(Player p){
+	}
 
 	@Override
 	protected Image getSprite() {
