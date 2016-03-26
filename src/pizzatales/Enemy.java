@@ -86,12 +86,21 @@ public abstract class Enemy extends BlockingStuff {
 	}
 	
 	private final void chekCollisionsWithItems(int x, int y) {
-		int h = 0;
-		while (h <= StartingClass.heightitemmap[x][y]) {
-			if (StartingClass.items[x][y][h].checkCollisionEnemy(this))
-				StartingClass.removeItem(StartingClass.items[x][y][h]);
-			else
-				h++;
+		if (StartingClass.map[x][y] == null || !Tile.class.isInstance(StartingClass.map[x][y])) {
+			int h = 0;
+			while (h <= StartingClass.heightitemmap[x][y]) {
+				if (BackgroundItem.class.isInstance(StartingClass.items[x][y][h])) {
+					if ((h == StartingClass.heightitemmap[x][y] || !BackgroundItem.class.isInstance(StartingClass.items[x][y][h+1]))&& StartingClass.items[x][y][h].checkCollisionEnemy(this)) {
+						StartingClass.leavingitems.add(StartingClass.items[x][y][h]);
+						StartingClass.removeItem(StartingClass.items[x][y][h]);
+					} else
+						h++;
+				} else if (StartingClass.items[x][y][h].checkCollisionEnemy(this)) {
+					StartingClass.leavingitems.add(StartingClass.items[x][y][h]);
+					StartingClass.removeItem(StartingClass.items[x][y][h]);
+				} else
+					h++;
+			}
 		}
 	}
 	

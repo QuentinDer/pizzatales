@@ -2,7 +2,7 @@ package pizzatales;
 
 import java.awt.Image;
 
-public class BoostBacon extends BackgroundItem {
+public class BoostBacon extends Item {
 
 	int target;
 	private final static int angleincrease = 3;

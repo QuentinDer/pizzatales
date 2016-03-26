@@ -68,7 +68,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	
 	public static final boolean TESTMODE = true;
 	public static int difficultylevel = TESTMODE ? 1 : 1;
-	public static int currentlevel = TESTMODE ? -1 : 1;
+	public static int currentlevel = TESTMODE ? 9 : 1;
 	private int maxlevel = 20;
 
 	public int weaponindex;
@@ -2009,7 +2009,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		for (int j = sty; j < fy; j++) {
 			for (int i = stx; i < fx; i++) {
 				for (int h = 0; h <= heightitemmap[i][j]; h++) {
-					if (BackgroundItem.class.isInstance(items[i][j][h]) || StartingClass.map[i][j] == null || !Tile.class.isInstance(StartingClass.map[i][j]))
+					if (BackgroundItem.class.isInstance(items[i][j][h])) {
+						if (h == heightitemmap[i][j] || !BackgroundItem.class.isInstance(items[i][j][h+1]))
+						g.drawImage(items[i][j][h].getSprite(), items[i][j][h].getCenterX() - 31, items[i][j][h].getCenterY() - 31, this);
+				} else if (StartingClass.map[i][j] == null || !Tile.class.isInstance(StartingClass.map[i][j]))
 						g.drawImage(items[i][j][h].getSprite(), items[i][j][h].getCenterX() - 31, items[i][j][h].getCenterY() - 31, this);
 				}
 			}

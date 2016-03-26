@@ -2,7 +2,7 @@ package pizzatales;
 
 import java.awt.Image;
 
-public class BoostBasil extends BackgroundItem {
+public class BoostBasil extends Item {
 	
 	public BoostBasil(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
 		super(x, y, deltapx, deltapy, onetimeeffect, height);

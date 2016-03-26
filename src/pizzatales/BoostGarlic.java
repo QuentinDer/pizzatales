@@ -2,7 +2,7 @@ package pizzatales;
 
 import java.awt.Image;
 
-public class BoostGarlic extends BackgroundItem {
+public class BoostGarlic extends Item {
 	
 	public BoostGarlic(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
 		super(x, y, deltapx, deltapy, onetimeeffect, height);
