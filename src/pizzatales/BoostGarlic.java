@@ -36,6 +36,22 @@ public class BoostGarlic extends Item {
 	@Override
 	protected void doLeavingEffect() {
 		player.setDefBoost(0.5f);
+		for (Enemy e : StartingClass.enemyarray) {
+			int i = 0;
+			while (i < e.getProjectiles().size()) {
+				Projectile p = e.getProjectiles().get(i);
+				if (player.R.intersects(p.fcenterX+2*p.speedX- p.halfsize, p.fcenterY+2*p.speedY- p.halfsize, p.size, p.size)) {
+					player.damage(p.damage);
+					p.speedX = -p.speedX;
+					p.speedY = -p.speedY;
+					p.damage = p.damage / 2.f;
+					p.travelleddist = 0;
+					e.getProjectiles().remove(i);
+					player.projectiles.add(p);
+				} else
+					i++;
+			}
+		}
 	}
 
 	@Override

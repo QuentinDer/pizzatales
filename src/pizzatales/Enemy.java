@@ -12,6 +12,7 @@ public abstract class Enemy extends BlockingStuff {
 	protected float health;
 	//private int power;
 	protected boolean alive = true;
+	static public boolean bloodymess = false;
 	protected URL base;
 	protected boolean isMoving = false;
 	protected int walkCounter = 1;
@@ -453,9 +454,15 @@ public abstract class Enemy extends BlockingStuff {
 		stopMoving();
 		if (ppdmg + pdmg + cdmg > 3) {
 			setGibsSprite();
-			player.isGrinning = 50;
+			player.isGrinning = Math.max(player.isGrinning, 50);
 		} else
 			setDieSprite();
+		if (bloodymess) {
+			setGibsSprite();
+			BazookaBulletExplosion bmess = new BazookaBulletExplosion(centerX, centerY);
+			bmess.procfrequency = 20;
+			StartingClass.explosions.add(bmess);
+		}
 		StartingClass.map[posx][posy] = null;
 	}
 

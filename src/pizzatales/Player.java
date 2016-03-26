@@ -84,6 +84,7 @@ public class Player extends BlockingStuff {
 		armor.defense = Math.min(armor.defense, armor.MAXDEF);
 		defBoost = 1.0f;
 		weapon.initState();
+		Enemy.bloodymess = false;
 		if (hat != null)
 			hat.effect();
 	}

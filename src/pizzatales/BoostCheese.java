@@ -36,6 +36,7 @@ public class BoostCheese extends Item {
 	@Override
 	protected void doLeavingEffect() {
 		player.getWeapon().setProjectiledmg(player.getWeapon().getProjectiledmg()*2);
+		Enemy.bloodymess = true;
 	}
 
 	@Override
