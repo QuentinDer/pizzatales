@@ -14,8 +14,8 @@ public class ReaperRingFlame extends FlamerFlame {
 	public void doOnLimitRange() {
 		if (forward) {
 			travelleddist = 0.f;
-			fspeedX = -fspeedX;
-			fspeedY = -fspeedY;
+			speedX = -speedX;
+			speedY = -speedY;
 			forward = false;
 		} else
 			visible = false;

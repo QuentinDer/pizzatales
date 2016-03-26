@@ -7,7 +7,7 @@ public class CheeseArmor extends Armor {
 	public static Image staysprite1, staysprite2, movesprite1, movesprite2;
 	
 	public CheeseArmor() {
-		super(16,3);	
+		super(15,3.75f);	
 	}
 
 	@Override

@@ -2,32 +2,50 @@ package pizzatales;
 
 public abstract class Stuff extends Point {
 
-	int speedX = 0;
-	int speedY = 0;
+	float speedX = 0;
+	float speedY = 0;
+	float fcenterX;
+	float fcenterY;
 	Player player = StartingClass.getPlayer();
 	
 	public Stuff(int centerX, int centerY) {
 		super(centerX, centerY);
+		fcenterX = centerX;
+		fcenterY = centerY;
 	}
 	
-	public int getSpeedX() {
+	public float getSpeedX() {
 		return speedX;
 	}
 	
-	public int getSpeedY() {
+	public float getSpeedY() {
 		return speedY;
 	}
 	
-	public void setSpeedX(int speedX) {
+	public void setSpeedX(float speedX) {
 		this.speedX = speedX;
 	}
 	
-	public void setSpeedY(int speedY) {
+	@Override
+	public void setCenterX(int centerX) {
+		super.setCenterX(centerX);
+		fcenterX = centerX;
+	}
+	
+	@Override
+	public void setCenterY(int centerY) {
+		super.setCenterY(centerY);
+		fcenterY = centerY;
+	}
+	
+	public void setSpeedY(float speedY) {
 		this.speedY = speedY;
 	}
 	
 	public void update() {
-		centerX += speedX - player.getScrollingSpeedX();
-		centerY += speedY - player.getScrollingSpeedY();
+		fcenterX += speedX - player.getScrollingSpeedX();
+		fcenterY += speedY - player.getScrollingSpeedY();
+		centerX = (int)fcenterX;
+		centerY = (int)fcenterY;
 	}
 }

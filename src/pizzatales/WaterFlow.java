@@ -13,7 +13,7 @@ public class WaterFlow extends BackgroundItem {
 
 	@Override
 	protected void doEffect(Player p) {
-		player.setMOVESPEED(Math.max(1, player.getArmor().speed/2));
+		player.setMOVESPEED(Math.max(1, player.getArmor().speed/2.f));
 		effectTimer = 20;
 		effectactive = true;
 	}
@@ -44,7 +44,7 @@ public class WaterFlow extends BackgroundItem {
 
 	@Override
 	protected void doLeavingEffect() {
-		player.setMOVESPEED(Math.max(1, player.getArmor().speed/2));
+		player.setMOVESPEED(Math.max(1, player.getArmor().speed/2.f));
 	}
 
 	@Override

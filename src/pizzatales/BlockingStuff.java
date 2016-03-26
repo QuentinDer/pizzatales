@@ -31,7 +31,7 @@ public abstract class BlockingStuff extends Stuff {
 	@Override
 	public void update() {
 		super.update();
-		R.setBounds(getCenterX() - halfrsizex + speedX, getCenterY() - halfrsizey + speedY, 2*halfrsizex, 2*halfrsizey);
+		R.setBounds((int)(centerX - halfrsizex + speedX), (int)(centerY - halfrsizey + speedY), 2*halfrsizex, 2*halfrsizey);
 	}
 	
 	public abstract Image getSprite();

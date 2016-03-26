@@ -196,7 +196,7 @@ public class SirTomato extends Enemy {
 					isDashing = true;
 					inAnimation = 50;
 					dcd = dashcd;
-					R.setBounds(getCenterX() - halfrsizex + speedX, getCenterY() - halfrsizey + speedY, 2*halfrsizex, 2*halfrsizey);
+					R.setBounds((int)(centerX - halfrsizex + speedX), (int)(centerY - halfrsizey + speedY), 2*halfrsizex, 2*halfrsizey);
 				}
 			}
 		}

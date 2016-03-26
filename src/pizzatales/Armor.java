@@ -7,9 +7,9 @@ public abstract class Armor {
 	public int MAXDEF;
 	public int DEFMAXDEF;
 	public float defense;
-	public int speed;
+	public float speed;
 	
-	public Armor(int maxdef, int speed) {
+	public Armor(int maxdef, float speed) {
 		MAXDEF = maxdef;
 		DEFMAXDEF = maxdef;
 		this.speed = speed;
@@ -30,12 +30,8 @@ public abstract class Armor {
 		this.defense = defense;
 	}
 
-	public int getSpeed() {
+	public float getSpeed() {
 		return speed;
-	}
-
-	public void setSpeed(int speed) {
-		this.speed = speed;
 	}
 	
 	public abstract Image getStaySprite();

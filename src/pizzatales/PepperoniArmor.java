@@ -7,7 +7,7 @@ public class PepperoniArmor extends Armor {
 	public static Image staysprite1, staysprite2, movesprite1, movesprite2;
 	
 	public PepperoniArmor() {
-		super(12,4);
+		super(12,4.5f);
 	}
 	
 	@Override

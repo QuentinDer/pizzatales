@@ -7,7 +7,7 @@ public class MargheritaArmor extends Armor {
 	public static Image staysprite1, staysprite2, movesprite1, movesprite2;
 	
 	public MargheritaArmor() {
-		super(4,6);
+		super(6,6);
 	}
 	
 	@Override

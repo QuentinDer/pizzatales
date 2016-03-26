@@ -62,7 +62,7 @@ public class BoostBacon extends Item {
 						}
 					}
 				}
-				float speed = (float) Math.sqrt(p.fspeedX*p.fspeedX+p.fspeedY*p.fspeedY);
+				float speed = (float) Math.sqrt(p.speedX*p.speedX+p.speedY*p.speedY);
 				float fdirX = StartingClass.enemyarray.get(target).getCenterX() - p.fcenterX;
 				float fdirY = StartingClass.enemyarray.get(target).getCenterY() - p.fcenterY;
 				dist = (float) Math.sqrt(fdirX*fdirX+fdirY*fdirY);
@@ -71,8 +71,8 @@ public class BoostBacon extends Item {
 				double angledir = Math.toDegrees(Math.acos(vectorx));
 				if (vectory < 0)
 					angledir = 360-angledir;
-				vectorx = p.fspeedX / speed;
-				vectory = p.fspeedY / speed;
+				vectorx = p.speedX / speed;
+				vectory = p.speedY / speed;
 				double anglespeed = Math.toDegrees(Math.acos(vectorx));
 				if (vectory < 0)
 					anglespeed = 360-anglespeed;
@@ -91,8 +91,8 @@ public class BoostBacon extends Item {
 					else
 						anglespeed = Math.min(anglespeed + angleincrease, angledir);
 				}
-				p.fspeedX = (float)(speed * Math.cos(Math.toRadians(anglespeed)));
-				p.fspeedY = (float)(speed * Math.sin(Math.toRadians(anglespeed)));
+				p.speedX = (float)(speed * Math.cos(Math.toRadians(anglespeed)));
+				p.speedY = (float)(speed * Math.sin(Math.toRadians(anglespeed)));
 			}
 		}
 	}

@@ -7,7 +7,7 @@ public class ChicagoArmor extends Armor {
 	public static Image staysprite1, staysprite2, movesprite1, movesprite2;
 	
 	public ChicagoArmor() {
-		super(20,2);
+		super(18,3);
 	}
 	
 	@Override

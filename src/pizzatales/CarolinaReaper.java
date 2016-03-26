@@ -430,8 +430,8 @@ public class CarolinaReaper extends Enemy {
 			if (nextbarrelcd == 0 && nbbarrels < this.maxnbbarrels) {
 				/*int toshootx = (int)(Math.random()*100)-50+player.getCenterX(); //TODO
 				int toshooty= (int)(Math.random()*100)-50+player.getCenterY();*/
-				int toshootx = (int)(Math.random()*100)-50+player.getCenterX() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))*player.getSpeedX()/9;
-				int toshooty = (int)(Math.random()*100)-50+player.getCenterY() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))*player.getSpeedY()/9;
+				int toshootx = (int)(Math.random()*100)-50+player.getCenterX() + (int)((Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))*player.getSpeedX()/9.f);
+				int toshooty = (int)(Math.random()*100)-50+player.getCenterY() + (int)((Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))*player.getSpeedY()/9.f);
 				float vectorX = (toshootx-centerX)/(float)(Math.abs(toshootx-centerX)+Math.abs(toshooty-centerY));
 				float vectorY = (toshooty-centerY)/(float)(Math.abs(toshootx-centerX)+Math.abs(toshooty-centerY));
 				if (Math.abs(toshootx-centerX) > Math.abs(toshooty-centerY)) {

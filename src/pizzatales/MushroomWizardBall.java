@@ -31,8 +31,8 @@ public class MushroomWizardBall extends Projectile {
 				speed = 5;
 				range = 600;
 			}
-			fspeedX = vectorX * speed;
-			fspeedY = vectorY * speed;
+			speedX = vectorX * speed;
+			speedY = vectorY * speed;
 			
 			break;
 		case 3:
@@ -41,16 +41,16 @@ public class MushroomWizardBall extends Projectile {
 			if (newpattern)
 				speed = 14;
 			damage = 0;
-			fspeedX = vectorX * speed;
-			fspeedY = vectorY * speed;
+			speedX = vectorX * speed;
+			speedY = vectorY * speed;
 			break;
 		case 4:
 			currentball = redball;
 			speed = 5;
 			damage = 0;
 			if (newpattern) {
-				fspeedX = vectorX * speed + (int)(Math.random()*3)-1;
-				fspeedY = vectorY * speed + (int)(Math.random()*3)-1;
+				speedX = vectorX * speed + (int)(Math.random()*3)-1;
+				speedY = vectorY * speed + (int)(Math.random()*3)-1;
 			}
 			break;
 		}
@@ -88,8 +88,8 @@ public class MushroomWizardBall extends Projectile {
 			damage = 0;
 			break;
 		}
-		fspeedX = vectorX * speed;
-		fspeedY = vectorY * speed;
+		speedX = vectorX * speed;
+		speedY = vectorY * speed;
 	}
 	
 	@Override
@@ -97,29 +97,29 @@ public class MushroomWizardBall extends Projectile {
 		if (color == 2 && newpattern) {
 			float diffX = player.centerX - fcenterX;
 			float diffY = player.centerY - fcenterY;
-			fspeedX = speed * diffX / (Math.abs(diffX)+Math.abs(diffY));
-			fspeedY = speed * diffY / (Math.abs(diffX)+Math.abs(diffY));
+			speedX = speed * diffX / (Math.abs(diffX)+Math.abs(diffY));
+			speedY = speed * diffY / (Math.abs(diffX)+Math.abs(diffY));
 			super.update();
 		} else if (type == 1) {
 			float diffX = fcenterX - cX;
 			float diffY = fcenterY - cY;
-			fspeedX = (diffY*speed) / (Math.abs(diffX)+Math.abs(diffY));
-			fspeedY = - (diffX*speed) / (Math.abs(diffX)+Math.abs(diffY));
+			speedX = (diffY*speed) / (Math.abs(diffX)+Math.abs(diffY));
+			speedY = - (diffX*speed) / (Math.abs(diffX)+Math.abs(diffY));
 			super.update();
 		} else if (color == 1 && newpattern) {
-			float basefspeedX = fspeedX;
-			float basefspeedY = fspeedY;
+			float basefspeedX = speedX;
+			float basefspeedY = speedY;
 			if (movementTime % 20 < 10) {
-				fspeedX += fspeedY*4/speed;
-				fspeedY -= fspeedX*4/speed;
+				speedX += speedY*4/speed;
+				speedY -= speedX*4/speed;
 			} else {
-				fspeedX -= fspeedY*4/speed;
-				fspeedY += fspeedX*4/speed;
+				speedX -= speedY*4/speed;
+				speedY += speedX*4/speed;
 			}
 			movementTime++;
 			super.update();
-			fspeedX = basefspeedX;
-			fspeedY = basefspeedY;
+			speedX = basefspeedX;
+			speedY = basefspeedY;
 		} else
 			super.update();
 	}

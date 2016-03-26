@@ -5,11 +5,11 @@ import java.util.ArrayList;
 
 public class Player extends BlockingStuff {
 
-	private int MOVESPEED = 4;
+	private float MOVESPEED = 4;
 	//private final static double MAXSCROLLINGPROPORTION = 0.5;
 	//private final static int SCROLLINGRANGE = 150;
-	private int scrollingSpeedY = 0;
-	private int scrollingSpeedX = 0;
+	private float scrollingSpeedY = 0;
+	private float scrollingSpeedX = 0;
 	private float health = 20;
 	private int maxhealth = 20;
 	private Armor armor;
@@ -24,8 +24,8 @@ public class Player extends BlockingStuff {
 	private boolean controlledismovingright;
 	public boolean sliding;
 	private boolean previoussliding;
-	private int slidingSpeedY;
-	private int slidingSpeedX;
+	private float slidingSpeedY;
+	private float slidingSpeedX;
 	public boolean canmoveright = true;
 	public boolean canmoveleft = true;
 	public boolean canmoveup = true;
@@ -653,27 +653,27 @@ public class Player extends BlockingStuff {
 		ismovingdown = false;
 	}
 	
-	public int getMOVESPEED() {
+	public float getMOVESPEED() {
 		return MOVESPEED;
 	}
 
-	public void setMOVESPEED(int mOVESPEED) {
+	public void setMOVESPEED(float mOVESPEED) {
 		MOVESPEED = mOVESPEED;
 	}
 	
-	public int getScrollingSpeedX() {
+	public float getScrollingSpeedX() {
 		return this.scrollingSpeedX;
 	}
 	
-	public int getScrollingSpeedY() {
+	public float getScrollingSpeedY() {
 		return this.scrollingSpeedY;
 	}
 	
-	public void setScrollingSpeedY(int scrollingspeed) {
+	public void setScrollingSpeedY(float scrollingspeed) {
 		this.scrollingSpeedY = scrollingspeed;
 	}
 	
-	public void setScrollingSpeedX(int scrollingspeedX) {
+	public void setScrollingSpeedX(float scrollingspeedX) {
 		this.scrollingSpeedX = scrollingspeedX;
 	}
 	

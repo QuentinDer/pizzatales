@@ -38,8 +38,8 @@ public class OnioughProjectile extends Projectile {
 			fccY += fscY;
 			int togox = (int)(fccX + dist*Math.cos(Math.toRadians(angle)));
 			int togoy = (int)(fccY + dist*Math.sin(Math.toRadians(angle)));
-			fspeedX = togox - centerX;
-			fspeedY = togoy - centerY;
+			speedX = togox - centerX;
+			speedY = togoy - centerY;
 			super.update();
 		} else
 			super.update();

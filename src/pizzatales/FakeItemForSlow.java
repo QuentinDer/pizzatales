@@ -36,7 +36,7 @@ public class FakeItemForSlow extends Item {
 	@Override
 	protected void doLeavingEffect() {
 		if (slow == 0)
-			player.setMOVESPEED(Math.max(1, player.getArmor().speed/2));
+			player.setMOVESPEED(Math.max(1, player.getArmor().speed/2.f));
 		else
 			player.setMOVESPEED(Math.max(1, player.getArmor().speed-slow));
 	}

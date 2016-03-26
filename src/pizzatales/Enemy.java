@@ -45,8 +45,8 @@ public abstract class Enemy extends BlockingStuff {
 	private int[][] waitingpattern;
 	public boolean sliding;
 	private boolean previoussliding;
-	private int slidingSpeedY;
-	private int slidingSpeedX;
+	private float slidingSpeedY;
+	private float slidingSpeedX;
 	
 	private final static int visionRange = 15;
 	private final static float slightincrease = (float)0.5;

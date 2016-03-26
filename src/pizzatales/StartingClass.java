@@ -68,7 +68,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	
 	public static final boolean TESTMODE = true;
 	public static int difficultylevel = TESTMODE ? 1 : 1;
-	public static int currentlevel = TESTMODE ? 9 : 1;
+	public static int currentlevel = TESTMODE ? 7 : 1;
 	private int maxlevel = 20;
 
 	public int weaponindex;
