@@ -5,8 +5,16 @@ import java.awt.Image;
 public abstract class Armor {
 	
 	public int MAXDEF;
+	public int DEFMAXDEF;
 	public float defense;
 	public int speed;
+	
+	public Armor(int maxdef, int speed) {
+		MAXDEF = maxdef;
+		DEFMAXDEF = maxdef;
+		this.speed = speed;
+		defense = maxdef;
+	}
 	
 	public void repairArmor(){
 		if(defense < MAXDEF) {

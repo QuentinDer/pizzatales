@@ -3,11 +3,6 @@ package pizzatales;
 import java.awt.Image;
 
 public class BoostBasil extends BackgroundItem {
-
-	int timer = 0;
-	int freq = 30;
-	boolean taken = false;
-	private boolean effectStarted=false;
 	
 	public BoostBasil(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
 		super(x, y, deltapx, deltapy, onetimeeffect, height);
@@ -15,42 +10,17 @@ public class BoostBasil extends BackgroundItem {
 
 	public static Image boostsprite;
 	public static Image boosteffectsprite;
-	
-	@Override
-	public void update(){
-		super.update();	
-		r.setBounds(getCenterX() - 25, getCenterY() - 25, 50, 50);
-		if(effectTimer > 0){
-			effectTimer--;
-		}
-		if(effectTimer == 0){
-			effectactive = false;
-			if(effectStarted){
-				undoEffect(player);
-				effectStarted = false;
-			}
-		}
-	}
 
 	@Override
 	protected void doEffect(Player p) {
-		timer++;
-		for(Firearm firearm : StartingClass.playerweapons){
-			firearm.setFireRate((int) (firearm.getBaseFirerate()*0.5));
-		}
 		effectactive = true;
 		effectTimer = 1800;
-		StartingClass.isGrinning = 1800;
-		effectStarted = true;
-		taken = true;
+		player.isGrinning = 1800;
 	}
 
 	@Override
 	protected Image getSprite() {
-		if(!taken)
-			return boostsprite;
-		else
-			return null;
+		return boostsprite;
 	}
 	
 	@Override
@@ -60,18 +30,12 @@ public class BoostBasil extends BackgroundItem {
 
 	@Override
 	protected boolean canDoEffect(Player p) {
-		return !taken;
-	}
-	
-	@Override
-	protected void undoEffect(Player p){
-		for(Firearm firearm : StartingClass.playerweapons){
-			firearm.setFireRate(firearm.getBaseFirerate());
-		}
+		return true;
 	}
 
 	@Override
 	protected void doLeavingEffect() {
+		player.getWeapon().setFireRate(player.getWeapon().getFireRate()/2);
 	}
 
 	@Override
@@ -86,18 +50,15 @@ public class BoostBasil extends BackgroundItem {
 
 	@Override
 	protected boolean isEffectAbove() {
-		return true;
+		return false;
 	}
 
 	@Override
 	protected boolean canDoEffect(Enemy e) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	protected void doEffect(Enemy e) {
-		// TODO Auto-generated method stub
-		
 	}
 }

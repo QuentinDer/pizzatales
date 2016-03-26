@@ -44,6 +44,7 @@ public abstract class Enemy extends BlockingStuff {
 	private float cdmg;
 	private int[][] waitingpattern;
 	public boolean sliding;
+	private boolean previoussliding;
 	private int slidingSpeedY;
 	private int slidingSpeedX;
 	
@@ -193,12 +194,13 @@ public abstract class Enemy extends BlockingStuff {
 	@Override
 	public void update() {
 		
-		speedY = 0;
-		speedX = 0;
-		
-		if (sliding) {
+		if (sliding && !previoussliding) {
 			speedX = slidingSpeedX;
 			speedY = slidingSpeedY;
+		}
+		if (!sliding) {
+			speedY = 0;
+			speedX = 0;
 		}
 		if (ismovingup) {
 			if (!sliding)
@@ -250,6 +252,8 @@ public abstract class Enemy extends BlockingStuff {
 			}
 				
 		}
+		
+		previoussliding = sliding;
 		
 		ppdmg = pdmg;
 		pdmg = cdmg;
@@ -440,7 +444,7 @@ public abstract class Enemy extends BlockingStuff {
 		stopMoving();
 		if (ppdmg + pdmg + cdmg > 3) {
 			setGibsSprite();
-			StartingClass.isGrinning = 50;
+			player.isGrinning = 50;
 		} else
 			setDieSprite();
 		StartingClass.map[posx][posy] = null;

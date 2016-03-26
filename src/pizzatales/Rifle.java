@@ -6,12 +6,7 @@ public class Rifle extends Firearm {
 	public static Image leftSprite, rightSprite, upSprite, downSprite;
 	
 	public Rifle() {
-		super();
-		this.setFireRate(40);
-		speed = 14;
-		range = 700;
-		projectiledmg = 3;
-		setBaseFirerate(getFireRate());
+		super(3,700,14,40);
 	}
 	
 	@Override

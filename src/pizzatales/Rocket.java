@@ -6,12 +6,7 @@ public class Rocket extends Firearm {
 	public static Image leftSprite, rightSprite, upSprite, downSprite;
 	
 	public Rocket() {
-		super();
-		this.setFireRate(150);
-		range = 750;
-		projectiledmg = 4;
-		speed = 5;
-		setBaseFirerate(getFireRate());
+		super(4,750,5,150);
 	}
 	
 	@Override

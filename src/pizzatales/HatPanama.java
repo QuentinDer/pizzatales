@@ -15,30 +15,8 @@ public class HatPanama extends Hat {
 	
 	@Override
 	public void effect(){
-		player.setHealth(player.getHealth()+10);
+		if (player.getHealth() >= player.getMaxHealth())
+			player.setHealth(player.getHealth()+10);
 		player.setMaxHealth(player.getMaxHealth()+10);
 	}
-	
-	@Override
-	public void undoEffect(){
-		player.setHealth(Math.max(1.0f, player.getHealth()-10));
-		player.setMaxHealth(player.getMaxHealth()-10);
-	}
-
-	@Override
-	public void effectWeapon() {
-	}
-
-	@Override
-	public void undoEffectWeapon() {
-	}
-
-	@Override
-	public void effectArmor() {
-	}
-
-	@Override
-	public void undoEffectArmor() {
-	}
-
 }

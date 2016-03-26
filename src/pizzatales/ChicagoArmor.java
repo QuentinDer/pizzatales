@@ -7,10 +7,7 @@ public class ChicagoArmor extends Armor {
 	public static Image staysprite1, staysprite2, movesprite1, movesprite2;
 	
 	public ChicagoArmor() {
-		super();
-		this.MAXDEF = 20;
-		this.defense = this.MAXDEF;
-		this.speed = 2;
+		super(20,2);
 	}
 	
 	@Override

@@ -35,11 +35,7 @@ public class HealthPotion extends Item {
 
 	@Override
 	protected boolean canDoEffect(Player p) {
-		return p.getHealth() != 20;
-	}
-
-	@Override
-	protected void undoEffect(Player p){
+		return p.getHealth() != p.getMaxHealth();
 	}
 	
 	@Override
@@ -63,13 +59,10 @@ public class HealthPotion extends Item {
 
 	@Override
 	protected boolean canDoEffect(Enemy e) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	protected void doEffect(Enemy e) {
-		// TODO Auto-generated method stub
-		
 	}
 }

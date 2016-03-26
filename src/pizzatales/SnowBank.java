@@ -24,10 +24,6 @@ public class SnowBank extends BackgroundItem {
 	protected void doEffect(Player p) {
 		player.setMOVESPEED(player.getArmor().speed-1);
 	}
-	
-	@Override
-	protected void undoEffect(Player p){
-	}
 
 	@Override
 	protected Image getSprite() {

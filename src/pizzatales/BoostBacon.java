@@ -4,13 +4,8 @@ import java.awt.Image;
 
 public class BoostBacon extends BackgroundItem {
 
-	int timer = 0;
-	int freq = 30;
-	boolean taken=false;
-	private boolean effectStarted=false;
-	float distX, distY, dist, prevDist;
 	int target;
-	int speed;
+	private final static int angleincrease = 3;
 	
 	public BoostBacon(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
 		super(x, y, deltapx, deltapy, onetimeeffect, height);
@@ -18,61 +13,17 @@ public class BoostBacon extends BackgroundItem {
 
 	public static Image boostsprite;
 	public static Image boosteffectsprite;
-	
-	@Override
-	public void update(){
-		super.update();	
-		r.setBounds(getCenterX() - 25, getCenterY() - 25, 50, 50);
-		speed = player.getWeapon().getSpeed();
-		if(effectTimer > 0){
-			effectTimer--;
-			for(int i = 0; i< StartingClass.enemyarray.size(); i++){
-				Enemy e = StartingClass.enemyarray.get(i);
-				if(e.alive){
-					distX = player.getCenterX() - e.getCenterX();
-					distY = player.getCenterY() - e.getCenterY();
-					dist = (float) Math.sqrt(distX*distX+distY*distY);
-					if(i == 0){
-						target = i;
-						prevDist = dist;
-					}
-					if(dist < prevDist){
-						target = i;
-						prevDist = dist;
-					}
-				}
-			}
-			for(int j = 0; j < player.getProjectiles().size(); j++){
-				Projectile p = player.getProjectiles().get(j);
-				p.fspeedX = (-1) * speed * distX / dist;
-				p.fspeedY = (-1) * speed * distY / dist;
-			}
-			
-		}
-		if(effectTimer == 0){
-			effectactive = false;
-			if(effectStarted){
-				undoEffect(player);
-				effectStarted = false;
-			}
-		}
-	}
 
 	@Override
 	protected void doEffect(Player p) {
-		timer++;
 		effectactive = true;
 		effectTimer = 1800;
-		StartingClass.isGrinning = 1800;
-		taken = true;
+		player.isGrinning = 1800;
 	}
 
 	@Override
 	protected Image getSprite() {
-		if(!taken)
-			return boostsprite;
-		else
-			return null;
+		return boostsprite;
 	}
 	
 	@Override
@@ -82,15 +33,68 @@ public class BoostBacon extends BackgroundItem {
 
 	@Override
 	protected boolean canDoEffect(Player p) {
-		return !taken;
+		return true;
 	}
-	
-	@Override
-	protected void undoEffect(Player p){
-	}
-
 	@Override
 	protected void doLeavingEffect() {
+		
+		boolean atleastoneenemyalive = false;
+		for (Enemy e : StartingClass.enemyarray) {
+			if (e.alive)
+				atleastoneenemyalive = true;
+		}
+		if (atleastoneenemyalive) {
+			for(int j = 0; j < player.getProjectiles().size(); j++){
+				Projectile p = player.getProjectiles().get(j);
+				int target = -1;
+				float prevDist = Float.MAX_VALUE;
+				float dist;
+				float distX, distY;
+				for(int i = 0; i< StartingClass.enemyarray.size(); i++){
+					Enemy e = StartingClass.enemyarray.get(i);
+					if(e.alive){
+						distX = p.getCenterX() - e.getCenterX();
+						distY = p.getCenterY() - e.getCenterY();
+						dist = (float) Math.sqrt(distX*distX+distY*distY);
+						if(dist < prevDist){
+							target = i;
+							prevDist = dist;
+						}
+					}
+				}
+				float speed = (float) Math.sqrt(p.fspeedX*p.fspeedX+p.fspeedY*p.fspeedY);
+				float fdirX = StartingClass.enemyarray.get(target).getCenterX() - p.fcenterX;
+				float fdirY = StartingClass.enemyarray.get(target).getCenterY() - p.fcenterY;
+				dist = (float) Math.sqrt(fdirX*fdirX+fdirY*fdirY);
+				float vectorx = fdirX / dist;
+				float vectory = fdirY / dist;
+				double angledir = Math.toDegrees(Math.acos(vectorx));
+				if (vectory < 0)
+					angledir = 360-angledir;
+				vectorx = p.fspeedX / speed;
+				vectory = p.fspeedY / speed;
+				double anglespeed = Math.toDegrees(Math.acos(vectorx));
+				if (vectory < 0)
+					anglespeed = 360-anglespeed;
+				if (anglespeed < 180) {
+					if (angledir > anglespeed && angledir < anglespeed + 180)
+						anglespeed = Math.min(anglespeed+angleincrease, angledir);
+					else if (angledir >= anglespeed + 180)
+						anglespeed = Math.max(anglespeed - angleincrease, angledir-360);
+					else
+						anglespeed = Math.max(anglespeed - angleincrease, angledir);
+				} else {
+					if (angledir < anglespeed && angledir > anglespeed - 180)
+						anglespeed = Math.max(anglespeed-angleincrease, angledir);
+					else if (angledir <= anglespeed - 180)
+						anglespeed = Math.min(anglespeed + angleincrease, angledir+360);
+					else
+						anglespeed = Math.min(anglespeed + angleincrease, angledir);
+				}
+				p.fspeedX = (float)(speed * Math.cos(Math.toRadians(anglespeed)));
+				p.fspeedY = (float)(speed * Math.sin(Math.toRadians(anglespeed)));
+			}
+		}
 	}
 
 	@Override
@@ -105,18 +109,15 @@ public class BoostBacon extends BackgroundItem {
 
 	@Override
 	protected boolean isEffectAbove() {
-		return true;
+		return false;
 	}
 
 	@Override
 	protected boolean canDoEffect(Enemy e) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	protected void doEffect(Enemy e) {
-		// TODO Auto-generated method stub
-		
 	}
 }

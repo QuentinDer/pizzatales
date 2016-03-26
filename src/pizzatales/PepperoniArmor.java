@@ -7,10 +7,7 @@ public class PepperoniArmor extends Armor {
 	public static Image staysprite1, staysprite2, movesprite1, movesprite2;
 	
 	public PepperoniArmor() {
-		super();
-		this.MAXDEF = 12;
-		this.defense = this.MAXDEF;
-		this.speed = 4;
+		super(12,4);
 	}
 	
 	@Override

@@ -47,7 +47,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private boolean threadstarted = false;
 	private boolean azerty = true;
 	private static Player player;
-	public static int isGrinning;
 	private Image image;
 	private Image blooddrop;
 	private Image grinningsprite;
@@ -62,6 +61,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static ArrayList<Armor> playerarmor;
 	public static ArrayList<Hat> playerhats;
 	public static ArrayList<Explosion> explosions;
+	public static int nextlevel;
 
 	private Clip clip;
 
@@ -587,12 +587,20 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filename)));
 		String line;
 		width = Integer.MAX_VALUE;
+		HashMap<Integer,Integer> exits = new HashMap<Integer,Integer>();
 		while (null != (line = reader.readLine())) {
 			// no more lines to read
-			if (!line.startsWith("!")) {
-				lines.add(line);
-				if (!line.contains("["))
-					width = Math.min(width, line.length());
+			if (line.startsWith("#")) {
+				if (line.contains("Exit")) {
+					String[] specifiedexit = line.split("\r");
+					
+				}
+			} else {
+				if (!line.startsWith("!")) {
+					lines.add(line);
+					if (!line.contains("["))
+						width = Math.min(width, line.length());
+				}
 			}
 		}
 		reader.close();
@@ -882,12 +890,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 							i++;
 						}
 					}
-					player.canmovedown = true;
-					player.canmoveleft = true;
-					player.canmoveright = true;
-					player.canmoveup = true;
-					player.sliding = false;
-					player.setMOVESPEED(player.getArmor().speed);
+					player.initState();
 					for (Enemy e : enemyarray) {
 						e.canmovedown = true;
 						e.canmoveleft = true;
@@ -1051,11 +1054,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 										i++;
 									}
 								}
-
-								player.canmovedown = true;
-								player.canmoveleft = true;
-								player.canmoveright = true;
-								player.canmoveup = true;
+								player.initState();
 								checkEnemiesCollision();
 								checkItemsCollision();
 								player.checkCollisionsWithBlockingStuff();
@@ -1410,12 +1409,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 							i++;
 						}	
 					}
-					player.canmovedown = true;
-					player.canmoveleft = true;
-					player.canmoveright = true;
-					player.canmoveup = true;
-					player.sliding = false;
-					player.setMOVESPEED(player.getArmor().speed);
+					player.initState();
 					for (Enemy e : enemyarray) {
 						e.canmovedown = true;
 						e.canmoveleft = true;
@@ -1687,14 +1681,12 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 									lifetaken, 2);
 						}
 					} else if (Player.class.isInstance(map[x][y])) {
-						if (isGrinning > 0)
-							isGrinning--;
 						if (player.isAimingUp()) {
 							g.drawImage(player.getWeapon().currentSprite, player.getCenterX() - player.halfsizex,
 									player.getCenterY() - player.halfsizey, this);
 							g.drawImage(player.currentSprite, player.getCenterX() - player.halfsizex,
 									player.getCenterY() - player.halfsizey, this);
-							if (isGrinning > 0)
+							if (player.isGrinning > 0)
 								g.drawImage(grinningsprite, player.getCenterX() - player.halfsizex,
 										player.getCenterY() - player.halfsizey, this);
 							if (player.getHat() != null)
@@ -1703,7 +1695,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						} else {
 							g.drawImage(player.currentSprite, player.getCenterX() - player.halfsizex,
 									player.getCenterY() - player.halfsizey, this);
-							if (isGrinning > 0)
+							if (player.isGrinning > 0)
 								g.drawImage(grinningsprite, player.getCenterX() - player.halfsizex,
 										player.getCenterY() - player.halfsizey, this);
 							if (player.getHat() != null)
@@ -2146,11 +2138,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				armorindex++;
 				if (armorindex == playerarmor.size())
 					armorindex = 0;
-				if (player.getHat() != null)
-					player.getHat().undoEffectArmor();
 				player.setArmor(playerarmor.get(armorindex));
-				if (player.getHat() != null)
-					player.getHat().effectArmor();
 			}
 			break;
 		case KeyEvent.VK_D:
@@ -2172,45 +2160,29 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			weaponindex++;
 			if (weaponindex == playerweapons.size())
 				weaponindex = 0;
-			if (player.getHat() != null)
-				player.getHat().undoEffectWeapon();
 			player.setWeapon(playerweapons.get(weaponindex));
-			if (player.getHat() != null)
-				player.getHat().effectWeapon();
 			break;
 		case KeyEvent.VK_R:
 			weaponindex--;
 			if (weaponindex == -1)
 				weaponindex = playerweapons.size() - 1;
-			if (player.getHat() != null)
-				player.getHat().undoEffectWeapon();
 			player.setWeapon(playerweapons.get(weaponindex));
-			if (player.getHat() != null)
-				player.getHat().effectWeapon();
 			break;
 		case KeyEvent.VK_A:
 			if(azerty){
 				armorindex++;
 				if (armorindex == playerarmor.size())
 					armorindex = 0;
-				if (player.getHat() != null)
-					player.getHat().undoEffectArmor();
 				player.setArmor(playerarmor.get(armorindex));
-				if (player.getHat() != null)
-					player.getHat().effectArmor();
 			}else{
 				player.stopMovingLeft();
 			}
 			break;
 		case KeyEvent.VK_H:
-			if (playerhats.get(hatindex) != null)
-				playerhats.get(hatindex).undoEffect();
 			hatindex++;
 			if (hatindex == playerhats.size())
 				hatindex = 0;
 			player.setHat(playerhats.get(hatindex));
-			if (player.getHat() != null)
-				player.getHat().effect();
 			break;
 		case KeyEvent.VK_SPACE:
 			if (state == GameState.Paused) {

@@ -7,16 +7,25 @@ public abstract class Firearm {
 	
 	public Image currentSprite;
 	protected int shootingCounter;
-	protected int baseFirerate;
 	protected int firerate;
 	protected float projectiledmg;
 	protected int range;
 	protected int speed;
+	private int defrange, defspeed, deffirerate;
+	private float defprojdmg;
 	protected ArrayList<Projectile> holderprojectiles;
 	public int deltapx;
 	public int deltapy;
 	
-	public Firearm() {
+	public Firearm(float projdmg, int range, int speed, int firerate) {
+		projectiledmg = projdmg;
+		defprojdmg = projdmg;
+		this.range = range;
+		defrange = range;
+		this.speed = speed;
+		defspeed = speed;
+		this.firerate = firerate;
+		deffirerate = firerate;
 		this.deltapx = -31;
 		this.deltapy = -31;
 	}
@@ -24,6 +33,13 @@ public abstract class Firearm {
 	public Firearm(int deltapx, int deltapy) {
 		this.deltapx = deltapx;
 		this.deltapy = deltapy;
+	}
+	
+	public void initState() {
+		projectiledmg = defprojdmg;
+		range = defrange;
+		firerate = deffirerate;
+		speed = defspeed;
 	}
 	
 	public void setHolderProjectiles(ArrayList<Projectile> holderprojectiles) {
@@ -63,14 +79,6 @@ public abstract class Firearm {
 	
 	public void setFireRate(int firerate) {
 		this.firerate = firerate;
-	}
-	
-	public int getBaseFirerate() {
-		return baseFirerate;
-	}
-
-	public void setBaseFirerate(int baseFirerate) {
-		this.baseFirerate = baseFirerate;
 	}
 
 	public void increaseShootingCounter() {

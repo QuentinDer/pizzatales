@@ -22,10 +22,6 @@ public class CrateOpen extends Item {
 	protected boolean canDoEffect(Player p) {
 		return true;
 	}
-	
-	@Override
-	protected void undoEffect(Player p){
-	}
 
 	@Override
 	protected void doEffect(Player p) {

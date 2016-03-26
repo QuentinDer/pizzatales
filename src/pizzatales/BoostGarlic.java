@@ -3,11 +3,6 @@ package pizzatales;
 import java.awt.Image;
 
 public class BoostGarlic extends BackgroundItem {
-
-	int timer = 0;
-	int freq = 30;
-	boolean taken = false;
-	private boolean effectStarted=false;
 	
 	public BoostGarlic(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
 		super(x, y, deltapx, deltapy, onetimeeffect, height);
@@ -15,40 +10,17 @@ public class BoostGarlic extends BackgroundItem {
 
 	public static Image boostsprite;
 	public static Image boosteffectsprite;
-	
-	@Override
-	public void update(){
-		super.update();	
-		r.setBounds(getCenterX() - 25, getCenterY() - 25, 50, 50);
-		if(effectTimer > 0){
-			effectTimer--;
-		}
-		if(effectTimer == 0){
-			effectactive = false;
-			if(effectStarted){
-				undoEffect(player);
-				effectStarted = false;
-			}
-		}
-	}
 
 	@Override
 	protected void doEffect(Player p) {
-		timer++;
-		player.setDefBoost(0.5f);
 		effectactive = true;
 		effectTimer = 1800;
-		StartingClass.isGrinning = 1800;
-		effectStarted = true;
-		taken = true;
+		player.isGrinning = 1800;
 	}
 
 	@Override
 	protected Image getSprite() {
-		if(!taken)
-			return boostsprite;
-		else
-			return null;
+		return boostsprite;
 	}
 	
 	@Override
@@ -58,16 +30,12 @@ public class BoostGarlic extends BackgroundItem {
 
 	@Override
 	protected boolean canDoEffect(Player p) {
-		return !taken;
-	}
-	
-	@Override
-	protected void undoEffect(Player p){
-		player.setDefBoost(1.0f);
+		return true;
 	}
 
 	@Override
 	protected void doLeavingEffect() {
+		player.setDefBoost(0.5f);
 	}
 
 	@Override
@@ -82,18 +50,15 @@ public class BoostGarlic extends BackgroundItem {
 
 	@Override
 	protected boolean isEffectAbove() {
-		return true;
+		return false;
 	}
 
 	@Override
 	protected boolean canDoEffect(Enemy e) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	protected void doEffect(Enemy e) {
-		// TODO Auto-generated method stub
-		
 	}
 }

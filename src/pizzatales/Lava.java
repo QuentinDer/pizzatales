@@ -38,10 +38,6 @@ public class Lava extends BackgroundItem {
 	protected boolean canDoEffect(Player p) {
 		return true;
 	}
-	
-	@Override
-	protected void undoEffect(Player p){
-	}
 
 	@Override
 	protected void doLeavingEffect() {

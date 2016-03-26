@@ -17,11 +17,7 @@ public class WaterFlow extends BackgroundItem {
 		effectTimer = 20;
 		effectactive = true;
 	}
-	
-	@Override
-	protected void undoEffect(Player p){
-	}
-	
+
 	@Override
 	public boolean checkCollisionPlayer(Player p) {
 		if (r.contains(p.getCenterX(), p.getCenterY())) {

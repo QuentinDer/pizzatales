@@ -113,10 +113,6 @@ public class ReaperTrap extends Item {
 	}
 	
 	@Override
-	protected void undoEffect(Player p){
-	}
-	
-	@Override
 	public boolean checkCollisionPlayer(Player p) {
 		if (Math.abs(p.getCenterX()-centerX) < 20 && Math.abs(p.getCenterY()-centerY) < 20) {
 			doEffect(p);

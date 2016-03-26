@@ -7,10 +7,7 @@ public class MargheritaArmor extends Armor {
 	public static Image staysprite1, staysprite2, movesprite1, movesprite2;
 	
 	public MargheritaArmor() {
-		super();
-		this.MAXDEF = 4;
-		this.defense = this.MAXDEF;
-		this.speed = 6;
+		super(4,6);
 	}
 	
 	@Override

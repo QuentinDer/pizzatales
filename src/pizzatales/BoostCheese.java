@@ -3,12 +3,6 @@ package pizzatales;
 import java.awt.Image;
 
 public class BoostCheese extends BackgroundItem {
-
-	int timer = 0;
-	int freq = 30;
-	boolean taken = false;
-	private float previousprojectiledmg = player.getWeapon().getProjectiledmg();
-	private boolean effectStarted=false;
 	
 	public BoostCheese(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
 		super(x, y, deltapx, deltapy, onetimeeffect, height);
@@ -16,41 +10,17 @@ public class BoostCheese extends BackgroundItem {
 
 	public static Image boostsprite;
 	public static Image boosteffectsprite;
-	
-	@Override
-	public void update(){
-		super.update();	
-		r.setBounds(getCenterX() - 25, getCenterY() - 25, 50, 50);
-		if(effectTimer > 0){
-			effectTimer--;
-		}
-		if(effectTimer == 0){
-			effectactive = false;
-			if(effectStarted){
-				undoEffect(player);
-				effectStarted = false;
-			}
-		}
-	}
 
 	@Override
 	protected void doEffect(Player p) {
-		timer++;
-		previousprojectiledmg = player.getWeapon().getProjectiledmg();
-		player.getWeapon().setProjectiledmg((p.getWeapon().getProjectiledmg()*2));
 		effectactive = true;
 		effectTimer = 1800;
-		StartingClass.isGrinning = 1800;
-		effectStarted = true;
-		taken = true;
+		player.isGrinning = 1800;
 	}
 
 	@Override
 	protected Image getSprite() {
-		if(!taken)
-			return boostsprite;
-		else
-			return null;
+		return boostsprite;
 	}
 	
 	@Override
@@ -60,16 +30,12 @@ public class BoostCheese extends BackgroundItem {
 
 	@Override
 	protected boolean canDoEffect(Player p) {
-		return !taken;
-	}
-	
-	@Override
-	protected void undoEffect(Player p){
-		player.getWeapon().setProjectiledmg(previousprojectiledmg);
+		return true;
 	}
 
 	@Override
 	protected void doLeavingEffect() {
+		player.getWeapon().setProjectiledmg(player.getWeapon().getProjectiledmg()*2);
 	}
 
 	@Override
@@ -84,18 +50,15 @@ public class BoostCheese extends BackgroundItem {
 
 	@Override
 	protected boolean isEffectAbove() {
-		return true;
+		return false;
 	}
 
 	@Override
 	protected boolean canDoEffect(Enemy e) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	protected void doEffect(Enemy e) {
-		// TODO Auto-generated method stub
-		
 	}
 }

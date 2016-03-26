@@ -13,12 +13,7 @@ public class Flamer extends Firearm {
 	private float xs = 0.1f;
 	
 	public Flamer() {
-		super();
-		this.setFireRate(25);
-		speed = 10;
-		projectiledmg = 1.0f;
-		range = 100;
-		setBaseFirerate(getFireRate());
+		super(1.0f,100,10,25);
 	}
 	
 	@Override

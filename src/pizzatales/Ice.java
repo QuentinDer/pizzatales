@@ -19,10 +19,6 @@ public class Ice extends BackgroundItem {
 	}
 	
 	@Override
-	protected void undoEffect(Player p){
-	}
-	
-	@Override
 	public boolean checkCollisionPlayer(Player p) {
 		if (r.contains(p.getCenterX(), p.getCenterY())) {
 			doEffect(p);

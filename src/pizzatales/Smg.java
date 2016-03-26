@@ -6,12 +6,7 @@ public class Smg extends Firearm {
 	public static Image leftSprite, rightSprite, upSprite, downSprite;
 	
 	public Smg() {
-		super();
-		this.setFireRate(10);
-		speed = 10;
-		projectiledmg = 1;
-		range = 400;
-		setBaseFirerate(getFireRate());
+		super(1,400,10,10);
 	}
 	
 	@Override

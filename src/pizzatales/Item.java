@@ -61,7 +61,6 @@ public abstract class Item extends Stuff {
 	protected abstract void doEffect(Player p);
 	protected abstract void doEffect(Enemy e);
 	protected abstract void doLeavingEffect();
-	protected abstract void undoEffect(Player p);
 	
 	protected abstract Image getSprite();
 	protected abstract Image getEffectSprite();

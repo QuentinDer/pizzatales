@@ -20,10 +20,6 @@ public class HiddenTrigger extends Item {
 		StartingClass.revealHidden = hiddenarea;
 	}
 	
-	@Override
-	protected void undoEffect(Player p){
-	}
-	
 	public void setHiddenAreaNumber(int hiddenareanumber) {
 		hiddenarea = hiddenareanumber;
 	}

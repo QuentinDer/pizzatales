@@ -7,10 +7,7 @@ public class HawaiiArmor extends Armor {
 	public static Image staysprite1, staysprite2, movesprite1, movesprite2;
 	
 	public HawaiiArmor() {
-		super();
-		this.MAXDEF = 8;
-		this.defense = this.MAXDEF;
-		this.speed = 5;
+		super(8,5);
 	}
 	
 	@Override

@@ -7,10 +7,7 @@ public class CheeseArmor extends Armor {
 	public static Image staysprite1, staysprite2, movesprite1, movesprite2;
 	
 	public CheeseArmor() {
-		super();
-		this.MAXDEF = 16;
-		this.defense = this.MAXDEF;
-		this.speed = 3;		
+		super(16,3);	
 	}
 
 	@Override

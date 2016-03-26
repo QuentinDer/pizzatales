@@ -14,12 +14,7 @@ public class Shotgun extends Firearm {
 	private float xs = 0.1f;
 	
 	public Shotgun() {
-		super();
-		this.setFireRate(50);
-		speed = 10;
-		projectiledmg = 2;
-		range = 250;
-		setBaseFirerate(getFireRate());
+		super(2,250,10,50);
 	}
 	
 	@Override

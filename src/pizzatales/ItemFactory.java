@@ -52,16 +52,16 @@ public class ItemFactory {
 			i = new Ice(x, y,deltapx, deltapy, false, height);
 			break;
 		case '6':
-			i = new BoostCheese(x, y,deltapx, deltapy, false, height);
+			i = new BoostCheese(x, y,deltapx, deltapy, true, height);
 			break;
 		case '7':
-			i = new BoostBacon(x, y,deltapx, deltapy, false, height);
+			i = new BoostBacon(x, y,deltapx, deltapy, true, height);
 			break;
 		case '8':
-			i = new BoostGarlic(x, y,deltapx, deltapy, false, height);
+			i = new BoostGarlic(x, y,deltapx, deltapy, true, height);
 			break;
 		case '9':
-			i = new BoostBasil(x, y,deltapx, deltapy, false, height);
+			i = new BoostBasil(x, y,deltapx, deltapy, true, height);
 			break;
 		}
 		return i;

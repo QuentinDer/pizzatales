@@ -402,10 +402,7 @@ public class MushroomWizard extends Enemy {
 				}	
 			}
 			
-			player.canmovedown = true;
-			player.canmoveleft = true;
-			player.canmoveright = true;
-			player.canmoveup = true;
+			player.initState();
 			for (Explosion e : StartingClass.explosions) {
 				if (e.isProcing() && player.R.intersects(e.getR())) {
 					if (player.getArmor().defense - e.damage < 0) {

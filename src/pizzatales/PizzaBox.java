@@ -47,7 +47,7 @@ public class PizzaBox extends Item {
 			if (toadd)
 				StartingClass.playerhats.add(hat);
 		}
-		StartingClass.isGrinning = 50;
+		player.isGrinning = 50;
 	}
 
 	@Override
@@ -58,10 +58,6 @@ public class PizzaBox extends Item {
 	@Override
 	protected Image getEffectSprite() {
 		return null;
-	}
-	
-	@Override
-	protected void undoEffect(Player p){
 	}
 
 	@Override

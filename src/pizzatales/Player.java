@@ -23,6 +23,7 @@ public class Player extends BlockingStuff {
 	private boolean controlledismovingleft;
 	private boolean controlledismovingright;
 	public boolean sliding;
+	private boolean previoussliding;
 	private int slidingSpeedY;
 	private int slidingSpeedX;
 	public boolean canmoveright = true;
@@ -37,6 +38,7 @@ public class Player extends BlockingStuff {
 	protected ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 	public boolean showHealthBar;
 	private Hat hat;
+	public int isGrinning;
 	
 	public Image currentSprite;
 
@@ -69,13 +71,31 @@ public class Player extends BlockingStuff {
 		posy = (centerY - bg.getCenterY() + StartingClass.bginity) / 50;
 	}
 	
+	public void initState() {
+		canmovedown = true;
+		canmoveleft = true;
+		canmoveright = true;
+		canmoveup = true;
+		sliding = false;
+		MOVESPEED = armor.speed;
+		maxhealth = 20;
+		armor.MAXDEF = armor.DEFMAXDEF;
+		health = Math.min(health, maxhealth);
+		armor.defense = Math.min(armor.defense, armor.MAXDEF);
+		defBoost = 1.0f;
+		weapon.initState();
+		if (hat != null)
+			hat.effect();
+	}
+	
 	private final void chekCollisionsWithItems(int x, int y) {
 		if (StartingClass.map[x][y] == null || !Tile.class.isInstance(StartingClass.map[x][y])) {
 			int h = 0;
 			while (h <= StartingClass.heightitemmap[x][y]) {
-				if (StartingClass.items[x][y][h].checkCollisionPlayer(this))
+				if (StartingClass.items[x][y][h].checkCollisionPlayer(this)) {
+					StartingClass.leavingitems.add(StartingClass.items[x][y][h]);
 					StartingClass.removeItem(StartingClass.items[x][y][h]);
-				else
+				} else
 					h++;
 			}
 		}
@@ -195,8 +215,18 @@ public class Player extends BlockingStuff {
 
 		// Updates X Position
 		
-		speedY = 0;
-		speedX = 0;
+		if (isGrinning > 0)
+			isGrinning--;
+		
+		if (sliding && !previoussliding) {
+			speedX = slidingSpeedX;
+			speedY = slidingSpeedY;
+		}
+		if (!sliding) {
+			speedY = 0;
+			speedX = 0;
+		}
+		
 		
 		// Prevents going beyond X coordinate of 0 or 1250
 		if (centerX - MOVESPEED <= 30) {
@@ -219,26 +249,42 @@ public class Player extends BlockingStuff {
 		if (ismovingup) {
 			if (!sliding)
 				speedY += -MOVESPEED;
-			else if (walkCounter % (armor.MAXDEF*3) == 0)
+			else if (speedY < 0) {
+				if (walkCounter % Math.max(1, ((int)(-speedY*(armor.MAXDEF*5f/16f+4.75f)-armor.MAXDEF*5f/4f+25f))) == 0)
+					speedY -= 1;
+			} else if (walkCounter % ((int)(speedY*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)) == 0) {
 				speedY -= 1;
+			}
 		}
 		if (ismovingdown) {
 			if (!sliding)
 				speedY += MOVESPEED;
-			else if (walkCounter % (armor.MAXDEF*3) == 0)
+			else if (speedY > 0) {
+				if (walkCounter % Math.max(1, ((int)(speedY*(armor.MAXDEF*5f/16f+4.75f)-armor.MAXDEF*5f/4f+25f))) == 0)
+					speedY += 1;
+			} else if (walkCounter % ((int)(-speedY*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)) == 0) {
 				speedY += 1;
+			}
 		}
 		if (ismovingleft) {
 			if (!sliding)
 				speedX += -MOVESPEED;
-			else if (walkCounter % (armor.MAXDEF*3) == 0)
+			else if (speedX < 0) {
+				if (walkCounter % Math.max(1, ((int)(-speedX*(armor.MAXDEF*5f/16f+4.75f)-armor.MAXDEF*5f/4f+25f))) == 0)
+					speedX -= 1;
+			} else if (walkCounter % ((int)(speedX*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)) == 0) {
 				speedX -= 1;
+			}
 		}
 		if (ismovingright) {
 			if (!sliding)
 				speedX += MOVESPEED;
-			else if (walkCounter % (armor.MAXDEF*3) == 0)
+			else if (speedX > 0) {
+				if (walkCounter % Math.max(1, ((int)(speedX*(armor.MAXDEF*5f/16f+4.75f)-armor.MAXDEF*5f/4f+25f))) == 0)
+					speedX += 1;
+			} else if (walkCounter % ((int)(-speedX*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)) == 0) {
 				speedX += 1;
+			}
 		}
 		if (speedY > 0 && !canmovedown)
 			speedY = 0;
@@ -250,6 +296,7 @@ public class Player extends BlockingStuff {
 			speedX = 0;
 		slidingSpeedX = speedX;
 		slidingSpeedY = speedY;
+		previoussliding = sliding;
 		isShooting = 0;
 		if (wannashootup)
 			isShooting = 2;
@@ -410,6 +457,8 @@ public class Player extends BlockingStuff {
 	}
 	
 	public void controlledupdate() {
+		if (isGrinning > 0)
+			isGrinning--;
 		speedY = 0;
 		speedX = 0;
 		if (controlledismovingright && canmoveright) {

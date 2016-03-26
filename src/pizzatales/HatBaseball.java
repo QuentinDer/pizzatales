@@ -15,30 +15,6 @@ public class HatBaseball extends Hat {
 	
 	@Override
 	public void effect(){
-		effectArmor();
-	}
-	
-	@Override
-	public void undoEffect(){
-		undoEffectArmor();
-	}
-
-	@Override
-	public void effectWeapon() {
-	}
-
-	@Override
-	public void undoEffectWeapon() {
-	}
-
-	@Override
-	public void effectArmor() {
 		player.getArmor().setSpeed(player.getArmor().getSpeed()+1);
 	}
-
-	@Override
-	public void undoEffectArmor() {
-		player.getArmor().setSpeed(player.getArmor().getSpeed()-1);
-	}
-
 }

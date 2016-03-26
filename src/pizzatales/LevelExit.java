@@ -5,7 +5,9 @@ import java.awt.Image;
 import pizzatales.StartingClass.GameState;
 
 public class LevelExit extends Item {
-
+	
+	public int nextlevel;
+	
 	public LevelExit(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
 		super(x, y, deltapx, deltapy, onetimeeffect, height);
 	}
@@ -18,10 +20,7 @@ public class LevelExit extends Item {
 	@Override
 	protected void doEffect(Player p) {
 		StartingClass.state = GameState.Menu;
-	}
-	
-	@Override
-	protected void undoEffect(Player p){
+		StartingClass.nextlevel = nextlevel;
 	}
 
 	@Override
@@ -55,13 +54,10 @@ public class LevelExit extends Item {
 
 	@Override
 	protected boolean canDoEffect(Enemy e) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	protected void doEffect(Enemy e) {
-		// TODO Auto-generated method stub
-		
 	}
 }
