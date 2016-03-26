@@ -7,6 +7,7 @@ import pizzatales.StartingClass.GameState;
 public class LevelExit extends Item {
 	
 	public int nextlevel;
+	public static Image sprite;
 	
 	public LevelExit(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
 		super(x, y, deltapx, deltapy, onetimeeffect, height);
@@ -25,7 +26,7 @@ public class LevelExit extends Item {
 
 	@Override
 	protected Image getSprite() {
-		return null;
+		return sprite;
 	}
 
 	@Override
