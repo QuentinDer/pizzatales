@@ -36,6 +36,8 @@ public abstract class Armor {
 	
 	public abstract Image getStaySprite();
 	public abstract Image getStaySprite2();
-	public abstract Image getMoveSprite1();
-	public abstract Image getMoveSprite2();
+	public abstract Image getMoveSpriteLeft1();
+	public abstract Image getMoveSpriteLeft2();
+	public abstract Image getMoveSpriteRight1();
+	public abstract Image getMoveSpriteRight2();
 }

@@ -68,7 +68,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	
 	public static final boolean TESTMODE = true;
 	public static int difficultylevel = TESTMODE ? 1 : 1;
-	public static int currentlevel = TESTMODE ? -1 : 1;
+	public static int currentlevel = TESTMODE ? 1 : 1;
 	private int maxlevel = 20;
 
 	public int weaponindex;
@@ -148,24 +148,34 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 		CheeseArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/cheese1.png")).getImage();
 		CheeseArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/cheese2.png")).getImage();
-		CheeseArmor.movesprite1 = new ImageIcon(getClass().getResource("/data/cheese3.png")).getImage();
-		CheeseArmor.movesprite2 = new ImageIcon(getClass().getResource("/data/cheese4.png")).getImage();
+		CheeseArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/cheeseLeft1.png")).getImage();
+		CheeseArmor.movespriteLeft2 = new ImageIcon(getClass().getResource("/data/cheeseLeft2.png")).getImage();
+		CheeseArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/cheeseRight1.png")).getImage();
+		CheeseArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/cheeseRight2.png")).getImage();
 		ChicagoArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/chicago1.png")).getImage();
 		ChicagoArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/chicago2.png")).getImage();
-		ChicagoArmor.movesprite1 = new ImageIcon(getClass().getResource("/data/chicago3.png")).getImage();
-		ChicagoArmor.movesprite2 = new ImageIcon(getClass().getResource("/data/chicago4.png")).getImage();
+		ChicagoArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/chicagoLeft1.png")).getImage();
+		ChicagoArmor.movespriteLeft2 = new ImageIcon(getClass().getResource("/data/chicagoLeft2.png")).getImage();
+		ChicagoArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/chicagoRight1.png")).getImage();
+		ChicagoArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/chicagoRight2.png")).getImage();
 		HawaiiArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/hawaii1.png")).getImage();
 		HawaiiArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/hawaii2.png")).getImage();
-		HawaiiArmor.movesprite1 = new ImageIcon(getClass().getResource("/data/hawaii3.png")).getImage();
-		HawaiiArmor.movesprite2 = new ImageIcon(getClass().getResource("/data/hawaii4.png")).getImage();
+		HawaiiArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/hawaiiLeft1.png")).getImage();
+		HawaiiArmor.movespriteLeft2 = new ImageIcon(getClass().getResource("/data/hawaiiLeft2.png")).getImage();
+		HawaiiArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/hawaiiRight1.png")).getImage();
+		HawaiiArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/hawaiiRight2.png")).getImage();
 		MargheritaArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/margherita1.png")).getImage();
 		MargheritaArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/margherita2.png")).getImage();
-		MargheritaArmor.movesprite1 = new ImageIcon(getClass().getResource("/data/margherita3.png")).getImage();
-		MargheritaArmor.movesprite2 = new ImageIcon(getClass().getResource("/data/margherita4.png")).getImage();
+		MargheritaArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/margheritaLeft1.png")).getImage();
+		MargheritaArmor.movespriteLeft2 = new ImageIcon(getClass().getResource("/data/margheritaLeft2.png")).getImage();
+		MargheritaArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/margheritaRight1.png")).getImage();
+		MargheritaArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/margheritaRight2.png")).getImage();
 		PepperoniArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/pepperoni1.png")).getImage();
 		PepperoniArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/pepperoni2.png")).getImage();
-		PepperoniArmor.movesprite1 = new ImageIcon(getClass().getResource("/data/pepperoni3.png")).getImage();
-		PepperoniArmor.movesprite2 = new ImageIcon(getClass().getResource("/data/pepperoni4.png")).getImage();
+		PepperoniArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/pepperoniLeft1.png")).getImage();
+		PepperoniArmor.movespriteLeft2 = new ImageIcon(getClass().getResource("/data/pepperoniLeft2.png")).getImage();
+		PepperoniArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/pepperoniRight1.png")).getImage();
+		PepperoniArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/pepperoniRight2.png")).getImage();
 
 		tileTree = new ImageIcon(getClass().getResource("/data/tree.png")).getImage();
 		//tileGrass = new ImageIcon(getClass().getResource("/data/grass.png")).getImage();
@@ -371,6 +381,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		BoostBasil.boosteffectsprite = new ImageIcon(getClass().getResource("/data/basileffect.png")).getImage();
 		BoostGarlic.boostsprite = new ImageIcon(getClass().getResource("/data/garlicbread.png")).getImage();
 		BoostGarlic.boosteffectsprite = new ImageIcon(getClass().getResource("/data/garlicbreadeffect.png")).getImage();
+		LevelExit.sprite = new ImageIcon(getClass().getResource("/data/finishline.png")).getImage();
 		
 		HatBaseball.hatsprite = new ImageIcon(getClass().getResource("/data/hatbaseball.png")).getImage();
 		HatBowler.hatsprite = new ImageIcon(getClass().getResource("/data/hatbowler.png")).getImage();

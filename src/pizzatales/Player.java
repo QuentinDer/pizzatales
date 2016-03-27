@@ -517,9 +517,15 @@ public class Player extends BlockingStuff {
 			if (walkCounter == 1000)
 				walkCounter = 0;
 			if (walkCounter % 30 == 0) {
-				currentSprite = armor.getMoveSprite1();
+				if(ismovingright)
+					currentSprite = armor.getMoveSpriteRight1();
+				else
+					currentSprite = armor.getMoveSpriteLeft1();
 			} else if (walkCounter % 15 == 0) {
-				currentSprite = armor.getMoveSprite2();
+				if(ismovingright)
+					currentSprite = armor.getMoveSpriteRight2();
+				else
+					currentSprite = armor.getMoveSpriteLeft2();
 			}
 		} else {
 			stayCounter++;
