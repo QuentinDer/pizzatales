@@ -537,6 +537,9 @@ public class Player extends BlockingStuff {
 			else
 				currentSprite = armor.getStaySprite();
 		}
+		if(health <= 0){
+			currentSprite = armor.getDeathSprite();
+		}
 	}
 	
 	public boolean isAimingUp() {

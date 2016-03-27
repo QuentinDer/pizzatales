@@ -4,7 +4,7 @@ import java.awt.Image;
 
 public class HawaiiArmor extends Armor {
 	
-	public static Image staysprite1, staysprite2, movespriteLeft1, movespriteLeft2, movespriteRight1, movespriteRight2;
+	public static Image staysprite1, staysprite2, movespriteLeft1, movespriteLeft2, movespriteRight1, movespriteRight2, deathSprite;
 	
 	public HawaiiArmor() {
 		super(9,5.25f);
@@ -38,5 +38,10 @@ public class HawaiiArmor extends Armor {
 	@Override
 	public Image getMoveSpriteRight2() {
 		return movespriteRight2;
+	}
+	
+	@Override
+	public Image getDeathSprite() {
+		return deathSprite;
 	}
 }

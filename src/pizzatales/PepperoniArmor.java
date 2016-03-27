@@ -4,7 +4,7 @@ import java.awt.Image;
 
 public class PepperoniArmor extends Armor {
 	
-	public static Image staysprite1, staysprite2, movespriteLeft1, movespriteLeft2, movespriteRight1, movespriteRight2;
+	public static Image staysprite1, staysprite2, movespriteLeft1, movespriteLeft2, movespriteRight1, movespriteRight2, deathSprite;
 	
 	public PepperoniArmor() {
 		super(12,4.5f);
@@ -38,5 +38,10 @@ public class PepperoniArmor extends Armor {
 	@Override
 	public Image getMoveSpriteRight2() {
 		return movespriteRight2;
+	}
+	
+	@Override
+	public Image getDeathSprite() {
+		return deathSprite;
 	}
 }

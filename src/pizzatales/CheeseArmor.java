@@ -4,7 +4,7 @@ import java.awt.Image;
 
 public class CheeseArmor extends Armor {
 	
-	public static Image staysprite1, staysprite2, movespriteLeft1, movespriteLeft2, movespriteRight1, movespriteRight2;
+	public static Image staysprite1, staysprite2, movespriteLeft1, movespriteLeft2, movespriteRight1, movespriteRight2, deathSprite;
 	
 	public CheeseArmor() {
 		super(15,3.75f);	
@@ -38,5 +38,10 @@ public class CheeseArmor extends Armor {
 	@Override
 	public Image getMoveSpriteRight2() {
 		return movespriteRight2;
+	}
+	
+	@Override
+	public Image getDeathSprite() {
+		return deathSprite;
 	}
 }

@@ -40,4 +40,5 @@ public abstract class Armor {
 	public abstract Image getMoveSpriteLeft2();
 	public abstract Image getMoveSpriteRight1();
 	public abstract Image getMoveSpriteRight2();
+	public abstract Image getDeathSprite();
 }
