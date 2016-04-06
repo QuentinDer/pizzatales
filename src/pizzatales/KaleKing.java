@@ -648,6 +648,10 @@ public class KaleKing extends Enemy {
 		
 		phase++;
 		
+		if (phase == 4) {
+			widerice = true;
+		}
+		
 		paintoverride = true;
 		animcounter = 0;
 		
