@@ -2,7 +2,7 @@ package pizzatales;
 
 public class EnemyFactory {
 
-	private static String acceptedEnemyTypes = "TABPMSWROG";
+	private static String acceptedEnemyTypes = "TABPMSWROGK";
 	
 	public static boolean isTileTypeSupported(char type) {
 		String test = "";
@@ -42,6 +42,9 @@ public class EnemyFactory {
 			break;
 		case 'G':
 			e = new Garlnstein(x*50+25,y*50+40,false);
+			break;
+		case 'K':
+			e = new KaleKing(x*50+25,y*50+40,app);
 			break;
 		}
 		return e;

@@ -6,7 +6,7 @@ public class Rocket extends Firearm {
 	public static Image leftSprite, rightSprite, upSprite, downSprite;
 	
 	public Rocket() {
-		super(4,750,5,150);
+		super(7,750,5,150);
 	}
 	
 	@Override

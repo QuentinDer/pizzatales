@@ -11,7 +11,7 @@ public class Lava extends BackgroundItem {
 		super(x, y, deltapx, deltapy, onetimeeffect, height);
 	}
 
-	public static Image lavasprite;
+	//public static Image lavasprite;
 	public static Image lavaeffectsprite;
 
 	@Override
@@ -26,7 +26,7 @@ public class Lava extends BackgroundItem {
 
 	@Override
 	protected Image getSprite() {
-		return lavasprite;
+		return null;
 	}
 	
 	@Override

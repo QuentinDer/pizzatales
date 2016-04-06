@@ -12,6 +12,7 @@ public abstract class Item extends Stuff {
 	public int posx;
 	public int posy;
 	public int height;
+	public boolean pleaseremove;
 	
 	public Item(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
 		super((x + deltapx) * 50 + 25,(y + deltapy)* 50 + 40);

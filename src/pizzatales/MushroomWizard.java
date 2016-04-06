@@ -41,7 +41,7 @@ public class MushroomWizard extends Enemy {
 			randr = 10;
 			break;
 		case 2:
-			maxInAnimation = 30;
+			maxInAnimation = 50;
 			maxBallInAnimation = 30;
 			ballcd = 60;
 			randg = 10;
@@ -192,7 +192,7 @@ public class MushroomWizard extends Enemy {
 					currentSprite = swipeLeft;
 					slashDirection = 1;
 				}
-			}
+			}//TODO
 			if (bcd == 0 && phase > 2) {
 				bcd = ballcd;
 				projectiles.add(new MushroomWizardBall(centerX + 30,centerY,0.f,-1.f,centerX,centerY,getNextBall(),phase % 2 == 0));

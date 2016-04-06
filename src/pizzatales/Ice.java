@@ -20,7 +20,7 @@ public class Ice extends BackgroundItem {
 	
 	@Override
 	public boolean checkCollisionPlayer(Player p) {
-		if (r.contains(p.getCenterX(), p.getCenterY())) {
+		if (r.intersects(p.getCenterX()-6,p.getCenterY()-6,12,12)) {
 			doEffect(p);
 			return false;
 		} else
@@ -29,7 +29,7 @@ public class Ice extends BackgroundItem {
 	
 	@Override
 	public boolean checkCollisionEnemy(Enemy e) {
-		if (canDoEffect(e) && e.R.intersects(r)) {
+		if (canDoEffect(e) && r.intersects(e.getCenterX()-6,e.getCenterY()-6,12,12)) {
 			doEffect(e);
 			return false;
 		} else

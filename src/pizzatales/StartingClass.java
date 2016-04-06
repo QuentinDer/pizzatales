@@ -67,10 +67,12 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	
 	public static final boolean TESTMODE = true;
-	public static int difficultylevel = TESTMODE ? 4 : 1;
-	public static int currentlevel = TESTMODE ? 1 : 1;
+	public static int difficultylevel = TESTMODE ? 1 : 1;
+	public static int currentlevel = TESTMODE ? 20 : 1;
 	private int maxlevel = 20;
 
+	public static int maskminx = -1, maskmaxx = -1, maskminy = -1, maskmaxy = -1;
+	
 	public int weaponindex;
 	private int armorindex;
 	private int hatindex;
@@ -93,11 +95,13 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static GameState state = GameState.Menu;
 
 	public static BlockingStuff[][] map;
-	private Image[][] backgroundmap; 
+	public static Image[][] backgroundmap;
+	private Image[][][] maskmap;
 	
 	public static int width;
 	public static int height;
 	public static int[][] heightitemmap;
+	public static boolean remask;
 
 	private static ArrayList<Tile> tilearray = new ArrayList<Tile>();
 	//public static ArrayList<Item> items = new ArrayList<Item>();
@@ -210,6 +214,22 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		BackgroundFactory.dirt = new ImageIcon(getClass().getResource("/data/dirt.png")).getImage();
 		BackgroundFactory.brick = new ImageIcon(getClass().getResource("/data/bricktile.png")).getImage();
 		BackgroundFactory.mountain = new ImageIcon(getClass().getResource("/data/mountainfloor.png")).getImage();
+		BackgroundFactory.lava = new ImageIcon(getClass().getResource("/data/puddlelava.png")).getImage();
+		
+		Level.dirtset[0] = BackgroundFactory.dirt;
+		for (int i = 1; i < 16; i++)
+			Level.dirtset[i] = new ImageIcon(StartingClass.class.getResource("/data/dirt"+i+".png")).getImage();
+		
+		Level.mountainset[0] = BackgroundFactory.mountain;
+		for (int i = 1; i < 16; i++)
+			Level.mountainset[i] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor"+i+".png")).getImage();
+		
+		Level.iceset[0] = BackgroundFactory.ice;
+		for (int i = 1; i < 16; i++)
+			Level.iceset[i] = new ImageIcon(StartingClass.class.getResource("/data/ice"+i+".png")).getImage();
+		Level.icesetm[0] = BackgroundFactory.ice;
+		for (int i = 1; i < 16; i++)
+			Level.icesetm[i] = new ImageIcon(StartingClass.class.getResource("/data/icem"+i+".png")).getImage();
 
 		blooddrop = new ImageIcon(getClass().getResource("/data/blooddrop.png")).getImage();
 		Gun.leftSprite = new ImageIcon(getClass().getResource("/data/pistol1.png")).getImage();
@@ -260,6 +280,14 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				.getImage();
 		ReaperBarrelProjectile.sprite = new ImageIcon(getClass().getResource("/data/barrelprojectile.png")).getImage();
 		OnioughProjectile.sprite = new ImageIcon(getClass().getResource("/data/onioughProjectile.png")).getImage();
+		IceBolt.boltdown = new ImageIcon(getClass().getResource("/data/iceboltdown.png")).getImage();
+		IceBolt.boltright = new ImageIcon(getClass().getResource("/data/iceboltright.png")).getImage();
+		IceBolt.boltleft = new ImageIcon(getClass().getResource("/data/iceboltleft.png")).getImage();
+		IceBolt.boltup = new ImageIcon(getClass().getResource("/data/iceboltup.png")).getImage();
+		IceBolt.boltleftdown = new ImageIcon(getClass().getResource("/data/iceboltleftdown.png")).getImage();
+		IceBolt.boltrightdown = new ImageIcon(getClass().getResource("/data/iceboltrightdown.png")).getImage();
+		IceBolt.boltleftup = new ImageIcon(getClass().getResource("/data/iceboltleftup.png")).getImage();
+		IceBolt.boltrightup = new ImageIcon(getClass().getResource("/data/iceboltrightup.png")).getImage();
 
 		Tato.staySprite = new ImageIcon(getClass().getResource("/data/tato1.png")).getImage();
 		Tato.move1Sprite = new ImageIcon(getClass().getResource("/data/tato2.png")).getImage();
@@ -353,6 +381,27 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Garlnstein.cloning1 = new ImageIcon(getClass().getResource("/data/garlnsteinCloning1.png")).getImage();
 		Garlnstein.cloning2 = new ImageIcon(getClass().getResource("/data/garlnsteinCloning2.png")).getImage();
 		Garlnstein.cloning3 = new ImageIcon(getClass().getResource("/data/garlnsteinCloning3.png")).getImage();
+		KaleKing.staySprite = new ImageIcon(getClass().getResource("/data/kaleking.png")).getImage();
+		KaleKing.move1Sprite = new ImageIcon(getClass().getResource("/data/kalekingWalk1.png")).getImage();
+		KaleKing.move2Sprite = new ImageIcon(getClass().getResource("/data/kalekingWalk2.png")).getImage();
+		KaleKing.dieSprite = new ImageIcon(getClass().getResource("/data/kalekingDead.png")).getImage();
+		KaleKing.swipeDown = new ImageIcon(getClass().getResource("/data/kalekingSwipeDown.png")).getImage();
+		KaleKing.swipeLeft = new ImageIcon(getClass().getResource("/data/kalekingSwipeLeft.png")).getImage();
+		KaleKing.swipeRight = new ImageIcon(getClass().getResource("/data/kalekingSwipeRight.png")).getImage();
+		KaleKing.swipeUp = new ImageIcon(getClass().getResource("/data/kalekingSwipeUp.png")).getImage();
+		KaleKing.boltsfiringsprite = new ImageIcon(getClass().getResource("/data/kalekingMagicCryoBeam.png")).getImage();
+		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase1.png")).getImage());
+		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase2.png")).getImage());
+		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase3.png")).getImage());
+		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase4.png")).getImage());
+		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase5.png")).getImage());
+		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase6.png")).getImage());
+		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase7.png")).getImage());
+		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase8.png")).getImage());
+		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase9.png")).getImage());
+		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase10.png")).getImage());
+		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase11.png")).getImage());
+		
 
 		BazookaBulletExplosion.bazookaexplosionsprite = new ImageIcon(
 				getClass().getResource("/data/bazookaexplosion.png")).getImage();
@@ -362,7 +411,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		
 		ArmorPotion.armorpotionsprite = new ImageIcon(getClass().getResource("/data/armor.png")).getImage();
 		HealthPotion.healthpotionsprite = new ImageIcon(getClass().getResource("/data/health.png")).getImage();
-		Lava.lavasprite = new ImageIcon(getClass().getResource("/data/puddlelava.png")).getImage();
 		Lava.lavaeffectsprite = new ImageIcon(getClass().getResource("/data/lavaeffect.png")).getImage();
 		WaterFlow.waterflowsprite = new ImageIcon(getClass().getResource("/data/waterflow.png")).getImage();
 		WaterFlow.watereffectsprite = new ImageIcon(getClass().getResource("/data/watereffect.png")).getImage();
@@ -387,6 +435,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		BoostGarlic.boostsprite = new ImageIcon(getClass().getResource("/data/garlicbread.png")).getImage();
 		BoostGarlic.boosteffectsprite = new ImageIcon(getClass().getResource("/data/garlicbreadeffect.png")).getImage();
 		LevelExit.sprite = new ImageIcon(getClass().getResource("/data/finishline.png")).getImage();
+		SummonedIce.healingice = new ImageIcon(getClass().getResource("/data/iceheal.png")).getImage();
+		FakeItemForFrozen.frozen = new ImageIcon(getClass().getResource("/data/frozeneffect.png")).getImage();
 		
 		HatBaseball.hatsprite = new ImageIcon(getClass().getResource("/data/hatbaseball.png")).getImage();
 		HatBowler.hatsprite = new ImageIcon(getClass().getResource("/data/hatbowler.png")).getImage();
@@ -634,6 +684,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		for (int i = 0; i < width; i++)
 			Arrays.fill(heightitemmap[i], -1);
 		backgroundmap = new Image[width][height];
+		maskmap = new Image[width][height][3];
 		Image background = new ImageIcon(getClass().getResource("/data/"+Level.getBackground(currentlevel))).getImage();
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
@@ -755,7 +806,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					k++;
 			}
 		}
-		Level.bitmask(currentlevel, backgroundmap);
+		Level.bitmask(currentlevel, backgroundmap, maskmap);
 		ArrayList<Integer> nonobstacles = new ArrayList<Integer>();
 		int k = 0;
 		for (int i = 0; i < width; i++) {
@@ -913,6 +964,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						e.canmoveright = true;
 						e.canmoveup = true;
 						e.sliding = false;
+						e.setDefaultSpeed();
 					}
 					checkEnemiesCollision();
 					player.checkCollisionsWithBlockingStuff();
@@ -1233,6 +1285,14 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 								map[t.posx][t.posy] = t;
 							}
 						}
+						i = 0;
+						while (i < leavingitems.size()) {
+							if (Boost.class.isInstance(leavingitems.get(i)))
+								leavingitems.remove(i);
+							else
+								i++;
+						}
+						player.isGrinning = 0;
 						activatedentry = null;
 						ScrollingMode = 0;
 					}
@@ -1396,7 +1456,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						hiddenenemies.get(revealHidden).clear();
 						revealHidden = -1;
 					}
-					if (player.getHealth() < 1) {
+					if (player.getHealth() <= 0) {
 						state = GameState.Dead;
 						player.controlledstopMoving();
 						player.setScrollingSpeedY(0);
@@ -1644,9 +1704,26 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		int fy = Math.min(height, (850 - bg.getCenterY() + StartingClass.bginity) / 50);
 		int bbx = bg.getCenterX() - bginitx;
 		int bby = bg.getCenterY() - bginity;
+		if (remask) {
+			remask = false;
+			if (maskminx != 1)
+				Level.bitmask(currentlevel, backgroundmap, maskmap, maskminx, maskmaxx, maskminy, maskmaxy);
+			else
+				Level.bitmask(currentlevel, backgroundmap, maskmap);
+		}
+		//boolean test = false;
 		for (int y = sty; y < fy; y++) {
 			for (int x = stx; x < fx; x++) {
 				g.drawImage(backgroundmap[x][y], 50*x+bbx, 50*y+bby, this);
+				if (map[x][y] != null) {
+					//System.out.println(map[x][y].getCenterX()+"-"+map[x][y].getCenterY()+" "+Integer.toString(50*x+bbx)+"-"+Integer.toString(50*y+bby));
+					//test = true;
+				}
+				int h = 0;
+				while (h < 3) {
+					g.drawImage(maskmap[x][y][h], 50*x+bbx, 50*y+bby, this);
+					h++;
+				}
 			}
 		}
 		//g.drawImage(background, bg.getCenterX(), bg.getCenterY(), this);
@@ -1995,12 +2072,20 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	}
 
 	public static void updateItems() {
+		int h;
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				for (int h = 0; h <= heightitemmap[i][j]; h++) {
-					/*if (items[i][j][h] == null)
-						System.out.println("Error : height=" +heightitemmap[i][j]+" x="+i+" y="+j);*/
+				h = 0;
+				while (h<=heightitemmap[i][j]) {
 					items[i][j][h].update();
+					if (items[i][j][h].pleaseremove) {
+						if (SummonedIce.class.isInstance(items[i][j][h])) {
+							backgroundmap[i][j] = ((SummonedIce)items[i][j][h]).previousbackground;
+							remask = true;
+						}
+						removeItem(items[i][j][h]);
+					} else
+						h++;
 				}
 			}
 		}
@@ -2022,14 +2107,16 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	 */
 
 	private void paintItems(Graphics g,int stx,int fx,int sty,int fy) {
-		for (int j = sty; j < fy; j++) {
-			for (int i = stx; i < fx; i++) {
-				for (int h = 0; h <= heightitemmap[i][j]; h++) {
-					if (BackgroundItem.class.isInstance(items[i][j][h])) {
-						if (h == heightitemmap[i][j] || !BackgroundItem.class.isInstance(items[i][j][h+1]))
-						g.drawImage(items[i][j][h].getSprite(), items[i][j][h].getCenterX() - 31, items[i][j][h].getCenterY() - 31, this);
-				} else if (StartingClass.map[i][j] == null || !Tile.class.isInstance(StartingClass.map[i][j]))
-						g.drawImage(items[i][j][h].getSprite(), items[i][j][h].getCenterX() - 31, items[i][j][h].getCenterY() - 31, this);
+		for (int h = 0; h <= blockmaxheight; h++) {
+			for (int j = sty; j < fy; j++) {
+				for (int i = stx; i < fx; i++) {
+					if (h <= heightitemmap[i][j]) {
+						if (BackgroundItem.class.isInstance(items[i][j][h])) {
+							if (h == heightitemmap[i][j] || !BackgroundItem.class.isInstance(items[i][j][h+1]))
+							g.drawImage(items[i][j][h].getSprite(), items[i][j][h].getCenterX() - 31, items[i][j][h].getCenterY() - 31, this);
+					} else if (StartingClass.map[i][j] == null || !Tile.class.isInstance(StartingClass.map[i][j]))
+							g.drawImage(items[i][j][h].getSprite(), items[i][j][h].getCenterX() - 31, items[i][j][h].getCenterY() - 31, this);
+					}
 				}
 			}
 		}

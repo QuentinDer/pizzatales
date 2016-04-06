@@ -6,6 +6,73 @@ import java.util.HashMap;
 
 public class MapUtil {
 
+	public static void getRing(int x, int y, int mp, ArrayList<Integer> ring) {
+		ring.clear();
+		ArrayList<Integer> todiscover = new ArrayList<Integer>();
+		todiscover.add(StartingClass.height*x+y);
+		ArrayList<Integer> nonobstacles = new ArrayList<Integer>();
+		int i = 0;
+		int j = 0;
+		int size;
+		boolean test;
+		while (i < mp && !todiscover.isEmpty()) {
+			j = 0;
+			size = todiscover.size();
+			while (j < size) {
+				int current = todiscover.get(0);
+				int xj = current / StartingClass.height;
+				int yj = current % StartingClass.height;
+				test = false;
+				if (!nonobstacles.contains(current-StartingClass.height) && !todiscover.contains(current-StartingClass.height) && 0 != xj) {
+					if (null == StartingClass.map[xj-1][yj]) {
+						todiscover.add(current-StartingClass.height);
+					} else
+						test = true;
+				}
+				if (!nonobstacles.contains(current+StartingClass.height) && !todiscover.contains(current+StartingClass.height) && StartingClass.width -1 != xj) {
+					if (null == StartingClass.map[xj+1][yj]) {
+						todiscover.add(current+StartingClass.height);
+					} else
+						test = true;
+				}
+				if (!nonobstacles.contains(current-1) && !todiscover.contains(current-1) && 0 != yj) {
+					if (null == StartingClass.map[xj][yj-1]) {
+						todiscover.add(current-1);
+					} else
+						test = true;
+				}
+				if (!nonobstacles.contains(current+1) && !todiscover.contains(current+1) && StartingClass.height-1 != yj) {
+					if (null == StartingClass.map[xj][yj+1]) {
+						todiscover.add(current+1);
+					} else
+						test = true;
+				}
+				if (xj != 0) {
+					if (yj != 0 && null != StartingClass.map[xj-1][yj-1])
+						test = true;
+					if (yj != StartingClass.height-1 && null != StartingClass.map[xj-1][yj+1])
+						test = true;
+				}
+				if (xj != StartingClass.width - 1) {
+					if (yj != 0 && null != StartingClass.map[xj+1][yj-1])
+						test = true;
+					if (yj != StartingClass.height-1 && null != StartingClass.map[xj+1][yj+1])
+						test = true;
+				}
+				if (test)
+					ring.add(current);
+				todiscover.remove(0);
+				nonobstacles.add(current);
+				j++;
+			}
+			i++;
+		}
+		if (i == mp) {
+			nonobstacles.clear();
+			ring.clear();
+		}
+	}
+	
 	public static void getAccessibleArea(int x, int y, int mp, char[][] map, ArrayList<Integer> nonobstacles, HashMap<Integer,EntryDoor> entrydoors, HashMap<Integer,Tile> doors, int arenanumber) {
 		nonobstacles.clear();
 		int width = map.length;
@@ -187,7 +254,7 @@ public class MapUtil {
 			area.clear();
 		}
 	}
-	
+	/*
 	public static void bitmask(Image[][] background, Image path, Image outside, Image[] cornerset) {
 		if (cornerset.length != 16)
 			return;
@@ -203,15 +270,65 @@ public class MapUtil {
 			for (int j = 0; j < StartingClass.height; j++) {
 				tmp = 0;
 				if (path.equals(background[i][j])) {
-					if (j > 0 && !bitmap[i][j-1])
+					if (j > 0 && bitmap[i][j-1])
 						tmp++;
-					if (j < StartingClass.height-1 && !bitmap[i][j+1])
+					if (j < StartingClass.height-1 && bitmap[i][j+1])
 						tmp += 8;
-					if (i > 0 && !bitmap[i-1][j])
+					if (i > 0 && bitmap[i-1][j])
 						tmp += 2;
-					if (i < StartingClass.width-1 && !bitmap[i+1][j])
+					if (i < StartingClass.width-1 && bitmap[i+1][j])
 						tmp += 4;
 					background[i][j] = cornerset[tmp];
+				}
+			}
+		}
+	}
+	Image[][] mask, 
+	*/
+	
+	public static void bitmask(Image[][] background, Image[][][] mask, Image path, Image outside, Image[] cornerset, int height) {
+		if (cornerset.length != 16)
+			return;
+		int tmp;
+		//outside.equals(background[i][j])
+		for (int i = 0; i < StartingClass.width; i++) {
+			for (int j = 0; j < StartingClass.height; j++) {
+				tmp = 0;
+				if (path.equals(background[i][j])) {
+					if (j > 0 && outside == background[i][j-1])
+						tmp++;
+					if (j < StartingClass.height-1 && outside == background[i][j+1])
+						tmp += 8;
+					if (i > 0 && outside == background[i-1][j])
+						tmp += 2;
+					if (i < StartingClass.width-1 && outside == background[i+1][j])
+						tmp += 4;
+					if (tmp > 0)
+						mask[i][j][height] = cornerset[tmp];
+				}
+			}
+		}
+	}
+	
+	public static void bitmask(Image[][] background, Image[][][] mask, Image path, Image outside, Image[] cornerset, int height, int minx, int maxx, int miny, int maxy) {
+		if (cornerset.length != 16)
+			return;
+		int tmp;
+		//outside.equals(background[i][j])
+		for (int i = minx; i <= maxx; i++) {
+			for (int j = miny; j <= maxy; j++) {
+				tmp = 0;
+				if (path.equals(background[i][j])) {
+					if (j > 0 && outside == background[i][j-1])
+						tmp++;
+					if (j < StartingClass.height-1 && outside == background[i][j+1])
+						tmp += 8;
+					if (i > 0 && outside == background[i-1][j])
+						tmp += 2;
+					if (i < StartingClass.width-1 && outside == background[i+1][j])
+						tmp += 4;
+					if (tmp > 0)
+						mask[i][j][height] = cornerset[tmp];
 				}
 			}
 		}

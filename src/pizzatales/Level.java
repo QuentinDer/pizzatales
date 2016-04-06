@@ -3,10 +3,13 @@ package pizzatales;
 import java.awt.Image;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
-
 public class Level {
 
+	public static Image[] dirtset = new Image[16];
+	public static Image[] mountainset = new Image[16];
+	public static Image[] iceset = new Image[16];
+	public static Image[] icesetm = new Image[16];
+	
 	public static String getMapName(int level) {
 		if (level == -1)
 			return "map1.txt";
@@ -136,27 +139,18 @@ public class Level {
 		return hats;
 	}
 	
-	public static void bitmask(int level, Image[][] background) {
-		Image[] cornerset = new Image[16];
+	public static void bitmask(int level, Image[][] background, Image[][][] mask) {
+		//Image[] cornerset = new Image[16];
+		for (int i = 0; i < StartingClass.width; i++) {
+			for (int j = 0; j < StartingClass.height; j++) {
+				for (int h = 0; h < 3; h++) {
+					mask[i][j][h] = null;
+				}
+			}
+		}
 		switch ((level-1)/4+1) {
 		case 1:
-			cornerset[0] = new ImageIcon(StartingClass.class.getResource("/data/dirt0.png")).getImage();
-			cornerset[1] = new ImageIcon(StartingClass.class.getResource("/data/dirt1.png")).getImage();
-			cornerset[2] = new ImageIcon(StartingClass.class.getResource("/data/dirt2.png")).getImage();
-			cornerset[3] = new ImageIcon(StartingClass.class.getResource("/data/dirt3.png")).getImage();
-			cornerset[4] = new ImageIcon(StartingClass.class.getResource("/data/dirt4.png")).getImage();
-			cornerset[5] = new ImageIcon(StartingClass.class.getResource("/data/dirt5.png")).getImage();
-			cornerset[6] = new ImageIcon(StartingClass.class.getResource("/data/dirt6.png")).getImage();
-			cornerset[7] = new ImageIcon(StartingClass.class.getResource("/data/dirt7.png")).getImage();
-			cornerset[8] = new ImageIcon(StartingClass.class.getResource("/data/dirt8.png")).getImage();
-			cornerset[9] = new ImageIcon(StartingClass.class.getResource("/data/dirt9.png")).getImage();
-			cornerset[10] = new ImageIcon(StartingClass.class.getResource("/data/dirt10.png")).getImage();
-			cornerset[11] = new ImageIcon(StartingClass.class.getResource("/data/dirt11.png")).getImage();
-			cornerset[12] = new ImageIcon(StartingClass.class.getResource("/data/dirt12.png")).getImage();
-			cornerset[13] = new ImageIcon(StartingClass.class.getResource("/data/dirt13.png")).getImage();
-			cornerset[14] = new ImageIcon(StartingClass.class.getResource("/data/dirt14.png")).getImage();
-			cornerset[15] = BackgroundFactory.dirt;
-			MapUtil.bitmask(background, BackgroundFactory.dirt, BackgroundFactory.grass, cornerset);
+			MapUtil.bitmask(background, mask, BackgroundFactory.dirt, BackgroundFactory.grass, dirtset,0);
 			break;
 		case 2:
 			break;
@@ -165,76 +159,53 @@ public class Level {
 		case 4:
 			break;
 		case 5:
-			cornerset[0] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor0.png")).getImage();
-			cornerset[1] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor1.png")).getImage();
-			cornerset[2] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor2.png")).getImage();
-			cornerset[3] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor3.png")).getImage();
-			cornerset[4] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor4.png")).getImage();
-			cornerset[5] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor5.png")).getImage();
-			cornerset[6] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor6.png")).getImage();
-			cornerset[7] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor7.png")).getImage();
-			cornerset[8] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor8.png")).getImage();
-			cornerset[9] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor9.png")).getImage();
-			cornerset[10] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor10.png")).getImage();
-			cornerset[11] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor11.png")).getImage();
-			cornerset[12] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor12.png")).getImage();
-			cornerset[13] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor13.png")).getImage();
-			cornerset[14] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor14.png")).getImage();
-			cornerset[15] = BackgroundFactory.mountain;
-			MapUtil.bitmask(background, BackgroundFactory.mountain, BackgroundFactory.snow, cornerset);
-			cornerset[0] = new ImageIcon(StartingClass.class.getResource("/data/ice0.png")).getImage();
-			cornerset[1] = new ImageIcon(StartingClass.class.getResource("/data/ice1.png")).getImage();
-			cornerset[2] = new ImageIcon(StartingClass.class.getResource("/data/ice2.png")).getImage();
-			cornerset[3] = new ImageIcon(StartingClass.class.getResource("/data/ice3.png")).getImage();
-			cornerset[4] = new ImageIcon(StartingClass.class.getResource("/data/ice4.png")).getImage();
-			cornerset[5] = new ImageIcon(StartingClass.class.getResource("/data/ice5.png")).getImage();
-			cornerset[6] = new ImageIcon(StartingClass.class.getResource("/data/ice6.png")).getImage();
-			cornerset[7] = new ImageIcon(StartingClass.class.getResource("/data/ice7.png")).getImage();
-			cornerset[8] = new ImageIcon(StartingClass.class.getResource("/data/ice8.png")).getImage();
-			cornerset[9] = new ImageIcon(StartingClass.class.getResource("/data/ice9.png")).getImage();
-			cornerset[10] = new ImageIcon(StartingClass.class.getResource("/data/ice10.png")).getImage();
-			cornerset[11] = new ImageIcon(StartingClass.class.getResource("/data/ice11.png")).getImage();
-			cornerset[12] = new ImageIcon(StartingClass.class.getResource("/data/ice12.png")).getImage();
-			cornerset[13] = new ImageIcon(StartingClass.class.getResource("/data/ice13.png")).getImage();
-			cornerset[14] = new ImageIcon(StartingClass.class.getResource("/data/ice14.png")).getImage();
-			cornerset[15] = BackgroundFactory.ice;
-			MapUtil.bitmask(background, BackgroundFactory.ice, BackgroundFactory.snow, cornerset);
+			MapUtil.bitmask(background, mask, BackgroundFactory.mountain, BackgroundFactory.snow, mountainset,0);
+			MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.mountain, icesetm,1);
+			MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.snow, iceset,2);
 			break;
 		case 15:
-			cornerset[0] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor0.png")).getImage();
-			cornerset[1] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor1.png")).getImage();
-			cornerset[2] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor2.png")).getImage();
-			cornerset[3] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor3.png")).getImage();
-			cornerset[4] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor4.png")).getImage();
-			cornerset[5] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor5.png")).getImage();
-			cornerset[6] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor6.png")).getImage();
-			cornerset[7] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor7.png")).getImage();
-			cornerset[8] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor8.png")).getImage();
-			cornerset[9] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor9.png")).getImage();
-			cornerset[10] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor10.png")).getImage();
-			cornerset[11] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor11.png")).getImage();
-			cornerset[12] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor12.png")).getImage();
-			cornerset[13] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor13.png")).getImage();
-			cornerset[14] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor14.png")).getImage();
-			cornerset[15] = BackgroundFactory.mountain;
-			MapUtil.bitmask(background, BackgroundFactory.mountain, BackgroundFactory.snow, cornerset);
-			cornerset[0] = new ImageIcon(StartingClass.class.getResource("/data/ice0.png")).getImage();
-			cornerset[1] = new ImageIcon(StartingClass.class.getResource("/data/ice1.png")).getImage();
-			cornerset[2] = new ImageIcon(StartingClass.class.getResource("/data/ice2.png")).getImage();
-			cornerset[3] = new ImageIcon(StartingClass.class.getResource("/data/ice3.png")).getImage();
-			cornerset[4] = new ImageIcon(StartingClass.class.getResource("/data/ice4.png")).getImage();
-			cornerset[5] = new ImageIcon(StartingClass.class.getResource("/data/ice5.png")).getImage();
-			cornerset[6] = new ImageIcon(StartingClass.class.getResource("/data/ice6.png")).getImage();
-			cornerset[7] = new ImageIcon(StartingClass.class.getResource("/data/ice7.png")).getImage();
-			cornerset[8] = new ImageIcon(StartingClass.class.getResource("/data/ice8.png")).getImage();
-			cornerset[9] = new ImageIcon(StartingClass.class.getResource("/data/ice9.png")).getImage();
-			cornerset[10] = new ImageIcon(StartingClass.class.getResource("/data/ice10.png")).getImage();
-			cornerset[11] = new ImageIcon(StartingClass.class.getResource("/data/ice11.png")).getImage();
-			cornerset[12] = new ImageIcon(StartingClass.class.getResource("/data/ice12.png")).getImage();
-			cornerset[13] = new ImageIcon(StartingClass.class.getResource("/data/ice13.png")).getImage();
-			cornerset[14] = new ImageIcon(StartingClass.class.getResource("/data/ice14.png")).getImage();
-			cornerset[15] = BackgroundFactory.ice;
-			MapUtil.bitmask(background, BackgroundFactory.ice, BackgroundFactory.snow, cornerset);
+			MapUtil.bitmask(background, mask, BackgroundFactory.mountain, BackgroundFactory.snow, mountainset,0);
+			MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.mountain, icesetm,1);
+			MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.snow, iceset,2);
+			break;
+		}
+	}
+	
+	public static void bitmask(int level, Image[][] background, Image[][][] mask, int minx, int maxx, int miny, int maxy) {
+		//Image[] cornerset = new Image[16];
+		for (int i = minx; i <= maxx; i++) {
+			for (int j = miny; j <= maxy; j++) {
+				for (int h = 0; h < 3; h++) {
+					mask[i][j][h] = null;
+				}
+			}
+		}
+		switch ((level-1)/4+1) {
+		case 1:
+			MapUtil.bitmask(background, mask, BackgroundFactory.dirt, BackgroundFactory.grass, dirtset,0, minx, maxx, miny, maxy);
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			MapUtil.bitmask(background, mask, BackgroundFactory.mountain, BackgroundFactory.snow, mountainset,0, minx, maxx, miny, maxy);
+			MapUtil.bitmask(background, mask, BackgroundFactory.dirt, BackgroundFactory.grass, dirtset,0, minx, maxx, miny, maxy);
+			/*MapUtil.bitmask(background, mask, BackgroundFactory.mountain, BackgroundFactory.grass, dirtset, 0, minx, maxx, miny, maxy);
+			MapUtil.bitmask(background, mask, BackgroundFactory.snow, BackgroundFactory.grass, dirtset, 0, minx, maxx, miny, maxy);*/
+			MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.grass, dirtset,1, minx, maxx, miny, maxy);
+			MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.mountain, icesetm,1, minx, maxx, miny, maxy);
+			MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.snow, iceset,2, minx, maxx, miny, maxy);
+			MapUtil.bitmask(background, mask, SummonedIce.healingice, BackgroundFactory.grass, dirtset,1, minx, maxx, miny, maxy);
+			MapUtil.bitmask(background, mask, SummonedIce.healingice, BackgroundFactory.mountain, icesetm,1, minx, maxx, miny, maxy);
+			MapUtil.bitmask(background, mask, SummonedIce.healingice, BackgroundFactory.snow, iceset,2, minx, maxx, miny, maxy);
+			break;
+		case 15:
+			MapUtil.bitmask(background, mask, BackgroundFactory.mountain, BackgroundFactory.snow, mountainset,0, minx, maxx, miny, maxy);
+			MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.mountain, icesetm,1, minx, maxx, miny, maxy);
+			MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.snow, iceset,2, minx, maxx, miny, maxy);
 			break;
 		}
 	}

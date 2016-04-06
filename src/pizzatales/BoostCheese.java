@@ -2,7 +2,7 @@ package pizzatales;
 
 import java.awt.Image;
 
-public class BoostCheese extends Item {
+public class BoostCheese extends Boost {
 	
 	public BoostCheese(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
 		super(x, y, deltapx, deltapy, onetimeeffect, height);

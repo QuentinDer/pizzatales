@@ -4,8 +4,7 @@ import java.awt.Image;
 
 public class Oniough extends Enemy {
 
-	public static Image staySprite, move1Sprite, move2Sprite, dieSprite,
-	dashSpriteRight, dashSpriteLeft, slashSpriteLeft, slashSpriteRight;
+	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
 	public static Image onioughStomp1, onioughStomp2;
 	
 	private int firecd;

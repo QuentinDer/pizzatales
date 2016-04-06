@@ -58,13 +58,13 @@ public abstract class Enemy extends BlockingStuff {
 	public boolean showHealthBar;
 	
 	//protected Animation anim;
-	private int defaultspeed;
-	protected int speed;
+	private float defaultspeed;
+	protected float speed;
 	
 	protected Image currentSprite;
 	private boolean isArenaEnemy;
 
-	public Enemy(int centerX, int centerY, Firearm weapon, int health, int speed, int halfsizex, int halfsizey, int halfrsizex, int halfrsizey) {
+	public Enemy(int centerX, int centerY, Firearm weapon, int health, float speed, int halfsizex, int halfsizey, int halfrsizex, int halfrsizey) {
 		super(centerX, centerY, halfsizex, halfsizey, halfrsizex, halfrsizey);
 		halfbary = halfrsizey;
 		this.weapon = weapon;
@@ -459,7 +459,7 @@ public abstract class Enemy extends BlockingStuff {
 			setDieSprite();
 		if (bloodymess) {
 			setGibsSprite();
-			BazookaBulletExplosion bmess = new BazookaBulletExplosion(centerX, centerY);
+			BazookaBulletExplosion bmess = new BazookaBulletExplosion(centerX+30, centerY+30);
 			bmess.procfrequency = 20;
 			StartingClass.explosions.add(bmess);
 		}
@@ -684,11 +684,11 @@ public abstract class Enemy extends BlockingStuff {
 		speed = defaultspeed;
 	}
 	
-	public void setSpeed(int speed) {
+	public void setSpeed(float speed) {
 		this.speed = speed;
 	}
 	
-	public int getDefaultSpeed() {
+	public float getDefaultSpeed() {
 		return defaultspeed;
 	}
 }

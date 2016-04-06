@@ -48,7 +48,7 @@ public class Player extends BlockingStuff {
 	private int stayCounter = 0;
 	
 	public Player() {
-		super(640,100, 31,31,23,23);
+		super(640,100, 31,31,25,25);
 	}
 
 	private Background bg;
@@ -257,40 +257,40 @@ public class Player extends BlockingStuff {
 			if (!sliding)
 				speedY += -MOVESPEED;
 			else if (speedY < 0) {
-				if (walkCounter % Math.max(1, ((int)(-speedY*(armor.MAXDEF*5f/16f+4.75f)-armor.MAXDEF*5f/4f+25f))) == 0)
-					speedY -= 1;
-			} else if (walkCounter % ((int)(speedY*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)) == 0) {
-				speedY -= 1;
+				if (walkCounter % Math.max(1, ((int)(-speedY*(armor.MAXDEF*5f/16f+4.75f)-armor.MAXDEF*5f/4f+25f))/6) == 0)
+					speedY -= 0.25f;
+			} else if (walkCounter %  Math.max(1,((int)(speedY*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)/6)) == 0) {
+				speedY -= 0.25f;
 			}
 		}
 		if (ismovingdown) {
 			if (!sliding)
 				speedY += MOVESPEED;
 			else if (speedY > 0) {
-				if (walkCounter % Math.max(1, ((int)(speedY*(armor.MAXDEF*5f/16f+4.75f)-armor.MAXDEF*5f/4f+25f))) == 0)
-					speedY += 1;
-			} else if (walkCounter % ((int)(-speedY*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)) == 0) {
-				speedY += 1;
+				if (walkCounter % Math.max(1, ((int)(speedY*(armor.MAXDEF*5f/16f+4.75f)-armor.MAXDEF*5f/4f+25f))/6) == 0)
+					speedY += 0.25f;
+			} else if (walkCounter %  Math.max(1,((int)(-speedY*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)/6)) == 0) {
+				speedY += 0.25f;
 			}
 		}
 		if (ismovingleft) {
 			if (!sliding)
 				speedX += -MOVESPEED;
 			else if (speedX < 0) {
-				if (walkCounter % Math.max(1, ((int)(-speedX*(armor.MAXDEF*5f/16f+4.75f)-armor.MAXDEF*5f/4f+25f))) == 0)
-					speedX -= 1;
-			} else if (walkCounter % ((int)(speedX*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)) == 0) {
-				speedX -= 1;
+				if (walkCounter % Math.max(1, ((int)(-speedX*(armor.MAXDEF*5f/16f+4.75f)-armor.MAXDEF*5f/4f+25f))/6) == 0)
+					speedX -= 0.25f;
+			} else if (walkCounter %  Math.max(1,((int)(speedX*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)/6)) == 0) {
+				speedX -= 0.25f;
 			}
 		}
 		if (ismovingright) {
 			if (!sliding)
 				speedX += MOVESPEED;
 			else if (speedX > 0) {
-				if (walkCounter % Math.max(1, ((int)(speedX*(armor.MAXDEF*5f/16f+4.75f)-armor.MAXDEF*5f/4f+25f))) == 0)
-					speedX += 1;
-			} else if (walkCounter % ((int)(-speedX*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)) == 0) {
-				speedX += 1;
+				if (walkCounter % Math.max(1, ((int)(speedX*(armor.MAXDEF*5f/16f+4.75f)-armor.MAXDEF*5f/4f+25f))/6) == 0)
+					speedX += 0.25f;
+			} else if (walkCounter %  Math.max(1,((int)(-speedX*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)/6)) == 0) {
+				speedX += 0.25f;
 			}
 		}
 		if (speedY > 0 && !canmovedown)
@@ -411,8 +411,10 @@ public class Player extends BlockingStuff {
 			setCenterY(getCenterY() + 2);
 		}*/
 
-		centerY += speedY;
-		centerX += speedX;
+		fcenterY += speedY;
+		fcenterX += speedX;
+		centerX = (int)fcenterX;
+		centerY = (int)fcenterY;
 
 		// Collision
 		R.setRect(centerX + speedX - 25, centerY + speedY - 25, 50, 50);
@@ -498,8 +500,10 @@ public class Player extends BlockingStuff {
 		}
 		speedY -= scrollingSpeedY;
 		speedX -= scrollingSpeedX;
-		centerY += speedY;
-		centerX += speedX;
+		fcenterY += speedY;
+		fcenterX += speedX;
+		centerX = (int)fcenterX;
+		centerY = (int)fcenterY;
 		R.setRect(centerX +speedX- 25, centerY +speedY- 25, 50, 50);
 		weapon.increaseShootingCounter();
 		posx = (centerX - bg.getCenterX() + StartingClass.bginitx) / 50;

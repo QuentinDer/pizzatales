@@ -15,7 +15,7 @@ public class SirTomato extends Enemy {
 	private boolean isSlashingRight;
 	private int slashCd;
 	private boolean hasSlashed;
-	private int dashSpeedX;
+	private float dashSpeedX;
 	
 	public SirTomato(int centerX, int centerY) {
 		super(centerX, centerY, null, 100, basicspeed, 50, 50, 45, 45);
@@ -65,20 +65,12 @@ public class SirTomato extends Enemy {
 				currentSprite = staySprite;
 				isSlashing = false;
 				slashCd = 30;
+				showHealthBar = true;
+				paintoverride = false;
 			}
 		}
 		if (slashCd > 0)
 			slashCd--;
-		if (isDashing && speedX != dashSpeedX) {
-			halfsizex = 50;
-			halfsizey = 50;
-			halfrsizex = 45;
-			halfrsizey = 45;
-			isDashing = false;
-			currentSprite = staySprite;
-			speed = basicspeed;
-			inAnimation = 0;
-		}
 			
 		
 		//boss parameters difinition
@@ -152,7 +144,14 @@ public class SirTomato extends Enemy {
 			}
 			if (tcd == 0 && diffx > 300) {
 				if (player.getCenterX() < getCenterX()) {
-					if (StartingClass.map[posx+1][posy] == null) {
+					boolean test = true;
+					for (int i = 0; i < 3; i++) {
+						for (int j = -1; j < 2; j++) {
+							if ((i != 0 || j != 0) && StartingClass.map[posx-i][posy+j] != null)
+								test = false;
+						}
+					}
+					if (test) {
 						projectiles.add(new TomatoProjectile(centerX - 30,centerY,-1,0));
 						stopMoving();
 						currentSprite = sirtomatothrowleft;
@@ -160,7 +159,14 @@ public class SirTomato extends Enemy {
 						tcd = tatocd;
 					}
 				} else {
-					if (StartingClass.map[posx-1][posy] == null) {
+					boolean test = true;
+					for (int i = 0; i < 3; i++) {
+						for (int j = -1; j < 2; j++) {
+							if ((i != 0 || j != 0) && StartingClass.map[posx+i][posy+j] != null)
+								test = false;
+						}
+					}
+					if (test) {
 						projectiles.add(new TomatoProjectile(centerX + 30,centerY,1,0));
 						stopMoving();
 						currentSprite = sirtomatothrowright;
@@ -194,6 +200,8 @@ public class SirTomato extends Enemy {
 					halfrsizex = 90;
 					halfrsizey = 35;
 					isDashing = true;
+					paintoverride = true;
+					showHealthBar = false;
 					inAnimation = 50;
 					dcd = dashcd;
 					R.setBounds((int)(centerX - halfrsizex + speedX), (int)(centerY - halfrsizey + speedY), 2*halfrsizex, 2*halfrsizey);
@@ -201,6 +209,77 @@ public class SirTomato extends Enemy {
 			}
 		}
 	}
+	
+	@Override
+	public void update() {
+		
+		speedX = 0;
+		speedY = 0;
+		
+		if (isDashing) {
+			if ((dashSpeedX > 0 && !canmoveright) || (dashSpeedX < 0 && !canmoveleft)) {
+				isDashing = false;
+				paintoverride = false;
+				showHealthBar = true;
+				halfsizex = 50;
+				halfsizey = 50;
+				halfrsizex = 45;
+				halfrsizey = 45;
+				isDashing = false;
+				currentSprite = staySprite;
+				speed = basicspeed;
+				inAnimation = 0;
+			} else {
+				speedX = dashSpeedX;
+				fcenterX += speedX - player.getScrollingSpeedX();
+				fcenterY += speedY - player.getScrollingSpeedY();
+				centerX = (int)fcenterX;
+				centerY = (int)fcenterY;
+			}
+		} else {
+			if (ismovingup) {
+				speedY += -speed;
+			}
+			if (ismovingdown) {
+				speedY += speed;
+			}
+			if (ismovingleft) {
+				speedX += -speed;
+			}
+			if (ismovingright) {
+				speedX += speed;
+			}
+			if (speedY > 0 && !canmovedown)
+				speedY = 0;
+			if (speedY < 0 && !canmoveup)
+				speedY = 0;
+			if (speedX > 0 && !canmoveright)
+				speedX = 0;
+			if (speedX < 0 && !canmoveleft)
+				speedX = 0;
+			fcenterX += speedX - player.getScrollingSpeedX();
+			fcenterY += speedY - player.getScrollingSpeedY();
+			centerX = (int)fcenterX;
+			centerY = (int)fcenterY;
+		}
+		
+		R.setBounds((int)(centerX - halfrsizex + speedX), (int)(centerY - halfrsizey + speedY), 2*halfrsizex, 2*halfrsizey);
+		
+		if (alive == true) {
+			
+			posx = (getCenterX() - bg.getCenterX() + StartingClass.bginitx) / 50;
+			posy = (getCenterY() - bg.getCenterY() + StartingClass.bginity) / 50;
+			StartingClass.map[posx][posy] = this;
+			animate();
+			if (movementTime % 15 == 0 && !hasSeenU && centerX + halfsizex > 0 
+					&& centerX - halfsizex< 1280 && centerY + halfsizey > 0 
+					&& centerY - halfsizey < 800 && this.canSeePlayer()) {
+				hasSeenU = true;
+			}
+				
+		}
+	}
+	
 	@Override
 	public void setStaySprite() {
 		currentSprite = staySprite;
@@ -263,6 +342,8 @@ public class SirTomato extends Enemy {
 				halfrsizex = 45;
 				halfrsizey = 45;
 				isDashing = false;
+				paintoverride = false;
+				showHealthBar = true;
 				currentSprite = staySprite;
 				inAnimation = 0;
 				speed = basicspeed;

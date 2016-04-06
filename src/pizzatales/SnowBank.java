@@ -22,7 +22,8 @@ public class SnowBank extends BackgroundItem {
 
 	@Override
 	protected void doEffect(Player p) {
-		player.setMOVESPEED(player.getArmor().speed-1);
+		//player.setMOVESPEED(player.getArmor().speed-1);
+		player.setMOVESPEED(Math.max(1, player.getArmor().speed/2.f));
 	}
 
 	@Override
@@ -90,6 +91,7 @@ public class SnowBank extends BackgroundItem {
 
 	@Override
 	protected void doEffect(Enemy e) {
-		e.setSpeed(Math.max(1, e.getDefaultSpeed() - 1));
+		//e.setSpeed(Math.max(1, e.getDefaultSpeed() - 1));
+		e.setSpeed(Math.max(1, e.getDefaultSpeed()/2.f));
 	}
 }

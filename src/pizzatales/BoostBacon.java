@@ -2,7 +2,7 @@ package pizzatales;
 
 import java.awt.Image;
 
-public class BoostBacon extends Item {
+public class BoostBacon extends Boost {
 
 	int target;
 	private final static int angleincrease = 3;
@@ -37,7 +37,7 @@ public class BoostBacon extends Item {
 	}
 	@Override
 	protected void doLeavingEffect() {
-		
+		player.getWeapon().range *= 2;
 		boolean atleastoneenemyalive = false;
 		for (Enemy e : StartingClass.enemyarray) {
 			if (e.alive)

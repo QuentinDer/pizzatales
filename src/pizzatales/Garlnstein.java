@@ -30,10 +30,6 @@ public class Garlnstein extends Enemy {
 	private int dashspeed;
 	private float dashSpeedY;
 	private float dashSpeedX;
-	private float fspeedX;
-	private float fspeedY;
-	private float fcenterX;
-	private float fcenterY;
 	public boolean fake;
 	private boolean cloningenabled, dashingenabled;
 	
@@ -409,16 +405,12 @@ public class Garlnstein extends Enemy {
 					}
 				}
 			} else {
-				fspeedY = 0;
-				fspeedX = 0;
-				fspeedY = dashSpeedY;
-				fspeedX = dashSpeedX;
-				fcenterX += fspeedX - player.getScrollingSpeedX();
-				fcenterY += fspeedY - player.getScrollingSpeedY();
+				speedY = dashSpeedY;
+				speedX = dashSpeedX;
+				fcenterX += speedX - player.getScrollingSpeedX();
+				fcenterY += speedY - player.getScrollingSpeedY();
 				centerX = (int)fcenterX;
 				centerY = (int)fcenterY;
-				speedX = (int)fspeedX;
-				speedY = (int)fspeedY;
 			}
 		} else {
 			if (ismovingup) {
@@ -441,8 +433,10 @@ public class Garlnstein extends Enemy {
 				speedX = 0;
 			if (speedX < 0 && !canmoveleft)
 				speedX = 0;
-			centerX += speedX - player.getScrollingSpeedX();
-			centerY += speedY - player.getScrollingSpeedY();
+			fcenterX += speedX - player.getScrollingSpeedX();
+			fcenterY += speedY - player.getScrollingSpeedY();
+			centerX = (int)fcenterX;
+			centerY = (int)fcenterY;
 		}
 		
 		R.setBounds((int)(centerX - halfrsizex + speedX), (int)(centerY - halfrsizey + speedY), 2*halfrsizex, 2*halfrsizey);
