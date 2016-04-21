@@ -73,6 +73,60 @@ public class MapUtil {
 		}
 	}
 	
+	public static void getPossibleDarkCenters(int x, int y, int mp, int circlewidth, ArrayList<Integer> ring, ArrayList<Integer> possibledarkcenters) {
+		possibledarkcenters.clear();
+		ArrayList<Integer> todiscover = new ArrayList<Integer>();
+		todiscover.add(StartingClass.height*x+y);
+		ArrayList<Integer> nonobstacles = new ArrayList<Integer>();
+		int i = 0;
+		int j = 0;
+		int size;
+		while (i < mp && !todiscover.isEmpty()) {
+			j = 0;
+			size = todiscover.size();
+			while (j < size) {
+				int current = todiscover.get(0);
+				int xj = current / StartingClass.height;
+				int yj = current % StartingClass.height;
+				if (!nonobstacles.contains(current-StartingClass.height) && !todiscover.contains(current-StartingClass.height) && 0 != xj) {
+					if (null == StartingClass.map[xj-1][yj]) {
+						todiscover.add(current-StartingClass.height);
+					}
+				}
+				if (!nonobstacles.contains(current+StartingClass.height) && !todiscover.contains(current+StartingClass.height) && StartingClass.width -1 != xj) {
+					if (null == StartingClass.map[xj+1][yj]) {
+						todiscover.add(current+StartingClass.height);
+					}
+				}
+				if (!nonobstacles.contains(current-1) && !todiscover.contains(current-1) && 0 != yj) {
+					if (null == StartingClass.map[xj][yj-1]) {
+						todiscover.add(current-1);
+					}
+				}
+				if (!nonobstacles.contains(current+1) && !todiscover.contains(current+1) && StartingClass.height-1 != yj) {
+					if (null == StartingClass.map[xj][yj+1]) {
+						todiscover.add(current+1);
+					}
+				}
+				boolean test = true;
+				int k = 0;
+				while (test && k < ring.size()) {
+					int xk = ring.get(k) / StartingClass.height;
+					int yk = ring.get(k) % StartingClass.height;
+					k++;
+					if (Math.abs(xk-xj)+Math.abs(yj-yk) < circlewidth)
+						test = false;
+				}
+				if (test)
+					possibledarkcenters.add(current);
+				todiscover.remove(0);
+				nonobstacles.add(current);
+				j++;
+			}
+			i++;
+		}
+	}
+	
 	public static void getAccessibleArea(int x, int y, int mp, char[][] map, ArrayList<Integer> nonobstacles, HashMap<Integer,EntryDoor> entrydoors, HashMap<Integer,Tile> doors, int arenanumber) {
 		nonobstacles.clear();
 		int width = map.length;

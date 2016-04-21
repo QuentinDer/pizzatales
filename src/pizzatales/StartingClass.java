@@ -67,7 +67,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	
 	public static final boolean TESTMODE = true;
-	public static int difficultylevel = TESTMODE ? 1 : 1;
+	public static int difficultylevel = TESTMODE ? 4 : 1;
 	public static int currentlevel = TESTMODE ? 20 : 1;
 	private int maxlevel = 20;
 
@@ -288,6 +288,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		IceBolt.boltrightdown = new ImageIcon(getClass().getResource("/data/iceboltrightdown.png")).getImage();
 		IceBolt.boltleftup = new ImageIcon(getClass().getResource("/data/iceboltleftup.png")).getImage();
 		IceBolt.boltrightup = new ImageIcon(getClass().getResource("/data/iceboltrightup.png")).getImage();
+		KaleKingBall.sprite = new ImageIcon(getClass().getResource("/data/kalekingBall.png")).getImage();
+		KaleKingFlame.sprite = new ImageIcon(getClass().getResource("/data/darkflame.png")).getImage();
 
 		Tato.staySprite = new ImageIcon(getClass().getResource("/data/tato1.png")).getImage();
 		Tato.move1Sprite = new ImageIcon(getClass().getResource("/data/tato2.png")).getImage();
@@ -401,6 +403,16 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase9.png")).getImage());
 		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase10.png")).getImage());
 		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase11.png")).getImage());
+		KaleKing.dashSpriteLeft = new ImageIcon(getClass().getResource("/data/kalekingThrustLeft.png")).getImage();
+		KaleKing.dashSpriteRight = new ImageIcon(getClass().getResource("/data/kalekingThrustRight.png")).getImage();
+		KaleKing.hulkSprite = new ImageIcon(getClass().getResource("/data/hulk.png")).getImage();
+		KaleKing.hulkMove1 = new ImageIcon(getClass().getResource("/data/hulkWalk1.png")).getImage();
+		KaleKing.hulkMove2 = new ImageIcon(getClass().getResource("/data/hulkWalk2.png")).getImage();
+		KaleKing.hulkSwipeDown = new ImageIcon(getClass().getResource("/data/hulkSwipeDown.png")).getImage();
+		KaleKing.hulkSwipeLeft = new ImageIcon(getClass().getResource("/data/hulkSwipeLeft.png")).getImage();
+		KaleKing.hulkSwipeRight = new ImageIcon(getClass().getResource("/data/hulkSwipeRight.png")).getImage();
+		KaleKing.hulkSwipeUp = new ImageIcon(getClass().getResource("/data/hulkSwipeUp.png")).getImage();
+		KaleKing.blinkingSprite = new ImageIcon(getClass().getResource("/data/kalekingMagicAoE.png")).getImage();
 		
 
 		BazookaBulletExplosion.bazookaexplosionsprite = new ImageIcon(
@@ -437,6 +449,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		LevelExit.sprite = new ImageIcon(getClass().getResource("/data/finishline.png")).getImage();
 		SummonedIce.healingice = new ImageIcon(getClass().getResource("/data/iceheal.png")).getImage();
 		FakeItemForFrozen.frozen = new ImageIcon(getClass().getResource("/data/frozeneffect.png")).getImage();
+		DarkIce.ready  = new ImageIcon(getClass().getResource("/data/darkiceready.png")).getImage();
+		DarkIce.strike  = new ImageIcon(getClass().getResource("/data/darkice.png")).getImage();
+		KaleKingBlinkingItem.sprite = new ImageIcon(getClass().getResource("/data/kingkaleblinking.png")).getImage();
 		
 		HatBaseball.hatsprite = new ImageIcon(getClass().getResource("/data/hatbaseball.png")).getImage();
 		HatBowler.hatsprite = new ImageIcon(getClass().getResource("/data/hatbowler.png")).getImage();
@@ -489,6 +504,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		bginitx = bg.getCenterX();
 		bginity = bg.getCenterY() - 15;
 
+		player.currentSprite = player.getArmor().getStaySprite();
 		/*
 		 * anim = new Animation(); anim.addFrame(character1, 1250);
 		 * anim.addFrame(character2, 50); currentSprite = anim.getImage();
@@ -964,7 +980,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						e.canmoveright = true;
 						e.canmoveup = true;
 						e.sliding = false;
-						e.setDefaultSpeed();
+						e.initSpeed();
 					}
 					checkEnemiesCollision();
 					player.checkCollisionsWithBlockingStuff();
@@ -1492,7 +1508,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						e.canmoveright = true;
 						e.canmoveup = true;
 						e.sliding = false;
-						e.setDefaultSpeed();
+						e.initSpeed();
 					}
 					checkItemsCollision();
 					for (Explosion e : StartingClass.explosions) {
@@ -1933,8 +1949,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				e.checkCollisionsWithItems();
 		}
 		player.checkCollisionsWithItems();
-		for (Item it : leavingitems) {
-			it.doLeavingEffect();
+		for (int i = 0; i < leavingitems.size(); i++) {
+			leavingitems.get(i).doLeavingEffect();
 		}
 	}
 	/*

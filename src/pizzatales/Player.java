@@ -256,40 +256,40 @@ public class Player extends BlockingStuff {
 		if (ismovingup) {
 			if (!sliding)
 				speedY += -MOVESPEED;
-			else if (speedY < 0) {
+			else if (speedY < 0 && MOVESPEED != 0) {
 				if (walkCounter % Math.max(1, ((int)(-speedY*(armor.MAXDEF*5f/16f+4.75f)-armor.MAXDEF*5f/4f+25f))/6) == 0)
 					speedY -= 0.25f;
-			} else if (walkCounter %  Math.max(1,((int)(speedY*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)/6)) == 0) {
+			} else if (MOVESPEED != 0 && walkCounter %  Math.max(1,((int)(speedY*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)/6)) == 0) {
 				speedY -= 0.25f;
 			}
 		}
 		if (ismovingdown) {
 			if (!sliding)
 				speedY += MOVESPEED;
-			else if (speedY > 0) {
+			else if (speedY > 0 && MOVESPEED != 0) {
 				if (walkCounter % Math.max(1, ((int)(speedY*(armor.MAXDEF*5f/16f+4.75f)-armor.MAXDEF*5f/4f+25f))/6) == 0)
 					speedY += 0.25f;
-			} else if (walkCounter %  Math.max(1,((int)(-speedY*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)/6)) == 0) {
+			} else if (MOVESPEED != 0 && walkCounter %  Math.max(1,((int)(-speedY*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)/6)) == 0) {
 				speedY += 0.25f;
 			}
 		}
 		if (ismovingleft) {
 			if (!sliding)
 				speedX += -MOVESPEED;
-			else if (speedX < 0) {
+			else if (speedX < 0 && MOVESPEED != 0) {
 				if (walkCounter % Math.max(1, ((int)(-speedX*(armor.MAXDEF*5f/16f+4.75f)-armor.MAXDEF*5f/4f+25f))/6) == 0)
 					speedX -= 0.25f;
-			} else if (walkCounter %  Math.max(1,((int)(speedX*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)/6)) == 0) {
+			} else if (MOVESPEED != 0 && walkCounter %  Math.max(1,((int)(speedX*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)/6)) == 0) {
 				speedX -= 0.25f;
 			}
 		}
 		if (ismovingright) {
 			if (!sliding)
 				speedX += MOVESPEED;
-			else if (speedX > 0) {
+			else if (speedX > 0 && MOVESPEED != 0) {
 				if (walkCounter % Math.max(1, ((int)(speedX*(armor.MAXDEF*5f/16f+4.75f)-armor.MAXDEF*5f/4f+25f))/6) == 0)
 					speedX += 0.25f;
-			} else if (walkCounter %  Math.max(1,((int)(-speedX*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)/6)) == 0) {
+			} else if (MOVESPEED != 0 && walkCounter %  Math.max(1,((int)(-speedX*(armor.MAXDEF/16f-5.25f)-armor.MAXDEF*15f/16f+68.25f)/6)) == 0) {
 				speedX += 0.25f;
 			}
 		}

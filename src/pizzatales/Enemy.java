@@ -42,7 +42,7 @@ public abstract class Enemy extends BlockingStuff {
 	protected int range;
 	private float ppdmg;
 	private float pdmg;
-	private float cdmg;
+	protected float cdmg;
 	private int[][] waitingpattern;
 	public boolean sliding;
 	private boolean previoussliding;
@@ -215,25 +215,25 @@ public abstract class Enemy extends BlockingStuff {
 		if (ismovingup) {
 			if (!sliding)
 				speedY += -speed;
-			else if (walkCounter % 30 == 0)
+			else if (walkCounter % 30 == 0 && speed != 0)
 				speedY -= 1;
 		}
 		if (ismovingdown) {
 			if (!sliding)
 				speedY += speed;
-			else if (walkCounter % 30 == 0)
+			else if (walkCounter % 30 == 0 && speed != 0)
 				speedY += 1;
 		}
 		if (ismovingleft) {
 			if (!sliding)
 				speedX += -speed;
-			else if (walkCounter % 30 == 0)
+			else if (walkCounter % 30 == 0 && speed != 0)
 				speedX -= 1;
 		}
 		if (ismovingright) {
 			if (!sliding)
 				speedX += speed;
-			else if (walkCounter % 30 == 0)
+			else if (walkCounter % 30 == 0 && speed != 0)
 				speedX += 1;
 		}
 		if (speedY > 0 && !canmovedown)
@@ -680,12 +680,17 @@ public abstract class Enemy extends BlockingStuff {
 		return ans;
 	}
 	
-	public void setDefaultSpeed() {
+	public void initSpeed() {
 		speed = defaultspeed;
 	}
 	
 	public void setSpeed(float speed) {
 		this.speed = speed;
+	}
+	
+	public void setDefaultSpeed(float defaults) {
+		defaultspeed = defaults;
+		speed = defaultspeed;
 	}
 	
 	public float getDefaultSpeed() {

@@ -33,7 +33,7 @@ public class SummonedIce extends BackgroundItem {
 	}
 	
 	public void initEffectTimer() {
-		effectTimer = StartingClass.difficultylevel*600;
+		effectTimer = StartingClass.difficultylevel*600+600;
 	}
 
 	@Override

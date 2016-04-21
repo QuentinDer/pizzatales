@@ -2,22 +2,20 @@ package pizzatales;
 
 import java.awt.Image;
 
-public class FakeItemForFrozen extends Item {
+public class KaleKingBlinkingItem extends Item {
 
-	BlockingStuff frozenguy;
+	public static Image sprite;
+	public boolean canblink;
 	
-	public static Image frozen;
-	
-	public FakeItemForFrozen(BlockingStuff frozenguy, int frozenduration) {
-		super(0, 0, 0, 0, false, 0);
-		this.frozenguy = frozenguy;
-		effectTimer = frozenduration;
-		effectactive = true;
+	public KaleKingBlinkingItem(int x, int y, int deltapx, int deltapy,
+			boolean onetimeeffect, int height) {
+		super(x, y, deltapx, deltapy, onetimeeffect, height);
+		canblink = true;
 	}
 
 	@Override
 	protected boolean canDoEffect(Player p) {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -27,6 +25,7 @@ public class FakeItemForFrozen extends Item {
 
 	@Override
 	protected void doEffect(Player p) {
+		canblink = false;
 	}
 
 	@Override
@@ -35,38 +34,31 @@ public class FakeItemForFrozen extends Item {
 
 	@Override
 	protected void doLeavingEffect() {
-		if (Player.class.isInstance(frozenguy)) {
-			((Player)frozenguy).setMOVESPEED(0.f);
-		} else {
-			((Enemy)frozenguy).setSpeed(0.f);
-		}
 	}
 
 	@Override
 	protected Image getSprite() {
-		return null;
+		return sprite;
 	}
 
 	@Override
 	protected Image getEffectSprite() {
-		return frozen;
+		return null;
 	}
 
 	@Override
 	protected int getEffectCenterX() {
-		return frozenguy.getCenterX();
+		return 0;
 	}
 
 	@Override
 	protected int getEffectCenterY() {
-		return frozenguy.getCenterY();
+		return 0;
 	}
 
 	@Override
 	protected boolean isEffectAbove() {
-		return true;
+		return false;
 	}
 
-	
-	
 }

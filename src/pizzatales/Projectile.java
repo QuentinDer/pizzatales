@@ -44,16 +44,16 @@ public abstract class Projectile extends Stuff {
 		if (travelleddist > range) {
 			doOnLimitRange();
 		}
-		if (centerX > 1280 && speedX > 0) {
+		if (centerX > 1255 && speedX > 0) {
 			doOnLimitScreen();
 		}
-		if (centerX < 0 && speedX < 0) {
+		if (centerX < 25 && speedX < 0) {
 			doOnLimitScreen();
 		}
-		if (centerY > 800 && speedY > 0) {
+		if (centerY > 775 && speedY > 0) {
 			doOnLimitScreen();
 		}
-		if (centerY < 0 && speedY < 0) {
+		if (centerY < 25 && speedY < 0) {
 			doOnLimitScreen();
 		}
 	}
