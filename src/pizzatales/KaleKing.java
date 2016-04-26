@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class KaleKing extends Enemy {
 
-	private static final boolean TRICK = true;
+	private static final boolean TRICK = false;
 	//private static float basicspeed = 2.5f;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
 	public static Image swipeDown, swipeRight, swipeLeft, swipeUp;

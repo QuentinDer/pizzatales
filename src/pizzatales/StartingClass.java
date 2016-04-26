@@ -7,6 +7,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,6 +23,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.AbstractMap.SimpleEntry;
+import java.awt.DisplayMode;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -64,11 +67,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static int nextlevel;
 
 	private Clip clip;
-
 	
+	private boolean fullscreenmode = true;
 	public static final boolean TESTMODE = true;
 	public static int difficultylevel = TESTMODE ? 4 : 1;
-	public static int currentlevel = TESTMODE ? 20 : 1;
+	public static int currentlevel = TESTMODE ? 20: 1;
 	private int maxlevel = 20;
 
 	public static int maskminx = -1, maskmaxx = -1, maskminy = -1, maskmaxy = -1;
@@ -146,7 +149,14 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		setBackground(Color.BLACK);
 		setFocusable(true);
 		addKeyListener(this);
-		setTitle("Pizza Tales");
+		if (fullscreenmode) {
+			 setUndecorated(true);
+			 setAlwaysOnTop(true);
+		} else {
+			setTitle("Pizza Tales");
+		}
+		
+		
 
 		// Image Setups
 
@@ -2306,6 +2316,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				hatindex = 0;
 			player.setHat(playerhats.get(hatindex));
 			break;
+		case KeyEvent.VK_ESCAPE:
+			state = GameState.Exit;
+			System.exit(0);
+			break;
 		case KeyEvent.VK_SPACE:
 			if (state == GameState.Paused) {
 				state = GameState.Running;
@@ -2396,7 +2410,19 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 			@Override
 			public void run() {
+				DisplayMode dm = new DisplayMode(1280, 800, 32, DisplayMode.REFRESH_RATE_UNKNOWN);
 				me = new StartingClass();
+				GraphicsEnvironment ge = GraphicsEnvironment.
+						   getLocalGraphicsEnvironment();
+				GraphicsDevice gd = ge.getDefaultScreenDevice();
+				if (gd.isFullScreenSupported()) {
+				     gd.setFullScreenWindow(me);
+				 }
+				if(dm != null && gd.isDisplayChangeSupported()) {
+		            try{
+		            	gd.setDisplayMode(dm); 
+		            }catch(Exception ex){}
+		        }
 				if (TESTMODE)
 					me.teststart();
 					
