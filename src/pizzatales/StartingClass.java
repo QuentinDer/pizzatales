@@ -68,7 +68,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	private Clip clip;
 	
-	private boolean fullscreenmode = true;
+	private boolean fullscreenmode = false;
 	public static final boolean TESTMODE = true;
 	public static int difficultylevel = TESTMODE ? 4 : 1;
 	public static int currentlevel = TESTMODE ? 20: 1;
@@ -126,7 +126,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static int revealHidden = -1;
 	private boolean centeringOnPlayerRequest = false;
 	private boolean toggleScrollingModeRequest = false;
-	private boolean showPlayerHealthBar = TESTMODE;
+	private boolean showPlayerHealthBar = false;
 	public static int blockmaxheight;
 	public static StartingClass me;
 	/*
@@ -1875,14 +1875,18 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			g.drawImage(blooddrop, hitpoints.get(i).getCenterX() - 7, hitpoints.get(i).getCenterY() - 7, this);
 		}
 		paintItemsEffectAbove(g,stx,fx,sty,fy);
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(32, 37, 200, 20);
 		g.setColor(Color.RED);
-		g.fillRect(32, 37, 20, 20);
+		g.fillRect(32, 37, ((int) player.getHealth())*10 , 20);
 		g.setColor(Color.WHITE);
-		g.drawString(Integer.toString((int) player.getHealth()), 35, 51);
+		g.drawString("HP: "+Integer.toString((int) player.getHealth()), 35, 51);
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(32, 57, ((int) player.getArmor().MAXDEF)*10, 20);
 		g.setColor(Color.BLUE);
-		g.fillRect(52, 37, 20, 20);
+		g.fillRect(32, 57, ((int) player.getArmor().defense)*10, 20);
 		g.setColor(Color.WHITE);
-		g.drawString(Integer.toString((int) player.getArmor().defense), 55, 51);
+		g.drawString("Armor: "+Integer.toString((int) player.getArmor().defense), 35, 71);
 		if (TESTMODE) {
 			g.setColor(Color.DARK_GRAY);
 			g.fillRect(1200, 37, 20, 20);
