@@ -1875,18 +1875,29 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			g.drawImage(blooddrop, hitpoints.get(i).getCenterX() - 7, hitpoints.get(i).getCenterY() - 7, this);
 		}
 		paintItemsEffectAbove(g,stx,fx,sty,fy);
+		
+		g.setFont(new Font ("AR DESTINE", Font.LAYOUT_LEFT_TO_RIGHT, 15));
+		
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(32, 37, 200, 20);
 		g.setColor(Color.RED);
 		g.fillRect(32, 37, ((int) player.getHealth())*10 , 20);
 		g.setColor(Color.WHITE);
 		g.drawString("HP: "+Integer.toString((int) player.getHealth()), 35, 51);
+		
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(32, 57, ((int) player.getArmor().MAXDEF)*10, 20);
 		g.setColor(Color.BLUE);
 		g.fillRect(32, 57, ((int) player.getArmor().defense)*10, 20);
 		g.setColor(Color.WHITE);
 		g.drawString("Armor: "+Integer.toString((int) player.getArmor().defense), 35, 71);
+		
+		g.setFont(new Font ("AR DESTINE", Font.BOLD, 20));
+		g.setColor(Color.YELLOW);
+		g.drawString(""+Math.round(player.getWeapon().getProjectiledmg()*100.0)/100.0, 260, 75);
+		g.drawString(Integer.toString((int) player.getWeapon().getFireRate()), 300, 75);
+		g.drawString(Integer.toString((int) player.getWeapon().getRange()), 340, 75);
+		
 		if (TESTMODE) {
 			g.setColor(Color.DARK_GRAY);
 			g.fillRect(1200, 37, 20, 20);
@@ -1905,9 +1916,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		if (state == GameState.Dead) {
 			Graphics2D g2d = (Graphics2D) g;
 			Composite c = g2d.getComposite();
-			g2d.setColor(Color.BLACK);
-			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-			g2d.fillRect(0, 300, 1280, 200);
+			g2d.setColor(Color.GRAY);
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+			g2d.fillRect(0, 0, 1280, 800);
 			//g.fillRect(1230, 37, 45, 20);
 			int style = Font.BOLD | Font.ITALIC;
 			
@@ -1915,11 +1926,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			g2d.setColor(Color.BLACK);
 			g2d.fillRect(0, 300, 1280, 200);*/
 
-			Font font = new Font ("Garamond", style , 60);
+			Font font = new Font ("AR DESTINE", style , 60);
 			Font pfont = g2d.getFont();
 			g2d.setFont(font);
 			g2d.setColor(Color.RED);
-			g2d.drawString("YOU DIED", 640-g2d.getFontMetrics().stringWidth("YOU DIED")/2, 400);
+			g2d.drawString("LEVEL FAILED", 640-g2d.getFontMetrics().stringWidth("LEVEL FAILED")/2, 400);
 			g2d.setComposite(c);
 			g2d.setFont(pfont);
 		}

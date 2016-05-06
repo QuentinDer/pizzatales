@@ -101,5 +101,9 @@ public abstract class Firearm {
 		this.projectiledmg = projectiledmg;
 	}
 	
+	public int getRange(){
+		return range;
+	}
+	
 	
 }
