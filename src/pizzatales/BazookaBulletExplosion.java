@@ -1,6 +1,7 @@
 package pizzatales;
 
 import java.awt.Image;
+import java.net.URL;
 
 public class BazookaBulletExplosion extends Explosion {
 

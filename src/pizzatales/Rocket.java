@@ -1,12 +1,15 @@
 package pizzatales;
 
 import java.awt.Image;
+import java.net.URL;
 
 public class Rocket extends Firearm {
 	public static Image leftSprite, rightSprite, upSprite, downSprite;
+	public static URL url;
 	
 	public Rocket() {
 		super(7,750,5,150);
+		weaponName = "rocket";
 	}
 	
 	@Override

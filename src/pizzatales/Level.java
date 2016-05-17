@@ -20,13 +20,19 @@ public class Level {
 		String ans  = "";
 		switch ((level-1)/4+1) {
 		case 1:
-			ans = "Soundtrack1.wav";
+			ans = "Grease Monkeys.wav";
 			break;
 		case 2:
-			ans = "Soundtrack2.wav";
+			ans = "Smash and Grab.wav";
 			break;
 		case 3:
-			ans = "Soundtrack3.wav";
+			ans = "Heavy Hitter.wav";
+			break;
+		case 4:
+			ans = "Organ Donor.wav";
+			break;
+		case 5:
+			ans = "Thrashing Around.wav";
 			break;
 		}
 		return ans;

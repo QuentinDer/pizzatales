@@ -1,7 +1,12 @@
 package pizzatales;
 
 import java.awt.Image;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public abstract class Firearm {
 	
@@ -16,6 +21,9 @@ public abstract class Firearm {
 	protected ArrayList<Projectile> holderprojectiles;
 	public int deltapx;
 	public int deltapy;
+	public Clip sound;
+	public static URL url;
+	public String weaponName;
 	
 	public Firearm(float projdmg, int range, int speed, int firerate) {
 		projectiledmg = projdmg;
@@ -105,5 +113,7 @@ public abstract class Firearm {
 		return range;
 	}
 	
-	
+	public void setGunSound(URL url){
+		this.url = url;
+	}
 }

@@ -1,10 +1,12 @@
 package pizzatales;
 
 import java.awt.Image;
+import java.net.URL;
 
 public class Shotgun extends Firearm {
 
 	public static Image leftSprite, rightSprite, upSprite, downSprite;
+	public static URL url;
 	
 	/*private float cos45 = 0.7f;
 	private float cos22 = 0.9f;
@@ -15,6 +17,7 @@ public class Shotgun extends Firearm {
 	
 	public Shotgun() {
 		super(2,250,10,50);
+		weaponName = "shotgun";
 	}
 	
 	@Override

@@ -1,9 +1,11 @@
 package pizzatales;
 
 import java.awt.Image;
+import java.net.URL;
 
 public class Flamer extends Firearm {
 	public static Image leftSprite, rightSprite, upSprite, downSprite;
+	public static URL url;
 	
 	/*private float cos45 = (float)0.7;
 	private float cos22 = (float)0.9;
@@ -14,6 +16,7 @@ public class Flamer extends Firearm {
 	
 	public Flamer() {
 		super(1.0f,100,10,25);
+		weaponName = "flamer";
 	}
 	
 	@Override

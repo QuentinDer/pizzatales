@@ -1,7 +1,16 @@
 package pizzatales;
 
 import java.awt.Image;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Player extends BlockingStuff {
 
@@ -32,6 +41,10 @@ public class Player extends BlockingStuff {
 	public boolean canmovedown = true;
 	public boolean wannashootleft, wannashootright, wannashootup, wannashootdown;
 	private boolean isMoving;
+	public boolean playSound = false;
+	public static URL hurtSound;
+	public boolean isHurt = false;
+	public Clip hurt= null;
 	
 	protected Firearm weapon;
 	public boolean isAimingUp = true;
@@ -87,6 +100,21 @@ public class Player extends BlockingStuff {
 		Enemy.bloodymess = false;
 		if (hat != null)
 			hat.effect();
+		AudioInputStream ais;
+		try {
+			hurt = AudioSystem.getClip();
+			ais = AudioSystem.getAudioInputStream(hurtSound);
+			hurt.open(ais);
+		} catch (LineUnavailableException e1) {
+			e1.printStackTrace();
+		} catch (UnsupportedAudioFileException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		FloatControl gainControl = (FloatControl) hurt.getControl(FloatControl.Type.MASTER_GAIN);
+		gainControl.setValue(-3.0f);
+		
 	}
 	
 	private final void chekCollisionsWithItems(int x, int y) {
@@ -423,34 +451,42 @@ public class Player extends BlockingStuff {
 				switch (isShooting) {
 				case 1:
 					weapon.shootLeft(centerX, centerY);
+					playSound = true;
 					isAimingUp = false;
 					break;
 				case 2:
 					weapon.shootUp(centerX, centerY);
+					playSound = true;
 					isAimingUp = true;
 					break;
 				case 3:
 					weapon.shootRight(centerX, centerY);
+					playSound = true;
 					isAimingUp = false;
 					break;
 				case 4:
 					weapon.shootDown(centerX, centerY);
+					playSound = true;
 					isAimingUp = false;
 					break;
 				case 5:
 					weapon.shootUpLeft(centerX, centerY);
+					playSound = true;
 					isAimingUp = false;
 					break;
 				case 6:
 					weapon.shootUpRight(centerX, centerY);
+					playSound = true;
 					isAimingUp = false;
 					break;
 				case 7:
 					weapon.shootDownRight(centerX, centerY);
+					playSound = true;
 					isAimingUp = false;
 					break;
 				case 8:
 					weapon.shootDownLeft(centerX, centerY);
+					playSound = true;
 					isAimingUp = false;
 					break;
 				}

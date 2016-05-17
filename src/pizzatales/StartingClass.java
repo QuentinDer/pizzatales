@@ -28,6 +28,9 @@ import java.awt.DisplayMode;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -65,13 +68,17 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static ArrayList<Hat> playerhats;
 	public static ArrayList<Explosion> explosions;
 	public static int nextlevel;
+	public boolean playSound = false;
+	public boolean gunSoundLoaded = false;
+	public URL gunSoundurl = null;
 
 	private Clip clip;
+	public Clip gunSound;
 	
 	private boolean fullscreenmode = false;
 	public static final boolean TESTMODE = true;
-	public static int difficultylevel = TESTMODE ? 4 : 1;
-	public static int currentlevel = TESTMODE ? 20: 1;
+	public static int difficultylevel = TESTMODE ? 1 : 1;
+	public static int currentlevel = TESTMODE ? 3: 1;
 	private int maxlevel = 20;
 
 	public static int maskminx = -1, maskmaxx = -1, maskminy = -1, maskmaxy = -1;
@@ -159,6 +166,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		
 
 		// Image Setups
+		
+		Player.hurtSound = getClass().getResource("/data/ugh.wav");
 
 		CheeseArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/cheese1.png")).getImage();
 		CheeseArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/cheese2.png")).getImage();
@@ -246,26 +255,31 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Gun.rightSprite = new ImageIcon(getClass().getResource("/data/pistol2.png")).getImage();
 		Gun.upSprite = new ImageIcon(getClass().getResource("/data/pistol4.png")).getImage();
 		Gun.downSprite = new ImageIcon(getClass().getResource("/data/pistol3.png")).getImage();
+		Gun.url = getClass().getResource("/data/pistol.wav");
 		Bullet.bulletsprite = new ImageIcon(getClass().getResource("/data/pistolprojectile.png")).getImage();
 		Shotgun.leftSprite = new ImageIcon(getClass().getResource("/data/shotgun1.png")).getImage();
 		Shotgun.rightSprite = new ImageIcon(getClass().getResource("/data/shotgun2.png")).getImage();
 		Shotgun.upSprite = new ImageIcon(getClass().getResource("/data/shotgun4.png")).getImage();
 		Shotgun.downSprite = new ImageIcon(getClass().getResource("/data/shotgun3.png")).getImage();
+		Shotgun.url = getClass().getResource("/data/shotgun.wav");
 		ShotgunBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/shotgunprojectile.png")).getImage();
 		Rifle.leftSprite = new ImageIcon(getClass().getResource("/data/rifle1.png")).getImage();
 		Rifle.rightSprite = new ImageIcon(getClass().getResource("/data/rifle2.png")).getImage();
 		Rifle.upSprite = new ImageIcon(getClass().getResource("/data/rifle4.png")).getImage();
 		Rifle.downSprite = new ImageIcon(getClass().getResource("/data/rifle3.png")).getImage();
+		Rifle.url = getClass().getResource("/data/rifle.wav");
 		RifleBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/rifleprojectile.png")).getImage();
 		Flamer.leftSprite = new ImageIcon(getClass().getResource("/data/flamer1.png")).getImage();
 		Flamer.rightSprite = new ImageIcon(getClass().getResource("/data/flamer2.png")).getImage();
 		Flamer.downSprite = new ImageIcon(getClass().getResource("/data/flamer3.png")).getImage();
 		Flamer.upSprite = new ImageIcon(getClass().getResource("/data/flamer4.png")).getImage();
+		Flamer.url = getClass().getResource("/data/flamer.wav");
 		FlamerFlame.bulletsprite = new ImageIcon(getClass().getResource("/data/flamerprojectile.png")).getImage();
 		Rocket.leftSprite = new ImageIcon(getClass().getResource("/data/rocket1.png")).getImage();
 		Rocket.rightSprite = new ImageIcon(getClass().getResource("/data/rocket2.png")).getImage();
 		Rocket.downSprite = new ImageIcon(getClass().getResource("/data/rocket3.png")).getImage();
 		Rocket.upSprite = new ImageIcon(getClass().getResource("/data/rocket4.png")).getImage();
+		Rocket.url = getClass().getResource("/data/rocket.wav");
 		BazookaBullet.bulletspriteLeft = new ImageIcon(getClass().getResource("/data/rocketprojectileleft.png"))
 				.getImage();
 		BazookaBullet.bulletspriteRight = new ImageIcon(getClass().getResource("/data/rocketprojectileright.png"))
@@ -277,6 +291,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Smg.rightSprite = new ImageIcon(getClass().getResource("/data/smg2.png")).getImage();
 		Smg.downSprite = new ImageIcon(getClass().getResource("/data/smg3.png")).getImage();
 		Smg.upSprite = new ImageIcon(getClass().getResource("/data/smg4.png")).getImage();
+		Smg.url = getClass().getResource("/data/smg.wav");
 		SmgBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/smgprojectile.png")).getImage();
 		TomatoProjectile.tomatoprojectilesprite = new ImageIcon(getClass().getResource("/data/sirtomatoprojectile.png"))
 				.getImage();
@@ -427,9 +442,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 		BazookaBulletExplosion.bazookaexplosionsprite = new ImageIcon(
 				getClass().getResource("/data/bazookaexplosion.png")).getImage();
+		BazookaBulletExplosion.sound = getClass().getResource("/data/explosion.wav");
 		TomatoProjectileExplosion.tomatoexplosionsprite = new ImageIcon(
 				getClass().getResource("/data/sirtomatoprojectileexplosion.png")).getImage();
 		BarrelExplosion.explosionsprite = new ImageIcon(getClass().getResource("/data/barrelexplosion.png")).getImage();
+		BarrelExplosion.sound = getClass().getResource("/data/explosion.wav");
 		
 		ArmorPotion.armorpotionsprite = new ImageIcon(getClass().getResource("/data/armor.png")).getImage();
 		HealthPotion.healthpotionsprite = new ImageIcon(getClass().getResource("/data/health.png")).getImage();
@@ -673,6 +690,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+		gainControl.setValue(-9.0f);
 
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
 
@@ -926,7 +945,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		for (Enemy e : enemyarray) {
 			e.initWaitingPattern();
 		}
-		if (TESTMODE) {
+		if (true) {
 			for (Enemy e : enemyarray) {
 				e.showHealthBar = true;
 			}
@@ -1989,6 +2008,28 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		while (i < explosions.size()) {
 			Explosion e = explosions.get(i);
 			e.update();
+			if(!e.soundPlayed){
+				AudioInputStream ais;
+				Clip explosion = null;
+				try {
+					explosion = AudioSystem.getClip();
+					ais = AudioSystem.getAudioInputStream(e.sound);
+					explosion.open(ais);
+				} catch (LineUnavailableException e1) {
+					e1.printStackTrace();
+				} catch (UnsupportedAudioFileException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				FloatControl gainControl = (FloatControl) explosion.getControl(FloatControl.Type.MASTER_GAIN);
+				gainControl.setValue(-24.0f);
+				explosion.loop(0);
+				explosion.close();
+				e.soundPlayed = true;
+			} else {
+				
+			}
 			if (e.isVisible()) {
 				i++;
 			} else {
@@ -1998,6 +2039,33 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	}
 
 	private void updatePlayer() {
+		
+		if (player.isHurt){
+			player.hurt.loop(0);
+			player.isHurt = false;
+		}
+
+		AudioInputStream ais = null;
+		
+		//if(!gunSoundLoaded){
+			gunSoundurl = getClass().getResource("/data/"+player.getWeapon().weaponName+".wav");
+			try {
+				gunSound = AudioSystem.getClip();
+				ais = AudioSystem.getAudioInputStream(gunSoundurl);
+				gunSound.open(ais);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			FloatControl gainControl = (FloatControl) gunSound.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-12.0f);
+			gunSoundLoaded = true;
+		//}
+
+		if (player.playSound){
+			gunSound.loop(0);
+			player.playSound = false;
+		}
+		
 		ArrayList<Projectile> projectiles = player.getProjectiles();
 		int i = 0;
 		while (i < projectiles.size()) {
@@ -2258,7 +2326,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			player.wannashootleft = true;
 			break;
 
-		case KeyEvent.VK_RIGHT:
+		case KeyEvent.VK_RIGHT:	
 			player.wannashootright = true;
 			break;
 		}
@@ -2304,12 +2372,14 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			player.wannashootright = false;
 			break;
 		case KeyEvent.VK_E:
+			gunSoundLoaded = false;
 			weaponindex++;
 			if (weaponindex == playerweapons.size())
 				weaponindex = 0;
 			player.setWeapon(playerweapons.get(weaponindex));
 			break;
 		case KeyEvent.VK_R:
+			gunSoundLoaded = false;
 			weaponindex--;
 			if (weaponindex == -1)
 				weaponindex = playerweapons.size() - 1;
@@ -2431,7 +2501,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						   getLocalGraphicsEnvironment();
 				GraphicsDevice gd = ge.getDefaultScreenDevice();
 				if (gd.isFullScreenSupported()) {
-				     gd.setFullScreenWindow(me);
+				     //gd.setFullScreenWindow(me);
 				 }
 				if(dm != null && gd.isDisplayChangeSupported()) {
 		            try{

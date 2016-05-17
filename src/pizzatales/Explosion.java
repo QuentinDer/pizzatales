@@ -2,6 +2,11 @@ package pizzatales;
 
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.net.URL;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public abstract class Explosion extends Stuff {
 	
@@ -13,6 +18,8 @@ public abstract class Explosion extends Stuff {
 	protected int time;
 	protected int procfrequency;
 	public int damage = 1;
+	public static URL sound;
+	public boolean soundPlayed = false;
 
 	public Explosion(int startX, int startY, int size, int halfsize, int damage, int timer, int procfrequency) {
 		super(startX, startY);
