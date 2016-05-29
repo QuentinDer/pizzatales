@@ -21,7 +21,6 @@ public class ShotgunBullet extends Projectile {
 
 	@Override
 	public void doOnCollision(Player p) {
-		p.isHurt = true;
 		visible = false;
 		StartingClass.hitpoints.add(new HitPoint(p,(getCenterX()-p.getCenterX())/2,(getCenterY()-p.getCenterY())/2));
 	}

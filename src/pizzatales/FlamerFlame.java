@@ -21,7 +21,6 @@ public class FlamerFlame extends Projectile {
 
 	@Override
 	public void doOnCollision(Player p) {
-		p.isHurt = true;
 		visible = false;
 	}
 

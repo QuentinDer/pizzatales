@@ -22,7 +22,6 @@ public class SmgBullet extends Projectile {
 	@Override
 	public void doOnCollision(Player p) {
 		visible = false;
-		p.isHurt = true;
 		StartingClass.hitpoints.add(new HitPoint(p,(getCenterX()-p.getCenterX())/2,(getCenterY()-p.getCenterY())/2));
 	}
 

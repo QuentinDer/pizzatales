@@ -31,7 +31,6 @@ public class BazookaBullet extends Projectile {
 	@Override
 	public void doOnCollision(Player p) {
 		if (visible) {
-			p.isHurt = true;
 			visible = false;
 			StartingClass.getExplosions().add(new BazookaBulletExplosion(this.centerX,this.centerY));
 		}

@@ -751,6 +751,7 @@ public class Player extends BlockingStuff {
 	}
 	
 	public void damage(float dmg) {
+		isHurt = true;
 		if (armor.getDefense() - dmg*2.0f*defBoost/3.0f < 0) {
 			health -= dmg*defBoost - armor.getDefense();
 			armor.setDefense(0.f);

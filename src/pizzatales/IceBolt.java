@@ -59,7 +59,6 @@ public class IceBolt extends Projectile {
 	@Override
 	public void doOnCollision(Player p) {
 		if (visible) {
-			p.isHurt = true;
 			visible = false;
 			StartingClass.leavingitems.add(new FakeItemForFrozen(p,frozenduration));
 			if (style == 5)

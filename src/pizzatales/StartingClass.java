@@ -79,7 +79,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private boolean fullscreenmode = false;
 	public static final boolean TESTMODE = true;
 	public static int difficultylevel = TESTMODE ? 4 : 1;
-	public static int currentlevel = TESTMODE ? 20: 1;
+	public static int currentlevel = TESTMODE ? 12: 1;
 	private int maxlevel = 20;
 
 	public static int maskminx = -1, maskmaxx = -1, maskminy = -1, maskmaxy = -1;
@@ -2085,14 +2085,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			/*if (gunSound != null)
 				gunSound.close();*/
 			player.playSound = false;
-			try {
-				/*if (urls.contains(player.getWeapon().getAudioURL())) {
-					int index = urls.indexOf(player.getWeapon().getAudioURL());
-			    	gunclips.get(index).stop();
-					gunclips.get(index).close();
-					gunclips.remove(index);
-					urls.remove(index);
-				}*/
+			/*try {
 				Clip gunSound = AudioSystem.getClip();
 				AudioInputStream ais = AudioSystem.getAudioInputStream(player.getWeapon().getAudioURL());
 				gunSound.open(ais);
@@ -2111,7 +2104,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			} catch (UnsupportedAudioFileException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			}*/
 		}
 		
 		ArrayList<Projectile> projectiles = player.getProjectiles();
