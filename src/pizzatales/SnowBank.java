@@ -62,11 +62,22 @@ public class SnowBank extends BackgroundItem {
 	
 	@Override
 	public boolean checkCollisionEnemy(Enemy e) {
-		if (canDoEffect(e) && e.R.intersects(r)) {
+		if (r.contains(e.getCenterX(), e.getCenterY())) {
 			doEffect(e);
+			wasActive = true;
 			return false;
-		} else
+		} else {
+			if (wasActive) {
+				effectTimer = 120;
+				effectactive = true;
+				icX = centerX;
+				icY = centerY;
+				ieX = Math.max(centerX-15, Math.min(centerX+15, e.getCenterX()));
+				ieY = Math.max(centerY-50, Math.min(centerY, e.getCenterY()));
+				wasActive = false;
+			}
 			return false;
+		}
 	}
 
 	@Override

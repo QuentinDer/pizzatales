@@ -1,5 +1,8 @@
 package pizzatales;
 
+import java.net.URL;
+
+
 public class FakeMushroomWeapon extends Firearm {
 
 	public FakeMushroomWeapon(int deltapx, int deltapy) {
@@ -70,5 +73,10 @@ public class FakeMushroomWeapon extends Firearm {
 
 	@Override
 	public void shootDownRight(int x, int y) {
+	}
+
+	@Override
+	public URL getAudioURL() {
+		return null;
 	}
 }

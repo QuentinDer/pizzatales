@@ -24,7 +24,8 @@ public class DarkIce extends Item {
 	
 	@Override
 	public boolean checkCollisionPlayer(Player p) {
-		if (r.intersects(p.getCenterX()-6,p.getCenterY()-6,12,12)) {
+		//if (r.intersects(p.getCenterX()-6,p.getCenterY()-6,12,12)) {
+		if (r.contains(p.getCenterX(),p.getCenterY())) {
 			doEffect(p);
 			return false;
 		} else

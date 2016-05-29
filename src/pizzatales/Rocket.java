@@ -9,7 +9,6 @@ public class Rocket extends Firearm {
 	
 	public Rocket() {
 		super(7,750,5,150);
-		weaponName = "rocket";
 	}
 	
 	@Override
@@ -78,5 +77,10 @@ public class Rocket extends Firearm {
 	@Override
 	public void shootDownRight(int x, int y) {
 		shootRight(x,y);
+	}
+	
+	@Override
+	public URL getAudioURL() {
+		return url;
 	}
 }

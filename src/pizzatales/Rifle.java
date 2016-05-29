@@ -9,7 +9,6 @@ public class Rifle extends Firearm {
 	
 	public Rifle() {
 		super(3,700,14,40);
-		weaponName = "rifle";
 	}
 	
 	@Override
@@ -86,5 +85,10 @@ public class Rifle extends Firearm {
 		setSpriteRight();
 		shootingCounter++;
 		holderprojectiles.add(new RifleBullet(x, y, 0.7f, 0.7f, speed, projectiledmg, range));
+	}
+
+	@Override
+	public URL getAudioURL() {
+		return url;
 	}
 }

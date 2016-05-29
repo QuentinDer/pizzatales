@@ -111,6 +111,7 @@ public class KaleKing extends Enemy {
 		dashdmg = 5;
 		balldmg = 0.5f;
 		slashdmg = 5;
+		StartingClass.maskphase = 1;
 		switch (StartingClass.difficultylevel) {
 		case 1:
 			waitmin = 120;
@@ -324,6 +325,7 @@ public class KaleKing extends Enemy {
 				halfrsizex = 48;
 				halfrsizey = 45;
 				StartingClass.map[posx][posy] = this;
+				StartingClass.maskphase++;
 				paintoverride = false;
 				if (TRICK)
 					health = maxHealth;
@@ -1307,7 +1309,7 @@ public class KaleKing extends Enemy {
 		halfrsizey = 45;
 		
 		phase++;
-		
+		StartingClass.maskphase++;
 		
 		//changing behaviour
 		setBehaviour();

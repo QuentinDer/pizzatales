@@ -11,6 +11,7 @@ public class KaleKingBall extends Projectile {
 	private float fccX;
 	private float fccY;
 	private boolean fixed;
+	private int fixedcounter;
 	
 	public KaleKingBall(int startX, int startY, float vectorX, float vectorY, float dmg, int range, KaleKing king) {
 		super(startX, startY, vectorX, vectorY, 10, dmg, 15, 7, range);
@@ -19,6 +20,7 @@ public class KaleKingBall extends Projectile {
 		dist = 56.6f;
 		fccX = king.getCenterX();
 		fccY = king.getCenterY();
+		fixedcounter = 0;
 	}
 
 	@Override
@@ -32,7 +34,13 @@ public class KaleKingBall extends Projectile {
 		}
 		int togox = (int)(fccX + dist*Math.cos(Math.toRadians(angle)));
 		int togoy = (int)(fccY + dist*Math.sin(Math.toRadians(angle)));
-		dist = dist + 0.5f;
+		dist = fixed?(Math.max(1.f, dist - 0.5f)):(dist + 0.5f);
+		if (fixed) {
+			fixedcounter++;
+			if (fixedcounter > 180)
+				visible = false;
+				
+		}
 		speedX = togox - centerX;
 		speedY = togoy - centerY;
 		super.update();

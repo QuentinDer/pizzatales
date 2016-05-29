@@ -2,6 +2,7 @@ package pizzatales;
 import java.awt.Image;
 import java.net.URL;
 
+
 public class Gun extends Firearm {
 	
 	public static Image leftSprite, rightSprite, upSprite, downSprite;
@@ -9,7 +10,6 @@ public class Gun extends Firearm {
 	
 	public Gun() {
 		super(2,550,12,25);
-		weaponName = "pistol";
 	}
 	
 	@Override
@@ -86,5 +86,10 @@ public class Gun extends Firearm {
 		setSpriteRight();
 		shootingCounter++;
 		holderprojectiles.add(new Bullet(x, y, 0.7f, 0.7f, speed, projectiledmg, range));
+	}
+	
+	@Override
+	public URL getAudioURL() {
+		return url;
 	}
 }

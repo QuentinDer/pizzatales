@@ -3,6 +3,7 @@ package pizzatales;
 import java.awt.Image;
 import java.net.URL;
 
+
 public class Flamer extends Firearm {
 	public static Image leftSprite, rightSprite, upSprite, downSprite;
 	public static URL url;
@@ -16,7 +17,6 @@ public class Flamer extends Firearm {
 	
 	public Flamer() {
 		super(1.0f,100,10,25);
-		weaponName = "flamer";
 	}
 	
 	@Override
@@ -157,6 +157,12 @@ public class Flamer extends Firearm {
 		holderprojectiles.add(new FlamerFlame(x, y, 0.7f, 0.6f, speed, projectiledmg, range));
 		holderprojectiles.add(new FlamerFlame(x, y, 0.8f, 0.5f, speed, projectiledmg, range));
 		holderprojectiles.add(new FlamerFlame(x, y, 0.9f, 0.4f, speed, projectiledmg, range));
+	}
+
+	@Override
+	public URL getAudioURL() {
+		// TODO Auto-generated method stub
+		return url;
 	}
 
 }

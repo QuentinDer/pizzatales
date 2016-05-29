@@ -73,15 +73,17 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public URL gunSoundurl = null;
 
 	private Clip clip;
-	public Clip gunSound;
+	
+	private static ArrayList<Clip> gunclips = new ArrayList<Clip>();
 	
 	private boolean fullscreenmode = false;
 	public static final boolean TESTMODE = true;
-	public static int difficultylevel = TESTMODE ? 1 : 1;
-	public static int currentlevel = TESTMODE ? 3: 1;
+	public static int difficultylevel = TESTMODE ? 4 : 1;
+	public static int currentlevel = TESTMODE ? 20: 1;
 	private int maxlevel = 20;
 
 	public static int maskminx = -1, maskmaxx = -1, maskminy = -1, maskmaxy = -1;
+	public static int maskphase;
 	
 	public int weaponindex;
 	private int armorindex;
@@ -146,8 +148,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	public StartingClass() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		if (!TESTMODE)
+		if (!TESTMODE) {
+			currentlevel = 1;
+			difficultylevel = 1;
 			initUI();
+		}
 		loadResources();
 	}
 
@@ -235,21 +240,25 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		BackgroundFactory.mountain = new ImageIcon(getClass().getResource("/data/mountainfloor.png")).getImage();
 		BackgroundFactory.lava = new ImageIcon(getClass().getResource("/data/puddlelava.png")).getImage();
 		
-		Level.dirtset[0] = BackgroundFactory.dirt;
 		for (int i = 1; i < 16; i++)
 			Level.dirtset[i] = new ImageIcon(StartingClass.class.getResource("/data/dirt"+i+".png")).getImage();
+		for (int i = 1; i < 16; i++)
+			Level.dirtiset[i] = new ImageIcon(StartingClass.class.getResource("/data/dirti"+i+".png")).getImage();
 		
-		Level.mountainset[0] = BackgroundFactory.mountain;
 		for (int i = 1; i < 16; i++)
 			Level.mountainset[i] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor"+i+".png")).getImage();
 		
-		Level.iceset[0] = BackgroundFactory.ice;
 		for (int i = 1; i < 16; i++)
 			Level.iceset[i] = new ImageIcon(StartingClass.class.getResource("/data/ice"+i+".png")).getImage();
-		Level.icesetm[0] = BackgroundFactory.ice;
 		for (int i = 1; i < 16; i++)
 			Level.icesetm[i] = new ImageIcon(StartingClass.class.getResource("/data/icem"+i+".png")).getImage();
-
+		
+		for (int i = 1; i < 16; i++)
+			Level.caveset[i] = new ImageIcon(StartingClass.class.getResource("/data/cave"+i+".png")).getImage();
+		
+		for (int i = 1; i < 16; i++)
+			Level.brickset[i] = new ImageIcon(StartingClass.class.getResource("/data/brick"+i+".png")).getImage();
+		
 		blooddrop = new ImageIcon(getClass().getResource("/data/blooddrop.png")).getImage();
 		Gun.leftSprite = new ImageIcon(getClass().getResource("/data/pistol1.png")).getImage();
 		Gun.rightSprite = new ImageIcon(getClass().getResource("/data/pistol2.png")).getImage();
@@ -266,8 +275,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Rifle.leftSprite = new ImageIcon(getClass().getResource("/data/rifle1.png")).getImage();
 		Rifle.rightSprite = new ImageIcon(getClass().getResource("/data/rifle2.png")).getImage();
 		Rifle.upSprite = new ImageIcon(getClass().getResource("/data/rifle4.png")).getImage();
-		Rifle.downSprite = new ImageIcon(getClass().getResource("/data/rifle3.png")).getImage();
 		Rifle.url = getClass().getResource("/data/rifle.wav");
+		Rifle.downSprite = new ImageIcon(getClass().getResource("/data/rifle3.png")).getImage();
 		RifleBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/rifleprojectile.png")).getImage();
 		Flamer.leftSprite = new ImageIcon(getClass().getResource("/data/flamer1.png")).getImage();
 		Flamer.rightSprite = new ImageIcon(getClass().getResource("/data/flamer2.png")).getImage();
@@ -305,14 +314,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				.getImage();
 		ReaperBarrelProjectile.sprite = new ImageIcon(getClass().getResource("/data/barrelprojectile.png")).getImage();
 		OnioughProjectile.sprite = new ImageIcon(getClass().getResource("/data/onioughProjectile.png")).getImage();
-		IceBolt.boltdown = new ImageIcon(getClass().getResource("/data/iceboltdown.png")).getImage();
-		IceBolt.boltright = new ImageIcon(getClass().getResource("/data/iceboltright.png")).getImage();
-		IceBolt.boltleft = new ImageIcon(getClass().getResource("/data/iceboltleft.png")).getImage();
-		IceBolt.boltup = new ImageIcon(getClass().getResource("/data/iceboltup.png")).getImage();
-		IceBolt.boltleftdown = new ImageIcon(getClass().getResource("/data/iceboltleftdown.png")).getImage();
-		IceBolt.boltrightdown = new ImageIcon(getClass().getResource("/data/iceboltrightdown.png")).getImage();
-		IceBolt.boltleftup = new ImageIcon(getClass().getResource("/data/iceboltleftup.png")).getImage();
-		IceBolt.boltrightup = new ImageIcon(getClass().getResource("/data/iceboltrightup.png")).getImage();
+		
+		for (int i = 0; i < 32; i++)
+			IceBolt.boltset[i] = new ImageIcon(getClass().getResource("/data/icebolt"+i+".png")).getImage();
 		KaleKingBall.sprite = new ImageIcon(getClass().getResource("/data/kalekingBall.png")).getImage();
 		KaleKingFlame.sprite = new ImageIcon(getClass().getResource("/data/darkflame.png")).getImage();
 
@@ -1751,8 +1755,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		int bby = bg.getCenterY() - bginity;
 		if (remask) {
 			remask = false;
-			if (maskminx != 1)
-				Level.bitmask(currentlevel, backgroundmap, maskmap, maskminx, maskmaxx, maskminy, maskmaxy);
+			if (maskminx != -1)
+				Level.bitmask(currentlevel, backgroundmap, maskmap, maskminx, maskmaxx, maskminy, maskmaxy, maskphase);
 			else
 				Level.bitmask(currentlevel, backgroundmap, maskmap);
 		}
@@ -2009,26 +2013,26 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			Explosion e = explosions.get(i);
 			e.update();
 			if(!e.soundPlayed){
-				AudioInputStream ais;
-				Clip explosion = null;
 				try {
-					explosion = AudioSystem.getClip();
-					ais = AudioSystem.getAudioInputStream(e.sound);
-					explosion.open(ais);
+					Clip explosiveSound = AudioSystem.getClip();
+					AudioInputStream ais = AudioSystem.getAudioInputStream(e.sound);
+					explosiveSound.open(ais);
+					ais.close();
+					FloatControl gainControl = (FloatControl) explosiveSound.getControl(FloatControl.Type.MASTER_GAIN);
+					gainControl.setValue(-12.0f);
+					gunclips.add(explosiveSound);
+					explosiveSound.loop(0);
 				} catch (LineUnavailableException e1) {
-					e1.printStackTrace();
-				} catch (UnsupportedAudioFileException e1) {
+					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (UnsupportedAudioFileException e1) {
+					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				FloatControl gainControl = (FloatControl) explosion.getControl(FloatControl.Type.MASTER_GAIN);
-				gainControl.setValue(-24.0f);
-				explosion.loop(0);
-				explosion.close();
 				e.soundPlayed = true;
-			} else {
-				
 			}
 			if (e.isVisible()) {
 				i++;
@@ -2040,34 +2044,78 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	private void updatePlayer() {
 		
-		if (player.isHurt){
-			player.hurt.loop(0);
-			player.isHurt = false;
+		int i = 0;
+		while (i < gunclips.size()) {
+			if (!gunclips.get(i).isRunning()) {
+				gunclips.get(i).close();
+				gunclips.remove(i);
+			} else
+				i++;
 		}
-
-		AudioInputStream ais = null;
 		
-		//if(!gunSoundLoaded){
-			gunSoundurl = getClass().getResource("/data/"+player.getWeapon().weaponName+".wav");
+		if (player.isHurt){
+			player.isHurt = false;
 			try {
-				gunSound = AudioSystem.getClip();
-				ais = AudioSystem.getAudioInputStream(gunSoundurl);
-				gunSound.open(ais);
-			} catch (Exception e) {
-				e.printStackTrace();
+				Clip hurtSound = AudioSystem.getClip();
+				AudioInputStream ais = AudioSystem.getAudioInputStream(Player.hurtSound);
+				hurtSound.open(ais);
+				ais.close();
+				FloatControl gainControl = (FloatControl) hurtSound.getControl(FloatControl.Type.MASTER_GAIN);
+				gainControl.setValue(-12.0f);
+				gunclips.add(hurtSound);
+				hurtSound.loop(0);
+			} catch (LineUnavailableException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (UnsupportedAudioFileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (Throwable e3) {
+				e3.printStackTrace();
 			}
-			FloatControl gainControl = (FloatControl) gunSound.getControl(FloatControl.Type.MASTER_GAIN);
-			gainControl.setValue(-12.0f);
-			gunSoundLoaded = true;
+		}
+		
 		//}
+		
 
 		if (player.playSound){
-			gunSound.loop(0);
+			/*if (gunSound != null)
+				gunSound.close();*/
 			player.playSound = false;
+			try {
+				/*if (urls.contains(player.getWeapon().getAudioURL())) {
+					int index = urls.indexOf(player.getWeapon().getAudioURL());
+			    	gunclips.get(index).stop();
+					gunclips.get(index).close();
+					gunclips.remove(index);
+					urls.remove(index);
+				}*/
+				Clip gunSound = AudioSystem.getClip();
+				AudioInputStream ais = AudioSystem.getAudioInputStream(player.getWeapon().getAudioURL());
+				gunSound.open(ais);
+				ais.close();
+				FloatControl gainControl = (FloatControl) gunSound.getControl(FloatControl.Type.MASTER_GAIN);
+				gainControl.setValue(-12.0f);
+				gunSoundLoaded = true;
+				gunclips.add(gunSound);
+				gunSound.loop(0);
+			} catch (LineUnavailableException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (UnsupportedAudioFileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		
 		ArrayList<Projectile> projectiles = player.getProjectiles();
-		int i = 0;
+		i = 0;
 		while (i < projectiles.size()) {
 			Projectile p = projectiles.get(i);
 			if (p.isVisible() == true) {

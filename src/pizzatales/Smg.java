@@ -9,7 +9,6 @@ public class Smg extends Firearm {
 	
 	public Smg() {
 		super(1,400,10,10);
-		weaponName = "smg";
 	}
 	
 	@Override
@@ -86,5 +85,10 @@ public class Smg extends Firearm {
 		setSpriteRight();
 		shootingCounter++;
 		holderprojectiles.add(new SmgBullet(x, y, 0.7f, 0.7f, speed, projectiledmg, range));
+	}
+	
+	@Override
+	public URL getAudioURL() {
+		return url;
 	}
 }

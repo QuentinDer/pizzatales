@@ -17,7 +17,6 @@ public class Shotgun extends Firearm {
 	
 	public Shotgun() {
 		super(2,250,10,50);
-		weaponName = "shotgun";
 	}
 	
 	@Override
@@ -146,5 +145,10 @@ public class Shotgun extends Firearm {
 		holderprojectiles.add(new ShotgunBullet(x, y, 0.6f, 0.8f, speed, projectiledmg, range));
 		holderprojectiles.add(new ShotgunBullet(x, y, 0.8f, 0.6f, speed, projectiledmg, range));
 		holderprojectiles.add(new ShotgunBullet(x, y, 0.9f, 0.45f, speed, projectiledmg, range));
+	}
+	
+	@Override
+	public URL getAudioURL() {
+		return url;
 	}
 }
