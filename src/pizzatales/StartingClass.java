@@ -77,9 +77,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private static ArrayList<Clip> gunclips = new ArrayList<Clip>();
 	
 	private boolean fullscreenmode = false;
-	public static final boolean TESTMODE = true;
-	public static int difficultylevel = TESTMODE ? 4 : 1;
-	public static int currentlevel = TESTMODE ? 12: 1;
+	public static final boolean TESTMODE = false;
+	public static int difficultylevel = TESTMODE ? 3 : 1;
+	public static int currentlevel = TESTMODE ? 1: 1;
 	private int maxlevel = 20;
 
 	public static int maskminx = -1, maskmaxx = -1, maskminy = -1, maskmaxy = -1;
@@ -695,7 +695,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			e.printStackTrace();
 		}
 		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-		gainControl.setValue(-9.0f);
+		gainControl.setValue(-15.0f);
 
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
 
@@ -2061,7 +2061,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				hurtSound.open(ais);
 				ais.close();
 				FloatControl gainControl = (FloatControl) hurtSound.getControl(FloatControl.Type.MASTER_GAIN);
-				gainControl.setValue(-12.0f);
+				gainControl.setValue(0.0f);
 				gunclips.add(hurtSound);
 				hurtSound.loop(0);
 			} catch (LineUnavailableException e1) {
@@ -2085,13 +2085,13 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			/*if (gunSound != null)
 				gunSound.close();*/
 			player.playSound = false;
-			/*try {
+			try {
 				Clip gunSound = AudioSystem.getClip();
 				AudioInputStream ais = AudioSystem.getAudioInputStream(player.getWeapon().getAudioURL());
 				gunSound.open(ais);
 				ais.close();
 				FloatControl gainControl = (FloatControl) gunSound.getControl(FloatControl.Type.MASTER_GAIN);
-				gainControl.setValue(-12.0f);
+				gainControl.setValue(-15.0f);
 				gunSoundLoaded = true;
 				gunclips.add(gunSound);
 				gunSound.loop(0);
@@ -2104,7 +2104,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			} catch (UnsupportedAudioFileException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}*/
+			}
 		}
 		
 		ArrayList<Projectile> projectiles = player.getProjectiles();
