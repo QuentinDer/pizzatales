@@ -580,7 +580,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		
 		azerty = true;
 		JButton azertyButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonAzertyRed.png")));
-		azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonQwertyWhite.png")));
+		azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonAzertyWhite.png")));
 
 		azertyButton.setBorderPainted(false);
 		azertyButton.setContentAreaFilled(false);
@@ -588,7 +588,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		add(azertyButton);
 		
 		final JButton levelButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonLevel1Red.png")));
-		levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel2White.png")));
+		levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel1White.png")));
 
 		levelButton.setBorderPainted(false);
 		levelButton.setContentAreaFilled(false);
@@ -596,7 +596,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		add(levelButton);
 		
 		final JButton diffButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonDiffEasyRed.png")));
-		diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffNormalWhite.png")));
+		diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffEasyWhite.png")));
 
 		diffButton.setBorderPainted(false);
 		diffButton.setContentAreaFilled(false);
@@ -617,11 +617,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			public void actionPerformed(ActionEvent event) {
 				if (azerty == false) {
 					azertyButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonAzertyRed.png")));
-					azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonQwertyWhite.png")));
+					azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonAzertyWhite.png")));
 					azerty = true;
 				} else {
 					azertyButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonQwertyRed.png")));
-					azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonAzertyWhite.png")));
+					azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonQwertyWhite.png")));
 					azerty = false;
 				}
 			}
@@ -637,83 +637,83 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				switch(currentlevel) {
 				case 1:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel1Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel2White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel1White.png")));
 					break;
 				case 2:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel2Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel3White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel2White.png")));
 					break;
 				case 3:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel3Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel4White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel3White.png")));
 					break;
 				case 4:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel4Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel5White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel4White.png")));
 					break;
 				case 5:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel5Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel6White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel5White.png")));
 					break;
 				case 6:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel6Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel7White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel6White.png")));
 					break;
 				case 7:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel7Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel8White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel7White.png")));
 					break;
 				case 8:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel8Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel9White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel8White.png")));
 					break;
 				case 9:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel9Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel10White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel9White.png")));
 					break;
 				case 10:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel10Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel11White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel10White.png")));
 					break;
 				case 11:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel11Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel12White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel11White.png")));
 					break;
 				case 12:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel12Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel13White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel12White.png")));
 					break;
 				case 13:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel13Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel14White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel13White.png")));
 					break;
 				case 14:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel14Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel15White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel14White.png")));
 					break;
 				case 15:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel15Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel16White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel15White.png")));
 					break;
 				case 16:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel16Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel17White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel16White.png")));
 					break;
 				case 17:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel17Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel18White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel17White.png")));
 					break;
 				case 18:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel18Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel19White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel18White.png")));
 					break;
 				case 19:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel19Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel20White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel19White.png")));
 					break;
 				case 20:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel20Red.png")));
-					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel1White.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel20White.png")));
 					break;
 				}
 				//levelButton.setText("Level: " + currentlevel);
@@ -731,19 +731,19 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				switch(difficultylevel) {
 				case 1:
 					diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffEasyRed.png")));
-					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffNormalWhite.png")));
+					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffEasyWhite.png")));
 					break;
 				case 2:
 					diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffNormalRed.png")));
-					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffHardWhite.png")));
+					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffNormalWhite.png")));
 					break;
 				case 3:
 					diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffHardRed.png")));
-					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffExtremeWhite.png")));
+					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffHardWhite.png")));
 					break;
 				case 4:
 					diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffExtremeRed.png")));
-					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffEasyWhite.png")));
+					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffExtremeWhite.png")));
 					break;
 				}
 				//diffButton.setText("Difficulty: " + difficultylevel);
