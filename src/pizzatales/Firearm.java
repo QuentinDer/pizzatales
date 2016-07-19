@@ -56,6 +56,8 @@ public abstract class Firearm {
 	public void setSpeed(int speed) {
 		this.speed = speed;
 	}
+	
+	public abstract String getID();
 
 	public abstract void shootUp(int x, int y);
 	

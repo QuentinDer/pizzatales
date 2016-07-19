@@ -44,4 +44,9 @@ public class HawaiiArmor extends Armor {
 	public Image getDeathSprite() {
 		return deathSprite;
 	}
+
+	@Override
+	public String getID() {
+		return "HAWAIIARMOR";
+	}
 }

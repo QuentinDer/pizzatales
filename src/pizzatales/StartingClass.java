@@ -16,8 +16,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,7 +88,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static final boolean TESTMODE = false;
 	public static int difficultylevel = TESTMODE ? 3 : 1;
 	public static int currentlevel = TESTMODE ? 1: 1;
-	private int maxlevel = 20;
+	private final int maxlevel = 20;
+	private int currentmaxlevel = 1;
 
 	public static int maskminx = -1, maskmaxx = -1, maskminy = -1, maskmaxy = -1;
 	public static int maskphase;
@@ -152,10 +158,164 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public StartingClass() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(false);
+		loadResources();
+		loadGameState();
 		if (!TESTMODE) {
 			initUI();
 		}
-		loadResources();
+	}
+	
+	private void saveGameState() {
+		File file = new File("save");
+		try {
+			if (!file.exists())
+				file.createNewFile();
+			file.setWritable(true);
+			PrintWriter pt = new PrintWriter(new FileWriter(file));
+			pt.println("AZERTY="+((azerty)?"TRUE":"FALSE"));
+			pt.println("CURRENTMAXLEVEL="+Integer.toString(currentmaxlevel));
+			pt.println("DIFFICULTY="+Integer.toString(difficultylevel));
+			pt.println("LASTLEVEL="+Integer.toString(currentlevel));
+			for (Armor armor : playerarmor)
+				pt.println(armor.getID()+"=TRUE");
+			for (Firearm firearm : playerweapons)
+				pt.println(firearm.getID()+"=TRUE");
+			for (Hat hat : playerhats) {
+				if (null != hat)
+					pt.println(hat.getID()+"=TRUE");
+			}
+			pt.close();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void loadGameState() {
+		File file = new File("save");
+		HashMap<String,String> gamestate = new HashMap<String,String>();
+		if (file.exists()) {
+			try {
+				BufferedReader reader = new BufferedReader(new FileReader(file));
+				String line = reader.readLine();
+				while (null != line && !line.isEmpty()) {
+					String[] linevals = line.split("=");
+					gamestate.put(linevals[0], linevals[1]);
+					line = reader.readLine();
+				}
+				reader.close();
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
+		}
+		for (Entry<String,String> entry : gamestate.entrySet()) {
+			String value = entry.getValue();
+			try {
+				switch(entry.getKey()) {
+				case "AZERTY":
+					if ("TRUE".equals(value))
+						azerty = true;
+					else
+						azerty = false;
+					break;
+				case "CURRENTMAXLEVEL":
+					currentmaxlevel = Integer.parseInt(value);
+					break;
+				case "DIFFICULTY":
+					difficultylevel = Integer.parseInt(value);
+					break;
+				case "LASTLEVEL":
+					currentlevel = Integer.parseInt(value);
+					break;
+				case "SHOTGUN":
+					if ("TRUE".equals(value)) {
+						Shotgun sht = new Shotgun();
+						playerweapons.add(sht);
+						sht.setHolderProjectiles(player.getProjectiles());
+					}
+					break;
+				case "SMG":
+					if ("TRUE".equals(value)) {
+						Smg sht = new Smg();
+						playerweapons.add(sht);
+						sht.setHolderProjectiles(player.getProjectiles());
+					}
+					break;
+				case "RIFLE":
+					if ("TRUE".equals(value)) {
+						Rifle sht = new Rifle();
+						playerweapons.add(sht);
+						sht.setHolderProjectiles(player.getProjectiles());
+					}
+					break;
+				case "FLAMER":
+					if ("TRUE".equals(value)) {
+						Flamer sht = new Flamer();
+						playerweapons.add(sht);
+						sht.setHolderProjectiles(player.getProjectiles());
+					}
+					break;
+				case "ROCKET":
+					if ("TRUE".equals(value)) {
+						Rocket sht = new Rocket();
+						playerweapons.add(sht);
+						sht.setHolderProjectiles(player.getProjectiles());
+					}
+					break;
+				case "CHEESEARMOR":
+					if ("TRUE".equals(value)) {
+						playerarmor.add(new CheeseArmor());
+					}
+					break;
+				case "HAWAIIARMOR":
+					if ("TRUE".equals(value)) {
+						playerarmor.add(new HawaiiArmor());
+					}
+					break;
+				case "CHICAGOARMOR":
+					if ("TRUE".equals(value)) {
+						playerarmor.add(new ChicagoArmor());
+					}
+					break;
+				case "MARGHERITAARMOR":
+					if ("TRUE".equals(value)) {
+						playerarmor.add(new MargheritaArmor());
+					}
+					break;
+				case "HATBASEBALL":
+					if ("TRUE".equals(value)) {
+						playerhats.add(new HatBaseball());
+					}
+					break;
+				case "HATBOWLER":
+					if ("TRUE".equals(value)) {
+						playerhats.add(new HatBowler());
+					}
+					break;
+				case "HATFEDORA":
+					if ("TRUE".equals(value)) {
+						playerhats.add(new HatFedora());
+					}
+					break;
+				case "HATPANAMA":
+					if ("TRUE".equals(value)) {
+						playerhats.add(new HatPanama());
+					}
+					break;
+				case "HATSHERLOCK":
+					if ("TRUE".equals(value)) {
+						playerhats.add(new HatSherlock());
+					}
+					break;
+				case "HATTOP":
+					if ("TRUE".equals(value)) {
+						playerhats.add(new HatTop());
+					}
+					break;
+				}
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void loadResources() {
@@ -578,9 +738,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		
 		add(quitButton);
 		
-		azerty = true;
-		JButton azertyButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonAzertyRed.png")));
-		azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonAzertyWhite.png")));
+		JButton azertyButton = new JButton(new ImageIcon((azerty)?(getClass().getResource("/data/buttonAzertyRed.png")):(getClass().getResource("/data/buttonQwertyRed.png"))));
+		azertyButton.setRolloverIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonAzertyWhite.png")):(getClass().getResource("/data/buttonQwertyWhite.png"))));
+		
 
 		azertyButton.setBorderPainted(false);
 		azertyButton.setContentAreaFilled(false);
@@ -593,6 +753,89 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		levelButton.setBorderPainted(false);
 		levelButton.setContentAreaFilled(false);
 		
+		switch(currentlevel) {
+		case 1:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel1Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel1White.png")));
+			break;
+		case 2:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel2Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel2White.png")));
+			break;
+		case 3:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel3Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel3White.png")));
+			break;
+		case 4:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel4Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel4White.png")));
+			break;
+		case 5:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel5Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel5White.png")));
+			break;
+		case 6:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel6Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel6White.png")));
+			break;
+		case 7:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel7Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel7White.png")));
+			break;
+		case 8:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel8Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel8White.png")));
+			break;
+		case 9:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel9Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel9White.png")));
+			break;
+		case 10:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel10Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel10White.png")));
+			break;
+		case 11:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel11Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel11White.png")));
+			break;
+		case 12:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel12Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel12White.png")));
+			break;
+		case 13:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel13Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel13White.png")));
+			break;
+		case 14:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel14Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel14White.png")));
+			break;
+		case 15:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel15Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel15White.png")));
+			break;
+		case 16:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel16Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel16White.png")));
+			break;
+		case 17:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel17Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel17White.png")));
+			break;
+		case 18:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel18Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel18White.png")));
+			break;
+		case 19:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel19Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel19White.png")));
+			break;
+		case 20:
+			levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel20Red.png")));
+			levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel20White.png")));
+			break;
+		}
+		
 		add(levelButton);
 		
 		final JButton diffButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonDiffEasyRed.png")));
@@ -600,6 +843,25 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 		diffButton.setBorderPainted(false);
 		diffButton.setContentAreaFilled(false);
+		
+		switch(difficultylevel) {
+		case 1:
+			diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffEasyRed.png")));
+			diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffEasyWhite.png")));
+			break;
+		case 2:
+			diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffNormalRed.png")));
+			diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffNormalWhite.png")));
+			break;
+		case 3:
+			diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffHardRed.png")));
+			diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffHardWhite.png")));
+			break;
+		case 4:
+			diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffExtremeRed.png")));
+			diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffExtremeWhite.png")));
+			break;
+		}
 		
 		add(diffButton);
 		
@@ -631,7 +893,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				currentlevel++;
-				if (currentlevel > maxlevel) {
+				if (currentlevel > currentmaxlevel) {
 					currentlevel = 1;
 				}
 				switch(currentlevel) {
@@ -1676,6 +1938,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					if (!endlevelmenuloaded) {
 						this.clean();
 						clip.stop();
+						if (currentlevel == currentmaxlevel) {
+							currentmaxlevel = Math.min(maxlevel, currentmaxlevel+1);
+						}
+						saveGameState();
 						initEndLevelScreen();
 						endlevelmenuloaded = true;
 					}

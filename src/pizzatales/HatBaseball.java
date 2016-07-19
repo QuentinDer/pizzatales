@@ -17,4 +17,9 @@ public class HatBaseball extends Hat {
 	public void effect(){
 		player.setMOVESPEED(player.getMOVESPEED()+1);
 	}
+
+	@Override
+	public String getID() {
+		return "HATBASEBALL";
+	}
 }

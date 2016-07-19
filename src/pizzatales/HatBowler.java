@@ -23,4 +23,9 @@ public class HatBowler extends Hat {
 			player.getArmor().setDefense(player.getArmor().getDefense()+8);
 		player.getArmor().MAXDEF += 8;
 	}
+
+	@Override
+	public String getID() {
+		return "HATBOWLER";
+	}
 }

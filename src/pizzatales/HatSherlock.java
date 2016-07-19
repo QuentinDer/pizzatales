@@ -17,5 +17,10 @@ public class HatSherlock extends Hat {
 	public void effect(){
 		player.getWeapon().range *= 1.3f;
 	}
+
+	@Override
+	public String getID() {
+		return "HATSHERLOCK";
+	}
 	
 }

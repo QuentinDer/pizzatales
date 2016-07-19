@@ -165,4 +165,9 @@ public class Flamer extends Firearm {
 		return url;
 	}
 
+	@Override
+	public String getID() {
+		return "FLAMER";
+	}
+
 }

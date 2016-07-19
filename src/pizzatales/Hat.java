@@ -9,4 +9,6 @@ public abstract class Hat {
 	public abstract Image getSprite();
 	
 	public abstract void effect();
+	
+	public abstract String getID();
 }

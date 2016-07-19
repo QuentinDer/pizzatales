@@ -21,4 +21,9 @@ public class HatTop extends Hat {
 	public void effect(){
 		player.getWeapon().projectiledmg *= 1.3f;
 	}
+
+	@Override
+	public String getID() {
+		return "HATTOP";
+	}
 }

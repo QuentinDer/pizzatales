@@ -83,4 +83,9 @@ public class Rocket extends Firearm {
 	public URL getAudioURL() {
 		return url;
 	}
+
+	@Override
+	public String getID() {
+		return "ROCKET";
+	}
 }

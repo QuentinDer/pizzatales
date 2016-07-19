@@ -91,4 +91,9 @@ public class Smg extends Firearm {
 	public URL getAudioURL() {
 		return url;
 	}
+
+	@Override
+	public String getID() {
+		return "SMG";
+	}
 }

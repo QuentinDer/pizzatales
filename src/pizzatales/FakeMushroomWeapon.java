@@ -79,4 +79,10 @@ public class FakeMushroomWeapon extends Firearm {
 	public URL getAudioURL() {
 		return null;
 	}
+
+	@Override
+	public String getID() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

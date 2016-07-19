@@ -19,4 +19,9 @@ public class HatPanama extends Hat {
 			player.setHealth(player.getHealth()+10);
 		player.setMaxHealth(player.getMaxHealth()+10);
 	}
+
+	@Override
+	public String getID() {
+		return "HATPANAMA";
+	}
 }

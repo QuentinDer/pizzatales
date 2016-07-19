@@ -17,4 +17,9 @@ public class HatFedora extends Hat {
 	public void effect(){
 		player.getWeapon().setFireRate((int)(player.getWeapon().getFireRate()*0.8f));
 	}
+
+	@Override
+	public String getID() {
+		return "HATFEDORA";
+	}
 }
