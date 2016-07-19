@@ -1,6 +1,7 @@
 package pizzatales;
 
 import java.awt.AlphaComposite;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Composite;
 import java.awt.EventQueue;
@@ -36,6 +37,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import java.awt.Container;
 
@@ -56,6 +58,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private Image image;
 	private Image blooddrop;
 	private Image grinningsprite;
+	private Image iconScreen;
 	public static Image tileTree, /*tileGrass, */tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit,
 			tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel, tileCandelabrum, 
 			tileCrate, tileChest, tileBlack, tileChestOpen, tilePineTree, tileMudWall, tileSnowRock, tileSky;
@@ -148,9 +151,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	public StartingClass() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setResizable(false);
 		if (!TESTMODE) {
-			currentlevel = 1;
-			difficultylevel = 1;
 			initUI();
 		}
 		loadResources();
@@ -543,30 +545,85 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	}
 
 	private void initUI() {
+		if (null == iconScreen)
+			iconScreen = new ImageIcon(getClass().getResource("/data/icon3.png")).getImage();
+		this.setIconImage(iconScreen);
 		
-		JButton quitButton = new JButton("Quit");
-		JButton startButton = new JButton("Start");
-		final JButton keyButton = (azerty)?new JButton("azerty"):new JButton("qwerty");
-		final JButton levelButton = new JButton("Level: " + currentlevel);
-		final JButton diffButton = new JButton("Difficulty: " + difficultylevel);
+		setLayout(new BorderLayout());
+		setContentPane(new JLabel(new ImageIcon(getClass().getResource("/data/menuScreen.png"))));
+		
+		setLayout(null);
+		
+		JButton startButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonStartRed.png")));
+		startButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonStartWhite.png")));
 
-		levelButton.setBounds(500, 100, 100, 50);
-		diffButton.setBounds(680, 100, 100, 50);
-		startButton.setBounds(590, 250, 100, 50);
-		quitButton.setBounds(590, 300, 100, 50);
-		keyButton.setBounds(650, 100, 100, 50);		
+		startButton.setBorderPainted(false);
+		startButton.setContentAreaFilled(false);
+		
+		add(startButton);
+		
+		JButton settingsButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonSettingsRed.png")));
+		settingsButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonSettingsWhite.png")));
 
-		keyButton.addActionListener(new ActionListener() {
+		settingsButton.setBorderPainted(false);
+		settingsButton.setContentAreaFilled(false);
+		
+		add(settingsButton);
+		
+		JButton quitButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonQuitRed.png")));
+		quitButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonQuitWhite.png")));
+
+		quitButton.setBorderPainted(false);
+		quitButton.setContentAreaFilled(false);
+		
+		add(quitButton);
+		
+		azerty = true;
+		JButton azertyButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonAzertyRed.png")));
+		azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonQwertyWhite.png")));
+
+		azertyButton.setBorderPainted(false);
+		azertyButton.setContentAreaFilled(false);
+		
+		add(azertyButton);
+		
+		final JButton levelButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonLevel1Red.png")));
+		levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel2White.png")));
+
+		levelButton.setBorderPainted(false);
+		levelButton.setContentAreaFilled(false);
+		
+		add(levelButton);
+		
+		final JButton diffButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonDiffEasyRed.png")));
+		diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffNormalWhite.png")));
+
+		diffButton.setBorderPainted(false);
+		diffButton.setContentAreaFilled(false);
+		
+		add(diffButton);
+		
+		startButton.setBounds(670, 100, 150, 75);
+		settingsButton.setBounds(670, 210, 150, 75);
+		quitButton.setBounds(670, 320, 150, 75);
+		
+		levelButton.setBounds(1100, 15, 150, 75);
+		diffButton.setBounds(1100, 110, 150, 75);
+		
+		azertyButton.setBounds(300, 15, 150, 75);		
+
+		azertyButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				if (azerty == false) {
+					azertyButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonAzertyRed.png")));
+					azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonQwertyWhite.png")));
 					azerty = true;
-					keyButton.setText("azerty");
 				} else {
+					azertyButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonQwertyRed.png")));
+					azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonAzertyWhite.png")));
 					azerty = false;
-					keyButton.setText("qwerty");
 				}
-				
 			}
 		});
 		
@@ -577,7 +634,89 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				if (currentlevel > maxlevel) {
 					currentlevel = 1;
 				}
-				levelButton.setText("Level: " + currentlevel);
+				switch(currentlevel) {
+				case 1:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel1Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel2White.png")));
+					break;
+				case 2:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel2Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel3White.png")));
+					break;
+				case 3:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel3Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel4White.png")));
+					break;
+				case 4:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel4Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel5White.png")));
+					break;
+				case 5:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel5Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel6White.png")));
+					break;
+				case 6:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel6Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel7White.png")));
+					break;
+				case 7:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel7Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel8White.png")));
+					break;
+				case 8:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel8Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel9White.png")));
+					break;
+				case 9:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel9Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel10White.png")));
+					break;
+				case 10:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel10Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel11White.png")));
+					break;
+				case 11:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel11Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel12White.png")));
+					break;
+				case 12:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel12Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel13White.png")));
+					break;
+				case 13:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel13Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel14White.png")));
+					break;
+				case 14:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel14Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel15White.png")));
+					break;
+				case 15:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel15Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel16White.png")));
+					break;
+				case 16:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel16Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel17White.png")));
+					break;
+				case 17:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel17Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel18White.png")));
+					break;
+				case 18:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel18Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel19White.png")));
+					break;
+				case 19:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel19Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel20White.png")));
+					break;
+				case 20:
+					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel20Red.png")));
+					levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel1White.png")));
+					break;
+				}
+				//levelButton.setText("Level: " + currentlevel);
 			}
 		});
 
@@ -589,7 +728,25 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				} else {
 					difficultylevel++;
 				}
-				diffButton.setText("Difficulty: " + difficultylevel);
+				switch(difficultylevel) {
+				case 1:
+					diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffEasyRed.png")));
+					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffNormalWhite.png")));
+					break;
+				case 2:
+					diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffNormalRed.png")));
+					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffHardWhite.png")));
+					break;
+				case 3:
+					diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffHardRed.png")));
+					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffExtremeWhite.png")));
+					break;
+				case 4:
+					diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffExtremeRed.png")));
+					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffEasyWhite.png")));
+					break;
+				}
+				//diffButton.setText("Difficulty: " + difficultylevel);
 			}
 		});
 
@@ -631,11 +788,12 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			}
 		});
 
+		/*createLayout(startButton);
+		createLayout(settingsButton);
+		createLayout(quitButton);
 		createLayout(levelButton);
 		createLayout(diffButton);
-		createLayout(startButton);
-		createLayout(quitButton);
-		createLayout(keyButton);
+		createLayout(azertyButton);*/
 
 		setTitle("Pizza Tales");
 		setSize(1280, 800);
