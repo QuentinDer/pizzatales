@@ -85,13 +85,13 @@ public class Player extends BlockingStuff {
 		MOVESPEED = armor.speed;
 		maxhealth = 20;
 		armor.MAXDEF = armor.DEFMAXDEF;
-		health = Math.min(health, maxhealth);
-		armor.defense = Math.min(armor.defense, armor.MAXDEF);
 		defBoost = 1.0f;
 		weapon.initState();
 		Enemy.bloodymess = false;
 		if (hat != null)
 			hat.effect();
+		health = Math.min(health, maxhealth);
+		armor.defense = Math.min(armor.defense, armor.MAXDEF);
 	}
 	
 	private final void chekCollisionsWithItems(int x, int y) {
