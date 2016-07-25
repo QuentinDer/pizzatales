@@ -1082,7 +1082,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		setTitle("Pizza Tales");
 		setSize(1280, 800);
 		setLocationRelativeTo(null);
-		this.setIgnoreRepaint(true);
+		//this.setIgnoreRepaint(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
