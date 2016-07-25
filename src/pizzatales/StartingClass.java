@@ -82,7 +82,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	private Clip clip;
 	
-	private static ArrayList<Clip> gunclips = new ArrayList<Clip>();
+	protected static ArrayList<Clip> gunclips = new ArrayList<Clip>();
 	
 	private boolean fullscreenmode = false;
 	public static final boolean TESTMODE = false;
@@ -160,6 +160,29 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		this.setResizable(false);
 		loadResources();
 		loadGameState();
+		Thread soundcleaner = new Thread() {
+			@Override
+			public void run() {
+				Clip clip;
+				while (true) {
+					clip = null;
+					synchronized (gunclips) {
+						if (!gunclips.isEmpty() && !gunclips.get(0).isRunning()) {
+							clip = gunclips.remove(0);
+						}
+					}
+					if (null != clip)
+						clip.close();
+					try {
+						Thread.sleep(5);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		soundcleaner.setDaemon(true);
+		soundcleaner.start();
 		if (!TESTMODE) {
 			initUI();
 		}
@@ -2444,8 +2467,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					ais.close();
 					FloatControl gainControl = (FloatControl) explosiveSound.getControl(FloatControl.Type.MASTER_GAIN);
 					gainControl.setValue(-12.0f);
-					gunclips.add(explosiveSound);
 					explosiveSound.loop(0);
+					synchronized(gunclips) {
+						gunclips.add(explosiveSound);
+					}
 				} catch (LineUnavailableException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -2468,15 +2493,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	private void updatePlayer() {
 		
-		int i = 0;
-		while (i < gunclips.size()) {
-			if (!gunclips.get(i).isRunning()) {
-				gunclips.get(i).close();
-				gunclips.remove(i);
-			} else
-				i++;
-		}
-		
 		if (player.isHurt){
 			player.isHurt = false;
 			try {
@@ -2486,8 +2502,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				ais.close();
 				FloatControl gainControl = (FloatControl) hurtSound.getControl(FloatControl.Type.MASTER_GAIN);
 				gainControl.setValue(0.0f);
-				gunclips.add(hurtSound);
 				hurtSound.loop(0);
+				synchronized (gunclips) {
+					gunclips.add(hurtSound);
+				}
+				
 			} catch (LineUnavailableException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -2517,8 +2536,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				FloatControl gainControl = (FloatControl) gunSound.getControl(FloatControl.Type.MASTER_GAIN);
 				gainControl.setValue(-15.0f);
 				gunSoundLoaded = true;
-				gunclips.add(gunSound);
 				gunSound.loop(0);
+				synchronized(gunclips) {
+					gunclips.add(gunSound);
+				}
 			} catch (LineUnavailableException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -2532,7 +2553,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		}
 		
 		ArrayList<Projectile> projectiles = player.getProjectiles();
-		i = 0;
+		int i = 0;
 		while (i < projectiles.size()) {
 			Projectile p = projectiles.get(i);
 			if (p.isVisible() == true) {
