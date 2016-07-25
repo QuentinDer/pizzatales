@@ -22,4 +22,5 @@ public class HatFedora extends Hat {
 	public String getID() {
 		return "HATFEDORA";
 	}
+
 }

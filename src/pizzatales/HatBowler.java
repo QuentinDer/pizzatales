@@ -28,4 +28,5 @@ public class HatBowler extends Hat {
 	public String getID() {
 		return "HATBOWLER";
 	}
+
 }

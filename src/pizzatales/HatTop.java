@@ -26,4 +26,5 @@ public class HatTop extends Hat {
 	public String getID() {
 		return "HATTOP";
 	}
+	
 }

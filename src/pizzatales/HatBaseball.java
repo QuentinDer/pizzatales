@@ -22,4 +22,5 @@ public class HatBaseball extends Hat {
 	public String getID() {
 		return "HATBASEBALL";
 	}
+
 }

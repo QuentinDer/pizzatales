@@ -15,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -42,6 +44,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 import java.awt.Container;
 
@@ -727,14 +730,15 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	}
 
 	private void initUI() {
-		if (null == iconScreen)
+		if (null == iconScreen) {
 			iconScreen = new ImageIcon(getClass().getResource("/data/icon3.png")).getImage();
-		this.setIconImage(iconScreen);
+			this.setIconImage(iconScreen);
 		
-		setLayout(new BorderLayout());
-		setContentPane(new JLabel(new ImageIcon(getClass().getResource("/data/menuScreen.png"))));
-		
-		setLayout(null);
+			setLayout(new BorderLayout());
+			setContentPane(new JLabel(new ImageIcon(getClass().getResource("/data/menuScreen.png"))));
+			
+			setLayout(null);
+		}
 		
 		JButton startButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonStartRed.png")));
 		startButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonStartWhite.png")));
@@ -911,13 +915,37 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			}
 		});
 		
-		levelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				currentlevel++;
-				if (currentlevel > currentmaxlevel) {
-					currentlevel = 1;
-				}
+		levelButton.addMouseListener(new MouseAdapter(){
+            boolean pressed;
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            	levelButton.getModel().setArmed(true);
+            	levelButton.getModel().setPressed(true);
+                pressed = true;
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                //if(isRightButtonPressed) {underlyingButton.getModel().setPressed(true));
+            	levelButton.getModel().setArmed(false);
+            	levelButton.getModel().setPressed(false);
+
+                if (pressed) {
+                    if (SwingUtilities.isRightMouseButton(e)) {
+                    	currentlevel--;
+        				if (currentlevel < 1) {
+        					currentlevel = currentmaxlevel;
+        				}
+                    }
+                    else {
+                    	currentlevel++;
+        				if (currentlevel > currentmaxlevel) {
+        					currentlevel = 1;
+        				}
+                    }
+                }
+				
 				switch(currentlevel) {
 				case 1:
 					levelButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonLevel1Red.png")));
@@ -1001,8 +1029,22 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 					break;
 				}
 				//levelButton.setText("Level: " + currentlevel);
-			}
-		});
+
+                pressed = false;
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                pressed = false;
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                pressed = true;
+            }                    
+        });
+
 
 		diffButton.addActionListener(new ActionListener() {
 			@Override
@@ -1082,7 +1124,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		setTitle("Pizza Tales");
 		setSize(1280, 800);
 		setLocationRelativeTo(null);
-		//this.setIgnoreRepaint(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
@@ -2062,46 +2103,69 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	}
 	
 	public void initEndLevelScreen(){
-		final JButton nextLevelButton = new JButton("Next Level");
-        final JButton quitButton = new JButton("Quit");
-        final JButton menuButton = new JButton("Main Menu");
+		
+		final JButton quitButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonQuitRed.png")));
+		quitButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonQuitWhite.png")));
+
+		quitButton.setBorderPainted(false);
+		quitButton.setContentAreaFilled(false);
+		
+		add(quitButton);
+		
+		final JButton menuButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonMainMenuRed.png")));
+		menuButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonMainMenuWhite.png")));
+
+		menuButton.setBorderPainted(false);
+		menuButton.setContentAreaFilled(false);
+		
+		add(menuButton);
         
-        nextLevelButton.setBounds(590, 100, 100, 50);
-        menuButton.setBounds(590, 200, 100, 50);
-        quitButton.setBounds(590, 300, 100, 50);
         
-        if(currentlevel >= maxlevel){
-        	nextLevelButton.setText("No more levels");
-        	nextLevelButton.setBounds(575, 100, 150, 50);
+        menuButton.setBounds(300, 15, 150, 75);
+        quitButton.setBounds(670, 320, 150, 75);
+        
+        if(currentlevel < maxlevel){
+        	
+        	final JButton nextLevelButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonNextLevelRed.png")));
+    		nextLevelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonNextLevelWhite.png")));
+
+    		nextLevelButton.setBorderPainted(false);
+    		nextLevelButton.setContentAreaFilled(false);
+    		
+    		add(nextLevelButton);
+        	
+        	nextLevelButton.setBounds(670, 210, 150, 75);
+        	
+        	nextLevelButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent event) {
+                	if(currentlevel < maxlevel){
+    	            	currentlevel++;
+    					bg.setCenterX(0);
+    					bg.setCenterY(0);
+    					bginity = bg.getCenterY() - 15;
+    					deathCountdown = 180;
+    					try {
+    						loadMap("/data/"+Level.getMapName(currentlevel));
+    					} catch (IOException e) {
+    						e.printStackTrace();
+    					}
+    					player.setHealth(player.getMaxHealth());
+    					player.getArmor().setDefense(player.getArmor().MAXDEF);
+    	            	state = GameState.Running;
+    	            	endlevelmenuloaded = false;
+    	            	
+    	            	contentPane = getContentPane();
+    					contentPane.removeAll();
+    					contentPane.invalidate();
+    					me.validate();
+    					me.repaint();
+                	}
+                }
+            });
         }
         
-        nextLevelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-            	if(currentlevel < maxlevel){
-	            	currentlevel++;
-					bg.setCenterX(0);
-					bg.setCenterY(0);
-					bginity = bg.getCenterY() - 15;
-					deathCountdown = 180;
-					try {
-						loadMap("/data/"+Level.getMapName(currentlevel));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					player.setHealth(player.getMaxHealth());
-					player.getArmor().setDefense(player.getArmor().MAXDEF);
-	            	state = GameState.Running;
-	            	endlevelmenuloaded = false;
-	            	
-	            	contentPane = getContentPane();
-					contentPane.removeAll();
-					contentPane.invalidate();
-					me.validate();
-					me.repaint();
-            	}
-            }
-        });
+        
         
         menuButton.addActionListener(new ActionListener() {
             @Override
@@ -2122,9 +2186,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
             }
         });
 
-        createLayout(nextLevelButton);
-        createLayout(menuButton);
-        createLayout(quitButton);
 	}
 	
 	public void initDeathScreen(){
