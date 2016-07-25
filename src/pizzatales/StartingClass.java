@@ -84,7 +84,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	private Clip clip;
 	
-	protected static ArrayList<Clip> gunclips = new ArrayList<Clip>();
+	//TODO protected static ArrayList<Clip> gunclips = new ArrayList<Clip>();
 	
 	private boolean fullscreenmode = false;
 	public static final boolean TESTMODE = false;
@@ -162,6 +162,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		this.setResizable(false);
 		loadResources();
 		loadGameState();
+		/* TODO
 		Thread soundcleaner = new Thread() {
 			@Override
 			public void run() {
@@ -183,8 +184,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				}
 			}
 		};
+		soundcleaner.setPriority(Thread.MIN_PRIORITY);
 		soundcleaner.setDaemon(true);
-		soundcleaner.start();
+		soundcleaner.start();*/
 		if (!TESTMODE) {
 			initUI();
 		}
@@ -1159,6 +1161,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public void start() {
 		threadstarted = true;
 		Thread thread = new Thread(this);
+		thread.setPriority(Thread.MAX_PRIORITY);
 		thread.start();
 	}
 
@@ -2520,7 +2523,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		while (i < explosions.size()) {
 			Explosion e = explosions.get(i);
 			e.update();
-			if(!e.soundPlayed){
+			/*TODO if(!e.soundPlayed){
 				try {
 					Clip explosiveSound = AudioSystem.getClip();
 					AudioInputStream ais = AudioSystem.getAudioInputStream(e.sound);
@@ -2533,17 +2536,14 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						gunclips.add(explosiveSound);
 					}
 				} catch (LineUnavailableException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (UnsupportedAudioFileException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				e.soundPlayed = true;
-			}
+			}*/
 			if (e.isVisible()) {
 				i++;
 			} else {
@@ -2554,6 +2554,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	private void updatePlayer() {
 		
+		/* TODO
 		if (player.isHurt){
 			player.isHurt = false;
 			try {
@@ -2569,25 +2570,20 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				}
 				
 			} catch (LineUnavailableException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (UnsupportedAudioFileException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (Throwable e3) {
 				e3.printStackTrace();
 			}
-		}
+		}*/
 		
 		//}
 		
-
+		/* TODO
 		if (player.playSound){
-			/*if (gunSound != null)
-				gunSound.close();*/
 			player.playSound = false;
 			try {
 				Clip gunSound = AudioSystem.getClip();
@@ -2611,7 +2607,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		}
+		}*/
 		
 		ArrayList<Projectile> projectiles = player.getProjectiles();
 		int i = 0;
