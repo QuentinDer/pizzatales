@@ -17,7 +17,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -1083,6 +1082,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		setTitle("Pizza Tales");
 		setSize(1280, 800);
 		setLocationRelativeTo(null);
+		this.setIgnoreRepaint(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 

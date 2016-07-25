@@ -15,8 +15,8 @@ public class HatPanama extends Hat {
 	
 	@Override
 	public void effect(){
-		if (player.getHealth() >= player.getMaxHealth())
-			player.setHealth(player.getHealth()+10);
+		/*if (player.getHealth() >= player.getMaxHealth())
+			player.setHealth(player.getHealth()+10);*/
 		player.setMaxHealth(player.getMaxHealth()+10);
 	}
 
