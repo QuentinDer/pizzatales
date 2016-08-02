@@ -715,6 +715,69 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		 * anim.addFrame(character2, 50); currentSprite = anim.getImage();
 		 */
 	}
+	
+	private void settingsUI(){
+		if (null == iconScreen) {
+			iconScreen = new ImageIcon(getClass().getResource("/data/icon3.png")).getImage();
+			this.setIconImage(iconScreen);
+		
+			setLayout(new BorderLayout());
+			setContentPane(new JLabel(new ImageIcon(getClass().getResource("/data/menuScreen.png"))));
+			
+			setLayout(null);
+		}
+		
+		JButton azertyButton = new JButton(new ImageIcon((azerty)?(getClass().getResource("/data/buttonAzertyRed.png")):(getClass().getResource("/data/buttonQwertyRed.png"))));
+		azertyButton.setRolloverIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonAzertyWhite.png")):(getClass().getResource("/data/buttonQwertyWhite.png"))));
+		
+
+		azertyButton.setBorderPainted(false);
+		azertyButton.setContentAreaFilled(false);
+		
+		add(azertyButton);
+		
+		JButton mainMenuButton = new JButton(new ImageIcon((getClass().getResource("/data/buttonMainMenuRed.png"))));
+		mainMenuButton.setRolloverIcon(new ImageIcon((getClass().getResource("/data/buttonMainMenuWhite.png"))));
+		
+
+		mainMenuButton.setBorderPainted(false);
+		mainMenuButton.setContentAreaFilled(false);
+		
+		add(mainMenuButton);
+		
+		azertyButton.setBounds(500, 15, 150, 75);
+		mainMenuButton.setBounds(150, 15, 150, 75);
+		
+		azertyButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if (azerty == false) {
+					azertyButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonAzertyRed.png")));
+					azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonAzertyWhite.png")));
+					azerty = true;
+				} else {
+					azertyButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonQwertyRed.png")));
+					azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonQwertyWhite.png")));
+					azerty = false;
+				}
+			}
+		});
+		
+		mainMenuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+            	contentPane = getContentPane();
+    			contentPane.removeAll();
+    			contentPane.invalidate();
+            	initUI();
+				me.validate();
+				me.repaint();
+            	//state = GameState.Running;
+            }
+        });
+		
+		
+	}
 
 	private void initUI() {
 		if (null == iconScreen) {
@@ -750,15 +813,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		quitButton.setContentAreaFilled(false);
 		
 		add(quitButton);
-		
-		JButton azertyButton = new JButton(new ImageIcon((azerty)?(getClass().getResource("/data/buttonAzertyRed.png")):(getClass().getResource("/data/buttonQwertyRed.png"))));
-		azertyButton.setRolloverIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonAzertyWhite.png")):(getClass().getResource("/data/buttonQwertyWhite.png"))));
-		
-
-		azertyButton.setBorderPainted(false);
-		azertyButton.setContentAreaFilled(false);
-		
-		add(azertyButton);
 		
 		final JButton levelButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonLevel1Red.png")));
 		levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel1White.png")));
@@ -884,23 +938,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		
 		levelButton.setBounds(1100, 15, 150, 75);
 		diffButton.setBounds(1100, 110, 150, 75);
-		
-		azertyButton.setBounds(300, 15, 150, 75);		
-
-		azertyButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if (azerty == false) {
-					azertyButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonAzertyRed.png")));
-					azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonAzertyWhite.png")));
-					azerty = true;
-				} else {
-					azertyButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonQwertyRed.png")));
-					azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonQwertyWhite.png")));
-					azerty = false;
-				}
-			}
-		});
 		
 		levelButton.addMouseListener(new MouseAdapter(){
             boolean pressed;
@@ -1121,6 +1158,18 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			public void actionPerformed(ActionEvent event) {
 				state = GameState.Exit;
 				System.exit(0);
+			}
+		});
+		
+		settingsButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				contentPane = getContentPane();
+    			contentPane.removeAll();
+    			contentPane.invalidate();
+				settingsUI();
+				me.validate();
+				me.repaint();
 			}
 		});
 
