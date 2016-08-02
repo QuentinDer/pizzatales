@@ -6,6 +6,7 @@ import java.net.URL;
 public class Gun extends Firearm {
 	
 	public static Image leftSprite, rightSprite, upSprite, downSprite;
+	public static Image leftUpSprite, rightUpSprite, leftDownSprite, rightDownSprite;
 	public static URL url;
 	
 	public Gun() {
@@ -62,28 +63,28 @@ public class Gun extends Firearm {
 	
 	@Override
 	public void shootUpLeft(int x, int y) {
-		setSpriteLeft();
+		setSpriteLeftUp();
 		shootingCounter++;
 		holderprojectiles.add(new Bullet(x, y, -0.7f, -0.7f, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootUpRight(int x, int y) {
-		setSpriteRight();
+		setSpriteRightUp();
 		shootingCounter++;
 		holderprojectiles.add(new Bullet(x, y, 0.7f, -0.7f, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootDownLeft(int x, int y) {
-		setSpriteLeft();
+		setSpriteLeftDown();
 		shootingCounter++;
 		holderprojectiles.add(new Bullet(x, y, -0.7f, 0.7f, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootDownRight(int x, int y) {
-		setSpriteRight();
+		setSpriteRightDown();
 		shootingCounter++;
 		holderprojectiles.add(new Bullet(x, y, 0.7f, 0.7f, speed, projectiledmg, range));
 	}
@@ -96,5 +97,25 @@ public class Gun extends Firearm {
 	@Override
 	public String getID() {
 		return "GUN";
+	}
+
+	@Override
+	public void setSpriteLeftUp() {
+		currentSprite = leftUpSprite;
+	}
+
+	@Override
+	public void setSpriteRightUp() {
+		currentSprite = rightUpSprite;
+	}
+
+	@Override
+	public void setSpriteLeftDown() {
+		currentSprite = leftDownSprite;
+	}
+
+	@Override
+	public void setSpriteRightDown() {
+		currentSprite = rightDownSprite;
 	}
 }

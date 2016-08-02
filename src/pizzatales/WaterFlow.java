@@ -8,7 +8,6 @@ public class WaterFlow extends BackgroundItem {
 		super(x, y, deltapx, deltapy, onetimeeffect, height);
 	}
 
-	public static Image waterflowsprite;
 	public static Image watereffectsprite;
 
 	@Override
@@ -29,7 +28,7 @@ public class WaterFlow extends BackgroundItem {
 
 	@Override
 	protected Image getSprite() {
-		return waterflowsprite;
+		return null;
 	}
 	
 	@Override

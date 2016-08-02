@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 public class CarolinaReaper extends Enemy {
 
-	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, staySpriteRight, 
-	move1SpriteRight, move2SpriteRight, firering, streamleft, streamup, streamright, streamdown;
+	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, firering, streamleft, streamup, streamright, streamdown;
+	public static Image staySpriteOnFire, move1SpriteOnFire, move2SpriteOnFire, fireringOnFire, intermediateDieSprite;
 	private int waitmin, waitmax;
 	private int streamingtime, streamrate, blinkingtime;
 	private int barrelsrate;
@@ -31,6 +31,7 @@ public class CarolinaReaper extends Enemy {
 	public static int trapscount;
 	public static boolean notifytrap;
 	private int maxtraps;
+	private boolean isOnFire = false;
 	
 	public CarolinaReaper(int centerX, int centerY) {
 		super(centerX, centerY, null, 100, 2, 31, 31, 25, 25);
@@ -152,7 +153,10 @@ public class CarolinaReaper extends Enemy {
 				}
 				blinkingitem = null;
 				fireRing();
-				currentSprite = staySprite;
+				if (isOnFire)
+					currentSprite = staySpriteOnFire;
+				else
+					currentSprite = staySprite;
 				blinkcd = blinkmaxcd;
 				incrementWaitingTimes();
 			}
@@ -372,7 +376,10 @@ public class CarolinaReaper extends Enemy {
 				blinkcd = blinkmaxcd;
 				incrementWaitingTimes();
 				blinkingitem = null;
-				currentSprite = staySprite;
+				if (isOnFire)
+					currentSprite = staySpriteOnFire;
+				else
+					currentSprite = staySprite;
 			}
 		}
 		if (!trapsenabled && health < 0.4f * maxHealth)
@@ -390,6 +397,7 @@ public class CarolinaReaper extends Enemy {
 			waitmin = waitmin / 2;
 			waitmax = waitmax / 2;
 			spawningmaxcd = spawningmaxcd / 3;
+			isOnFire = true;
 		}
 		if (!isThrowingBarrels && blinkenabled && blinkcd == 0 && streaming == 0 && blinking == 0) {
 			int tmpx;
@@ -417,7 +425,10 @@ public class CarolinaReaper extends Enemy {
 				blinkingitem.r.setBounds(blinkingitem.getCenterX() - 22, blinkingitem.getCenterY() - 22, 45, 45);
 				StartingClass.items[blinkposx][blinkposy][StartingClass.heightitemmap[blinkposx][blinkposy]] = blinkingitem;
 				//System.out.println("Blinking item: "+blinkposx+":"+blinkposy+" "+StartingClass.heightitemmap[blinkposx][blinkposy]);
-				currentSprite = firering;
+				if (isOnFire)
+					currentSprite = fireringOnFire;
+				else
+					currentSprite = firering;
 			}
 			possibleblinkpositions.clear();
 		}
@@ -639,17 +650,26 @@ public class CarolinaReaper extends Enemy {
 	
 	@Override
 	public void setStaySprite() {
-		currentSprite = staySprite;
+		if (isOnFire)
+			currentSprite = staySpriteOnFire;
+		else
+			currentSprite = staySprite;
 	}
 
 	@Override
 	public void setMove1Sprite() {
-		currentSprite = staySprite;
+		if (isOnFire)
+			currentSprite = move1SpriteOnFire;
+		else
+			currentSprite = move1Sprite;
 	}
 
 	@Override
 	public void setMove2Sprite() {
-		currentSprite = staySprite;
+		if (isOnFire)
+			currentSprite = move2SpriteOnFire;
+		else
+			currentSprite = move2Sprite;
 	}
 
 	@Override
@@ -659,17 +679,26 @@ public class CarolinaReaper extends Enemy {
 	
 	@Override
 	public void setStaySpriteAlt() {
-		currentSprite = staySprite;
+		if (isOnFire)
+			currentSprite = staySpriteOnFire;
+		else
+			currentSprite = staySprite;
 	}
 
 	@Override
 	public void setMove1SpriteAlt() {
-		currentSprite = staySprite;
+		if (isOnFire)
+			currentSprite = move1SpriteOnFire;
+		else
+			currentSprite = move1Sprite;
 	}
 
 	@Override
 	public void setMove2SpriteAlt() {
-		currentSprite = staySprite;
+		if (isOnFire)
+			currentSprite = move2SpriteOnFire;
+		else
+			currentSprite = move2Sprite;
 	}
 	
 	@Override
@@ -701,5 +730,15 @@ public class CarolinaReaper extends Enemy {
 				((Barrel)StartingClass.map[jx][jy]).damage(10.0f);
 			}
 		}
+	}
+
+	@Override
+	public boolean hasIntermediateDying() {
+		return true;
+	}
+
+	@Override
+	public void setIntermediateDieSprite() {
+		currentSprite = intermediateDieSprite;
 	}
 }

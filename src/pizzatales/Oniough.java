@@ -5,7 +5,7 @@ import java.awt.Image;
 public class Oniough extends Enemy {
 
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
-	public static Image onioughStomp1, onioughStomp2;
+	public static Image onioughStomp1, onioughStomp2, intermediateDieSprite;
 	
 	private int firecd;
 	private int firemaxcd0, firemaxcd1, firemaxcd2;
@@ -311,6 +311,16 @@ public class Oniough extends Enemy {
 				}
 			}
 		}
+	}
+
+	@Override
+	public boolean hasIntermediateDying() {
+		return true;
+	}
+
+	@Override
+	public void setIntermediateDieSprite() {
+		currentSprite = intermediateDieSprite;
 	}
 
 }

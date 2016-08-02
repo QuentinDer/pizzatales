@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.prefs.Preferences;
 import java.util.AbstractMap.SimpleEntry;
 import java.awt.DisplayMode;
 
@@ -106,6 +107,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public static int fpscount;
 	public static long fpsclock = System.currentTimeMillis();
 	public static long clock = System.currentTimeMillis();
+	
+	private Preferences prefs = Preferences.userNodeForPackage(StartingClass.class);
 	/*
 	 * public static long nanoclock = System.nanoTime(); public static int
 	 * computationtime; public static int cmptime;
@@ -193,155 +196,94 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	}
 	
 	private void saveGameState() {
-		File file = new File("save");
-		try {
-			if (!file.exists())
-				file.createNewFile();
-			file.setWritable(true);
-			PrintWriter pt = new PrintWriter(new FileWriter(file));
-			pt.println("AZERTY="+((azerty)?"TRUE":"FALSE"));
-			pt.println("CURRENTMAXLEVEL="+Integer.toString(currentmaxlevel));
-			pt.println("DIFFICULTY="+Integer.toString(difficultylevel));
-			pt.println("LASTLEVEL="+Integer.toString(currentlevel));
-			for (Armor armor : playerarmor)
-				pt.println(armor.getID()+"=TRUE");
-			for (Firearm firearm : playerweapons)
-				pt.println(firearm.getID()+"=TRUE");
-			for (Hat hat : playerhats) {
-				if (null != hat)
-					pt.println(hat.getID()+"=TRUE");
-			}
-			pt.close();
-		} catch (Throwable e) {
-			e.printStackTrace();
+		prefs.putBoolean("AZERTY", azerty);
+		prefs.putInt("CURRENTMAXLEVEL",currentmaxlevel);
+		prefs.putInt("DIFFICULTY", difficultylevel);
+		prefs.putInt("LASTLEVEL", currentlevel);
+		for (Armor armor : playerarmor)
+			prefs.putBoolean(armor.getID(),true);
+		for (Firearm firearm : playerweapons)
+			prefs.putBoolean(firearm.getID(),true);
+		for (Hat hat : playerhats) {
+			if (null != hat)
+				prefs.putBoolean(hat.getID(),true);
 		}
 	}
 	
 	public void loadGameState() {
-		File file = new File("save");
-		HashMap<String,String> gamestate = new HashMap<String,String>();
-		if (file.exists()) {
-			try {
-				BufferedReader reader = new BufferedReader(new FileReader(file));
-				String line = reader.readLine();
-				while (null != line && !line.isEmpty()) {
-					String[] linevals = line.split("=");
-					gamestate.put(linevals[0], linevals[1]);
-					line = reader.readLine();
-				}
-				reader.close();
-			} catch (Throwable e) {
-				e.printStackTrace();
-			}
+		azerty = prefs.getBoolean("AZERTY", true);
+		currentmaxlevel = prefs.getInt("CURRENTMAXLEVEL",1);
+		difficultylevel = prefs.getInt("DIFFICULTY", 1);
+		currentlevel = prefs.getInt("LASTLEVEL", 1);
+		boolean shotgun = prefs.getBoolean("SHOTGUN",false);
+		if (shotgun) {
+			Shotgun sht = new Shotgun();
+			playerweapons.add(sht);
+			sht.setHolderProjectiles(player.getProjectiles());
 		}
-		for (Entry<String,String> entry : gamestate.entrySet()) {
-			String value = entry.getValue();
-			try {
-				switch(entry.getKey()) {
-				case "AZERTY":
-					if ("TRUE".equals(value))
-						azerty = true;
-					else
-						azerty = false;
-					break;
-				case "CURRENTMAXLEVEL":
-					currentmaxlevel = Integer.parseInt(value);
-					break;
-				case "DIFFICULTY":
-					difficultylevel = Integer.parseInt(value);
-					break;
-				case "LASTLEVEL":
-					currentlevel = Integer.parseInt(value);
-					break;
-				case "SHOTGUN":
-					if ("TRUE".equals(value)) {
-						Shotgun sht = new Shotgun();
-						playerweapons.add(sht);
-						sht.setHolderProjectiles(player.getProjectiles());
-					}
-					break;
-				case "SMG":
-					if ("TRUE".equals(value)) {
-						Smg sht = new Smg();
-						playerweapons.add(sht);
-						sht.setHolderProjectiles(player.getProjectiles());
-					}
-					break;
-				case "RIFLE":
-					if ("TRUE".equals(value)) {
-						Rifle sht = new Rifle();
-						playerweapons.add(sht);
-						sht.setHolderProjectiles(player.getProjectiles());
-					}
-					break;
-				case "FLAMER":
-					if ("TRUE".equals(value)) {
-						Flamer sht = new Flamer();
-						playerweapons.add(sht);
-						sht.setHolderProjectiles(player.getProjectiles());
-					}
-					break;
-				case "ROCKET":
-					if ("TRUE".equals(value)) {
-						Rocket sht = new Rocket();
-						playerweapons.add(sht);
-						sht.setHolderProjectiles(player.getProjectiles());
-					}
-					break;
-				case "CHEESEARMOR":
-					if ("TRUE".equals(value)) {
-						playerarmor.add(new CheeseArmor());
-					}
-					break;
-				case "HAWAIIARMOR":
-					if ("TRUE".equals(value)) {
-						playerarmor.add(new HawaiiArmor());
-					}
-					break;
-				case "CHICAGOARMOR":
-					if ("TRUE".equals(value)) {
-						playerarmor.add(new ChicagoArmor());
-					}
-					break;
-				case "MARGHERITAARMOR":
-					if ("TRUE".equals(value)) {
-						playerarmor.add(new MargheritaArmor());
-					}
-					break;
-				case "HATBASEBALL":
-					if ("TRUE".equals(value)) {
-						playerhats.add(new HatBaseball());
-					}
-					break;
-				case "HATBOWLER":
-					if ("TRUE".equals(value)) {
-						playerhats.add(new HatBowler());
-					}
-					break;
-				case "HATFEDORA":
-					if ("TRUE".equals(value)) {
-						playerhats.add(new HatFedora());
-					}
-					break;
-				case "HATPANAMA":
-					if ("TRUE".equals(value)) {
-						playerhats.add(new HatPanama());
-					}
-					break;
-				case "HATSHERLOCK":
-					if ("TRUE".equals(value)) {
-						playerhats.add(new HatSherlock());
-					}
-					break;
-				case "HATTOP":
-					if ("TRUE".equals(value)) {
-						playerhats.add(new HatTop());
-					}
-					break;
-				}
-			} catch (Throwable e) {
-				e.printStackTrace();
-			}
+		boolean smg = prefs.getBoolean("SMG",false);
+		if (smg) {
+			Smg sht = new Smg();
+			playerweapons.add(sht);
+			sht.setHolderProjectiles(player.getProjectiles());
+		}
+		boolean rifle = prefs.getBoolean("RIFLE",false);
+		if (rifle) {
+			Rifle sht = new Rifle();
+			playerweapons.add(sht);
+			sht.setHolderProjectiles(player.getProjectiles());
+		}
+		boolean flamer = prefs.getBoolean("FLAMER",false);
+		if (flamer) {
+			Flamer sht = new Flamer();
+			playerweapons.add(sht);
+			sht.setHolderProjectiles(player.getProjectiles());
+		}
+		boolean rocket = prefs.getBoolean("ROCKET",false);
+		if (rocket) {
+			Rocket sht = new Rocket();
+			playerweapons.add(sht);
+			sht.setHolderProjectiles(player.getProjectiles());
+		}
+		boolean cheesearmor = prefs.getBoolean("CHEESEARMOR",false);
+		if (cheesearmor) {
+			playerarmor.add(new CheeseArmor());
+		}
+		boolean hawaiiarmor = prefs.getBoolean("HAWAIIARMOR",false);
+		if (hawaiiarmor) {
+			playerarmor.add(new HawaiiArmor());
+		}
+		boolean chicagoarmor = prefs.getBoolean("CHICAGOARMOR",false);
+		if (chicagoarmor) {
+			playerarmor.add(new ChicagoArmor());
+		}
+		boolean margheritaarmor = prefs.getBoolean("MARGHERITAARMOR",false);
+		if (margheritaarmor) {
+			playerarmor.add(new MargheritaArmor());
+		}
+		boolean hatbaseball = prefs.getBoolean("HATBASEBALL",false);
+		if (hatbaseball) {
+			playerhats.add(new HatBaseball());
+		}
+		boolean hatbowler = prefs.getBoolean("HATBOWLER",false);
+		if (hatbowler) {
+			playerhats.add(new HatBowler());
+		}
+		boolean hatfedora = prefs.getBoolean("HATFEDORA",false);
+		if (hatfedora) {
+			playerhats.add(new HatFedora());
+		}
+		boolean hatpanama = prefs.getBoolean("HATPANAMA",false);
+		if (hatpanama) {
+			playerhats.add(new HatPanama());
+		}
+		boolean hatsherlock = prefs.getBoolean("HATSHERLOCK",false);
+		if (hatsherlock) {
+			playerhats.add(new HatSherlock());
+		}
+		boolean hattop = prefs.getBoolean("HATTOP",false);
+		if (hattop) {
+			playerhats.add(new HatTop());
 		}
 	}
 
@@ -453,17 +395,29 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Gun.rightSprite = new ImageIcon(getClass().getResource("/data/pistol2.png")).getImage();
 		Gun.upSprite = new ImageIcon(getClass().getResource("/data/pistol4.png")).getImage();
 		Gun.downSprite = new ImageIcon(getClass().getResource("/data/pistol3.png")).getImage();
+		Gun.leftDownSprite = new ImageIcon(getClass().getResource("/data/pistol7.png")).getImage();
+		Gun.leftUpSprite = new ImageIcon(getClass().getResource("/data/pistol8.png")).getImage();
+		Gun.rightDownSprite = new ImageIcon(getClass().getResource("/data/pistol6.png")).getImage();
+		Gun.rightUpSprite = new ImageIcon(getClass().getResource("/data/pistol5.png")).getImage();
 		Gun.url = getClass().getResource("/data/pistol.wav");
 		Bullet.bulletsprite = new ImageIcon(getClass().getResource("/data/pistolprojectile.png")).getImage();
 		Shotgun.leftSprite = new ImageIcon(getClass().getResource("/data/shotgun1.png")).getImage();
 		Shotgun.rightSprite = new ImageIcon(getClass().getResource("/data/shotgun2.png")).getImage();
 		Shotgun.upSprite = new ImageIcon(getClass().getResource("/data/shotgun4.png")).getImage();
 		Shotgun.downSprite = new ImageIcon(getClass().getResource("/data/shotgun3.png")).getImage();
+		Shotgun.leftDownSprite = new ImageIcon(getClass().getResource("/data/shotgun7.png")).getImage();
+		Shotgun.leftUpSprite = new ImageIcon(getClass().getResource("/data/shotgun8.png")).getImage();
+		Shotgun.rightDownSprite = new ImageIcon(getClass().getResource("/data/shotgun6.png")).getImage();
+		Shotgun.rightUpSprite = new ImageIcon(getClass().getResource("/data/shotgun5.png")).getImage();
 		Shotgun.url = getClass().getResource("/data/shotgun.wav");
 		ShotgunBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/shotgunprojectile.png")).getImage();
 		Rifle.leftSprite = new ImageIcon(getClass().getResource("/data/rifle1.png")).getImage();
 		Rifle.rightSprite = new ImageIcon(getClass().getResource("/data/rifle2.png")).getImage();
 		Rifle.upSprite = new ImageIcon(getClass().getResource("/data/rifle4.png")).getImage();
+		Rifle.leftDownSprite = new ImageIcon(getClass().getResource("/data/rifle7.png")).getImage();
+		Rifle.leftUpSprite = new ImageIcon(getClass().getResource("/data/rifle8.png")).getImage();
+		Rifle.rightDownSprite = new ImageIcon(getClass().getResource("/data/rifle6.png")).getImage();
+		Rifle.rightUpSprite = new ImageIcon(getClass().getResource("/data/rifle5.png")).getImage();
 		Rifle.url = getClass().getResource("/data/rifle.wav");
 		Rifle.downSprite = new ImageIcon(getClass().getResource("/data/rifle3.png")).getImage();
 		RifleBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/rifleprojectile.png")).getImage();
@@ -471,6 +425,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Flamer.rightSprite = new ImageIcon(getClass().getResource("/data/flamer2.png")).getImage();
 		Flamer.downSprite = new ImageIcon(getClass().getResource("/data/flamer3.png")).getImage();
 		Flamer.upSprite = new ImageIcon(getClass().getResource("/data/flamer4.png")).getImage();
+		Flamer.leftDownSprite = new ImageIcon(getClass().getResource("/data/flamer7.png")).getImage();
+		Flamer.leftUpSprite = new ImageIcon(getClass().getResource("/data/flamer8.png")).getImage();
+		Flamer.rightDownSprite = new ImageIcon(getClass().getResource("/data/flamer6.png")).getImage();
+		Flamer.rightUpSprite = new ImageIcon(getClass().getResource("/data/flamer5.png")).getImage();
 		Flamer.url = getClass().getResource("/data/flamer.wav");
 		FlamerFlame.bulletsprite = new ImageIcon(getClass().getResource("/data/flamerprojectile.png")).getImage();
 		Rocket.leftSprite = new ImageIcon(getClass().getResource("/data/rocket1.png")).getImage();
@@ -489,6 +447,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Smg.rightSprite = new ImageIcon(getClass().getResource("/data/smg2.png")).getImage();
 		Smg.downSprite = new ImageIcon(getClass().getResource("/data/smg3.png")).getImage();
 		Smg.upSprite = new ImageIcon(getClass().getResource("/data/smg4.png")).getImage();
+		Smg.leftDownSprite = new ImageIcon(getClass().getResource("/data/smg7.png")).getImage();
+		Smg.leftUpSprite = new ImageIcon(getClass().getResource("/data/smg8.png")).getImage();
+		Smg.rightDownSprite = new ImageIcon(getClass().getResource("/data/smg6.png")).getImage();
+		Smg.rightUpSprite = new ImageIcon(getClass().getResource("/data/smg5.png")).getImage();
 		Smg.url = getClass().getResource("/data/smg.wav");
 		SmgBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/smgprojectile.png")).getImage();
 		TomatoProjectile.tomatoprojectilesprite = new ImageIcon(getClass().getResource("/data/sirtomatoprojectile.png"))
@@ -551,6 +513,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		SirTomato.dashSpriteRight = new ImageIcon(getClass().getResource("/data/sirtomatodashright.png")).getImage();
 		SirTomato.slashSpriteLeft = new ImageIcon(getClass().getResource("/data/sirtomatoswipeleft.png")).getImage();
 		SirTomato.slashSpriteRight = new ImageIcon(getClass().getResource("/data/sirtomatoswiperight.png")).getImage();
+		SirTomato.dashLeftWindup = new ImageIcon(getClass().getResource("/data/sirtomatodashleftwindup.png")).getImage();
+		SirTomato.dashRightWindup = new ImageIcon(getClass().getResource("/data/sirtomatodashrightwindup.png")).getImage();
+		SirTomato.swipeLeftWindup = new ImageIcon(getClass().getResource("/data/sirtomatoswipeleftwindup.png")).getImage();
+		SirTomato.swipeRightWindup = new ImageIcon(getClass().getResource("/data/sirtomatoswiperightwindup.png")).getImage();
+		SirTomato.intermediateDieSprite = new ImageIcon(getClass().getResource("/data/sirtomatodying.png")).getImage();
 		MushroomWizard.staySprite = new ImageIcon(getClass().getResource("/data/mushroomwizardleft1.png")).getImage();
 		MushroomWizard.move1Sprite = new ImageIcon(getClass().getResource("/data/mushroomwizardleft2.png")).getImage();
 		MushroomWizard.move2Sprite = new ImageIcon(getClass().getResource("/data/mushroomwizardleft3.png")).getImage();
@@ -571,20 +538,29 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		MushroomWizard.shooting = new ImageIcon(getClass().getResource("/data/mushroomwizardshooting.png")).getImage();
 		MushroomWizard.summoning = new ImageIcon(getClass().getResource("/data/mushroomwizardlavasummon.png"))
 				.getImage();
+		MushroomWizard.intermediateDieSprite = new ImageIcon(getClass().getResource("/data/mushroomwizarddying.png")).getImage();
 		CarolinaReaper.staySprite = new ImageIcon(getClass().getResource("/data/reaper.png")).getImage();
+		CarolinaReaper.move1Sprite = new ImageIcon(getClass().getResource("/data/reaperwalk1.png")).getImage();
+		CarolinaReaper.move2Sprite = new ImageIcon(getClass().getResource("/data/reaperwalk2.png")).getImage();
+		CarolinaReaper.staySpriteOnFire = new ImageIcon(getClass().getResource("/data/reaperwalkfire1.png")).getImage();
+		CarolinaReaper.move1SpriteOnFire = new ImageIcon(getClass().getResource("/data/reaperwalkfire2.png")).getImage();
+		CarolinaReaper.move2SpriteOnFire = new ImageIcon(getClass().getResource("/data/reaperwalkfire3.png")).getImage();
 		CarolinaReaper.firering = new ImageIcon(getClass().getResource("/data/reaperfirering.png")).getImage();
+		CarolinaReaper.fireringOnFire = new ImageIcon(getClass().getResource("/data/reaperfirestreamwindup.png")).getImage();
 		CarolinaReaper.streamleft = new ImageIcon(getClass().getResource("/data/reaperfirestreamleft.png")).getImage();
 		CarolinaReaper.streamright = new ImageIcon(getClass().getResource("/data/reaperfirestreamright.png"))
 				.getImage();
 		CarolinaReaper.streamup = new ImageIcon(getClass().getResource("/data/reaperfirestreamup.png")).getImage();
 		CarolinaReaper.streamdown = new ImageIcon(getClass().getResource("/data/reaperfirestreamdown.png")).getImage();
 		CarolinaReaper.dieSprite = new ImageIcon(getClass().getResource("/data/reaperdead.png")).getImage();
+		CarolinaReaper.intermediateDieSprite = new ImageIcon(getClass().getResource("/data/reaperdead1.png")).getImage();
 		Oniough.staySprite = new ImageIcon(getClass().getResource("/data/oniough1.png")).getImage();
 		Oniough.move1Sprite = new ImageIcon(getClass().getResource("/data/onioughWalk1.png")).getImage();
 		Oniough.move2Sprite = new ImageIcon(getClass().getResource("/data/onioughWalk2.png")).getImage();
 		Oniough.onioughStomp1 = new ImageIcon(getClass().getResource("/data/onioughStomp1.png")).getImage();
 		Oniough.onioughStomp2 = new ImageIcon(getClass().getResource("/data/onioughStomp2.png")).getImage();
 		Oniough.dieSprite = new ImageIcon(getClass().getResource("/data/onioughdead.png")).getImage();
+		Oniough.intermediateDieSprite = new ImageIcon(getClass().getResource("/data/onioughdying.png")).getImage();
 		Garlnstein.staySprite = new ImageIcon(getClass().getResource("/data/garlnstein.png")).getImage();
 		Garlnstein.move1Sprite = new ImageIcon(getClass().getResource("/data/garlnsteinWalk1.png")).getImage();
 		Garlnstein.move2Sprite = new ImageIcon(getClass().getResource("/data/garlnsteinWalk2.png")).getImage();
@@ -601,6 +577,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Garlnstein.cloning1 = new ImageIcon(getClass().getResource("/data/garlnsteinCloning1.png")).getImage();
 		Garlnstein.cloning2 = new ImageIcon(getClass().getResource("/data/garlnsteinCloning2.png")).getImage();
 		Garlnstein.cloning3 = new ImageIcon(getClass().getResource("/data/garlnsteinCloning3.png")).getImage();
+		Garlnstein.intermediateDieSprite = new ImageIcon(getClass().getResource("/data/garlnsteinDying.png")).getImage();
 		KaleKing.staySprite = new ImageIcon(getClass().getResource("/data/kaleking.png")).getImage();
 		KaleKing.move1Sprite = new ImageIcon(getClass().getResource("/data/kalekingWalk1.png")).getImage();
 		KaleKing.move2Sprite = new ImageIcon(getClass().getResource("/data/kalekingWalk2.png")).getImage();
@@ -631,7 +608,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		KaleKing.hulkSwipeRight = new ImageIcon(getClass().getResource("/data/hulkSwipeRight.png")).getImage();
 		KaleKing.hulkSwipeUp = new ImageIcon(getClass().getResource("/data/hulkSwipeUp.png")).getImage();
 		KaleKing.blinkingSprite = new ImageIcon(getClass().getResource("/data/kalekingMagicAoE.png")).getImage();
-		
+		KaleKing.intermediateDieSprite = new ImageIcon(getClass().getResource("/data/kalekingDying.png")).getImage();
 
 		BazookaBulletExplosion.bazookaexplosionsprite = new ImageIcon(
 				getClass().getResource("/data/bazookaexplosion.png")).getImage();
@@ -642,9 +619,17 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		BarrelExplosion.sound = getClass().getResource("/data/explosion.wav");
 		
 		ArmorPotion.armorpotionsprite = new ImageIcon(getClass().getResource("/data/armor.png")).getImage();
+		ArmorPotion.armorpotioneffectsprite = new ImageIcon(getClass().getResource("/data/armoreffect.png")).getImage();
+		ArmorPotion.armorpotioneffectsprite2 = new ImageIcon(getClass().getResource("/data/armoreffect_2.png")).getImage();
+		ArmorPotion.armorpotioneffectsprite3 = new ImageIcon(getClass().getResource("/data/armoreffect_3.png")).getImage();
+		ArmorPotion.armorpotioneffectsprite4 = new ImageIcon(getClass().getResource("/data/armoreffect_4.png")).getImage();
 		HealthPotion.healthpotionsprite = new ImageIcon(getClass().getResource("/data/health.png")).getImage();
+		HealthPotion.healthpotioneffectsprite = new ImageIcon(getClass().getResource("/data/healtheffect.png")).getImage();
+		HealthPotion.healthpotioneffectsprite2 = new ImageIcon(getClass().getResource("/data/healtheffect_2.png")).getImage();
+		HealthPotion.healthpotioneffectsprite3 = new ImageIcon(getClass().getResource("/data/healtheffect_3.png")).getImage();
+		HealthPotion.healthpotioneffectsprite4 = new ImageIcon(getClass().getResource("/data/healtheffect_4.png")).getImage();
 		Lava.lavaeffectsprite = new ImageIcon(getClass().getResource("/data/lavaeffect.png")).getImage();
-		WaterFlow.waterflowsprite = new ImageIcon(getClass().getResource("/data/waterflow.png")).getImage();
+		BackgroundFactory.waterflow = new ImageIcon(getClass().getResource("/data/waterflow.png")).getImage();
 		WaterFlow.watereffectsprite = new ImageIcon(getClass().getResource("/data/watereffect.png")).getImage();
 		WaterPuddle.sprite = new ImageIcon(getClass().getResource("/data/puddle.png")).getImage();
 		WoodBridge.sprite = new ImageIcon(getClass().getResource("/data/woodbridge.png")).getImage();
@@ -1047,35 +1032,58 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
             }                    
         });
 
+		diffButton.addMouseListener(new MouseAdapter(){
+            boolean pressed;
 
-		diffButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if (difficultylevel == 4) {
-					difficultylevel = 1;
-				} else {
-					difficultylevel++;
-				}
-				switch(difficultylevel) {
-				case 1:
-					diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffEasyRed.png")));
-					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffEasyWhite.png")));
-					break;
-				case 2:
-					diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffNormalRed.png")));
-					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffNormalWhite.png")));
-					break;
-				case 3:
-					diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffHardRed.png")));
-					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffHardWhite.png")));
-					break;
-				case 4:
-					diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffExtremeRed.png")));
-					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffExtremeWhite.png")));
-					break;
-				}
-				//diffButton.setText("Difficulty: " + difficultylevel);
-			}
+            @Override
+            public void mousePressed(MouseEvent e) {
+            	levelButton.getModel().setArmed(true);
+            	levelButton.getModel().setPressed(true);
+                pressed = true;
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                //if(isRightButtonPressed) {underlyingButton.getModel().setPressed(true));
+            	levelButton.getModel().setArmed(false);
+            	levelButton.getModel().setPressed(false);
+
+                if (pressed) {
+                    if (SwingUtilities.isRightMouseButton(e)) {
+                    	if (difficultylevel == 1) {
+        					difficultylevel = 4;
+        				} else {
+        					difficultylevel--;
+        				}
+                    }
+                    else {
+                    	if (difficultylevel == 4) {
+        					difficultylevel = 1;
+        				} else {
+        					difficultylevel++;
+        				}
+                    }
+                    switch(difficultylevel) {
+    				case 1:
+    					diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffEasyRed.png")));
+    					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffEasyWhite.png")));
+    					break;
+    				case 2:
+    					diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffNormalRed.png")));
+    					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffNormalWhite.png")));
+    					break;
+    				case 3:
+    					diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffHardRed.png")));
+    					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffHardWhite.png")));
+    					break;
+    				case 4:
+    					diffButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonDiffExtremeRed.png")));
+    					diffButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonDiffExtremeWhite.png")));
+    					break;
+    				}
+                    pressed = false;
+                }
+            }
 		});
 
 		startButton.addActionListener(new ActionListener() {
@@ -1169,6 +1177,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		ArrayList<String> lines = new ArrayList<String>();
 		blockmaxheight = 0;
 		
+		maskminx = -1;
+		maskmaxx = -1;
+		maskminy = -1;
+		maskmaxy = -1;
+		maskphase = 1;
 		/*if (clip != null && clip.isOpen())
 			clip.close();*/
 		if (clip != null)
@@ -1343,11 +1356,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			}
 		}
 		Level.bitmask(currentlevel, backgroundmap, maskmap);
-		ArrayList<Integer> nonobstacles = new ArrayList<Integer>();
 		int k = 0;
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				if (charmap[i][j] == 'f') {
+					ArrayList<Integer> nonobstacles = new ArrayList<Integer>();
 					MapUtil.getAccessibleArea(i, j, 100, charmap, nonobstacles, mentrydoors, doors, k);
 					if (!nonobstacles.isEmpty()) {
 						int l = 0;
@@ -1362,7 +1375,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						}
 						l = 0;
 						arenaenemies.add(lenemies);
-						arenacenters.add(new SimpleEntry<Integer, Integer>(i, j));
+						//arenacenters.add(new SimpleEntry<Integer, Integer>(i, j));
 						arenainsidearea.add(nonobstacles);
 						k++;
 					}
@@ -1614,6 +1627,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 								else
 									player.setScrollingSpeedX(-player.getMOVESPEED());
 							}
+							/*System.out.println("sums: " + sumx+ "-" + sumy);
+							System.out.println("sums: " + sumx+ "-" + sumy);
+							System.out.println("arenacenter: " + cix+ "-" + ciy);*/
 							boolean foundposition = false;
 							int deltapx = 0;
 							int deltapy = 0;
@@ -2000,19 +2016,15 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 						clip.stop();
 					}
 				}
-				if (state == GameState.Menu) {
-
-					if (!endlevelmenuloaded) {
-						this.clean();
-						clip.stop();
-						if (currentlevel == currentmaxlevel) {
-							currentmaxlevel = Math.min(maxlevel, currentmaxlevel+1);
-						}
-						saveGameState();
-						initEndLevelScreen();
-						endlevelmenuloaded = true;
+				if (!endlevelmenuloaded && state == GameState.Menu) {
+					this.clean();
+					clip.stop();
+					if (currentlevel == currentmaxlevel) {
+						currentmaxlevel = Math.min(maxlevel, currentmaxlevel+1);
 					}
-					
+					saveGameState();
+					initEndLevelScreen();
+					endlevelmenuloaded = true;
 				}
 				if (state == GameState.Dead) {
 
@@ -2292,10 +2304,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		for (Enemy e : getEnemyarray()) {
 			if (!e.alive || e.paintoverride) {
 				g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey, this);
-				for (int j = 0; j < e.getProjectiles().size(); j++) {
-					Projectile p = e.getProjectiles().get(j);
-					g.drawImage(p.getSprite(), p.getCenterX() - p.halfsize, p.getCenterY() - p.halfsize, this);
-				}
 			}
 			for (int j = 0; j < e.getProjectiles().size(); j++) {
 				Projectile p = e.getProjectiles().get(j);

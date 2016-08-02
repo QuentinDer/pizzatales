@@ -328,4 +328,16 @@ public class Pepper extends Enemy {
 	public void setGibsSprite() {
 		currentSprite = gibsSprite;
 	}
+
+	@Override
+	public boolean hasIntermediateDying() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setIntermediateDieSprite() {
+		// TODO Auto-generated method stub
+		
+	}
 }

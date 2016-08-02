@@ -12,7 +12,7 @@ public class KaleKing extends Enemy {
 	public static Image swipeDown, swipeRight, swipeLeft, swipeUp;
 	public static Image boltsfiringsprite, dashSpriteRight, dashSpriteLeft;
 	public static Image blinkingSprite;
-	public static Image hulkSprite, hulkMove1, hulkMove2, hulkSwipeDown, hulkSwipeRight, hulkSwipeLeft, hulkSwipeUp;
+	public static Image hulkSprite, hulkMove1, hulkMove2, hulkSwipeDown, hulkSwipeRight, hulkSwipeLeft, hulkSwipeUp, intermediateDieSprite;
 	public static ArrayList<Image> phaseanim = new ArrayList<Image>();
 	//public static Image phase1, phase2, phase3, phase4, phase5, phase6, phase7, phase8, phase9, phase10, phase11;
 	private boolean darktrail/* = true*/;
@@ -300,15 +300,17 @@ public class KaleKing extends Enemy {
 					j++;
 				}
 				StartingClass.map[player.posx][player.posy] = player;
-				if (player.getArmor().defense + 1 < player.getArmor().MAXDEF) {
-					player.getArmor().setDefense(player.getArmor().getDefense()+1);
-				} else
-					player.getArmor().setDefense(player.getArmor().MAXDEF);
-				if (player.getHealth() + 1 > player.getMaxHealth()) {
-					player.setHealth(player.getMaxHealth());
-				} else {
-					player.setHealth(player.getHealth() + 1);
-				} 
+				if (StartingClass.difficultylevel<4) {
+					if (player.getArmor().defense + 1 < player.getArmor().MAXDEF) {
+						player.getArmor().setDefense(player.getArmor().getDefense()+1);
+					} else
+						player.getArmor().setDefense(player.getArmor().MAXDEF);
+					if (player.getHealth() + 1 > player.getMaxHealth()) {
+						player.setHealth(player.getMaxHealth());
+					} else {
+						player.setHealth(player.getHealth() + 1);
+					} 
+				}
 			}
 			if (animcounter % phaseanimrate == 0) {
 				animsprite++;
@@ -879,6 +881,15 @@ public class KaleKing extends Enemy {
 	
 	@Override
 	public void update() {
+		
+		if (!alive && hasIntermediateDying()) {
+			if (dying > 0) {
+				dying--;
+				if (dying == 0) {
+					setDieSprite();
+				}
+			}
+		}
 		
 		speedX = 0;
 		speedY = 0;
@@ -1505,6 +1516,16 @@ public class KaleKing extends Enemy {
 		projectiles.add(new KaleKingFlame(centerX,centerY,-0.26f,-0.96f,10,fireringdmg,fireringrange));
 		projectiles.add(new KaleKingFlame(centerX,centerY,-0.17f,-0.98f,10,fireringdmg,fireringrange));
 		projectiles.add(new KaleKingFlame(centerX,centerY,-0.09f,-1.0f,10,fireringdmg,fireringrange));
+	}
+
+	@Override
+	public boolean hasIntermediateDying() {
+		return true;
+	}
+
+	@Override
+	public void setIntermediateDieSprite() {
+		currentSprite = intermediateDieSprite;
 	}
 
 }

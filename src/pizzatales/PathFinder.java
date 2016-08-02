@@ -517,7 +517,7 @@ public class PathFinder {
 				}
 			}
 		}
-		if (!f_score_final.isEmpty())
+		if (!direction.isEmpty() && !f_score_final.isEmpty())
 			return direction.get(getMin(f_score_final));
 		else
 			return 0;

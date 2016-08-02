@@ -162,6 +162,8 @@ public class Level {
 			MapUtil.bitmask(background, mask, BackgroundFactory.dirt, BackgroundFactory.grass, dirtset,0);
 			break;
 		case 2:
+			MapUtil.bitmask(background, mask, BackgroundFactory.lava, BackgroundFactory.cave, caveset,0);
+			MapUtil.bitmask(background, mask, BackgroundFactory.waterflow, BackgroundFactory.cave, caveset,1);
 			break;
 		case 3:
 			break;
@@ -194,6 +196,8 @@ public class Level {
 			MapUtil.bitmask(background, mask, BackgroundFactory.dirt, BackgroundFactory.grass, dirtset,0, minx, maxx, miny, maxy);
 			break;
 		case 2:
+			MapUtil.bitmask(background, mask, BackgroundFactory.lava, BackgroundFactory.cave, caveset,1, minx, maxx, miny, maxy);
+			MapUtil.bitmask(background, mask, BackgroundFactory.waterflow, BackgroundFactory.cave, caveset,2, minx, maxx, miny, maxy);
 			break;
 		case 3:
 			break;

@@ -6,6 +6,7 @@ import java.net.URL;
 public class Shotgun extends Firearm {
 
 	public static Image leftSprite, rightSprite, upSprite, downSprite;
+	public static Image leftUpSprite, rightUpSprite, leftDownSprite, rightDownSprite;
 	public static URL url;
 	
 	/*private float cos45 = 0.7f;
@@ -109,7 +110,7 @@ public class Shotgun extends Firearm {
 
 	@Override
 	public void shootUpLeft(int x, int y) {
-		setSpriteLeft();
+		setSpriteLeftUp();
 		shootingCounter++;
 		holderprojectiles.add(new ShotgunBullet(x, y, -0.45f, -0.9f, speed, projectiledmg, range));
 		holderprojectiles.add(new ShotgunBullet(x, y, -0.6f, -0.8f, speed, projectiledmg, range));
@@ -119,7 +120,7 @@ public class Shotgun extends Firearm {
 
 	@Override
 	public void shootUpRight(int x, int y) {
-		setSpriteRight();
+		setSpriteRightUp();
 		shootingCounter++;
 		holderprojectiles.add(new ShotgunBullet(x, y, 0.45f, -0.9f, speed, projectiledmg, range));
 		holderprojectiles.add(new ShotgunBullet(x, y, 0.6f, -0.8f, speed, projectiledmg, range));
@@ -129,7 +130,7 @@ public class Shotgun extends Firearm {
 
 	@Override
 	public void shootDownLeft(int x, int y) {
-		setSpriteLeft();
+		setSpriteLeftDown();
 		shootingCounter++;
 		holderprojectiles.add(new ShotgunBullet(x, y, -0.45f, 0.9f, speed, projectiledmg, range));
 		holderprojectiles.add(new ShotgunBullet(x, y, -0.6f, 0.8f, speed, projectiledmg, range));
@@ -139,7 +140,7 @@ public class Shotgun extends Firearm {
 
 	@Override
 	public void shootDownRight(int x, int y) {
-		setSpriteRight();
+		setSpriteRightDown();
 		shootingCounter++;
 		holderprojectiles.add(new ShotgunBullet(x, y, 0.45f, 0.9f, speed, projectiledmg, range));
 		holderprojectiles.add(new ShotgunBullet(x, y, 0.6f, 0.8f, speed, projectiledmg, range));
@@ -155,5 +156,25 @@ public class Shotgun extends Firearm {
 	@Override
 	public String getID() {
 		return "SHOTGUN";
+	}
+
+	@Override
+	public void setSpriteLeftUp() {
+		currentSprite = leftUpSprite;
+	}
+
+	@Override
+	public void setSpriteRightUp() {
+		currentSprite = rightUpSprite;
+	}
+
+	@Override
+	public void setSpriteLeftDown() {
+		currentSprite = leftDownSprite;
+	}
+
+	@Override
+	public void setSpriteRightDown() {
+		currentSprite = rightDownSprite;
 	}
 }

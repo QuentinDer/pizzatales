@@ -9,7 +9,7 @@ public class HealthPotion extends Item {
 	}
 
 	public static Image healthpotionsprite;
-	public static Image healthpotioneffectsprite;
+	public static Image healthpotioneffectsprite, healthpotioneffectsprite2, healthpotioneffectsprite3, healthpotioneffectsprite4;
 
 
 	@Override
@@ -20,7 +20,7 @@ public class HealthPotion extends Item {
 			p.setHealth(p.getHealth() + 5);
 		} 
 		effectactive = true;
-		effectTimer = 30;
+		effectTimer = 60;
 	}
 
 	@Override
@@ -30,7 +30,16 @@ public class HealthPotion extends Item {
 	
 	@Override
 	protected Image getEffectSprite(){
-		return healthpotioneffectsprite;
+		switch(effectTimer/8 % 4) {
+		case 0:
+			return healthpotioneffectsprite;
+		case 1:
+			return healthpotioneffectsprite2;
+		case 2:
+			return healthpotioneffectsprite3;
+		default:
+			return healthpotioneffectsprite4;
+		}
 	}
 
 	@Override
@@ -44,17 +53,17 @@ public class HealthPotion extends Item {
 
 	@Override
 	protected int getEffectCenterX() {
-		return 0;
+		return player.getCenterX();
 	}
 
 	@Override
 	protected int getEffectCenterY() {
-		return 0;
+		return player.getCenterY();
 	}
 	
 	@Override
 	protected boolean isEffectAbove() {
-		return false;
+		return true;
 	}
 
 	@Override

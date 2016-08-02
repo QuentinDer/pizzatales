@@ -330,20 +330,42 @@ public class Player extends BlockingStuff {
 		}
 		if (0 == isShooting) {
 			if (speedX > 0) {
-				weapon.setSpriteRight();
-				isAimingUp = false;
+				if (speedY > 0) {
+					weapon.setSpriteRightDown();
+					isAimingUp = false;
+				}
+				if (speedY < 0) {
+					weapon.setSpriteRightUp();
+					isAimingUp = false;
+				}
+				if (speedY == 0) {
+					weapon.setSpriteRight();
+					isAimingUp = false;
+				}
 			}
 			if (speedX < 0) {
-				weapon.setSpriteLeft();
-				isAimingUp = false;
+				if (speedY > 0) {
+					weapon.setSpriteLeftDown();
+					isAimingUp = false;
+				}
+				if (speedY < 0) {
+					weapon.setSpriteLeftUp();
+					isAimingUp = false;
+				}
+				if (speedY == 0) {
+					weapon.setSpriteLeft();
+					isAimingUp = false;
+				}
 			}
-			if (speedY > 0) {
-				weapon.setSpriteDown();
-				isAimingUp = false;
-			}
-			if (speedY < 0) {
-				weapon.setSpriteUp();
-				isAimingUp = true;
+			if (speedX == 0) {
+				if (speedY > 0) {
+					weapon.setSpriteDown();
+					isAimingUp = false;
+				}
+				if (speedY < 0) {
+					weapon.setSpriteUp();
+					isAimingUp = true;
+				}
 			}
 		}
 		// Prevents going beyond Y coordinate of 250 and 550

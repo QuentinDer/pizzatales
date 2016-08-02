@@ -9,7 +9,7 @@ public class ArmorPotion extends Item {
 	}
 
 	public static Image armorpotionsprite;
-	public static Image armorpotioneffectsprite;
+	public static Image armorpotioneffectsprite, armorpotioneffectsprite2, armorpotioneffectsprite3, armorpotioneffectsprite4;
 
 	@Override
 	protected void doEffect(Player p) {
@@ -18,7 +18,7 @@ public class ArmorPotion extends Item {
 		} else
 			p.getArmor().setDefense(p.getArmor().MAXDEF);
 		effectactive = true;
-		effectTimer = 30;
+		effectTimer = 60;
 	}
 
 	@Override
@@ -28,7 +28,16 @@ public class ArmorPotion extends Item {
 	
 	@Override
 	protected Image getEffectSprite(){
-		return armorpotioneffectsprite;
+		switch(effectTimer/8 % 4) {
+		case 0:
+			return armorpotioneffectsprite;
+		case 1:
+			return armorpotioneffectsprite2;
+		case 2:
+			return armorpotioneffectsprite3;
+		default:
+			return armorpotioneffectsprite4;
+		}
 	}
 
 	@Override
@@ -42,17 +51,17 @@ public class ArmorPotion extends Item {
 
 	@Override
 	protected int getEffectCenterX() {
-		return 0;
+		return player.getCenterX();
 	}
 
 	@Override
 	protected int getEffectCenterY() {
-		return 0;
+		return player.getCenterY();
 	}
 
 	@Override
 	protected boolean isEffectAbove() {
-		return false;
+		return true;
 	}
 
 	@Override

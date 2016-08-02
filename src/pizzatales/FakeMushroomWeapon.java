@@ -85,4 +85,28 @@ public class FakeMushroomWeapon extends Firearm {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void setSpriteLeftUp() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setSpriteRightUp() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setSpriteLeftDown() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setSpriteRightDown() {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -7,7 +7,7 @@ public class MushroomWizard extends Enemy {
 
 	private int inAnimation;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, staySpriteRight, 
-		move1SpriteRight, move2SpriteRight, swipeDown, swipeRight, swipeLeft, swipeUp, shooting, summoning;
+		move1SpriteRight, move2SpriteRight, swipeDown, swipeRight, swipeLeft, swipeUp, shooting, summoning, intermediateDieSprite;
 	private int maxInAnimation;
 	private int ballInAnimation;
 	private int maxBallInAnimation;
@@ -54,7 +54,7 @@ public class MushroomWizard extends Enemy {
 			maxBallInAnimation = 15;
 			//phase = 3;
 			ballcd = 30;
-			randg = 34;
+			randg = 33;
 			randy = 35;
 			randb = 38;
 			randr = 40;
@@ -65,8 +65,8 @@ public class MushroomWizard extends Enemy {
 			//phase = 4;
 			ballcd = 22;
 			randg = 34;
-			randy = 35;
-			randb = 38;
+			randy = 36;
+			randb = 39;
 			randr = 40;
 			break;
 		}
@@ -76,6 +76,28 @@ public class MushroomWizard extends Enemy {
 
 	@Override
 	public void callAI() {
+		if (StartingClass.maskminx == -1) {
+			int minx = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(0) / StartingClass.height;
+			int miny = StartingClass.arenainsidearea.get(StartingClass.isInArena).get(0) % StartingClass.height;
+			int maxx = minx;
+			int maxy = miny;
+			for (int i : StartingClass.arenainsidearea.get(StartingClass.isInArena)) {
+				int x = i / StartingClass.height;
+				int y = i % StartingClass.height;
+				if (x < minx)
+					minx = x;
+				if (x > maxx)
+					maxx = x;
+				if (y < miny)
+					miny = y;
+				if (y > maxy)
+					maxy = y;
+			}
+			StartingClass.maskminx = minx;
+			StartingClass.maskminy = miny;
+			StartingClass.maskmaxx = maxx;
+			StartingClass.maskmaxy = maxy;
+		}
 		if (slashCd > 0)
 			slashCd--;
 		if (ballInAnimation>0) {
@@ -104,25 +126,9 @@ public class MushroomWizard extends Enemy {
 			bcd2--;
 		if (inAnimation == 0) {
 			int pathresult = 0;
-			ArrayList<Integer> tox = new ArrayList<Integer>();
-			ArrayList<Integer> toy = new ArrayList<Integer>();
-			if (player.posx != StartingClass.width && StartingClass.map[player.posx+1][player.posy] == null) {
-				tox.add(player.posx+1);
-				toy.add(player.posy);
-			}
-			if (player.posx != 0 && StartingClass.map[player.posx-1][player.posy] == null) {
-				tox.add(player.posx-1);
-				toy.add(player.posy);
-			}
-			if (player.posy != StartingClass.height && StartingClass.map[player.posx][player.posy+1] == null) {
-				tox.add(player.posx);
-				toy.add(player.posy+1);
-			}
-			if (player.posy != 0 && StartingClass.map[player.posx][player.posy-1] == null) {
-				tox.add(player.posx);
-				toy.add(player.posy-1);
-			}
-			pathresult = pf.getDirectionToShoot(posx, posy, tox, toy, 50, canmoveleft, canmoveup, canmoveright, canmovedown, 0, false);
+			StartingClass.map[player.posx][player.posy] = null;
+			pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 200, canmoveleft, canmoveup, canmoveright, canmovedown, 0, true);
+			StartingClass.map[player.posx][player.posy] = player;
 			switch (pathresult) {
 			case 0:
 				stopMoving();
@@ -138,6 +144,18 @@ public class MushroomWizard extends Enemy {
 				break;
 			case 4:
 				moveDown();
+				break;
+			case 5:
+				moveLeftUp();
+				break;
+			case 6:
+				moveRightUp();
+				break;
+			case 7:
+				moveRightDown();
+				break;
+			case 8:
+				moveLeftDown();
 				break;
 			}
 			if (health < maxHealth/5 && phase < StartingClass.difficultylevel)
@@ -323,7 +341,7 @@ public class MushroomWizard extends Enemy {
 	@Override
 	public void die() {
 		super.die();
-		projectiles.clear();
+		//projectiles.clear();
 	}
 
 	@Override
@@ -451,6 +469,8 @@ public class MushroomWizard extends Enemy {
 				Lava l1 = new Lava(poslx,posly,0,0,false,0);
 				l1.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
 				l1.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
+				applet.backgroundmap[poslx][posly] = BackgroundFactory.lava;
+				StartingClass.remask = true;
 				l1.r.setBounds(l1.getCenterX() - 22, l1.getCenterY() - 22, 45, 45);
 				StartingClass.items[poslx][posly][0] = l1;
 				StartingClass.heightitemmap[poslx][posly]++;
@@ -471,7 +491,7 @@ public class MushroomWizard extends Enemy {
 				StartingClass.heightitemmap[poslx][posly]++;
 				summoningstep++;
 			}
-			if (summoningstep == 3 && fhealth > toheal - 4 * summoningdelta) {
+			if (summoningstep == 2 && fhealth > toheal - 4 * summoningdelta) {
 				//Adding Lava 2
 				do {
 					posl = (int)(Math.random()*insideareasize);
@@ -481,12 +501,14 @@ public class MushroomWizard extends Enemy {
 				Lava l2 = new Lava(poslx,posly,0,0,false,0);
 				l2.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
 				l2.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
+				applet.backgroundmap[poslx][posly] = BackgroundFactory.lava;
+				StartingClass.remask = true;
 				l2.r.setBounds(l2.getCenterX() - 22, l2.getCenterY() - 22, 45, 45);
 				StartingClass.items[poslx][posly][0] = l2;
 				StartingClass.heightitemmap[poslx][posly]++;
 				summoningstep++;
 			}
-			if (summoningstep == 2 && fhealth > toheal - 3 * summoningdelta) {
+			if (summoningstep == 3 && fhealth > toheal - 3 * summoningdelta) {
 				//Adding WaterFlow 1
 				do {
 					posl = (int)(Math.random()*insideareasize);
@@ -496,12 +518,14 @@ public class MushroomWizard extends Enemy {
 				WaterFlow w1 = new WaterFlow(poslx,posly,0,0,false,0);
 				w1.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
 				w1.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
+				applet.backgroundmap[poslx][posly] = BackgroundFactory.waterflow;
+				StartingClass.remask = true;
 				w1.r.setBounds(w1.getCenterX() - 22, w1.getCenterY() - 22, 45, 45);
 				StartingClass.items[poslx][posly][0] = w1;
 				StartingClass.heightitemmap[poslx][posly]++;
 				summoningstep++;
 			}
-			if (summoningstep == 3 && fhealth > toheal - 2 * summoningdelta) {
+			if (summoningstep == 4 && fhealth > toheal - 2 * summoningdelta) {
 				//Adding Lava 3
 				do {
 					posl = (int)(Math.random()*insideareasize);
@@ -511,12 +535,14 @@ public class MushroomWizard extends Enemy {
 				Lava l3 = new Lava(poslx,posly,0,0,false,0);
 				l3.setCenterX(50*poslx+25+bg.getCenterX()-StartingClass.bginitx);
 				l3.setCenterY(50*posly+25+bg.getCenterY()-StartingClass.bginity);
+				applet.backgroundmap[poslx][posly] = BackgroundFactory.lava;
+				StartingClass.remask = true;
 				l3.r.setBounds(l3.getCenterX() - 22, l3.getCenterY() - 22, 45, 45);
 				StartingClass.items[poslx][posly][0] = l3;
 				StartingClass.heightitemmap[poslx][posly]++;
 				summoningstep++;
 			}
-			if (summoningstep == 4 && fhealth > toheal - 1 * summoningdelta) {
+			if (summoningstep == 5 && fhealth > toheal - 1 * summoningdelta) {
 				//Adding armorpotion 1
 				do {
 					posl = (int)(Math.random()*insideareasize);
@@ -551,5 +577,15 @@ public class MushroomWizard extends Enemy {
 	@Override
 	public void setGibsSprite() {
 		currentSprite = dieSprite;
+	}
+
+	@Override
+	public boolean hasIntermediateDying() {
+		return true;
+	}
+
+	@Override
+	public void setIntermediateDieSprite() {
+		currentSprite = intermediateDieSprite;
 	}
 }

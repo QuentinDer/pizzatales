@@ -7,7 +7,7 @@ public class Garlnstein extends Enemy {
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
 	public static Image slashRight, slashLeft, slashUp, slashDown;
 	public static Image dashRight, dashLeft, dashUp, dashDown, dashBlinking;
-	public static Image cloning1, cloning2, cloning3;
+	public static Image cloning1, cloning2, cloning3, intermediateDieSprite;
 	
 	private int slashcd;
 	private int maxInAnimation;
@@ -366,6 +366,15 @@ public class Garlnstein extends Enemy {
 	@Override
 	public void update() {
 		
+		if (!alive && hasIntermediateDying()) {
+			if (dying > 0) {
+				dying--;
+				if (dying == 0) {
+					setDieSprite();
+				}
+			}
+		}
+		
 		speedX = 0;
 		speedY = 0;
 		
@@ -590,5 +599,15 @@ public class Garlnstein extends Enemy {
 	@Override
 	public void setMove2SpriteAlt() {
 		currentSprite = move2Sprite;
+	}
+
+	@Override
+	public boolean hasIntermediateDying() {
+		return true;
+	}
+
+	@Override
+	public void setIntermediateDieSprite() {
+		currentSprite = intermediateDieSprite;
 	}
 }

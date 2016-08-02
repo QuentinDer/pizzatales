@@ -484,4 +484,16 @@ public class Aubergine extends Enemy {
 		currentSprite = gibsSprite;
 	}
 
+	@Override
+	public boolean hasIntermediateDying() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setIntermediateDieSprite() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

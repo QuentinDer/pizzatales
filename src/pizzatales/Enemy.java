@@ -20,6 +20,8 @@ public abstract class Enemy extends BlockingStuff {
 	private int nextdestx;
 	private int nextdesty;
 	private int waitpatindex = 0;
+	private int dyingtime = 60;
+	protected int dying;
 
 	protected int movementTime = ((int) Math.random() * 100) + 50;
 
@@ -82,7 +84,7 @@ public abstract class Enemy extends BlockingStuff {
 	public void damage(float projdmg) {
 		cdmg += projdmg;
 		health -= projdmg;
-		if (health < 0)
+		if (health <= 0)
 			die();
 	}
 	
@@ -200,10 +202,19 @@ public abstract class Enemy extends BlockingStuff {
 		}
 	}
 	
+	
+	
 	// Behavioral Methods
 	@Override
 	public void update() {
-		
+		if (!alive && hasIntermediateDying()) {
+			if (dying > 0) {
+				dying--;
+				if (dying == 0) {
+					setDieSprite();
+				}
+			}
+		}
 		if (sliding && !previoussliding) {
 			speedX = slidingSpeedX;
 			speedY = slidingSpeedY;
@@ -452,16 +463,21 @@ public abstract class Enemy extends BlockingStuff {
 	public void die() {
 		alive = false;
 		stopMoving();
-		if (ppdmg + pdmg + cdmg > 3) {
-			setGibsSprite();
-			player.isGrinning = Math.max(player.isGrinning, 50);
-		} else
-			setDieSprite();
-		if (bloodymess) {
-			setGibsSprite();
-			BazookaBulletExplosion bmess = new BazookaBulletExplosion(centerX+30, centerY+30);
-			bmess.procfrequency = 20;
-			StartingClass.explosions.add(bmess);
+		if (this.hasIntermediateDying()) {
+			dying = dyingtime;
+			setIntermediateDieSprite();
+		} else {
+			if (ppdmg + pdmg + cdmg > 3) {
+				setGibsSprite();
+				player.isGrinning = Math.max(player.isGrinning, 50);
+			} else
+				setDieSprite();
+			if (bloodymess) {
+				setGibsSprite();
+				BazookaBulletExplosion bmess = new BazookaBulletExplosion(centerX+30, centerY+30);
+				bmess.procfrequency = 20;
+				StartingClass.explosions.add(bmess);
+			}
 		}
 		StartingClass.map[posx][posy] = null;
 	}
@@ -643,6 +659,9 @@ public abstract class Enemy extends BlockingStuff {
 	public abstract void setStaySpriteAlt();
 	public abstract void setMove1SpriteAlt();
 	public abstract void setMove2SpriteAlt();
+	
+	public abstract boolean hasIntermediateDying();
+	public abstract void setIntermediateDieSprite();
 	
 	protected boolean canSeePlayer() {
 		if (Math.abs(posx-player.posx)+Math.abs(posy-player.posy) > visionRange)

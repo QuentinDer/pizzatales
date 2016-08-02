@@ -88,4 +88,24 @@ public class Rocket extends Firearm {
 	public String getID() {
 		return "ROCKET";
 	}
+
+	@Override
+	public void setSpriteLeftUp() {
+		currentSprite = leftSprite;
+	}
+
+	@Override
+	public void setSpriteRightUp() {
+		currentSprite = rightSprite;
+	}
+
+	@Override
+	public void setSpriteLeftDown() {
+		currentSprite = leftSprite;
+	}
+
+	@Override
+	public void setSpriteRightDown() {
+		currentSprite = rightSprite;
+	}
 }

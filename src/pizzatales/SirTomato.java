@@ -8,13 +8,19 @@ public class SirTomato extends Enemy {
 	private static final int basicspeed = 3;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, staySpriteRight, 
 		move1SpriteRight, move2SpriteRight, sirtomatothrowleft, sirtomatothrowright,
-		dashSpriteRight, dashSpriteLeft, slashSpriteLeft, slashSpriteRight;
+		dashSpriteRight, dashSpriteLeft, slashSpriteLeft, slashSpriteRight, dashLeftWindup, 
+		dashRightWindup, swipeLeftWindup, swipeRightWindup, intermediateDieSprite;
 	private int maxInAnimation;
 	private boolean isDashing;
 	private boolean isSlashing;
 	private boolean isSlashingRight;
 	private int slashCd;
 	private boolean hasSlashed;
+	private int dashblinking;
+	private int dashblinkingtime;
+	private int slashwindup;
+	private int slashwinduptime;
+	private float dashSpeedY;
 	private float dashSpeedX;
 	
 	public SirTomato(int centerX, int centerY) {
@@ -27,26 +33,33 @@ public class SirTomato extends Enemy {
 		case 1:
 			maxInAnimation = 60;
 			tatocd = 300;
+			slashwinduptime = 25;
 			dcd = Integer.MAX_VALUE;
 			dashcd = Integer.MAX_VALUE;
 			break;
 		case 2:
 			maxInAnimation = 50;
 			tatocd = 240;
-			dcd = Integer.MAX_VALUE;
-			dashcd = Integer.MAX_VALUE;
+			dashblinkingtime = 40;
+			slashwinduptime = 20;
+			dashcd = 240;
+			dashspeed = 12;
 			break;
 		case 3:
 			maxInAnimation = 40;
 			tatocd = 180;
+			dashblinkingtime = 30;
+			slashwinduptime = 15;
 			dashcd = 180;
-			dashspeed = 6;
+			dashspeed = 13;
 			break;
 		case 4:
 			maxInAnimation = 30;
 			tatocd = 240;
+			dashblinkingtime = 20;
+			slashwinduptime = 10;
 			dashcd = 120;
-			dashspeed = 8;
+			dashspeed = 14;
 			break;
 		}
 	}
@@ -69,17 +82,54 @@ public class SirTomato extends Enemy {
 				paintoverride = false;
 			}
 		}
+		if (slashwindup > 0) {
+			slashwindup--;
+			if (slashwindup == 0) {
+				hasSlashed = false;
+				isSlashing = true;
+				inAnimation = maxInAnimation;
+				if (player.getCenterX() > getCenterX()) {
+					currentSprite = slashSpriteRight;
+					isSlashingRight = true;
+				} else {
+					currentSprite = slashSpriteLeft;
+					isSlashingRight = false;
+				}
+			}
+		}
+		if (dashblinking > 0) {
+			dashblinking--;
+			if (dashblinking == 0) {
+				float diffx = player.getCenterX() - getCenterX();
+				float diffy = player.getCenterY() - getCenterY();
+				dashSpeedX = diffx * dashspeed / (Math.abs(diffx)+Math.abs(diffy));
+				dashSpeedY = diffy * dashspeed / (Math.abs(diffx)+Math.abs(diffy));
+				/*halfsizex = 75;
+				halfrsizex = 65;
+				halfsizey = 31;
+				halfrsizey = 25;*/
+				if (dashSpeedX > 0)
+					currentSprite = dashSpriteRight;
+				else
+					currentSprite = dashSpriteLeft;
+				fcenterX = centerX;
+				fcenterY = centerY;
+				isDashing = true;
+				paintoverride = true;
+				dcd = dashcd;
+			}
+		}
 		if (slashCd > 0)
 			slashCd--;
 			
 		
-		//boss parameters difinition
+		//boss parameters definition
 		if (tcd > 0)
 			tcd--;
 		if (dcd > 0)
 			dcd--;
 		
-		if (inAnimation == 0 && !isDashing) {
+		if (inAnimation == 0 && !isDashing && dashblinking == 0 && slashwindup == 0) {
 			if (movementTime % 10 == 0) {
 				int tox = player.posx;
 				if (posx < player.posx) {
@@ -127,19 +177,15 @@ public class SirTomato extends Enemy {
 			int diffy = player.getCenterY() - getCenterY();
 			if (slashCd == 0 && diffx < 100 && diffy < 20 && diffy > -80) {
 				stopMoving();
-				hasSlashed = false;
-				isSlashing = true;
-				inAnimation = maxInAnimation;
 				halfsizex = 100;
 				halfrsizex = 85;
 				halfsizey = 65;
 				halfrsizey = 50;
-				if (player.getCenterX() > getCenterX()) {
-					currentSprite = slashSpriteRight;
-					isSlashingRight = true;
+				slashwindup = slashwinduptime;
+				if (player.getCenterX()>getCenterX()) {
+					currentSprite = swipeRightWindup;
 				} else {
-					currentSprite = slashSpriteLeft;
-					isSlashingRight = false;
+					currentSprite = swipeLeftWindup;
 				}
 			}
 			if (tcd == 0 && diffx > 300) {
@@ -175,27 +221,38 @@ public class SirTomato extends Enemy {
 					}
 				}
 			}
-			if (dcd == 0 && diffx > 120 && Math.abs(player.posy-posy)<=1) {
+			if (dcd == 0 && diffx > 180 && Math.abs(player.posy-posy)<=3) {
 				boolean candash = true;
-				if (player.getCenterX() > getCenterX()) {
+				/*if (player.getCenterX() > getCenterX()) {
 					for (int i = posx+1; i < player.posx; i++)
-						candash = candash && (StartingClass.map[i][posy] == null);
-					if (candash) {
+						candash = candash && (StartingClass.map[i][posy] == null);*/
+					/*if (candash) {
 						currentSprite = dashSpriteRight;
 						moveRight();
 						dashSpeedX = dashspeed;
-					}
-				} else {
+					}*/
+				/*} else {
 					for (int i = posx-1; i > player.posx; i--)
-						candash = candash && (StartingClass.map[i][posy] == null);
-					if (candash) {
+						candash = candash && (StartingClass.map[i][posy] == null);*/
+					/*if (candash) {
 						currentSprite = dashSpriteLeft;
 						moveLeft();
 						dashSpeedX = -dashspeed;
-					}
-				}
+					}*/
+				//}
 				if (candash) {
-					speed = dashspeed;
+					dashblinking = dashblinkingtime;
+					halfsizex = 100;
+					halfrsizex = 90;
+					halfrsizey = 35;
+					R.setBounds((int)(centerX - halfrsizex + speedX), (int)(centerY - halfrsizey + speedY), 2*halfrsizex, 2*halfrsizey);
+					stopMoving();
+					if (player.getCenterX() > getCenterX()) {
+						currentSprite = dashRightWindup;
+					} else {
+						currentSprite = dashLeftWindup;
+					}
+					/*speed = dashspeed;
 					halfsizex = 100;
 					halfrsizex = 90;
 					halfrsizey = 35;
@@ -204,7 +261,7 @@ public class SirTomato extends Enemy {
 					showHealthBar = false;
 					inAnimation = 50;
 					dcd = dashcd;
-					R.setBounds((int)(centerX - halfrsizex + speedX), (int)(centerY - halfrsizey + speedY), 2*halfrsizex, 2*halfrsizey);
+					R.setBounds((int)(centerX - halfrsizex + speedX), (int)(centerY - halfrsizey + speedY), 2*halfrsizex, 2*halfrsizey);*/
 				}
 			}
 		}
@@ -213,23 +270,31 @@ public class SirTomato extends Enemy {
 	@Override
 	public void update() {
 		
+		if (!alive && hasIntermediateDying()) {
+			if (dying > 0) {
+				dying--;
+				if (dying == 0) {
+					setDieSprite();
+				}
+			}
+		}
+		
 		speedX = 0;
 		speedY = 0;
 		
 		if (isDashing) {
-			if ((dashSpeedX > 0 && !canmoveright) || (dashSpeedX < 0 && !canmoveleft)) {
+			if ((dashSpeedX > 0 && !canmoveright) || (dashSpeedX < 0 && !canmoveleft) || (dashSpeedY > 0 && !canmovedown) || (dashSpeedY < 0 && !canmoveup)) {
 				isDashing = false;
 				paintoverride = false;
-				showHealthBar = true;
 				halfsizex = 50;
 				halfsizey = 50;
 				halfrsizex = 45;
 				halfrsizey = 45;
-				isDashing = false;
-				currentSprite = staySprite;
 				speed = basicspeed;
-				inAnimation = 0;
+				currentSprite = staySprite;
+				slashCd = 30;
 			} else {
+				speedY = dashSpeedY;
 				speedX = dashSpeedX;
 				fcenterX += speedX - player.getScrollingSpeedX();
 				fcenterY += speedY - player.getScrollingSpeedY();
@@ -384,5 +449,19 @@ public class SirTomato extends Enemy {
 	@Override
 	public void setGibsSprite() {
 		currentSprite = dieSprite;
+	}
+
+	@Override
+	public boolean hasIntermediateDying() {
+		return true;
+	}
+
+	@Override
+	public void setIntermediateDieSprite() {
+		halfsizex = 75;
+		halfsizey = 50;
+		halfrsizex = 60;
+		halfrsizey = 45;
+		currentSprite = intermediateDieSprite;
 	}
 }
