@@ -748,6 +748,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		JButton musicButton = new JButton(new ImageIcon((playMusic)?(getClass().getResource("/data/buttonMusicOnRed.png")):(getClass().getResource("/data/buttonMusicOffRed.png"))));
 		musicButton.setRolloverIcon(new ImageIcon((playMusic)?(getClass().getResource("/data/buttonMusicOnWhite.png")):(getClass().getResource("/data/buttonMusicOffWhite.png"))));
 		
+		musicButton.setBorderPainted(false);
+		musicButton.setContentAreaFilled(false);
+		
 		add(musicButton);
 		
 		azertyButton.setBounds(500, 15, 150, 75);
