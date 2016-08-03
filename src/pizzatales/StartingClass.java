@@ -83,17 +83,18 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public boolean gunSoundLoaded = false;
 	public URL gunSoundurl = null;
 	protected boolean playMusic = true;
+	boolean showUI = true;
 
 	private Clip clip;
 	
 	//TODO protected static ArrayList<Clip> gunclips = new ArrayList<Clip>();
 	
 	private boolean fullscreenmode = false;
-	public static final boolean TESTMODE = false;
+	public static final boolean TESTMODE = true;
 	public static int difficultylevel = TESTMODE ? 3 : 1;
-	public static int currentlevel = TESTMODE ? 1: 1;
+	public static int currentlevel = TESTMODE ? 12: 1;
 	private final int maxlevel = 20;
-	private int currentmaxlevel = 1;
+	private int currentmaxlevel = 20;
 
 	public static int maskminx = -1, maskmaxx = -1, maskminy = -1, maskmaxy = -1;
 	public static int maskphase;
@@ -214,9 +215,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	
 	public void loadGameState() {
 		azerty = prefs.getBoolean("AZERTY", true);
-		currentmaxlevel = prefs.getInt("CURRENTMAXLEVEL",1);
-		difficultylevel = prefs.getInt("DIFFICULTY", 1);
-		currentlevel = prefs.getInt("LASTLEVEL", 1);
+		if(!TESTMODE){
+			currentmaxlevel = prefs.getInt("CURRENTMAXLEVEL",1);
+			difficultylevel = prefs.getInt("DIFFICULTY", 1);
+			currentlevel = prefs.getInt("LASTLEVEL", 1);
+		}
 		playMusic = prefs.getBoolean("PLAYMUSIC", true);
 		boolean shotgun = prefs.getBoolean("SHOTGUN",false);
 		if (shotgun) {
@@ -2518,7 +2521,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 							g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey,
 									this);
 						}
-						if (e.showHealthBar) {
+						if (e.showHealthBar && showUI) {
 							g.setColor(Color.GREEN);
 							int lifetaken = (int) ((e.getMaxHealth() - e.getHealth()) * e.halfbarx * 2)
 									/ e.getMaxHealth();
@@ -2589,7 +2592,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			// p.getR().height);
 			g.drawImage(p.getSprite(), p.getCenterX() - p.halfsize, p.getCenterY() - p.halfsize, this);
 		}
-		if (showPlayerHealthBar) {
+		if (showPlayerHealthBar && showUI) {
 			g.setColor(Color.GREEN);
 			int lifetaken = (int) ((20 + player.getArmor().MAXDEF - player.getHealth()
 					- player.getArmor().getDefense()) * 44) / (20 + player.getArmor().MAXDEF);
@@ -2605,29 +2608,33 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		}
 		paintItemsEffectAbove(g,stx,fx,sty,fy);
 		
-		g.setFont(new Font ("AR DESTINE", Font.LAYOUT_LEFT_TO_RIGHT, 15));
+		if(showUI){
+			g.setFont(new Font ("AR DESTINE", Font.LAYOUT_LEFT_TO_RIGHT, 15));
+			
+			g.setColor(Color.DARK_GRAY);
+			g.fillRect(32, 37, 200, 20);
+			g.setColor(Color.RED);
+			g.fillRect(32, 37, ((int) player.getHealth())*10 , 20);
+			g.setColor(Color.WHITE);
+			g.drawString("HP: "+Integer.toString((int) player.getHealth()), 35, 51);
+			
+			g.setColor(Color.DARK_GRAY);
+			g.fillRect(32, 57, ((int) player.getArmor().MAXDEF)*10, 20);
+			g.setColor(Color.BLUE);
+			g.fillRect(32, 57, ((int) player.getArmor().defense)*10, 20);
+			g.setColor(Color.WHITE);
+			g.drawString("Armor: "+Integer.toString((int) player.getArmor().defense), 35, 71);
+			
+			g.setColor(Color.DARK_GRAY);
+			g.fillRect(247, 42, 295, 25);
+			g.setFont(new Font ("AR DESTINE", Font.BOLD, 20));
+			g.setColor(Color.WHITE);
+			g.drawString("Dmg:"+Math.round(player.getWeapon().getProjectiledmg()*100.0)/100.0, 250, 60);
+			g.drawString("APS:"+String.format("%.2f",(float)100.0/player.getWeapon().getFireRate()), 345, 60);
+			g.drawString("Rng:"+Integer.toString((int) player.getWeapon().getRange()), 450, 60);	
+		}
 		
-		g.setColor(Color.DARK_GRAY);
-		g.fillRect(32, 37, 200, 20);
-		g.setColor(Color.RED);
-		g.fillRect(32, 37, ((int) player.getHealth())*10 , 20);
-		g.setColor(Color.WHITE);
-		g.drawString("HP: "+Integer.toString((int) player.getHealth()), 35, 51);
-		
-		g.setColor(Color.DARK_GRAY);
-		g.fillRect(32, 57, ((int) player.getArmor().MAXDEF)*10, 20);
-		g.setColor(Color.BLUE);
-		g.fillRect(32, 57, ((int) player.getArmor().defense)*10, 20);
-		g.setColor(Color.WHITE);
-		g.drawString("Armor: "+Integer.toString((int) player.getArmor().defense), 35, 71);
-		
-		g.setFont(new Font ("AR DESTINE", Font.BOLD, 20));
-		g.setColor(Color.YELLOW);
-		g.drawString(""+Math.round(player.getWeapon().getProjectiledmg()*100.0)/100.0, 260, 75);
-		g.drawString(Integer.toString((int) player.getWeapon().getFireRate()), 300, 75);
-		g.drawString(Integer.toString((int) player.getWeapon().getRange()), 340, 75);
-		
-		if (TESTMODE) {
+		if (TESTMODE && showUI) {
 			g.setColor(Color.DARK_GRAY);
 			g.fillRect(1200, 37, 20, 20);
 			g.fillRect(1230, 37, 45, 20);
