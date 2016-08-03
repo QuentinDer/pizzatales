@@ -118,4 +118,10 @@ public class Gun extends Firearm {
 	public void setSpriteRightDown() {
 		currentSprite = rightDownSprite;
 	}
+
+	@Override
+	public Image getAddSprite() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

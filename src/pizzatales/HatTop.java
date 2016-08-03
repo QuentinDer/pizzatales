@@ -10,7 +10,7 @@ public class HatTop extends Hat {
 		deltay = -7;
 	}
 	
-	public static Image hatsprite;
+	public static Image hatsprite, addSprite;
 	
 	@Override
 	public Image getSprite() {
@@ -25,6 +25,11 @@ public class HatTop extends Hat {
 	@Override
 	public String getID() {
 		return "HATTOP";
+	}
+
+	@Override
+	public Image getAddSprite() {
+		return addSprite;
 	}
 	
 }

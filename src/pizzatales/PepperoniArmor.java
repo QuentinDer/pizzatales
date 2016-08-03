@@ -49,4 +49,10 @@ public class PepperoniArmor extends Armor {
 	public String getID() {
 		return "PEPPERONIARMOR";
 	}
+
+	@Override
+	public Image getAddSprite() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

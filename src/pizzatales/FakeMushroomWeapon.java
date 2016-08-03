@@ -1,5 +1,6 @@
 package pizzatales;
 
+import java.awt.Image;
 import java.net.URL;
 
 
@@ -108,5 +109,11 @@ public class FakeMushroomWeapon extends Firearm {
 	public void setSpriteRightDown() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Image getAddSprite() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

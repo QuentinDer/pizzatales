@@ -4,7 +4,7 @@ import java.awt.Image;
 import java.net.URL;
 
 public class Rocket extends Firearm {
-	public static Image leftSprite, rightSprite, upSprite, downSprite;
+	public static Image leftSprite, rightSprite, upSprite, downSprite, addSprite;
 	public static URL url;
 	
 	public Rocket() {
@@ -107,5 +107,10 @@ public class Rocket extends Firearm {
 	@Override
 	public void setSpriteRightDown() {
 		currentSprite = rightSprite;
+	}
+
+	@Override
+	public Image getAddSprite() {
+		return addSprite;
 	}
 }

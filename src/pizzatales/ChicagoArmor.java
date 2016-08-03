@@ -4,7 +4,7 @@ import java.awt.Image;
 
 public class ChicagoArmor extends Armor {
 
-	public static Image staysprite1, staysprite2, movespriteLeft1, movespriteLeft2, movespriteRight1, movespriteRight2, deathSprite;
+	public static Image staysprite1, staysprite2, movespriteLeft1, movespriteLeft2, movespriteRight1, movespriteRight2, deathSprite, addSprite;
 	
 	public ChicagoArmor() {
 		super(18,3);
@@ -48,5 +48,10 @@ public class ChicagoArmor extends Armor {
 	@Override
 	public String getID() {
 		return "CHICAGOARMOR";
+	}
+
+	@Override
+	public Image getAddSprite() {
+		return addSprite;
 	}
 }

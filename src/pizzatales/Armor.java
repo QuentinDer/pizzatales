@@ -41,5 +41,6 @@ public abstract class Armor {
 	public abstract Image getMoveSpriteRight1();
 	public abstract Image getMoveSpriteRight2();
 	public abstract Image getDeathSprite();
+	public abstract Image getAddSprite();
 	public abstract String getID();
 }

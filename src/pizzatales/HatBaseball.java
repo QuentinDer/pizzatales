@@ -6,7 +6,7 @@ public class HatBaseball extends Hat {
 	
 	private Player player = StartingClass.getPlayer();
 	
-	public static Image hatsprite;
+	public static Image hatsprite, addSprite;
 	
 	@Override
 	public Image getSprite() {
@@ -21,6 +21,11 @@ public class HatBaseball extends Hat {
 	@Override
 	public String getID() {
 		return "HATBASEBALL";
+	}
+
+	@Override
+	public Image getAddSprite() {
+		return addSprite;
 	}
 
 }

@@ -201,6 +201,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		prefs.putInt("CURRENTMAXLEVEL",currentmaxlevel);
 		prefs.putInt("DIFFICULTY", difficultylevel);
 		prefs.putInt("LASTLEVEL", currentlevel);
+		prefs.putBoolean("PLAYMUSIC", playMusic);
 		for (Armor armor : playerarmor)
 			prefs.putBoolean(armor.getID(),true);
 		for (Firearm firearm : playerweapons)
@@ -216,6 +217,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		currentmaxlevel = prefs.getInt("CURRENTMAXLEVEL",1);
 		difficultylevel = prefs.getInt("DIFFICULTY", 1);
 		currentlevel = prefs.getInt("LASTLEVEL", 1);
+		playMusic = prefs.getBoolean("PLAYMUSIC", true);
 		boolean shotgun = prefs.getBoolean("SHOTGUN",false);
 		if (shotgun) {
 			Shotgun sht = new Shotgun();
@@ -313,6 +315,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		CheeseArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/cheeseRight1.png")).getImage();
 		CheeseArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/cheeseRight2.png")).getImage();
 		CheeseArmor.deathSprite = new ImageIcon(getClass().getResource("/data/cheeseDead.png")).getImage();
+		CheeseArmor.addSprite = new ImageIcon(getClass().getResource("/data/addcheese.png")).getImage();
 		ChicagoArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/chicago1.png")).getImage();
 		ChicagoArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/chicago2.png")).getImage();
 		ChicagoArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/chicagoLeft1.png")).getImage();
@@ -320,6 +323,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		ChicagoArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/chicagoRight1.png")).getImage();
 		ChicagoArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/chicagoRight2.png")).getImage();
 		ChicagoArmor.deathSprite = new ImageIcon(getClass().getResource("/data/chicagoDead.png")).getImage();
+		ChicagoArmor.addSprite = new ImageIcon(getClass().getResource("/data/addchicago.png")).getImage();
 		HawaiiArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/hawaii1.png")).getImage();
 		HawaiiArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/hawaii2.png")).getImage();
 		HawaiiArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/hawaiiLeft1.png")).getImage();
@@ -327,6 +331,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		HawaiiArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/hawaiiRight1.png")).getImage();
 		HawaiiArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/hawaiiRight2.png")).getImage();
 		HawaiiArmor.deathSprite = new ImageIcon(getClass().getResource("/data/hawaiiDead.png")).getImage();
+		HawaiiArmor.addSprite = new ImageIcon(getClass().getResource("/data/addhawaii.png")).getImage();
 		MargheritaArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/margherita1.png")).getImage();
 		MargheritaArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/margherita2.png")).getImage();
 		MargheritaArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/margheritaLeft1.png")).getImage();
@@ -334,13 +339,14 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		MargheritaArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/margheritaRight1.png")).getImage();
 		MargheritaArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/margheritaRight2.png")).getImage();
 		MargheritaArmor.deathSprite = new ImageIcon(getClass().getResource("/data/margheritaDead.png")).getImage();
+		MargheritaArmor.addSprite = new ImageIcon(getClass().getResource("/data/margheritaDead.png")).getImage();
 		PepperoniArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/pepperoni1.png")).getImage();
 		PepperoniArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/pepperoni2.png")).getImage();
 		PepperoniArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/pepperoniLeft1.png")).getImage();
 		PepperoniArmor.movespriteLeft2 = new ImageIcon(getClass().getResource("/data/pepperoniLeft2.png")).getImage();
 		PepperoniArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/pepperoniRight1.png")).getImage();
 		PepperoniArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/pepperoniRight2.png")).getImage();
-		PepperoniArmor.deathSprite = new ImageIcon(getClass().getResource("/data/pepperoniDead.png")).getImage();
+		PepperoniArmor.deathSprite = new ImageIcon(getClass().getResource("/data/addmargherita.png")).getImage();
 
 		tileTree = new ImageIcon(getClass().getResource("/data/tree.png")).getImage();
 		//tileGrass = new ImageIcon(getClass().getResource("/data/grass.png")).getImage();
@@ -411,6 +417,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Shotgun.rightDownSprite = new ImageIcon(getClass().getResource("/data/shotgun6.png")).getImage();
 		Shotgun.rightUpSprite = new ImageIcon(getClass().getResource("/data/shotgun5.png")).getImage();
 		Shotgun.url = getClass().getResource("/data/shotgun.wav");
+		Shotgun.addSprite = new ImageIcon(getClass().getResource("/data/addshotgun.png")).getImage();
 		ShotgunBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/shotgunprojectile.png")).getImage();
 		Rifle.leftSprite = new ImageIcon(getClass().getResource("/data/rifle1.png")).getImage();
 		Rifle.rightSprite = new ImageIcon(getClass().getResource("/data/rifle2.png")).getImage();
@@ -420,6 +427,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Rifle.rightDownSprite = new ImageIcon(getClass().getResource("/data/rifle6.png")).getImage();
 		Rifle.rightUpSprite = new ImageIcon(getClass().getResource("/data/rifle5.png")).getImage();
 		Rifle.url = getClass().getResource("/data/rifle.wav");
+		Rifle.addSprite = new ImageIcon(getClass().getResource("/data/addrifle.png")).getImage();
 		Rifle.downSprite = new ImageIcon(getClass().getResource("/data/rifle3.png")).getImage();
 		RifleBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/rifleprojectile.png")).getImage();
 		Flamer.leftSprite = new ImageIcon(getClass().getResource("/data/flamer1.png")).getImage();
@@ -431,12 +439,14 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Flamer.rightDownSprite = new ImageIcon(getClass().getResource("/data/flamer6.png")).getImage();
 		Flamer.rightUpSprite = new ImageIcon(getClass().getResource("/data/flamer5.png")).getImage();
 		Flamer.url = getClass().getResource("/data/flamer.wav");
+		Flamer.addSprite = new ImageIcon(getClass().getResource("/data/addflamer.png")).getImage();
 		FlamerFlame.bulletsprite = new ImageIcon(getClass().getResource("/data/flamerprojectile.png")).getImage();
 		Rocket.leftSprite = new ImageIcon(getClass().getResource("/data/rocket1.png")).getImage();
 		Rocket.rightSprite = new ImageIcon(getClass().getResource("/data/rocket2.png")).getImage();
 		Rocket.downSprite = new ImageIcon(getClass().getResource("/data/rocket3.png")).getImage();
 		Rocket.upSprite = new ImageIcon(getClass().getResource("/data/rocket4.png")).getImage();
 		Rocket.url = getClass().getResource("/data/rocket.wav");
+		Rocket.addSprite = new ImageIcon(getClass().getResource("/data/addrocket.png")).getImage();
 		BazookaBullet.bulletspriteLeft = new ImageIcon(getClass().getResource("/data/rocketprojectileleft.png"))
 				.getImage();
 		BazookaBullet.bulletspriteRight = new ImageIcon(getClass().getResource("/data/rocketprojectileright.png"))
@@ -453,6 +463,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Smg.rightDownSprite = new ImageIcon(getClass().getResource("/data/smg6.png")).getImage();
 		Smg.rightUpSprite = new ImageIcon(getClass().getResource("/data/smg5.png")).getImage();
 		Smg.url = getClass().getResource("/data/smg.wav");
+		Smg.addSprite = new ImageIcon(getClass().getResource("/data/addsmg.png")).getImage();
 		SmgBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/smgprojectile.png")).getImage();
 		TomatoProjectile.tomatoprojectilesprite = new ImageIcon(getClass().getResource("/data/sirtomatoprojectile.png"))
 				.getImage();
@@ -660,11 +671,17 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		KaleKingBlinkingItem.sprite = new ImageIcon(getClass().getResource("/data/kingkaleblinking.png")).getImage();
 		
 		HatBaseball.hatsprite = new ImageIcon(getClass().getResource("/data/hatbaseball.png")).getImage();
+		HatBaseball.addSprite = new ImageIcon(getClass().getResource("/data/addhatbaseball.png")).getImage();
 		HatBowler.hatsprite = new ImageIcon(getClass().getResource("/data/hatbowler.png")).getImage();
+		HatBowler.addSprite = new ImageIcon(getClass().getResource("/data/addhatbowler.png")).getImage();
 		HatFedora.hatsprite = new ImageIcon(getClass().getResource("/data/hatfedora.png")).getImage();
+		HatFedora.addSprite = new ImageIcon(getClass().getResource("/data/addhatfedora.png")).getImage();
 		HatPanama.hatsprite = new ImageIcon(getClass().getResource("/data/hatpanama.png")).getImage();
+		HatPanama.addSprite = new ImageIcon(getClass().getResource("/data/addhatpanama.png")).getImage();
 		HatSherlock.hatsprite = new ImageIcon(getClass().getResource("/data/hatsherlock.png")).getImage();
+		HatSherlock.addSprite = new ImageIcon(getClass().getResource("/data/addhatsherlock.png")).getImage();
 		HatTop.hatsprite = new ImageIcon(getClass().getResource("/data/hattop.png")).getImage();
+		HatTop.addSprite = new ImageIcon(getClass().getResource("/data/addhattop.png")).getImage();
 
 		grinningsprite = new ImageIcon(getClass().getResource("/data/grin.png")).getImage();
 		
@@ -3129,10 +3146,12 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		case KeyEvent.VK_SPACE:
 			if (state == GameState.Paused) {
 				state = GameState.Running;
-				clip.loop(Clip.LOOP_CONTINUOUSLY);
+				if (clip != null && playMusic)
+					clip.loop(Clip.LOOP_CONTINUOUSLY);
 			} else if (state == GameState.Running) {
 				state = GameState.Paused;
-				clip.stop();
+				if (clip != null && playMusic)
+					clip.stop();
 			}
 			break;
 		case KeyEvent.VK_C:

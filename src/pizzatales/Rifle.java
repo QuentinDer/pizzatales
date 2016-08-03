@@ -5,7 +5,7 @@ import java.net.URL;
 
 public class Rifle extends Firearm {
 	public static Image leftSprite, rightSprite, upSprite, downSprite;
-	public static Image leftUpSprite, rightUpSprite, leftDownSprite, rightDownSprite;
+	public static Image leftUpSprite, rightUpSprite, leftDownSprite, rightDownSprite, addSprite;
 	public static URL url;
 	
 	public Rifle() {
@@ -116,5 +116,10 @@ public class Rifle extends Firearm {
 	@Override
 	public void setSpriteRightDown() {
 		currentSprite = rightDownSprite;
+	}
+
+	@Override
+	public Image getAddSprite() {
+		return addSprite;
 	}
 }

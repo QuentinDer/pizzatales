@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class PizzaBox extends Item {
 
 	public static Image pizzaboxsprite;
+	private Image effectSprite;
 	
 	public PizzaBox(int x, int y, int deltapx, int deltapy, boolean onetimeeffect, int height) {
 		super(x, y, deltapx, deltapy, onetimeeffect, height);
@@ -24,8 +25,10 @@ public class PizzaBox extends Item {
 			for (Armor playerarmor : StartingClass.playerarmor) {
 				toadd = toadd && (playerarmor.getClass() != armor.getClass());
 			}
-			if (toadd)
+			if (toadd) {
 				StartingClass.playerarmor.add(armor);
+				effectSprite = armor.getAddSprite();
+			}
 		}
 		ArrayList<Firearm> firearms = Level.getPizzaBoxFirearms(StartingClass.currentlevel);
 		for (Firearm firearm : firearms) {
@@ -36,6 +39,7 @@ public class PizzaBox extends Item {
 			if (toadd) {
 				firearm.setHolderProjectiles(player.getProjectiles());
 				StartingClass.playerweapons.add(firearm);
+				effectSprite = firearm.getAddSprite();
 			}
 		}
 		ArrayList<Hat> hats = Level.getPizzaBoxHats(StartingClass.currentlevel);
@@ -44,9 +48,13 @@ public class PizzaBox extends Item {
 			for (Hat playerhat : StartingClass.playerhats) {
 				toadd = toadd && (playerhat == null || playerhat.getClass() != hat.getClass());
 			}
-			if (toadd)
+			if (toadd) {
 				StartingClass.playerhats.add(hat);
+				effectSprite = hat.getAddSprite();
+			}
 		}
+		effectactive = true;
+		effectTimer = 180;
 		player.isGrinning = 50;
 	}
 
@@ -57,7 +65,7 @@ public class PizzaBox extends Item {
 
 	@Override
 	protected Image getEffectSprite() {
-		return null;
+		return effectSprite;
 	}
 
 	@Override
@@ -66,12 +74,12 @@ public class PizzaBox extends Item {
 
 	@Override
 	protected int getEffectCenterX() {
-		return 0;
+		return centerX;
 	}
 
 	@Override
 	protected int getEffectCenterY() {
-		return 0;
+		return centerY;
 	}
 
 	@Override

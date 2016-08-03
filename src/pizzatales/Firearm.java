@@ -80,6 +80,7 @@ public abstract class Firearm {
 	public abstract void setSpriteRightUp();
 	public abstract void setSpriteLeftDown();
 	public abstract void setSpriteRightDown();
+	public abstract Image getAddSprite();
 	
 	public int getFireRate() {
 		return firerate;
