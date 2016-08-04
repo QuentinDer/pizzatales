@@ -82,19 +82,17 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public boolean playSound = false;
 	public boolean gunSoundLoaded = false;
 	public URL gunSoundurl = null;
-	protected boolean playMusic = true;
-	boolean showUI = true;
 
 	private Clip clip;
 	
 	//TODO protected static ArrayList<Clip> gunclips = new ArrayList<Clip>();
 	
 	private boolean fullscreenmode = false;
-	public static final boolean TESTMODE = true;
+	public static final boolean TESTMODE = false;
 	public static int difficultylevel = TESTMODE ? 3 : 1;
-	public static int currentlevel = TESTMODE ? 12: 1;
+	public static int currentlevel = TESTMODE ? 1: 1;
 	private final int maxlevel = 20;
-	private int currentmaxlevel = 20;
+	private int currentmaxlevel = 1;
 
 	public static int maskminx = -1, maskmaxx = -1, maskminy = -1, maskmaxy = -1;
 	public static int maskphase;
@@ -202,7 +200,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		prefs.putInt("CURRENTMAXLEVEL",currentmaxlevel);
 		prefs.putInt("DIFFICULTY", difficultylevel);
 		prefs.putInt("LASTLEVEL", currentlevel);
-		prefs.putBoolean("PLAYMUSIC", playMusic);
 		for (Armor armor : playerarmor)
 			prefs.putBoolean(armor.getID(),true);
 		for (Firearm firearm : playerweapons)
@@ -215,12 +212,9 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	
 	public void loadGameState() {
 		azerty = prefs.getBoolean("AZERTY", true);
-		if(!TESTMODE){
-			currentmaxlevel = prefs.getInt("CURRENTMAXLEVEL",1);
-			difficultylevel = prefs.getInt("DIFFICULTY", 1);
-			currentlevel = prefs.getInt("LASTLEVEL", 1);
-		}
-		playMusic = prefs.getBoolean("PLAYMUSIC", true);
+		currentmaxlevel = prefs.getInt("CURRENTMAXLEVEL",1);
+		difficultylevel = prefs.getInt("DIFFICULTY", 1);
+		currentlevel = prefs.getInt("LASTLEVEL", 1);
 		boolean shotgun = prefs.getBoolean("SHOTGUN",false);
 		if (shotgun) {
 			Shotgun sht = new Shotgun();
@@ -318,7 +312,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		CheeseArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/cheeseRight1.png")).getImage();
 		CheeseArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/cheeseRight2.png")).getImage();
 		CheeseArmor.deathSprite = new ImageIcon(getClass().getResource("/data/cheeseDead.png")).getImage();
-		CheeseArmor.addSprite = new ImageIcon(getClass().getResource("/data/addcheese.png")).getImage();
 		ChicagoArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/chicago1.png")).getImage();
 		ChicagoArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/chicago2.png")).getImage();
 		ChicagoArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/chicagoLeft1.png")).getImage();
@@ -326,7 +319,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		ChicagoArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/chicagoRight1.png")).getImage();
 		ChicagoArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/chicagoRight2.png")).getImage();
 		ChicagoArmor.deathSprite = new ImageIcon(getClass().getResource("/data/chicagoDead.png")).getImage();
-		ChicagoArmor.addSprite = new ImageIcon(getClass().getResource("/data/addchicago.png")).getImage();
 		HawaiiArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/hawaii1.png")).getImage();
 		HawaiiArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/hawaii2.png")).getImage();
 		HawaiiArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/hawaiiLeft1.png")).getImage();
@@ -334,7 +326,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		HawaiiArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/hawaiiRight1.png")).getImage();
 		HawaiiArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/hawaiiRight2.png")).getImage();
 		HawaiiArmor.deathSprite = new ImageIcon(getClass().getResource("/data/hawaiiDead.png")).getImage();
-		HawaiiArmor.addSprite = new ImageIcon(getClass().getResource("/data/addhawaii.png")).getImage();
 		MargheritaArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/margherita1.png")).getImage();
 		MargheritaArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/margherita2.png")).getImage();
 		MargheritaArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/margheritaLeft1.png")).getImage();
@@ -342,14 +333,13 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		MargheritaArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/margheritaRight1.png")).getImage();
 		MargheritaArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/margheritaRight2.png")).getImage();
 		MargheritaArmor.deathSprite = new ImageIcon(getClass().getResource("/data/margheritaDead.png")).getImage();
-		MargheritaArmor.addSprite = new ImageIcon(getClass().getResource("/data/margheritaDead.png")).getImage();
 		PepperoniArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/pepperoni1.png")).getImage();
 		PepperoniArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/pepperoni2.png")).getImage();
 		PepperoniArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/pepperoniLeft1.png")).getImage();
 		PepperoniArmor.movespriteLeft2 = new ImageIcon(getClass().getResource("/data/pepperoniLeft2.png")).getImage();
 		PepperoniArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/pepperoniRight1.png")).getImage();
 		PepperoniArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/pepperoniRight2.png")).getImage();
-		PepperoniArmor.deathSprite = new ImageIcon(getClass().getResource("/data/addmargherita.png")).getImage();
+		PepperoniArmor.deathSprite = new ImageIcon(getClass().getResource("/data/pepperoniDead.png")).getImage();
 
 		tileTree = new ImageIcon(getClass().getResource("/data/tree.png")).getImage();
 		//tileGrass = new ImageIcon(getClass().getResource("/data/grass.png")).getImage();
@@ -420,7 +410,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Shotgun.rightDownSprite = new ImageIcon(getClass().getResource("/data/shotgun6.png")).getImage();
 		Shotgun.rightUpSprite = new ImageIcon(getClass().getResource("/data/shotgun5.png")).getImage();
 		Shotgun.url = getClass().getResource("/data/shotgun.wav");
-		Shotgun.addSprite = new ImageIcon(getClass().getResource("/data/addshotgun.png")).getImage();
 		ShotgunBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/shotgunprojectile.png")).getImage();
 		Rifle.leftSprite = new ImageIcon(getClass().getResource("/data/rifle1.png")).getImage();
 		Rifle.rightSprite = new ImageIcon(getClass().getResource("/data/rifle2.png")).getImage();
@@ -430,7 +419,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Rifle.rightDownSprite = new ImageIcon(getClass().getResource("/data/rifle6.png")).getImage();
 		Rifle.rightUpSprite = new ImageIcon(getClass().getResource("/data/rifle5.png")).getImage();
 		Rifle.url = getClass().getResource("/data/rifle.wav");
-		Rifle.addSprite = new ImageIcon(getClass().getResource("/data/addrifle.png")).getImage();
 		Rifle.downSprite = new ImageIcon(getClass().getResource("/data/rifle3.png")).getImage();
 		RifleBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/rifleprojectile.png")).getImage();
 		Flamer.leftSprite = new ImageIcon(getClass().getResource("/data/flamer1.png")).getImage();
@@ -442,14 +430,12 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Flamer.rightDownSprite = new ImageIcon(getClass().getResource("/data/flamer6.png")).getImage();
 		Flamer.rightUpSprite = new ImageIcon(getClass().getResource("/data/flamer5.png")).getImage();
 		Flamer.url = getClass().getResource("/data/flamer.wav");
-		Flamer.addSprite = new ImageIcon(getClass().getResource("/data/addflamer.png")).getImage();
 		FlamerFlame.bulletsprite = new ImageIcon(getClass().getResource("/data/flamerprojectile.png")).getImage();
 		Rocket.leftSprite = new ImageIcon(getClass().getResource("/data/rocket1.png")).getImage();
 		Rocket.rightSprite = new ImageIcon(getClass().getResource("/data/rocket2.png")).getImage();
 		Rocket.downSprite = new ImageIcon(getClass().getResource("/data/rocket3.png")).getImage();
 		Rocket.upSprite = new ImageIcon(getClass().getResource("/data/rocket4.png")).getImage();
 		Rocket.url = getClass().getResource("/data/rocket.wav");
-		Rocket.addSprite = new ImageIcon(getClass().getResource("/data/addrocket.png")).getImage();
 		BazookaBullet.bulletspriteLeft = new ImageIcon(getClass().getResource("/data/rocketprojectileleft.png"))
 				.getImage();
 		BazookaBullet.bulletspriteRight = new ImageIcon(getClass().getResource("/data/rocketprojectileright.png"))
@@ -466,7 +452,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Smg.rightDownSprite = new ImageIcon(getClass().getResource("/data/smg6.png")).getImage();
 		Smg.rightUpSprite = new ImageIcon(getClass().getResource("/data/smg5.png")).getImage();
 		Smg.url = getClass().getResource("/data/smg.wav");
-		Smg.addSprite = new ImageIcon(getClass().getResource("/data/addsmg.png")).getImage();
 		SmgBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/smgprojectile.png")).getImage();
 		TomatoProjectile.tomatoprojectilesprite = new ImageIcon(getClass().getResource("/data/sirtomatoprojectile.png"))
 				.getImage();
@@ -674,17 +659,11 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		KaleKingBlinkingItem.sprite = new ImageIcon(getClass().getResource("/data/kingkaleblinking.png")).getImage();
 		
 		HatBaseball.hatsprite = new ImageIcon(getClass().getResource("/data/hatbaseball.png")).getImage();
-		HatBaseball.addSprite = new ImageIcon(getClass().getResource("/data/addhatbaseball.png")).getImage();
 		HatBowler.hatsprite = new ImageIcon(getClass().getResource("/data/hatbowler.png")).getImage();
-		HatBowler.addSprite = new ImageIcon(getClass().getResource("/data/addhatbowler.png")).getImage();
 		HatFedora.hatsprite = new ImageIcon(getClass().getResource("/data/hatfedora.png")).getImage();
-		HatFedora.addSprite = new ImageIcon(getClass().getResource("/data/addhatfedora.png")).getImage();
 		HatPanama.hatsprite = new ImageIcon(getClass().getResource("/data/hatpanama.png")).getImage();
-		HatPanama.addSprite = new ImageIcon(getClass().getResource("/data/addhatpanama.png")).getImage();
 		HatSherlock.hatsprite = new ImageIcon(getClass().getResource("/data/hatsherlock.png")).getImage();
-		HatSherlock.addSprite = new ImageIcon(getClass().getResource("/data/addhatsherlock.png")).getImage();
 		HatTop.hatsprite = new ImageIcon(getClass().getResource("/data/hattop.png")).getImage();
-		HatTop.addSprite = new ImageIcon(getClass().getResource("/data/addhattop.png")).getImage();
 
 		grinningsprite = new ImageIcon(getClass().getResource("/data/grin.png")).getImage();
 		
@@ -736,187 +715,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		 * anim.addFrame(character2, 50); currentSprite = anim.getImage();
 		 */
 	}
-	
-	private void settingsUI(){
-		if (null == iconScreen) {
-			iconScreen = new ImageIcon(getClass().getResource("/data/icon3.png")).getImage();
-			this.setIconImage(iconScreen);
-		
-			setLayout(new BorderLayout());
-			setContentPane(new JLabel(new ImageIcon(getClass().getResource("/data/menuScreen.png"))));
-			
-			setLayout(null);
-		}
-		
-		JButton azertyButton = new JButton(new ImageIcon((azerty)?(getClass().getResource("/data/buttonAzertyRed.png")):(getClass().getResource("/data/buttonQwertyRed.png"))));
-		azertyButton.setRolloverIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonAzertyWhite.png")):(getClass().getResource("/data/buttonQwertyWhite.png"))));
-		
-
-		azertyButton.setBorderPainted(false);
-		azertyButton.setContentAreaFilled(false);
-		
-		add(azertyButton);
-		
-		JButton mainMenuButton = new JButton(new ImageIcon((getClass().getResource("/data/buttonMainMenuRed.png"))));
-		mainMenuButton.setRolloverIcon(new ImageIcon((getClass().getResource("/data/buttonMainMenuWhite.png"))));
-
-		mainMenuButton.setBorderPainted(false);
-		mainMenuButton.setContentAreaFilled(false);
-		
-		add(mainMenuButton);
-		
-		JButton musicButton = new JButton(new ImageIcon((playMusic)?(getClass().getResource("/data/buttonMusicOnRed.png")):(getClass().getResource("/data/buttonMusicOffRed.png"))));
-		musicButton.setRolloverIcon(new ImageIcon((playMusic)?(getClass().getResource("/data/buttonMusicOnWhite.png")):(getClass().getResource("/data/buttonMusicOffWhite.png"))));
-		
-		musicButton.setBorderPainted(false);
-		musicButton.setContentAreaFilled(false);
-		
-		add(musicButton);
-		
-		azertyButton.setBounds(500, 15, 150, 75);
-		mainMenuButton.setBounds(150, 15, 150, 75);
-		musicButton.setBounds(800, 15, 150, 75);
-		
-		JLabel moveUpButton = new JLabel(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsZ.png")):(getClass().getResource("/data/buttonSettingsW.png"))));
-		JLabel moveDownButton = new JLabel(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsS.png")):(getClass().getResource("/data/buttonSettingsS.png"))));
-		JLabel moveLeftButton = new JLabel(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsQ.png")):(getClass().getResource("/data/buttonSettingsA.png"))));
-		JLabel moveRightButton = new JLabel(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsD.png")):(getClass().getResource("/data/buttonSettingsD.png"))));
-		JLabel shootUpButton = new JLabel(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsArrowUp.png")):(getClass().getResource("/data/buttonSettingsW.png"))));
-		JLabel shootDownButton = new JLabel(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsArrowDown.png")):(getClass().getResource("/data/buttonSettingsW.png"))));
-		JLabel shootLeftButton = new JLabel(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsArrowLeft.png")):(getClass().getResource("/data/buttonSettingsW.png"))));
-		JLabel shootRightButton = new JLabel(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsArrowRight.png")):(getClass().getResource("/data/buttonSettingsW.png"))));
-		JLabel weaponsButton = new JLabel(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsE.png")):(getClass().getResource("/data/buttonSettingsE.png"))));
-		JLabel armorsButton = new JLabel(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsA.png")):(getClass().getResource("/data/buttonSettingsQ.png"))));
-		JLabel hatsButton = new JLabel(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsH.png")):(getClass().getResource("/data/buttonSettingsH.png"))));
-		JLabel pauseButton = new JLabel(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsSpace.png")):(getClass().getResource("/data/buttonSettingsSpace.png"))));
-		JLabel quitButton = new JLabel(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsEsc.png")):(getClass().getResource("/data/buttonSettingsEsc.png"))));
-		add(moveUpButton);
-		add(moveDownButton);
-		add(moveLeftButton);
-		add(moveRightButton);
-		add(shootUpButton);
-		add(shootDownButton);
-		add(shootLeftButton);
-		add(shootRightButton);
-		add(weaponsButton);
-		add(armorsButton);
-		add(hatsButton);
-		add(pauseButton);
-		add(quitButton);
-		moveUpButton.setBounds(800, 125, 200, 25);
-		moveDownButton.setBounds(800, 175, 200, 25);
-		moveLeftButton.setBounds(800, 225, 200, 25);
-		moveRightButton.setBounds(800, 275, 200, 25);
-		shootUpButton.setBounds(800, 325, 200, 25);
-		shootDownButton.setBounds(800, 375, 200, 25);
-		shootLeftButton.setBounds(800, 425, 200, 25);
-		shootRightButton.setBounds(800, 475, 200, 25);
-		weaponsButton.setBounds(800, 525, 200, 25);
-		armorsButton.setBounds(800, 575, 200, 25);
-		hatsButton.setBounds(800, 625, 200, 25);
-		pauseButton.setBounds(800, 675, 200, 25);
-		quitButton.setBounds(800, 725, 200, 25);
-		
-		azertyButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if (azerty == false) {
-					azertyButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonAzertyRed.png")));
-					azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonAzertyWhite.png")));
-					azerty = true;
-				} else {
-					azertyButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonQwertyRed.png")));
-					azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonQwertyWhite.png")));
-					azerty = false;
-				}
-				moveUpButton.setIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsZ.png")):(getClass().getResource("/data/buttonSettingsW.png"))));
-				moveDownButton.setIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsS.png")):(getClass().getResource("/data/buttonSettingsS.png"))));
-				moveLeftButton.setIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsQ.png")):(getClass().getResource("/data/buttonSettingsA.png"))));
-				moveRightButton.setIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsD.png")):(getClass().getResource("/data/buttonSettingsD.png"))));
-				shootUpButton.setIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsArrowUp.png")):(getClass().getResource("/data/buttonSettingsArrowUp.png"))));
-				shootDownButton.setIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsArrowDown.png")):(getClass().getResource("/data/buttonSettingsArrowDown.png"))));
-				shootLeftButton.setIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsArrowLeft.png")):(getClass().getResource("/data/buttonSettingsArrowLeft.png"))));
-				shootRightButton.setIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsArrowRight.png")):(getClass().getResource("/data/buttonSettingsArrowRight.png"))));
-				weaponsButton.setIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsE.png")):(getClass().getResource("/data/buttonSettingsE.png"))));
-				armorsButton.setIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsA.png")):(getClass().getResource("/data/buttonSettingsQ.png"))));
-				hatsButton.setIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsH.png")):(getClass().getResource("/data/buttonSettingsH.png"))));
-				pauseButton.setIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsSpace.png")):(getClass().getResource("/data/buttonSettingsSpace.png"))));
-				quitButton.setIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsEsc.png")):(getClass().getResource("/data/buttonSettingsEsc.png"))));
-			}
-		});
-		
-		mainMenuButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-            	contentPane = getContentPane();
-    			contentPane.removeAll();
-    			contentPane.invalidate();
-            	initUI();
-				me.validate();
-				me.repaint();
-            	//state = GameState.Running;
-            }
-        });
-		
-		musicButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if(playMusic){
-					musicButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonMusicOffRed.png")));
-					musicButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonMusicOffWhite.png")));
-					playMusic = false;
-				} else {
-					musicButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonMusicOnRed.png")));
-					musicButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonMusicOnWhite.png")));
-					playMusic = true;
-				}
-			}
-		});
-		
-		JLabel moveUpLabel = new JLabel(new ImageIcon((getClass().getResource("/data/buttonSettingsMoveUp.png"))));
-		JLabel moveDownLabel = new JLabel(new ImageIcon((getClass().getResource("/data/buttonSettingsMoveDown.png"))));
-		JLabel moveLeftLabel = new JLabel(new ImageIcon((getClass().getResource("/data/buttonSettingsMoveLeft.png"))));
-		JLabel moveRightLabel = new JLabel(new ImageIcon((getClass().getResource("/data/buttonSettingsMoveRight.png"))));
-		JLabel shootUpLabel = new JLabel(new ImageIcon((getClass().getResource("/data/buttonSettingsShootUp.png"))));
-		JLabel shootDownLabel = new JLabel(new ImageIcon((getClass().getResource("/data/buttonSettingsShootDown.png"))));
-		JLabel shootLeftLabel = new JLabel(new ImageIcon((getClass().getResource("/data/buttonSettingsShootLeft.png"))));
-		JLabel shootRightLabel = new JLabel(new ImageIcon((getClass().getResource("/data/buttonSettingsShootRight.png"))));
-		JLabel weaponsLabel = new JLabel(new ImageIcon((getClass().getResource("/data/buttonSettingsWeapons.png"))));
-		JLabel armorsLabel = new JLabel(new ImageIcon((getClass().getResource("/data/buttonSettingsArmors.png"))));
-		JLabel hatsLabel = new JLabel(new ImageIcon((getClass().getResource("/data/buttonSettingsHats.png"))));
-		JLabel pauseLabel = new JLabel(new ImageIcon((getClass().getResource("/data/buttonSettingsPause.png"))));
-		JLabel quitLabel = new JLabel(new ImageIcon((getClass().getResource("/data/buttonSettingsQuit.png"))));
-		add(moveUpLabel);
-		add(moveDownLabel);
-		add(moveLeftLabel);
-		add(moveRightLabel);
-		add(shootUpLabel);
-		add(shootDownLabel);
-		add(shootLeftLabel);
-		add(shootRightLabel);
-		add(weaponsLabel);
-		add(armorsLabel);
-		add(hatsLabel);
-		add(pauseLabel);
-		add(quitLabel);
-		moveUpLabel.setBounds(650, 125, 200, 25);
-		moveDownLabel.setBounds(650, 175, 200, 25);
-		moveLeftLabel.setBounds(650, 225, 200, 25);
-		moveRightLabel.setBounds(650, 275, 200, 25);
-		shootUpLabel.setBounds(650, 325, 200, 25);
-		shootDownLabel.setBounds(650, 375, 200, 25);
-		shootLeftLabel.setBounds(650, 425, 200, 25);
-		shootRightLabel.setBounds(650, 475, 200, 25);
-		weaponsLabel.setBounds(650, 525, 200, 25);
-		armorsLabel.setBounds(650, 575, 200, 25);
-		hatsLabel.setBounds(650, 625, 200, 25);
-		pauseLabel.setBounds(650, 675, 200, 25);
-		quitLabel.setBounds(650, 725, 200, 25);
-		
-		
-		
-		
-	}
 
 	private void initUI() {
 		if (null == iconScreen) {
@@ -952,6 +750,15 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		quitButton.setContentAreaFilled(false);
 		
 		add(quitButton);
+		
+		JButton azertyButton = new JButton(new ImageIcon((azerty)?(getClass().getResource("/data/buttonAzertyRed.png")):(getClass().getResource("/data/buttonQwertyRed.png"))));
+		azertyButton.setRolloverIcon(new ImageIcon((azerty)?(getClass().getResource("/data/buttonAzertyWhite.png")):(getClass().getResource("/data/buttonQwertyWhite.png"))));
+		
+
+		azertyButton.setBorderPainted(false);
+		azertyButton.setContentAreaFilled(false);
+		
+		add(azertyButton);
 		
 		final JButton levelButton = new JButton(new ImageIcon(getClass().getResource("/data/buttonLevel1Red.png")));
 		levelButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonLevel1White.png")));
@@ -1077,6 +884,23 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		
 		levelButton.setBounds(1100, 15, 150, 75);
 		diffButton.setBounds(1100, 110, 150, 75);
+		
+		azertyButton.setBounds(300, 15, 150, 75);		
+
+		azertyButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if (azerty == false) {
+					azertyButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonAzertyRed.png")));
+					azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonAzertyWhite.png")));
+					azerty = true;
+				} else {
+					azertyButton.setIcon(new ImageIcon(getClass().getResource("/data/buttonQwertyRed.png")));
+					azertyButton.setRolloverIcon(new ImageIcon(getClass().getResource("/data/buttonQwertyWhite.png")));
+					azerty = false;
+				}
+			}
+		});
 		
 		levelButton.addMouseListener(new MouseAdapter(){
             boolean pressed;
@@ -1299,18 +1123,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 				System.exit(0);
 			}
 		});
-		
-		settingsButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				contentPane = getContentPane();
-    			contentPane.removeAll();
-    			contentPane.invalidate();
-				settingsUI();
-				me.validate();
-				me.repaint();
-			}
-		});
 
 		/*createLayout(startButton);
 		createLayout(settingsButton);
@@ -1372,22 +1184,20 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		maskphase = 1;
 		/*if (clip != null && clip.isOpen())
 			clip.close();*/
-		if (playMusic){
-			if (clip != null)
-				clip.close();
-			URL url = getClass().getResource("/data/"+Level.getClip(currentlevel));
-			try {
-				clip = AudioSystem.getClip();
-				AudioInputStream ais = AudioSystem.getAudioInputStream(url);
-				clip.open(ais);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-			gainControl.setValue(-15.0f);
-	
-			clip.loop(Clip.LOOP_CONTINUOUSLY);
+		if (clip != null)
+			clip.close();
+		URL url = getClass().getResource("/data/"+Level.getClip(currentlevel));
+		try {
+			clip = AudioSystem.getClip();
+			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+			clip.open(ais);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+		gainControl.setValue(-15.0f);
+
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(filename)));
 		String line;
@@ -2521,7 +2331,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 							g.drawImage(e.currentSprite, e.getCenterX() - e.halfsizex, e.getCenterY() - e.halfsizey,
 									this);
 						}
-						if (e.showHealthBar && showUI) {
+						if (e.showHealthBar) {
 							g.setColor(Color.GREEN);
 							int lifetaken = (int) ((e.getMaxHealth() - e.getHealth()) * e.halfbarx * 2)
 									/ e.getMaxHealth();
@@ -2592,7 +2402,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 			// p.getR().height);
 			g.drawImage(p.getSprite(), p.getCenterX() - p.halfsize, p.getCenterY() - p.halfsize, this);
 		}
-		if (showPlayerHealthBar && showUI) {
+		if (showPlayerHealthBar) {
 			g.setColor(Color.GREEN);
 			int lifetaken = (int) ((20 + player.getArmor().MAXDEF - player.getHealth()
 					- player.getArmor().getDefense()) * 44) / (20 + player.getArmor().MAXDEF);
@@ -2608,33 +2418,29 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		}
 		paintItemsEffectAbove(g,stx,fx,sty,fy);
 		
-		if(showUI){
-			g.setFont(new Font ("AR DESTINE", Font.LAYOUT_LEFT_TO_RIGHT, 15));
-			
-			g.setColor(Color.DARK_GRAY);
-			g.fillRect(32, 37, 200, 20);
-			g.setColor(Color.RED);
-			g.fillRect(32, 37, ((int) player.getHealth())*10 , 20);
-			g.setColor(Color.WHITE);
-			g.drawString("HP: "+Integer.toString((int) player.getHealth()), 35, 51);
-			
-			g.setColor(Color.DARK_GRAY);
-			g.fillRect(32, 57, ((int) player.getArmor().MAXDEF)*10, 20);
-			g.setColor(Color.BLUE);
-			g.fillRect(32, 57, ((int) player.getArmor().defense)*10, 20);
-			g.setColor(Color.WHITE);
-			g.drawString("Armor: "+Integer.toString((int) player.getArmor().defense), 35, 71);
-			
-			g.setColor(Color.DARK_GRAY);
-			g.fillRect(247, 42, 295, 25);
-			g.setFont(new Font ("AR DESTINE", Font.BOLD, 20));
-			g.setColor(Color.WHITE);
-			g.drawString("Dmg:"+Math.round(player.getWeapon().getProjectiledmg()*100.0)/100.0, 250, 60);
-			g.drawString("APS:"+String.format("%.2f",(float)100.0/player.getWeapon().getFireRate()), 345, 60);
-			g.drawString("Rng:"+Integer.toString((int) player.getWeapon().getRange()), 450, 60);	
-		}
+		g.setFont(new Font ("AR DESTINE", Font.LAYOUT_LEFT_TO_RIGHT, 15));
 		
-		if (TESTMODE && showUI) {
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(32, 37, 200, 20);
+		g.setColor(Color.RED);
+		g.fillRect(32, 37, ((int) player.getHealth())*10 , 20);
+		g.setColor(Color.WHITE);
+		g.drawString("HP: "+Integer.toString((int) player.getHealth()), 35, 51);
+		
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(32, 57, ((int) player.getArmor().MAXDEF)*10, 20);
+		g.setColor(Color.BLUE);
+		g.fillRect(32, 57, ((int) player.getArmor().defense)*10, 20);
+		g.setColor(Color.WHITE);
+		g.drawString("Armor: "+Integer.toString((int) player.getArmor().defense), 35, 71);
+		
+		g.setFont(new Font ("AR DESTINE", Font.BOLD, 20));
+		g.setColor(Color.YELLOW);
+		g.drawString(""+Math.round(player.getWeapon().getProjectiledmg()*100.0)/100.0, 260, 75);
+		g.drawString(Integer.toString((int) player.getWeapon().getFireRate()), 300, 75);
+		g.drawString(Integer.toString((int) player.getWeapon().getRange()), 340, 75);
+		
+		if (TESTMODE) {
 			g.setColor(Color.DARK_GRAY);
 			g.fillRect(1200, 37, 20, 20);
 			g.fillRect(1230, 37, 45, 20);
@@ -3153,12 +2959,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		case KeyEvent.VK_SPACE:
 			if (state == GameState.Paused) {
 				state = GameState.Running;
-				if (clip != null && playMusic)
-					clip.loop(Clip.LOOP_CONTINUOUSLY);
+				clip.loop(Clip.LOOP_CONTINUOUSLY);
 			} else if (state == GameState.Running) {
 				state = GameState.Paused;
-				if (clip != null && playMusic)
-					clip.stop();
+				clip.stop();
 			}
 			break;
 		case KeyEvent.VK_C:
