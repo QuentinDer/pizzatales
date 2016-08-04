@@ -6,6 +6,8 @@ public class Oniough extends Enemy {
 
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
 	public static Image onioughStomp1, onioughStomp2, intermediateDieSprite;
+	public static Image onioughShootLeft, onioughShootRight, onioughShootDown, onioughShootUp;
+	public static Image onioughShootLeftUp, onioughShootLeftDown, onioughShootRightUp, onioughShootRightDown;
 	
 	private int firecd;
 	private int firemaxcd0, firemaxcd1, firemaxcd2;
@@ -73,8 +75,12 @@ public class Oniough extends Enemy {
 		
 		if (firingmodecd > 0)
 			firingmodecd--;
-		if (firecd > 0)
+		if (firecd > 0) {
 			firecd--;
+			if (firecd == 0) {
+				currentSprite = staySprite;
+			}
+		}
 		if (earthshakingcd > 0)
 			earthshakingcd--;
 		if (earthshaking > 0) {
@@ -113,7 +119,7 @@ public class Oniough extends Enemy {
 					player.setScrollingSpeedY(-4);
 			}
 		}
-		if (earthshaking == 0 && movementTime % 3 == 0) {
+		if (earthshaking == 0 && movementTime % 3 == 0 && firecd == 0) {
 			StartingClass.map[player.posx][player.posy] = null;
 			int dirplace = 0;
 			int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
@@ -187,6 +193,7 @@ public class Oniough extends Enemy {
 			stopMoving();
 			earthshaking = earthshakingtime;
 			earthshakingcd = earthshakingmaxcd;
+			firecd = 0;
 		}
 		if (firingmodecd == 0) {
 			firingmode = (firingmode+1)%3;
@@ -196,19 +203,68 @@ public class Oniough extends Enemy {
 			float diffx = player.getCenterX() - getCenterX();
 			float diffy = player.getCenterY() - getCenterY();
 			float dist = (float)Math.sqrt(Math.abs(diffx)*Math.abs(diffx)+Math.abs(diffy)*Math.abs(diffy));
+			
+			switch (firingmode) {
+			case 0:
+				if (dist > 500)
+					return;
+				break;
+			case 1:
+				if (dist > 300)
+					return;
+				break;
+			case 2:
+				break;
+			}
+			
 			float vectorx = diffx / dist;
 			float vectory = diffy / dist;
+			stopMoving();
+			int angleS;
+			if (vectory >= 0)
+				angleS = (int)(Math.toDegrees(Math.acos(vectorx))+22.5);
+			else {
+				angleS = 360 - (int)(Math.toDegrees(Math.acos(vectorx))-22.5);
+			}
+			int angdir = (angleS % 360) / 45;
+			switch (angdir) {
+			case 0:
+				currentSprite = onioughShootRight;
+				break;
+			case 1:
+				currentSprite = onioughShootRightDown;
+				break;
+			case 2:
+				currentSprite = onioughShootDown;
+				break;
+			case 3:
+				currentSprite = onioughShootLeftDown;
+				break;
+			case 4:
+				currentSprite = onioughShootLeft;
+				break;
+			case 5:
+				currentSprite = onioughShootLeftUp;
+				break;
+			case 6:
+				currentSprite = onioughShootUp;
+				break;
+			case 7:
+				currentSprite = onioughShootRightUp;
+				break;
+			}
+			
 			switch(firingmode) {
 			case 0:
-				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,10,500));
+				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,15,500));
 				firecd = firemaxcd0;
 				break;
 			case 1:
-				diffx = player.getCenterX() - getCenterX();
+				/*diffx = player.getCenterX() - getCenterX();
 				diffy = player.getCenterY() - getCenterY();
 				dist = (float)Math.sqrt(Math.abs(diffx)*Math.abs(diffx)+Math.abs(diffy)*Math.abs(diffy));
 				vectorx = diffx / dist;
-				vectory = diffy / dist;
+				vectory = diffy / dist;*/
 				double angle = Math.toDegrees(Math.acos(vectorx));
 				if (vectory < 0)
 					angle = 360-angle;
@@ -291,7 +347,7 @@ public class Oniough extends Enemy {
 	
 	@Override
 	public void animate(){
-		if (earthshaking == 0 && isMoving) {
+		if (earthshaking == 0 && isMoving && firecd == 0) {
 			walkCounter++;
 			if (getSpeedX() <= 0) {
 				if (walkCounter == 1000)

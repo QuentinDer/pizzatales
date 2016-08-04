@@ -581,6 +581,16 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Oniough.onioughStomp2 = new ImageIcon(getClass().getResource("/data/onioughStomp2.png")).getImage();
 		Oniough.dieSprite = new ImageIcon(getClass().getResource("/data/onioughdead.png")).getImage();
 		Oniough.intermediateDieSprite = new ImageIcon(getClass().getResource("/data/onioughdying.png")).getImage();
+		
+		Oniough.onioughShootDown = new ImageIcon(getClass().getResource("/data/onioughShootDown.png")).getImage();
+		Oniough.onioughShootLeft = new ImageIcon(getClass().getResource("/data/onioughShootLeft.png")).getImage();
+		Oniough.onioughShootRight = new ImageIcon(getClass().getResource("/data/onioughShootRight.png")).getImage();
+		Oniough.onioughShootUp = new ImageIcon(getClass().getResource("/data/onioughShootUp.png")).getImage();
+		Oniough.onioughShootLeftDown = new ImageIcon(getClass().getResource("/data/onioughShootDownLeft.png")).getImage();
+		Oniough.onioughShootLeftUp = new ImageIcon(getClass().getResource("/data/onioughShootUpLeft.png")).getImage();
+		Oniough.onioughShootRightDown = new ImageIcon(getClass().getResource("/data/onioughShootDownRight.png")).getImage();
+		Oniough.onioughShootRightUp = new ImageIcon(getClass().getResource("/data/onioughShootUpRight.png")).getImage();
+		
 		Garlnstein.staySprite = new ImageIcon(getClass().getResource("/data/garlnstein.png")).getImage();
 		Garlnstein.move1Sprite = new ImageIcon(getClass().getResource("/data/garlnsteinWalk1.png")).getImage();
 		Garlnstein.move2Sprite = new ImageIcon(getClass().getResource("/data/garlnsteinWalk2.png")).getImage();
