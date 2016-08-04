@@ -508,8 +508,10 @@ public class CarolinaReaper extends Enemy {
 						streamtoy = player.getCenterY() + (Math.abs(player.getCenterX()-centerX)+Math.abs(player.getCenterY()-centerY))*player.getSpeedY()/12;
 					}*/
 				}
-				float vectorX = (streamtox-centerX)/(float)(Math.abs(streamtox-centerX)+Math.abs(streamtoy-centerY));
-				float vectorY = (streamtoy-centerY)/(float)(Math.abs(streamtox-centerX)+Math.abs(streamtoy-centerY));
+				
+				float dist = (float)(Math.sqrt(Math.abs(streamtox-centerX)*Math.abs(streamtox-centerX)+Math.abs(streamtoy-centerY)*Math.abs(streamtoy-centerY)));
+				float vectorX = (streamtox-centerX)/dist;
+				float vectorY = (streamtoy-centerY)/dist;
 				projectiles.add(new FlamerFlame(centerX, centerY, vectorX, vectorY, 10, streamdmg, streamrange));
 				if (Math.abs(streamtox-centerX) > Math.abs(streamtoy-centerY)) {
 					if (streamtox > centerX)

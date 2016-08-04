@@ -354,7 +354,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		PepperoniArmor.movespriteLeft2 = new ImageIcon(getClass().getResource("/data/pepperoniLeft2.png")).getImage();
 		PepperoniArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/pepperoniRight1.png")).getImage();
 		PepperoniArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/pepperoniRight2.png")).getImage();
-		PepperoniArmor.deathSprite = new ImageIcon(getClass().getResource("/data/addmargherita.png")).getImage();
+		PepperoniArmor.deathSprite = new ImageIcon(getClass().getResource("/data/pepperoniDead.png")).getImage();
 
 		tileTree = new ImageIcon(getClass().getResource("/data/tree.png")).getImage();
 		//tileGrass = new ImageIcon(getClass().getResource("/data/grass.png")).getImage();
