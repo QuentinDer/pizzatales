@@ -74,7 +74,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private Image iconScreen;
 	public static Image tileTree, /*tileGrass, */tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit,
 			tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel, tileCandelabrum, 
-			tileCrate, tileChest, tileBlack, tileChestOpen, tilePineTree, tileMudWall, tileSnowRock, tileSky;
+			tileCrate, tileChest, tileBlack, tileChestOpen, tilePineTree, tileMudWall, tileSnowRock;
 	private Graphics second;
 	private static Background bg;
 	private static PathFinder pf;
@@ -377,7 +377,7 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		tilePineTree = new ImageIcon(getClass().getResource("/data/pinetree.png")).getImage();
 		tileSnowRock = new ImageIcon(getClass().getResource("/data/snowrock.png")).getImage();
 		tileMudWall = new ImageIcon(getClass().getResource("/data/mudwall.png")).getImage();
-		tileSky = new ImageIcon(getClass().getResource("/data/sky.png")).getImage();
+		BackgroundFactory.sky = new ImageIcon(getClass().getResource("/data/sky.png")).getImage();
 		
 		BackgroundFactory.grass = new ImageIcon(getClass().getResource("/data/grass.png")).getImage();
 		BackgroundFactory.cave = new ImageIcon(getClass().getResource("/data/cavefloor.png")).getImage();
@@ -404,6 +404,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		
 		for (int i = 1; i < 16; i++)
 			Level.brickset[i] = new ImageIcon(StartingClass.class.getResource("/data/brick"+i+".png")).getImage();
+		
+		Level.skyset[1] = new ImageIcon(StartingClass.class.getResource("/data/skyset1.png")).getImage();
+		Level.skyset[3] = new ImageIcon(StartingClass.class.getResource("/data/skyset3.png")).getImage();
+		Level.skyset[5] = new ImageIcon(StartingClass.class.getResource("/data/skyset5.png")).getImage();
 		
 		blooddrop = new ImageIcon(getClass().getResource("/data/blooddrop.png")).getImage();
 		Gun.leftSprite = new ImageIcon(getClass().getResource("/data/pistol1.png")).getImage();
@@ -455,6 +459,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		Rocket.upSprite = new ImageIcon(getClass().getResource("/data/rocket4.png")).getImage();
 		Rocket.url = getClass().getResource("/data/rocket.wav");
 		Rocket.addSprite = new ImageIcon(getClass().getResource("/data/addrocket.png")).getImage();
+		Rocket.leftSpriteUp = new ImageIcon(getClass().getResource("/data/rocket8.png")).getImage();
+		Rocket.rightUpSprite = new ImageIcon(getClass().getResource("/data/rocket5.png")).getImage();
+		Rocket.leftDownSprite = new ImageIcon(getClass().getResource("/data/rocket7.png")).getImage();
+		Rocket.rightDownSprite = new ImageIcon(getClass().getResource("/data/rocket6.png")).getImage();
 		BazookaBullet.bulletspriteLeft = new ImageIcon(getClass().getResource("/data/rocketprojectileleft.png"))
 				.getImage();
 		BazookaBullet.bulletspriteRight = new ImageIcon(getClass().getResource("/data/rocketprojectileright.png"))
@@ -462,6 +470,10 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		BazookaBullet.bulletspriteUp = new ImageIcon(getClass().getResource("/data/rocketprojectileup.png")).getImage();
 		BazookaBullet.bulletspriteDown = new ImageIcon(getClass().getResource("/data/rocketprojectiledown.png"))
 				.getImage();
+		BazookaBullet.bulletleftdown = new ImageIcon(getClass().getResource("/data/rocketprojectiledownleft.png")).getImage();
+		BazookaBullet.bulletrightdown = new ImageIcon(getClass().getResource("/data/rocketprojectiledownright.png")).getImage();
+		BazookaBullet.bulletrightup = new ImageIcon(getClass().getResource("/data/rocketprojectileupright.png")).getImage();
+		BazookaBullet.bulletleftup = new ImageIcon(getClass().getResource("/data/rocketprojectileupleft.png")).getImage();
 		Smg.leftSprite = new ImageIcon(getClass().getResource("/data/smg1.png")).getImage();
 		Smg.rightSprite = new ImageIcon(getClass().getResource("/data/smg2.png")).getImage();
 		Smg.downSprite = new ImageIcon(getClass().getResource("/data/smg3.png")).getImage();
@@ -664,7 +676,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		WaterPuddle.sprite = new ImageIcon(getClass().getResource("/data/puddle.png")).getImage();
 		WoodBridge.sprite = new ImageIcon(getClass().getResource("/data/woodbridge.png")).getImage();
 		PizzaBox.pizzaboxsprite = new ImageIcon(getClass().getResource("/data/pizzabox.png")).getImage();
-		Carpet.sprite = new ImageIcon(getClass().getResource("/data/carpet.png")).getImage();
+		//Carpet.sprite = new ImageIcon(getClass().getResource("/data/carpet.png")).getImage();
+		BackgroundFactory.carpet = new ImageIcon(getClass().getResource("/data/carpet.png")).getImage();
 		CrateOpen.sprite = new ImageIcon(getClass().getResource("/data/crateopen.png")).getImage();
 		ReaperBlinkingItem.sprite = new ImageIcon(getClass().getResource("/data/reaperblinkingpos.png")).getImage();
 		ReaperTrap.pizzatrap = new ImageIcon(getClass().getResource("/data/pizzatrap.png")).getImage();

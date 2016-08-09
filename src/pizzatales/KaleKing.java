@@ -35,7 +35,7 @@ public class KaleKing extends Enemy {
 	private boolean boltsenabled;
 	private int boltsfiring, boltsfiringduration;
 	private int boltsfirerate, boltscirclerange, boltsbasefirerate;
-	private int phasegroundrate, phaseanimrate;
+	private int phasegroundrate, phaseanimrate, phaseanimmaxrate;
 	private int darkiceprisoncd, darkiceprisonmaxcd;
 	private int darkiceprisonrate, darkiceprisoncircle, darkiceprison;
 	private int darkiceprisoncx, darkiceprisoncy;//, darkiceprisonfx, darkiceprisonfy;
@@ -105,7 +105,7 @@ public class KaleKing extends Enemy {
 		boltsfiringduration = 120;
 		//this.applet = applet;
 		phasegroundrate = 10;
-		phaseanimrate = 7;
+		phaseanimmaxrate = 7;
 		darkicedmg = 3.f;
 		darkiced = 50;
 		dashdmg = 5;
@@ -127,7 +127,7 @@ public class KaleKing extends Enemy {
 			dashmaxcd = 360;
 			dashspeed = 6;
 			idarkcircle = 2;
-			darkicer = 150;
+			darkicer = 90;
 			hulkmaxcd = 1200;
 			hulkduration = 300;
 			hulkspeed = 3.0f;
@@ -153,7 +153,7 @@ public class KaleKing extends Enemy {
 			dashmaxcd = 300;
 			dashspeed = 7;
 			idarkcircle = 3;
-			darkicer = 120;
+			darkicer = 80;
 			hulkmaxcd = 1000;
 			hulkduration = 360;
 			hulkspeed = 3.5f;
@@ -179,7 +179,7 @@ public class KaleKing extends Enemy {
 			dashmaxcd = 240;
 			dashspeed = 8;
 			idarkcircle = 4;
-			darkicer = 90;
+			darkicer = 70;
 			hulkmaxcd = 800;
 			hulkduration = 420;
 			hulkspeed = 4.0f;
@@ -838,7 +838,7 @@ public class KaleKing extends Enemy {
 			break;
 		case 3:
 			iceboltdmg = 0;
-			iceboltspeed = 6;
+			iceboltspeed = 5;
 			boltsfiringduration = 90;
 			boltsfirerate = 50;
 			iceboltrange = 800;
@@ -1310,9 +1310,11 @@ public class KaleKing extends Enemy {
 		stopMoving();
 		animsprite = 0;
 		currentSprite = phaseanim.get(0);
-		//TODO
 		
 		isAnimating = true;
+		
+		//TODO
+		phaseanimrate = phaseanimmaxrate - 3*Math.abs(posx-(StartingClass.maskmaxx+StartingClass.maskmaxy)/2)/((StartingClass.maskmaxx+StartingClass.maskmaxy)/2);
 		
 		halfsizex = 112;
 		halfsizey = 100;
@@ -1404,7 +1406,7 @@ public class KaleKing extends Enemy {
 			StartingClass.destroyabletiles.add(b);
 			break;
 		case 5:
-			ans = Carpet.sprite;
+			ans = BackgroundFactory.carpet;
 			break;
 		case 6:
 			h = 0;
@@ -1431,7 +1433,6 @@ public class KaleKing extends Enemy {
 	
 	@Override
 	public void damage(float projdmg) {
-		//TODO
 		if (!isAnimating && hulking == 0) {
 			cdmg += projdmg;
 			health -= projdmg;
@@ -1526,6 +1527,7 @@ public class KaleKing extends Enemy {
 	@Override
 	public void setIntermediateDieSprite() {
 		currentSprite = intermediateDieSprite;
+		isDashing = false;
 	}
 
 }

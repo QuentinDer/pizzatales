@@ -12,6 +12,7 @@ public class Level {
 	public static Image[] icesetm = new Image[16];
 	public static Image[] caveset = new Image[16];
 	public static Image[] brickset = new Image[16];
+	public static Image[] skyset = new Image[16];
 	
 	public static String getMapName(int level) {
 		if (level == -1)
@@ -170,6 +171,7 @@ public class Level {
 		case 4:
 			break;
 		case 5:
+			MapUtil.bitmask(background, mask, BackgroundFactory.snow, BackgroundFactory.sky, skyset, 0);
 			MapUtil.bitmask(background, mask, BackgroundFactory.mountain, BackgroundFactory.snow, mountainset,0);
 			MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.mountain, icesetm,1);
 			MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.snow, iceset,2);
@@ -204,11 +206,14 @@ public class Level {
 		case 4:
 			break;
 		case 5:
+			
 			switch(phase) {
 			case 1:
-				
+				MapUtil.bitmask(background, mask, BackgroundFactory.snow, BackgroundFactory.sky, skyset, 0, minx, maxx, miny, maxy);
 				break;
 			case 2:
+				MapUtil.bitmask(background, mask, BackgroundFactory.snow, BackgroundFactory.sky, skyset, 1, minx, maxx, miny, maxy);
+				MapUtil.bitmask(background, mask, BackgroundFactory.dirt, BackgroundFactory.sky, skyset, 1, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, BackgroundFactory.mountain, BackgroundFactory.grass, dirtset, 0, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, BackgroundFactory.snow, BackgroundFactory.grass, dirtset, 0, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, BackgroundFactory.dirt, BackgroundFactory.grass, dirtset,0, minx, maxx, miny, maxy);
@@ -219,6 +224,7 @@ public class Level {
 				MapUtil.bitmask(background, mask, BackgroundFactory.dirt, BackgroundFactory.snow, iceset,2, minx, maxx, miny, maxy);
 				break;
 			case 3:
+				MapUtil.bitmask(background, mask, BackgroundFactory.dirt, BackgroundFactory.sky, skyset, 1, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, BackgroundFactory.dirt, BackgroundFactory.grass, dirtset,0, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.grass, dirtset,1, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.dirt, dirtiset,2, minx, maxx, miny, maxy);
@@ -228,6 +234,8 @@ public class Level {
 				break;
 			case 4:
 				MapUtil.bitmask(background, mask, BackgroundFactory.dirt, BackgroundFactory.grass, dirtset,0, minx, maxx, miny, maxy);
+				MapUtil.bitmask(background, mask, BackgroundFactory.dirt, BackgroundFactory.sky, skyset, 1, minx, maxx, miny, maxy);
+				MapUtil.bitmask(background, mask, BackgroundFactory.lava, BackgroundFactory.sky, skyset, 1, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, BackgroundFactory.cave, BackgroundFactory.grass, dirtset,1, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, BackgroundFactory.cave, BackgroundFactory.dirt, dirtiset,1, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.grass, dirtset,1, minx, maxx, miny, maxy);
@@ -239,10 +247,12 @@ public class Level {
 				MapUtil.bitmask(background, mask, BackgroundFactory.dirt, BackgroundFactory.snow, iceset,2, minx, maxx, miny, maxy);
 				break;
 			case 5:
+				MapUtil.bitmask(background, mask, BackgroundFactory.lava, BackgroundFactory.sky, skyset, 1, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.cave, caveset,1, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, SummonedIce.healingice, BackgroundFactory.cave, caveset,2, minx, maxx, miny, maxy);
 				break;
 			case 6:
+				MapUtil.bitmask(background, mask, BackgroundFactory.lava, BackgroundFactory.sky, skyset, 1, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, BackgroundFactory.cave, BackgroundFactory.dirt, dirtiset,0, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.cave, caveset,1, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, SummonedIce.healingice, BackgroundFactory.cave, caveset,2, minx, maxx, miny, maxy);
@@ -254,25 +264,31 @@ public class Level {
 				MapUtil.bitmask(background, mask, SummonedIce.healingice, BackgroundFactory.dirt, dirtiset,2, minx, maxx, miny, maxy);
 				break;
 			case 8:
-				MapUtil.bitmask(background, mask, BackgroundFactory.brick, BackgroundFactory.dirt, dirtiset,0, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.dirt, dirtiset,2, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, SummonedIce.healingice, BackgroundFactory.dirt, dirtiset,2, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.brick, brickset,1, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, SummonedIce.healingice, BackgroundFactory.brick, brickset,2, minx, maxx, miny, maxy);
+				MapUtil.bitmask(background, mask, BackgroundFactory.carpet, BackgroundFactory.sky, skyset, 1, minx, maxx, miny, maxy);
+				MapUtil.bitmask(background, mask, BackgroundFactory.brick, BackgroundFactory.dirt, dirtiset,0, minx, maxx, miny, maxy);
 				break;
 			case 9:
 				MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.brick, brickset,1, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, SummonedIce.healingice, BackgroundFactory.brick, brickset,2, minx, maxx, miny, maxy);
+				MapUtil.bitmask(background, mask, BackgroundFactory.carpet, BackgroundFactory.sky, skyset, 1, minx, maxx, miny, maxy);
 				break;
 			case 10:
 				MapUtil.bitmask(background, mask, BackgroundFactory.mountain, BackgroundFactory.brick, brickset,0, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.brick, brickset,1, minx, maxx, miny, maxy);
 				MapUtil.bitmask(background, mask, SummonedIce.healingice, BackgroundFactory.brick, brickset,2, minx, maxx, miny, maxy);
+				MapUtil.bitmask(background, mask, BackgroundFactory.carpet, BackgroundFactory.sky, skyset, 1, minx, maxx, miny, maxy);
+				MapUtil.bitmask(background, mask, BackgroundFactory.snow, BackgroundFactory.sky, skyset, 0, minx, maxx, miny, maxy);
 				break;
 			case 11:
-				
+				MapUtil.bitmask(background, mask, BackgroundFactory.snow, BackgroundFactory.sky, skyset, 0, minx, maxx, miny, maxy);
 				break;
 			}
+			MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.sky, skyset, 0, minx, maxx, miny, maxy);
+			
 			MapUtil.bitmask(background, mask, BackgroundFactory.mountain, BackgroundFactory.snow, mountainset,0, minx, maxx, miny, maxy);
 			
 			MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.mountain, icesetm,1, minx, maxx, miny, maxy);

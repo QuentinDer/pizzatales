@@ -463,5 +463,6 @@ public class SirTomato extends Enemy {
 		halfrsizex = 60;
 		halfrsizey = 45;
 		currentSprite = intermediateDieSprite;
+		isDashing = false;
 	}
 }

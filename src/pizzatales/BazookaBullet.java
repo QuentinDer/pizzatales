@@ -4,10 +4,11 @@ import java.awt.Image;
 
 public class BazookaBullet extends Projectile {
 
-	public static Image bulletsprite, bulletspriteLeft, bulletspriteRight, bulletspriteUp, bulletspriteDown;
+	public static Image bulletspriteLeft, bulletspriteRight, bulletspriteUp, bulletspriteDown;
+	public static Image bulletrightup, bulletrightdown, bulletleftdown, bulletleftup;
 	private int life;
 	
-	public BazookaBullet(int startX, int startY, int vectorX, int vectorY, int speed, float dmg, int range) {
+	public BazookaBullet(int startX, int startY, float vectorX, float vectorY, int speed, float dmg, int range) {
 		super(startX, startY, vectorX, vectorY, speed, dmg, 30, 15, range);
 		life = 1;
 		canbedestroyed = true;
@@ -15,17 +16,37 @@ public class BazookaBullet extends Projectile {
 	
 	@Override
 	public Image getSprite(){
-		if (Math.abs(speedX)>Math.abs(speedY)) {
-			if (speedX > 0)
-				return bulletspriteRight;
-			else
-				return bulletspriteLeft;
+		Image ans = null;
+		if (speedX == 0) {
+			if (speedY > 0) {
+				ans = bulletspriteDown;
+			} else {
+				ans = bulletspriteUp;
+			}
 		} else {
-			if (speedY > 0)
-				return bulletspriteDown;
-			else
-				return bulletspriteUp;
+			if (speedY == 0) {
+				if (speedX > 0) {
+					ans = bulletspriteRight;
+				} else {
+					ans = bulletspriteLeft;
+				}
+			} else {
+				if (speedX > 0) {
+					if (speedY > 0) {
+						ans = bulletrightdown;
+					} else {
+						ans = bulletrightup;
+					}
+				} else {
+					if (speedY > 0) {
+						ans = bulletleftdown;
+					} else {
+						ans = bulletleftup;
+					}
+				}
+			}
 		}
+		return ans;
 	}
 
 	@Override

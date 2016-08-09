@@ -34,16 +34,14 @@ public class IceBolt extends Projectile {
 		if (style == 3) {
 			float diffX = player.centerX - fcenterX;
 			float diffY = player.centerY - fcenterY;
-			float vectorX = diffX / (Math.abs(diffX)+Math.abs(diffY));
-			float vectorY = diffY / (Math.abs(diffX)+Math.abs(diffY));
+			float vectorX = diffX / (float)(Math.sqrt(Math.abs(diffX)*Math.abs(diffX)+Math.abs(diffY)*Math.abs(diffY)));
+			float vectorY = diffY / (float)(Math.sqrt(Math.abs(diffX)*Math.abs(diffX)+Math.abs(diffY)*Math.abs(diffY)));
 			speedX = speed * vectorX;
 			speedY = speed * vectorY;
-			if (style == 3) {
-				if (vectorY >= 0)
-					angle = (int)Math.toDegrees(Math.acos(vectorX)) + 5;
-				else {
-					angle = 360 - (int)Math.toDegrees(Math.acos(vectorX)) + 5;
-				}
+			if (vectorY >= 0)
+				angle = (int)Math.toDegrees(Math.acos(vectorX)) + 5;
+			else {
+				angle = 360 - (int)Math.toDegrees(Math.acos(vectorX)) + 5;
 			}
 			mysprite = (int)((angle % 360) / 11.25f);
 			super.update();

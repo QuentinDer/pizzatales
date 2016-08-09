@@ -81,7 +81,7 @@ public class TileFactory {
 			ans.setTileImage(StartingClass.tileMudWall);
 			break;
 		case 'J':
-			ans.setTileImage(StartingClass.tileSky);
+			//ans.setTileImage(StartingClass.tileSky);
 			break;
 		}
 		return ans;

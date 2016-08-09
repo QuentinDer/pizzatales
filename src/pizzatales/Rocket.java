@@ -5,6 +5,7 @@ import java.net.URL;
 
 public class Rocket extends Firearm {
 	public static Image leftSprite, rightSprite, upSprite, downSprite, addSprite;
+	public static Image leftSpriteUp, rightUpSprite, leftDownSprite, rightDownSprite;
 	public static URL url;
 	
 	public Rocket() {
@@ -61,22 +62,30 @@ public class Rocket extends Firearm {
 
 	@Override
 	public void shootUpLeft(int x, int y) {
-		shootLeft(x,y);
+		setSpriteLeftUp();
+		shootingCounter++;
+		holderprojectiles.add(new BazookaBullet(x, y, -0.7f, -0.7f, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootUpRight(int x, int y) {
-		shootRight(x,y);
+		setSpriteRightUp();
+		shootingCounter++;
+		holderprojectiles.add(new BazookaBullet(x, y, 0.7f, -0.7f, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootDownLeft(int x, int y) {
-		shootLeft(x,y);
+		setSpriteLeftDown();
+		shootingCounter++;
+		holderprojectiles.add(new BazookaBullet(x, y, -0.7f, 0.7f, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootDownRight(int x, int y) {
-		shootRight(x,y);
+		setSpriteRightDown();
+		shootingCounter++;
+		holderprojectiles.add(new BazookaBullet(x, y, 0.7f, 0.7f, speed, projectiledmg, range));
 	}
 	
 	@Override
@@ -91,22 +100,22 @@ public class Rocket extends Firearm {
 
 	@Override
 	public void setSpriteLeftUp() {
-		currentSprite = leftSprite;
+		currentSprite = leftSpriteUp;
 	}
 
 	@Override
 	public void setSpriteRightUp() {
-		currentSprite = rightSprite;
+		currentSprite = rightUpSprite;
 	}
 
 	@Override
 	public void setSpriteLeftDown() {
-		currentSprite = leftSprite;
+		currentSprite = leftDownSprite;
 	}
 
 	@Override
 	public void setSpriteRightDown() {
-		currentSprite = rightSprite;
+		currentSprite = rightDownSprite;
 	}
 
 	@Override

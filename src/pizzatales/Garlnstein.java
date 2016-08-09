@@ -609,5 +609,6 @@ public class Garlnstein extends Enemy {
 	@Override
 	public void setIntermediateDieSprite() {
 		currentSprite = intermediateDieSprite;
+		isDashing = false;
 	}
 }

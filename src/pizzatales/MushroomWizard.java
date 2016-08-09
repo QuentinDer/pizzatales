@@ -158,7 +158,7 @@ public class MushroomWizard extends Enemy {
 				moveLeftDown();
 				break;
 			}
-			if (health < maxHealth/5 && phase < StartingClass.difficultylevel)
+			if (health < maxHealth/5 && phase < Math.max(StartingClass.difficultylevel+1,4))
 				animationNextPhase();
 			int diffx = player.getCenterX() - getCenterX();
 			int diffy = player.getCenterY() - getCenterY();
@@ -382,7 +382,7 @@ public class MushroomWizard extends Enemy {
 		int poslx;
 		int posly;
 		
-		int toheal = maxHealth * (StartingClass.difficultylevel-phase)/StartingClass.difficultylevel;
+		int toheal = maxHealth * (StartingClass.difficultylevel+1-phase)/(StartingClass.difficultylevel+1);
 		float deltaheal = (toheal-health)/(240.0f);
 		float fhealth = (float)health;
 		float summoningdelta = (toheal-health)/((float)7);

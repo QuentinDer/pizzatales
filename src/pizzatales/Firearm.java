@@ -93,13 +93,13 @@ public abstract class Firearm {
 	public void increaseShootingCounter() {
 		if (!isReady2Fire()) {
 			shootingCounter++;
-			if (shootingCounter == 1000)
+			if (shootingCounter % firerate == 0)
 				shootingCounter = 0;
 		}
 	}
 	
 	public boolean isReady2Fire() {
-		return (shootingCounter % firerate == 0);
+		return shootingCounter == 0;
 	}
 
 	public float getProjectiledmg() {

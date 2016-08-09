@@ -4,9 +4,9 @@ import java.awt.Image;
 
 public class BackgroundFactory {
 
-	private final static String isBackground = "12345NIlo";
+	private final static String isBackground = "12345CNIloJ";
 	
-	public static Image grass, cave, dirt, brick, mountain, snow, ice, lava, waterflow;
+	public static Image grass, cave, dirt, brick, mountain, snow, ice, lava, waterflow, sky, carpet;
 
 	public static boolean isBackgroundImage(char type) {
 		String test = "";
@@ -32,6 +32,9 @@ public class BackgroundFactory {
 		case '5':
 			ans = mountain;
 			break;
+		case 'C':
+			ans = carpet;
+			break;
 		case 'N':
 			ans = snow;
 			break;
@@ -43,6 +46,9 @@ public class BackgroundFactory {
 			break;
 		case 'o':
 			ans = waterflow;
+			break;
+		case 'J':
+			ans = sky;
 			break;
 		}
 		return ans;

@@ -499,7 +499,7 @@ public class CarolinaReaper extends Enemy {
 		}
 		if (streaming > 0) {
 			if (streamr == 0) {
-				if (StartingClass.difficultylevel > 2) {
+				if (StartingClass.difficultylevel > 1) {
 					//if (!predictivestream) {
 						streamtox = player.getCenterX();
 						streamtoy = player.getCenterY();
@@ -512,7 +512,7 @@ public class CarolinaReaper extends Enemy {
 				float dist = (float)(Math.sqrt(Math.abs(streamtox-centerX)*Math.abs(streamtox-centerX)+Math.abs(streamtoy-centerY)*Math.abs(streamtoy-centerY)));
 				float vectorX = (streamtox-centerX)/dist;
 				float vectorY = (streamtoy-centerY)/dist;
-				projectiles.add(new FlamerFlame(centerX, centerY, vectorX, vectorY, 10, streamdmg, streamrange));
+				projectiles.add(new FlamerFlame(centerX, centerY, vectorX, vectorY, 6+StartingClass.difficultylevel, streamdmg, streamrange));
 				if (Math.abs(streamtox-centerX) > Math.abs(streamtoy-centerY)) {
 					if (streamtox > centerX)
 						currentSprite = streamright;
