@@ -10,7 +10,7 @@ public class Gun extends Firearm {
 	public static URL url;
 	
 	public Gun() {
-		super(2,550,12,25);
+		super(2.25f,550,12,20);
 	}
 	
 	@Override

@@ -8,7 +8,7 @@ public class Rocket extends Firearm {
 	public static URL url;
 	
 	public Rocket() {
-		super(7,750,5,150);
+		super(7,750,7,75);
 	}
 	
 	@Override
