@@ -391,27 +391,36 @@ public class KaleKing extends Enemy {
 					else
 						moveRight();
 					if (blinking == 0) {
-						while (!blinkingpos[blinkingnumber].canblink)
+						while (blinkingnumber >= 0 && !blinkingpos[blinkingnumber].canblink) {
+							StartingClass.removeItem(blinkingpos[blinkingnumber]);
 							blinkingnumber--;
-						KaleKingBlinkingItem blinkingitem = blinkingpos[blinkingnumber];
-						StartingClass.removeItem(blinkingitem);
-						if (StartingClass.map[blinkingitem.posx][blinkingitem.posy] == null) {
-							StartingClass.map[posx][posy] = null;
-							setCenterX(50*blinkingitem.posx+25+bg.getCenterX()-StartingClass.bginitx);
-							setCenterY(50*blinkingitem.posy+25+bg.getCenterY()-StartingClass.bginity);
-							blinkingitem.r.setBounds(blinkingitem.getCenterX() - 25, blinkingitem.getCenterY() - 25, 50, 50);
-							StartingClass.map[blinkingitem.posx][blinkingitem.posy] = this;
 						}
-						fireRing();
-						//TODO
-						if (blinkingnumber == 0) {
+						if (blinkingnumber >= 0) {
+							KaleKingBlinkingItem blinkingitem = blinkingpos[blinkingnumber];
+							StartingClass.removeItem(blinkingitem);
+							if (StartingClass.map[blinkingitem.posx][blinkingitem.posy] == null) {
+								StartingClass.map[posx][posy] = null;
+								setCenterX(50*blinkingitem.posx+25+bg.getCenterX()-StartingClass.bginitx);
+								setCenterY(50*blinkingitem.posy+25+bg.getCenterY()-StartingClass.bginity);
+								blinkingitem.r.setBounds(blinkingitem.getCenterX() - 25, blinkingitem.getCenterY() - 25, 50, 50);
+								StartingClass.map[blinkingitem.posx][blinkingitem.posy] = this;
+							}
+							fireRing();
+							//TODO
+							if (blinkingnumber == 0) {
+								blinkingcd = blinkingmaxcd;
+								incrementWaitingTimes();
+								currentSprite = staySprite;
+							} else {
+								blinkingnumber--;
+								blinking = this.blinkingfollowingduration;
+							}
+						} else {
 							blinkingcd = blinkingmaxcd;
 							incrementWaitingTimes();
 							currentSprite = staySprite;
-						} else {
-							blinkingnumber--;
-							blinking = this.blinkingfollowingduration;
 						}
+						
 					}
 				} else {
 					blinking = 0;
@@ -1523,11 +1532,41 @@ public class KaleKing extends Enemy {
 	public boolean hasIntermediateDying() {
 		return true;
 	}
+	
+	@Override
+	public void die() {
+		if (alive) {
+			super.die();
+			while (blinkingnumber >= 0) {
+				StartingClass.removeItem(blinkingpos[blinkingnumber]);
+				blinkingnumber--;
+			}
+			isDashing = false;
+			int nposx = posx;
+			int nposy = posy;
+			if (Tile.class.isInstance(StartingClass.map[posx][posy+1])) {
+				if (Tile.class.isInstance(StartingClass.map[posx][posy-1])) {
+					if (Tile.class.isInstance(StartingClass.map[posx-1][posy])) {
+						if (!Tile.class.isInstance(StartingClass.map[posx+1][posy]))
+							nposx++;
+					} else
+						nposx--;
+				} else
+					nposy--;
+			} else
+				nposy++;
+			HolySauce a1 = new HolySauce(nposx,nposy,0,0,true,0);
+			a1.setCenterX(50*nposx+25+bg.getCenterX()-StartingClass.bginitx);
+			a1.setCenterY(50*nposy+25+bg.getCenterY()-StartingClass.bginity);
+			a1.r.setBounds(a1.getCenterX() - 22, a1.getCenterY() - 22, 45, 45);
+			StartingClass.items[nposx][nposy][0] = a1;
+			StartingClass.heightitemmap[nposx][nposy] = 0;
+		}
+	}
 
 	@Override
 	public void setIntermediateDieSprite() {
 		currentSprite = intermediateDieSprite;
-		isDashing = false;
 	}
 
 }

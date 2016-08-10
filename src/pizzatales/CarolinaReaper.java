@@ -32,6 +32,7 @@ public class CarolinaReaper extends Enemy {
 	public static boolean notifytrap;
 	private int maxtraps;
 	private boolean isOnFire = false;
+	private ArrayList<Integer> insidearena;
 	
 	public CarolinaReaper(int centerX, int centerY) {
 		super(centerX, centerY, null, 100, 2, 31, 31, 25, 25);
@@ -677,6 +678,16 @@ public class CarolinaReaper extends Enemy {
 	@Override
 	public void setDieSprite() {
 		currentSprite = dieSprite;
+		projectiles.clear();
+		fireRing();
+		for (int j :insidearena) {
+			int jx = j / StartingClass.height;
+			int jy = j % StartingClass.height;
+			if (StartingClass.map[jx][jy] != null && Barrel.class.isInstance(StartingClass.map[jx][jy])) {
+				((Barrel)StartingClass.map[jx][jy]).damage(10.0f);
+			}
+		}
+		insidearena.clear();
 	}
 	
 	@Override
@@ -705,33 +716,119 @@ public class CarolinaReaper extends Enemy {
 	
 	@Override
 	public void setGibsSprite() {
-		currentSprite = dieSprite;
-	}
-	
-	@Override
-	public void die() {
-		super.die();
 		projectiles.clear();
-		for (int i = 0; i < StartingClass.width; i++) {
-			for (int j = 0; j < StartingClass.height; j++) {
-				int h = 0;
-				while (h<= StartingClass.heightitemmap[i][j]) {
-					if (ReaperTrap.class.isInstance(StartingClass.items[i][j][h]) || ReaperBlinkingItem.class.isInstance(StartingClass.items[i][j][h]))
-						StartingClass.removeItem(StartingClass.items[i][j][h]);
-					else
-						h++;
-				}
-			}
-		}
-		blinkingitem = null;
+		currentSprite = dieSprite;
 		fireRing();
-		for (int j : StartingClass.arenainsidearea.get(StartingClass.isInArena)) {
+		for (int j :insidearena) {
 			int jx = j / StartingClass.height;
 			int jy = j % StartingClass.height;
 			if (StartingClass.map[jx][jy] != null && Barrel.class.isInstance(StartingClass.map[jx][jy])) {
 				((Barrel)StartingClass.map[jx][jy]).damage(10.0f);
 			}
 		}
+		insidearena.clear();
+	}
+	
+	@Override
+	public void die() {
+		if (alive) {
+			projectiles.clear();
+			for (int i = 0; i < StartingClass.width; i++) {
+				for (int j = 0; j < StartingClass.height; j++) {
+					int h = 0;
+					while (h<= StartingClass.heightitemmap[i][j]) {
+						if (ReaperTrap.class.isInstance(StartingClass.items[i][j][h]) || ReaperBlinkingItem.class.isInstance(StartingClass.items[i][j][h]))
+							StartingClass.removeItem(StartingClass.items[i][j][h]);
+						else
+							h++;
+					}
+				}
+			}
+			if (blinkingitem != null)
+				StartingClass.removeItem(blinkingitem);
+			blinkingitem = null;
+			projectiles.add(new ReaperRingFlame(centerX,centerY,1.0f,0.0f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,1.0f,0.09f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.98f,0.17f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.96f,0.26f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.94f,0.34f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.91f,0.42f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.87f,0.5f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.82f,0.57f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.77f,0.64f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.71f,0.71f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.64f,0.77f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.57f,0.82f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.5f,0.87f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.42f,0.91f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.34f,0.94f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.26f,0.96f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.17f,0.98f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.09f,1.0f,1,fireringdmg,fireringrange));
+			
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-1.0f,0.0f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-1.0f,0.09f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.98f,0.17f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.96f,0.26f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.94f,0.34f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.91f,0.42f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.87f,0.5f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.82f,0.57f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.77f,0.64f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.71f,0.71f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.64f,0.77f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.57f,0.82f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.5f,0.87f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.42f,0.91f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.34f,0.94f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.26f,0.96f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.17f,0.98f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.09f,1.0f,1,fireringdmg,fireringrange));
+			
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.0f,1.0f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,1.0f,-0.09f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.98f,-0.17f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.96f,-0.26f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.94f,-0.34f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.91f,-0.42f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.87f,-0.5f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.82f,-0.57f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.77f,-0.64f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.71f,-0.71f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.64f,-0.77f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.57f,-0.82f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.5f,-0.87f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.42f,-0.91f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.34f,-0.94f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.26f,-0.96f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.17f,-0.98f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.09f,-1.0f,1,fireringdmg,fireringrange));
+			
+			projectiles.add(new ReaperRingFlame(centerX,centerY,0.0f,-1.0f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-1.0f,-0.09f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.98f,-0.17f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.96f,-0.26f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.94f,-0.34f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.91f,-0.42f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.87f,-0.5f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.82f,-0.57f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.77f,-0.64f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.71f,-0.71f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.64f,-0.77f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.57f,-0.82f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.5f,-0.87f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.42f,-0.91f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.34f,-0.94f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.26f,-0.96f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.17f,-0.98f,1,fireringdmg,fireringrange));
+			projectiles.add(new ReaperRingFlame(centerX,centerY,-0.09f,-1.0f,1,fireringdmg,fireringrange));
+			
+			insidearena = new ArrayList<Integer>();
+			for (int j : StartingClass.arenainsidearea.get(StartingClass.isInArena)) {
+				insidearena.add(j);
+			}
+		}
+		super.die();
 	}
 
 	@Override
@@ -742,5 +839,6 @@ public class CarolinaReaper extends Enemy {
 	@Override
 	public void setIntermediateDieSprite() {
 		currentSprite = intermediateDieSprite;
+		dying = 90;
 	}
 }

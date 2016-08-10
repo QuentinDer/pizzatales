@@ -461,25 +461,27 @@ public abstract class Enemy extends BlockingStuff {
 	}
 	
 	public void die() {
-		alive = false;
-		stopMoving();
-		if (this.hasIntermediateDying()) {
-			dying = dyingtime;
-			setIntermediateDieSprite();
-		} else {
-			if (ppdmg + pdmg + cdmg > 3) {
-				setGibsSprite();
-				player.isGrinning = Math.max(player.isGrinning, 50);
-			} else
-				setDieSprite();
-			if (bloodymess) {
-				setGibsSprite();
-				BazookaBulletExplosion bmess = new BazookaBulletExplosion(centerX+30, centerY+30);
-				bmess.procfrequency = 20;
-				StartingClass.explosions.add(bmess);
+		if (alive) {
+			alive = false;
+			stopMoving();
+			if (this.hasIntermediateDying()) {
+				dying = dyingtime;
+				setIntermediateDieSprite();
+			} else {
+				if (ppdmg + pdmg + cdmg > 3) {
+					setGibsSprite();
+					player.isGrinning = Math.max(player.isGrinning, 50);
+				} else
+					setDieSprite();
+				if (bloodymess) {
+					setGibsSprite();
+					BazookaBulletExplosion bmess = new BazookaBulletExplosion(centerX+30, centerY+30);
+					bmess.procfrequency = 20;
+					StartingClass.explosions.add(bmess);
+				}
 			}
+			StartingClass.map[posx][posy] = null;
 		}
-		StartingClass.map[posx][posy] = null;
 	}
 
 	public int getMaxHealth() {

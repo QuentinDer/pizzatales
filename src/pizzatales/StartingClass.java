@@ -13,6 +13,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -54,7 +55,7 @@ import java.awt.Container;
 
 import pizzatales.framework.Animation;
 
-public class StartingClass extends JFrame implements Runnable, KeyListener {
+public class StartingClass extends JFrame implements Runnable {
 
 	/**
 	 * 
@@ -69,8 +70,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private boolean azerty = true;
 	private static Player player;
 	private Image image;
-	private Image blooddrop;
-	private Image grinningsprite;
+	public static Image blooddrop;
+	public static Image grinningsprite;
 	private Image iconScreen;
 	public static Image tileTree, /*tileGrass, */tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit,
 			tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel, tileCandelabrum, 
@@ -170,7 +171,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	public StartingClass() {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(false);
-		loadResources();
+		initScreen();
+		ResourcesManager.loadResources();
 		loadGameState();
 		/* TODO
 		Thread soundcleaner = new Thread() {
@@ -298,423 +300,170 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		}
 	}
 
-	public void loadResources() {
+	public void initScreen() {
 		setSize(1280, 800);
 		setBackground(Color.BLACK);
 		setFocusable(true);
-		addKeyListener(this);
+		addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_Z:
+					if(azerty)
+						player.moveUp();
+					break;
+					
+				case KeyEvent.VK_W:
+					if(!azerty)
+						player.moveUp();
+					break;
+
+				case KeyEvent.VK_S:
+					player.moveDown();
+					break;
+
+				case KeyEvent.VK_Q:
+					if(azerty){
+						player.moveLeft();
+					}
+					
+					break;
+					
+				case KeyEvent.VK_A:
+					if(!azerty){
+						player.moveLeft();
+					}
+					
+					break;
+
+				case KeyEvent.VK_D:
+					player.moveRight();
+					break;
+
+				case KeyEvent.VK_UP:
+					player.wannashootup = true;
+					break;
+
+				case KeyEvent.VK_DOWN:
+					player.wannashootdown = true;
+					break;
+
+				case KeyEvent.VK_LEFT:
+					player.wannashootleft = true;
+					break;
+
+				case KeyEvent.VK_RIGHT:	
+					player.wannashootright = true;
+					break;
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_Z:
+					if(azerty)
+						player.stopMovingUp();
+					break;
+				case KeyEvent.VK_W:
+					if(!azerty)
+						player.stopMovingUp();
+					break;
+				case KeyEvent.VK_S:
+					player.stopMovingDown();
+					break;
+				case KeyEvent.VK_Q:
+					if(azerty)
+						player.stopMovingLeft();
+					else{
+						armorindex++;
+						if (armorindex == playerarmor.size())
+							armorindex = 0;
+						player.setArmor(playerarmor.get(armorindex));
+					}
+					break;
+				case KeyEvent.VK_D:
+					player.stopMovingRight();
+					break;
+				case KeyEvent.VK_UP:
+					player.wannashootup = false;
+					break;
+				case KeyEvent.VK_DOWN:
+					player.wannashootdown = false;
+					break;
+				case KeyEvent.VK_LEFT:
+					player.wannashootleft = false;
+					break;
+				case KeyEvent.VK_RIGHT:
+					player.wannashootright = false;
+					break;
+				case KeyEvent.VK_E:
+					gunSoundLoaded = false;
+					weaponindex++;
+					if (weaponindex == playerweapons.size())
+						weaponindex = 0;
+					player.setWeapon(playerweapons.get(weaponindex));
+					break;
+				case KeyEvent.VK_R:
+					gunSoundLoaded = false;
+					weaponindex--;
+					if (weaponindex == -1)
+						weaponindex = playerweapons.size() - 1;
+					player.setWeapon(playerweapons.get(weaponindex));
+					break;
+				case KeyEvent.VK_A:
+					if(azerty){
+						armorindex++;
+						if (armorindex == playerarmor.size())
+							armorindex = 0;
+						player.setArmor(playerarmor.get(armorindex));
+					}else{
+						player.stopMovingLeft();
+					}
+					break;
+				case KeyEvent.VK_H:
+					hatindex++;
+					if (hatindex == playerhats.size())
+						hatindex = 0;
+					player.setHat(playerhats.get(hatindex));
+					break;
+				case KeyEvent.VK_ESCAPE:
+					state = GameState.Exit;
+					System.exit(0);
+					break;
+				case KeyEvent.VK_SPACE:
+					if (state == GameState.Paused) {
+						state = GameState.Running;
+						if (clip != null && playMusic)
+							clip.loop(Clip.LOOP_CONTINUOUSLY);
+					} else if (state == GameState.Running) {
+						state = GameState.Paused;
+						if (clip != null && playMusic)
+							clip.stop();
+					}
+					break;
+				case KeyEvent.VK_C:
+					if (ScrollingMode > 0)
+						centeringOnPlayerRequest = true;
+					break;
+				case KeyEvent.VK_V:
+					if (ScrollingMode > 0)
+						toggleScrollingModeRequest = true;
+					break;
+				}
+			}
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+		});
 		if (fullscreenmode) {
 			 setUndecorated(true);
 			 setAlwaysOnTop(true);
 		} else {
 			setTitle("Pizza Tales");
 		}
-		
-		
-
-		// Image Setups
-		
-		Player.hurtSound = getClass().getResource("/data/ugh.wav");
-
-		CheeseArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/cheese1.png")).getImage();
-		CheeseArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/cheese2.png")).getImage();
-		CheeseArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/cheeseLeft1.png")).getImage();
-		CheeseArmor.movespriteLeft2 = new ImageIcon(getClass().getResource("/data/cheeseLeft2.png")).getImage();
-		CheeseArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/cheeseRight1.png")).getImage();
-		CheeseArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/cheeseRight2.png")).getImage();
-		CheeseArmor.deathSprite = new ImageIcon(getClass().getResource("/data/cheeseDead.png")).getImage();
-		CheeseArmor.addSprite = new ImageIcon(getClass().getResource("/data/addcheese.png")).getImage();
-		ChicagoArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/chicago1.png")).getImage();
-		ChicagoArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/chicago2.png")).getImage();
-		ChicagoArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/chicagoLeft1.png")).getImage();
-		ChicagoArmor.movespriteLeft2 = new ImageIcon(getClass().getResource("/data/chicagoLeft2.png")).getImage();
-		ChicagoArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/chicagoRight1.png")).getImage();
-		ChicagoArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/chicagoRight2.png")).getImage();
-		ChicagoArmor.deathSprite = new ImageIcon(getClass().getResource("/data/chicagoDead.png")).getImage();
-		ChicagoArmor.addSprite = new ImageIcon(getClass().getResource("/data/addchicago.png")).getImage();
-		HawaiiArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/hawaii1.png")).getImage();
-		HawaiiArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/hawaii2.png")).getImage();
-		HawaiiArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/hawaiiLeft1.png")).getImage();
-		HawaiiArmor.movespriteLeft2 = new ImageIcon(getClass().getResource("/data/hawaiiLeft2.png")).getImage();
-		HawaiiArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/hawaiiRight1.png")).getImage();
-		HawaiiArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/hawaiiRight2.png")).getImage();
-		HawaiiArmor.deathSprite = new ImageIcon(getClass().getResource("/data/hawaiiDead.png")).getImage();
-		HawaiiArmor.addSprite = new ImageIcon(getClass().getResource("/data/addhawaii.png")).getImage();
-		MargheritaArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/margherita1.png")).getImage();
-		MargheritaArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/margherita2.png")).getImage();
-		MargheritaArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/margheritaLeft1.png")).getImage();
-		MargheritaArmor.movespriteLeft2 = new ImageIcon(getClass().getResource("/data/margheritaLeft2.png")).getImage();
-		MargheritaArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/margheritaRight1.png")).getImage();
-		MargheritaArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/margheritaRight2.png")).getImage();
-		MargheritaArmor.deathSprite = new ImageIcon(getClass().getResource("/data/margheritaDead.png")).getImage();
-		MargheritaArmor.addSprite = new ImageIcon(getClass().getResource("/data/margheritaDead.png")).getImage();
-		PepperoniArmor.staysprite1 = new ImageIcon(getClass().getResource("/data/pepperoni1.png")).getImage();
-		PepperoniArmor.staysprite2 = new ImageIcon(getClass().getResource("/data/pepperoni2.png")).getImage();
-		PepperoniArmor.movespriteLeft1 = new ImageIcon(getClass().getResource("/data/pepperoniLeft1.png")).getImage();
-		PepperoniArmor.movespriteLeft2 = new ImageIcon(getClass().getResource("/data/pepperoniLeft2.png")).getImage();
-		PepperoniArmor.movespriteRight1 = new ImageIcon(getClass().getResource("/data/pepperoniRight1.png")).getImage();
-		PepperoniArmor.movespriteRight2 = new ImageIcon(getClass().getResource("/data/pepperoniRight2.png")).getImage();
-		PepperoniArmor.deathSprite = new ImageIcon(getClass().getResource("/data/pepperoniDead.png")).getImage();
-
-		tileTree = new ImageIcon(getClass().getResource("/data/tree.png")).getImage();
-		//tileGrass = new ImageIcon(getClass().getResource("/data/grass.png")).getImage();
-		tileWall = new ImageIcon(getClass().getResource("/data/wall.png")).getImage();
-		tileCave = new ImageIcon(getClass().getResource("/data/cave.png")).getImage();
-		tileStalag = new ImageIcon(getClass().getResource("/data/stalagmites.png")).getImage();
-		tileCaveRock = new ImageIcon(getClass().getResource("/data/caverock.png")).getImage();
-		tileGate = new ImageIcon(getClass().getResource("/data/gate.png")).getImage();
-		tileCaveExit = new ImageIcon(getClass().getResource("/data/caveexit.png")).getImage();
-		tileRock = new ImageIcon(getClass().getResource("/data/rock.png")).getImage();
-		tileDecoy = new ImageIcon(getClass().getResource("/data/decoy.png")).getImage();
-		tilePikes = new ImageIcon(getClass().getResource("/data/pikes.png")).getImage();
-		tileFlag = new ImageIcon(getClass().getResource("/data/flag.png")).getImage();
-		tileBarrel = new ImageIcon(getClass().getResource("/data/barrel.png")).getImage();
-		tileCandelabrum = new ImageIcon(getClass().getResource("/data/candelabrum.png")).getImage();
-		tileCrate = new ImageIcon(getClass().getResource("/data/crate.png")).getImage();
-		tileChest = new ImageIcon(getClass().getResource("/data/chest.png")).getImage();
-		tileBlack = new ImageIcon(getClass().getResource("/data/blacktile.png")).getImage();
-		tileChestOpen = new ImageIcon(getClass().getResource("/data/chestopen.png")).getImage();
-		tilePineTree = new ImageIcon(getClass().getResource("/data/pinetree.png")).getImage();
-		tileSnowRock = new ImageIcon(getClass().getResource("/data/snowrock.png")).getImage();
-		tileMudWall = new ImageIcon(getClass().getResource("/data/mudwall.png")).getImage();
-		BackgroundFactory.sky = new ImageIcon(getClass().getResource("/data/sky.png")).getImage();
-		
-		BackgroundFactory.grass = new ImageIcon(getClass().getResource("/data/grass.png")).getImage();
-		BackgroundFactory.cave = new ImageIcon(getClass().getResource("/data/cavefloor.png")).getImage();
-		BackgroundFactory.dirt = new ImageIcon(getClass().getResource("/data/dirt.png")).getImage();
-		BackgroundFactory.brick = new ImageIcon(getClass().getResource("/data/bricktile.png")).getImage();
-		BackgroundFactory.mountain = new ImageIcon(getClass().getResource("/data/mountainfloor.png")).getImage();
-		BackgroundFactory.lava = new ImageIcon(getClass().getResource("/data/puddlelava.png")).getImage();
-		
-		for (int i = 1; i < 16; i++)
-			Level.dirtset[i] = new ImageIcon(StartingClass.class.getResource("/data/dirt"+i+".png")).getImage();
-		for (int i = 1; i < 16; i++)
-			Level.dirtiset[i] = new ImageIcon(StartingClass.class.getResource("/data/dirti"+i+".png")).getImage();
-		
-		for (int i = 1; i < 16; i++)
-			Level.mountainset[i] = new ImageIcon(StartingClass.class.getResource("/data/mountainfloor"+i+".png")).getImage();
-		
-		for (int i = 1; i < 16; i++)
-			Level.iceset[i] = new ImageIcon(StartingClass.class.getResource("/data/ice"+i+".png")).getImage();
-		for (int i = 1; i < 16; i++)
-			Level.icesetm[i] = new ImageIcon(StartingClass.class.getResource("/data/icem"+i+".png")).getImage();
-		
-		for (int i = 1; i < 16; i++)
-			Level.caveset[i] = new ImageIcon(StartingClass.class.getResource("/data/cave"+i+".png")).getImage();
-		
-		for (int i = 1; i < 16; i++)
-			Level.brickset[i] = new ImageIcon(StartingClass.class.getResource("/data/brick"+i+".png")).getImage();
-		
-		Level.skyset[1] = new ImageIcon(StartingClass.class.getResource("/data/skyset1.png")).getImage();
-		Level.skyset[3] = new ImageIcon(StartingClass.class.getResource("/data/skyset3.png")).getImage();
-		Level.skyset[5] = new ImageIcon(StartingClass.class.getResource("/data/skyset5.png")).getImage();
-		
-		blooddrop = new ImageIcon(getClass().getResource("/data/blooddrop.png")).getImage();
-		Gun.leftSprite = new ImageIcon(getClass().getResource("/data/pistol1.png")).getImage();
-		Gun.rightSprite = new ImageIcon(getClass().getResource("/data/pistol2.png")).getImage();
-		Gun.upSprite = new ImageIcon(getClass().getResource("/data/pistol4.png")).getImage();
-		Gun.downSprite = new ImageIcon(getClass().getResource("/data/pistol3.png")).getImage();
-		Gun.leftDownSprite = new ImageIcon(getClass().getResource("/data/pistol7.png")).getImage();
-		Gun.leftUpSprite = new ImageIcon(getClass().getResource("/data/pistol8.png")).getImage();
-		Gun.rightDownSprite = new ImageIcon(getClass().getResource("/data/pistol6.png")).getImage();
-		Gun.rightUpSprite = new ImageIcon(getClass().getResource("/data/pistol5.png")).getImage();
-		Gun.url = getClass().getResource("/data/pistol.wav");
-		Bullet.bulletsprite = new ImageIcon(getClass().getResource("/data/pistolprojectile.png")).getImage();
-		Shotgun.leftSprite = new ImageIcon(getClass().getResource("/data/shotgun1.png")).getImage();
-		Shotgun.rightSprite = new ImageIcon(getClass().getResource("/data/shotgun2.png")).getImage();
-		Shotgun.upSprite = new ImageIcon(getClass().getResource("/data/shotgun4.png")).getImage();
-		Shotgun.downSprite = new ImageIcon(getClass().getResource("/data/shotgun3.png")).getImage();
-		Shotgun.leftDownSprite = new ImageIcon(getClass().getResource("/data/shotgun7.png")).getImage();
-		Shotgun.leftUpSprite = new ImageIcon(getClass().getResource("/data/shotgun8.png")).getImage();
-		Shotgun.rightDownSprite = new ImageIcon(getClass().getResource("/data/shotgun6.png")).getImage();
-		Shotgun.rightUpSprite = new ImageIcon(getClass().getResource("/data/shotgun5.png")).getImage();
-		Shotgun.url = getClass().getResource("/data/shotgun.wav");
-		Shotgun.addSprite = new ImageIcon(getClass().getResource("/data/addshotgun.png")).getImage();
-		ShotgunBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/shotgunprojectile.png")).getImage();
-		Rifle.leftSprite = new ImageIcon(getClass().getResource("/data/rifle1.png")).getImage();
-		Rifle.rightSprite = new ImageIcon(getClass().getResource("/data/rifle2.png")).getImage();
-		Rifle.upSprite = new ImageIcon(getClass().getResource("/data/rifle4.png")).getImage();
-		Rifle.leftDownSprite = new ImageIcon(getClass().getResource("/data/rifle7.png")).getImage();
-		Rifle.leftUpSprite = new ImageIcon(getClass().getResource("/data/rifle8.png")).getImage();
-		Rifle.rightDownSprite = new ImageIcon(getClass().getResource("/data/rifle6.png")).getImage();
-		Rifle.rightUpSprite = new ImageIcon(getClass().getResource("/data/rifle5.png")).getImage();
-		Rifle.url = getClass().getResource("/data/rifle.wav");
-		Rifle.addSprite = new ImageIcon(getClass().getResource("/data/addrifle.png")).getImage();
-		Rifle.downSprite = new ImageIcon(getClass().getResource("/data/rifle3.png")).getImage();
-		RifleBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/rifleprojectile.png")).getImage();
-		Flamer.leftSprite = new ImageIcon(getClass().getResource("/data/flamer1.png")).getImage();
-		Flamer.rightSprite = new ImageIcon(getClass().getResource("/data/flamer2.png")).getImage();
-		Flamer.downSprite = new ImageIcon(getClass().getResource("/data/flamer3.png")).getImage();
-		Flamer.upSprite = new ImageIcon(getClass().getResource("/data/flamer4.png")).getImage();
-		Flamer.leftDownSprite = new ImageIcon(getClass().getResource("/data/flamer7.png")).getImage();
-		Flamer.leftUpSprite = new ImageIcon(getClass().getResource("/data/flamer8.png")).getImage();
-		Flamer.rightDownSprite = new ImageIcon(getClass().getResource("/data/flamer6.png")).getImage();
-		Flamer.rightUpSprite = new ImageIcon(getClass().getResource("/data/flamer5.png")).getImage();
-		Flamer.url = getClass().getResource("/data/flamer.wav");
-		Flamer.addSprite = new ImageIcon(getClass().getResource("/data/addflamer.png")).getImage();
-		FlamerFlame.bulletsprite = new ImageIcon(getClass().getResource("/data/flamerprojectile.png")).getImage();
-		Rocket.leftSprite = new ImageIcon(getClass().getResource("/data/rocket1.png")).getImage();
-		Rocket.rightSprite = new ImageIcon(getClass().getResource("/data/rocket2.png")).getImage();
-		Rocket.downSprite = new ImageIcon(getClass().getResource("/data/rocket3.png")).getImage();
-		Rocket.upSprite = new ImageIcon(getClass().getResource("/data/rocket4.png")).getImage();
-		Rocket.url = getClass().getResource("/data/rocket.wav");
-		Rocket.addSprite = new ImageIcon(getClass().getResource("/data/addrocket.png")).getImage();
-		Rocket.leftSpriteUp = new ImageIcon(getClass().getResource("/data/rocket8.png")).getImage();
-		Rocket.rightUpSprite = new ImageIcon(getClass().getResource("/data/rocket5.png")).getImage();
-		Rocket.leftDownSprite = new ImageIcon(getClass().getResource("/data/rocket7.png")).getImage();
-		Rocket.rightDownSprite = new ImageIcon(getClass().getResource("/data/rocket6.png")).getImage();
-		BazookaBullet.bulletspriteLeft = new ImageIcon(getClass().getResource("/data/rocketprojectileleft.png"))
-				.getImage();
-		BazookaBullet.bulletspriteRight = new ImageIcon(getClass().getResource("/data/rocketprojectileright.png"))
-				.getImage();
-		BazookaBullet.bulletspriteUp = new ImageIcon(getClass().getResource("/data/rocketprojectileup.png")).getImage();
-		BazookaBullet.bulletspriteDown = new ImageIcon(getClass().getResource("/data/rocketprojectiledown.png"))
-				.getImage();
-		BazookaBullet.bulletleftdown = new ImageIcon(getClass().getResource("/data/rocketprojectiledownleft.png")).getImage();
-		BazookaBullet.bulletrightdown = new ImageIcon(getClass().getResource("/data/rocketprojectiledownright.png")).getImage();
-		BazookaBullet.bulletrightup = new ImageIcon(getClass().getResource("/data/rocketprojectileupright.png")).getImage();
-		BazookaBullet.bulletleftup = new ImageIcon(getClass().getResource("/data/rocketprojectileupleft.png")).getImage();
-		Smg.leftSprite = new ImageIcon(getClass().getResource("/data/smg1.png")).getImage();
-		Smg.rightSprite = new ImageIcon(getClass().getResource("/data/smg2.png")).getImage();
-		Smg.downSprite = new ImageIcon(getClass().getResource("/data/smg3.png")).getImage();
-		Smg.upSprite = new ImageIcon(getClass().getResource("/data/smg4.png")).getImage();
-		Smg.leftDownSprite = new ImageIcon(getClass().getResource("/data/smg7.png")).getImage();
-		Smg.leftUpSprite = new ImageIcon(getClass().getResource("/data/smg8.png")).getImage();
-		Smg.rightDownSprite = new ImageIcon(getClass().getResource("/data/smg6.png")).getImage();
-		Smg.rightUpSprite = new ImageIcon(getClass().getResource("/data/smg5.png")).getImage();
-		Smg.url = getClass().getResource("/data/smg.wav");
-		Smg.addSprite = new ImageIcon(getClass().getResource("/data/addsmg.png")).getImage();
-		SmgBullet.bulletsprite = new ImageIcon(getClass().getResource("/data/smgprojectile.png")).getImage();
-		TomatoProjectile.tomatoprojectilesprite = new ImageIcon(getClass().getResource("/data/sirtomatoprojectile.png"))
-				.getImage();
-		MushroomWizardBall.greenball = new ImageIcon(getClass().getResource("/data/mushroomwizardgreenball.png"))
-				.getImage();
-		MushroomWizardBall.yellowball = new ImageIcon(getClass().getResource("/data/mushroomwizardyellowball.png"))
-				.getImage();
-		MushroomWizardBall.redball = new ImageIcon(getClass().getResource("/data/mushroomwizardredball.png"))
-				.getImage();
-		MushroomWizardBall.blueball = new ImageIcon(getClass().getResource("/data/mushroomwizardblueball.png"))
-				.getImage();
-		ReaperBarrelProjectile.sprite = new ImageIcon(getClass().getResource("/data/barrelprojectile.png")).getImage();
-		OnioughProjectile.sprite = new ImageIcon(getClass().getResource("/data/onioughProjectile.png")).getImage();
-		
-		for (int i = 0; i < 32; i++)
-			IceBolt.boltset[i] = new ImageIcon(getClass().getResource("/data/icebolt"+i+".png")).getImage();
-		KaleKingBall.sprite = new ImageIcon(getClass().getResource("/data/kalekingBall.png")).getImage();
-		KaleKingFlame.sprite = new ImageIcon(getClass().getResource("/data/darkflame.png")).getImage();
-
-		Tato.staySprite = new ImageIcon(getClass().getResource("/data/tato1.png")).getImage();
-		Tato.move1Sprite = new ImageIcon(getClass().getResource("/data/tato2.png")).getImage();
-		Tato.move2Sprite = new ImageIcon(getClass().getResource("/data/tato3.png")).getImage();
-		Tato.dieSprite = new ImageIcon(getClass().getResource("/data/tatoDie.png")).getImage();
-		Tato.gibsSprite = new ImageIcon(getClass().getResource("/data/tatogibs.png")).getImage();
-		Aubergine.staySprite = new ImageIcon(getClass().getResource("/data/aubergine1.png")).getImage();
-		Aubergine.move1Sprite = new ImageIcon(getClass().getResource("/data/aubergine2.png")).getImage();
-		Aubergine.move2Sprite = new ImageIcon(getClass().getResource("/data/aubergine3.png")).getImage();
-		Aubergine.dieSprite = new ImageIcon(getClass().getResource("/data/auberginedead.png")).getImage();
-		Aubergine.gibsSprite = new ImageIcon(getClass().getResource("/data/auberginegibs.png")).getImage();
-		Broccoli.staySprite = new ImageIcon(getClass().getResource("/data/broccoli1.png")).getImage();
-		Broccoli.move1Sprite = new ImageIcon(getClass().getResource("/data/broccoli2.png")).getImage();
-		Broccoli.move2Sprite = new ImageIcon(getClass().getResource("/data/broccoli3.png")).getImage();
-		Broccoli.dieSprite = new ImageIcon(getClass().getResource("/data/broccolidead.png")).getImage();
-		Broccoli.gibsSprite = new ImageIcon(getClass().getResource("/data/broccoligibs.png")).getImage();
-		Pepper.staySprite = new ImageIcon(getClass().getResource("/data/pepperLeft1.png")).getImage();
-		Pepper.move1Sprite = new ImageIcon(getClass().getResource("/data/pepperLeft2.png")).getImage();
-		Pepper.move2Sprite = new ImageIcon(getClass().getResource("/data/pepperLeft3.png")).getImage();
-		Pepper.staySpriteRight = new ImageIcon(getClass().getResource("/data/pepperRight1.png")).getImage();
-		Pepper.move1SpriteRight = new ImageIcon(getClass().getResource("/data/pepperRight2.png")).getImage();
-		Pepper.move2SpriteRight = new ImageIcon(getClass().getResource("/data/pepperRight3.png")).getImage();
-		Pepper.dieSprite = new ImageIcon(getClass().getResource("/data/pepperdead.png")).getImage();
-		Pepper.gibsSprite = new ImageIcon(getClass().getResource("/data/peppergibs.png")).getImage();
-		Mushroom.staySprite = new ImageIcon(getClass().getResource("/data/shroom1.png")).getImage();
-		Mushroom.move1Sprite = new ImageIcon(getClass().getResource("/data/shroom2.png")).getImage();
-		Mushroom.move2Sprite = new ImageIcon(getClass().getResource("/data/shroom3.png")).getImage();
-		Mushroom.dieSprite = new ImageIcon(getClass().getResource("/data/shroomdead.png")).getImage();
-		Mushroom.gibsSprite = new ImageIcon(getClass().getResource("/data/shroomgibs.png")).getImage();
-		SirTomato.staySprite = new ImageIcon(getClass().getResource("/data/sirtomatoleft1.png")).getImage();
-		SirTomato.move1Sprite = new ImageIcon(getClass().getResource("/data/sirtomatoleft2.png")).getImage();
-		SirTomato.move2Sprite = new ImageIcon(getClass().getResource("/data/sirtomatoleft3.png")).getImage();
-		SirTomato.staySpriteRight = new ImageIcon(getClass().getResource("/data/sirtomatoright1.png")).getImage();
-		SirTomato.move1SpriteRight = new ImageIcon(getClass().getResource("/data/sirtomatoright2.png")).getImage();
-		SirTomato.move2SpriteRight = new ImageIcon(getClass().getResource("/data/sirtomatoright3.png")).getImage();
-		SirTomato.dieSprite = new ImageIcon(getClass().getResource("/data/sirtomatodead.png")).getImage();
-		SirTomato.sirtomatothrowleft = new ImageIcon(getClass().getResource("/data/sirtomatothrowleft.png")).getImage();
-		SirTomato.sirtomatothrowright = new ImageIcon(getClass().getResource("/data/sirtomatothrowright.png"))
-				.getImage();
-		SirTomato.dashSpriteLeft = new ImageIcon(getClass().getResource("/data/sirtomatodashleft.png")).getImage();
-		SirTomato.dashSpriteRight = new ImageIcon(getClass().getResource("/data/sirtomatodashright.png")).getImage();
-		SirTomato.slashSpriteLeft = new ImageIcon(getClass().getResource("/data/sirtomatoswipeleft.png")).getImage();
-		SirTomato.slashSpriteRight = new ImageIcon(getClass().getResource("/data/sirtomatoswiperight.png")).getImage();
-		SirTomato.dashLeftWindup = new ImageIcon(getClass().getResource("/data/sirtomatodashleftwindup.png")).getImage();
-		SirTomato.dashRightWindup = new ImageIcon(getClass().getResource("/data/sirtomatodashrightwindup.png")).getImage();
-		SirTomato.swipeLeftWindup = new ImageIcon(getClass().getResource("/data/sirtomatoswipeleftwindup.png")).getImage();
-		SirTomato.swipeRightWindup = new ImageIcon(getClass().getResource("/data/sirtomatoswiperightwindup.png")).getImage();
-		SirTomato.intermediateDieSprite = new ImageIcon(getClass().getResource("/data/sirtomatodying.png")).getImage();
-		MushroomWizard.staySprite = new ImageIcon(getClass().getResource("/data/mushroomwizardleft1.png")).getImage();
-		MushroomWizard.move1Sprite = new ImageIcon(getClass().getResource("/data/mushroomwizardleft2.png")).getImage();
-		MushroomWizard.move2Sprite = new ImageIcon(getClass().getResource("/data/mushroomwizardleft3.png")).getImage();
-		MushroomWizard.staySpriteRight = new ImageIcon(getClass().getResource("/data/mushroomwizardright1.png"))
-				.getImage();
-		MushroomWizard.move1SpriteRight = new ImageIcon(getClass().getResource("/data/mushroomwizardright2.png"))
-				.getImage();
-		MushroomWizard.move2SpriteRight = new ImageIcon(getClass().getResource("/data/mushroomwizardright3.png"))
-				.getImage();
-		MushroomWizard.dieSprite = new ImageIcon(getClass().getResource("/data/mushroomwizarddead.png")).getImage();
-		MushroomWizard.swipeLeft = new ImageIcon(getClass().getResource("/data/mushroomwizardswipeleft.png"))
-				.getImage();
-		MushroomWizard.swipeRight = new ImageIcon(getClass().getResource("/data/mushroomwizardswiperight.png"))
-				.getImage();
-		MushroomWizard.swipeDown = new ImageIcon(getClass().getResource("/data/mushroomwizardswipedown.png"))
-				.getImage();
-		MushroomWizard.swipeUp = new ImageIcon(getClass().getResource("/data/mushroomwizardswipeup.png")).getImage();
-		MushroomWizard.shooting = new ImageIcon(getClass().getResource("/data/mushroomwizardshooting.png")).getImage();
-		MushroomWizard.summoning = new ImageIcon(getClass().getResource("/data/mushroomwizardlavasummon.png"))
-				.getImage();
-		MushroomWizard.intermediateDieSprite = new ImageIcon(getClass().getResource("/data/mushroomwizarddying.png")).getImage();
-		CarolinaReaper.staySprite = new ImageIcon(getClass().getResource("/data/reaper.png")).getImage();
-		CarolinaReaper.move1Sprite = new ImageIcon(getClass().getResource("/data/reaperwalk1.png")).getImage();
-		CarolinaReaper.move2Sprite = new ImageIcon(getClass().getResource("/data/reaperwalk2.png")).getImage();
-		CarolinaReaper.staySpriteOnFire = new ImageIcon(getClass().getResource("/data/reaperwalkfire1.png")).getImage();
-		CarolinaReaper.move1SpriteOnFire = new ImageIcon(getClass().getResource("/data/reaperwalkfire2.png")).getImage();
-		CarolinaReaper.move2SpriteOnFire = new ImageIcon(getClass().getResource("/data/reaperwalkfire3.png")).getImage();
-		CarolinaReaper.firering = new ImageIcon(getClass().getResource("/data/reaperfirering.png")).getImage();
-		CarolinaReaper.fireringOnFire = new ImageIcon(getClass().getResource("/data/reaperfirestreamwindup.png")).getImage();
-		CarolinaReaper.streamleft = new ImageIcon(getClass().getResource("/data/reaperfirestreamleft.png")).getImage();
-		CarolinaReaper.streamright = new ImageIcon(getClass().getResource("/data/reaperfirestreamright.png"))
-				.getImage();
-		CarolinaReaper.streamup = new ImageIcon(getClass().getResource("/data/reaperfirestreamup.png")).getImage();
-		CarolinaReaper.streamdown = new ImageIcon(getClass().getResource("/data/reaperfirestreamdown.png")).getImage();
-		CarolinaReaper.dieSprite = new ImageIcon(getClass().getResource("/data/reaperdead.png")).getImage();
-		CarolinaReaper.intermediateDieSprite = new ImageIcon(getClass().getResource("/data/reaperdead1.png")).getImage();
-		Oniough.staySprite = new ImageIcon(getClass().getResource("/data/oniough1.png")).getImage();
-		Oniough.move1Sprite = new ImageIcon(getClass().getResource("/data/onioughWalk1.png")).getImage();
-		Oniough.move2Sprite = new ImageIcon(getClass().getResource("/data/onioughWalk2.png")).getImage();
-		Oniough.onioughStomp1 = new ImageIcon(getClass().getResource("/data/onioughStomp1.png")).getImage();
-		Oniough.onioughStomp2 = new ImageIcon(getClass().getResource("/data/onioughStomp2.png")).getImage();
-		Oniough.dieSprite = new ImageIcon(getClass().getResource("/data/onioughdead.png")).getImage();
-		Oniough.intermediateDieSprite = new ImageIcon(getClass().getResource("/data/onioughdying.png")).getImage();
-		
-		Oniough.onioughShootDown = new ImageIcon(getClass().getResource("/data/onioughShootDown.png")).getImage();
-		Oniough.onioughShootLeft = new ImageIcon(getClass().getResource("/data/onioughShootLeft.png")).getImage();
-		Oniough.onioughShootRight = new ImageIcon(getClass().getResource("/data/onioughShootRight.png")).getImage();
-		Oniough.onioughShootUp = new ImageIcon(getClass().getResource("/data/onioughShootUp.png")).getImage();
-		Oniough.onioughShootLeftDown = new ImageIcon(getClass().getResource("/data/onioughShootDownLeft.png")).getImage();
-		Oniough.onioughShootLeftUp = new ImageIcon(getClass().getResource("/data/onioughShootUpLeft.png")).getImage();
-		Oniough.onioughShootRightDown = new ImageIcon(getClass().getResource("/data/onioughShootDownRight.png")).getImage();
-		Oniough.onioughShootRightUp = new ImageIcon(getClass().getResource("/data/onioughShootUpRight.png")).getImage();
-		
-		Garlnstein.staySprite = new ImageIcon(getClass().getResource("/data/garlnstein.png")).getImage();
-		Garlnstein.move1Sprite = new ImageIcon(getClass().getResource("/data/garlnsteinWalk1.png")).getImage();
-		Garlnstein.move2Sprite = new ImageIcon(getClass().getResource("/data/garlnsteinWalk2.png")).getImage();
-		Garlnstein.dieSprite = new ImageIcon(getClass().getResource("/data/garlnsteinDead.png")).getImage();
-		Garlnstein.slashDown = new ImageIcon(getClass().getResource("/data/garlnsteinSwipeDown.png")).getImage();
-		Garlnstein.slashUp = new ImageIcon(getClass().getResource("/data/garlnsteinSwipeUp.png")).getImage();
-		Garlnstein.slashRight = new ImageIcon(getClass().getResource("/data/garlnsteinSwipeRight.png")).getImage();
-		Garlnstein.slashLeft = new ImageIcon(getClass().getResource("/data/garlnsteinDashLeft.png")).getImage();
-		Garlnstein.dashDown = new ImageIcon(getClass().getResource("/data/garlnsteinDashDown.png")).getImage();
-		Garlnstein.dashUp = new ImageIcon(getClass().getResource("/data/garlnsteinDashUp.png")).getImage();
-		Garlnstein.dashRight = new ImageIcon(getClass().getResource("/data/garlnsteinDashRight.png")).getImage();
-		Garlnstein.dashLeft = new ImageIcon(getClass().getResource("/data/garlnsteinDashLeft.png")).getImage();
-		Garlnstein.dashBlinking = new ImageIcon(getClass().getResource("/data/garlnsteinReadyToDash.png")).getImage();
-		Garlnstein.cloning1 = new ImageIcon(getClass().getResource("/data/garlnsteinCloning1.png")).getImage();
-		Garlnstein.cloning2 = new ImageIcon(getClass().getResource("/data/garlnsteinCloning2.png")).getImage();
-		Garlnstein.cloning3 = new ImageIcon(getClass().getResource("/data/garlnsteinCloning3.png")).getImage();
-		Garlnstein.intermediateDieSprite = new ImageIcon(getClass().getResource("/data/garlnsteinDying.png")).getImage();
-		KaleKing.staySprite = new ImageIcon(getClass().getResource("/data/kaleking.png")).getImage();
-		KaleKing.move1Sprite = new ImageIcon(getClass().getResource("/data/kalekingWalk1.png")).getImage();
-		KaleKing.move2Sprite = new ImageIcon(getClass().getResource("/data/kalekingWalk2.png")).getImage();
-		KaleKing.dieSprite = new ImageIcon(getClass().getResource("/data/kalekingDead.png")).getImage();
-		KaleKing.swipeDown = new ImageIcon(getClass().getResource("/data/kalekingSwipeDown.png")).getImage();
-		KaleKing.swipeLeft = new ImageIcon(getClass().getResource("/data/kalekingSwipeLeft.png")).getImage();
-		KaleKing.swipeRight = new ImageIcon(getClass().getResource("/data/kalekingSwipeRight.png")).getImage();
-		KaleKing.swipeUp = new ImageIcon(getClass().getResource("/data/kalekingSwipeUp.png")).getImage();
-		KaleKing.boltsfiringsprite = new ImageIcon(getClass().getResource("/data/kalekingMagicCryoBeam.png")).getImage();
-		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase1.png")).getImage());
-		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase2.png")).getImage());
-		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase3.png")).getImage());
-		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase4.png")).getImage());
-		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase5.png")).getImage());
-		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase6.png")).getImage());
-		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase7.png")).getImage());
-		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase8.png")).getImage());
-		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase9.png")).getImage());
-		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase10.png")).getImage());
-		KaleKing.phaseanim.add(new ImageIcon(getClass().getResource("/data/kalekingPhase11.png")).getImage());
-		KaleKing.dashSpriteLeft = new ImageIcon(getClass().getResource("/data/kalekingThrustLeft.png")).getImage();
-		KaleKing.dashSpriteRight = new ImageIcon(getClass().getResource("/data/kalekingThrustRight.png")).getImage();
-		KaleKing.hulkSprite = new ImageIcon(getClass().getResource("/data/hulk.png")).getImage();
-		KaleKing.hulkMove1 = new ImageIcon(getClass().getResource("/data/hulkWalk1.png")).getImage();
-		KaleKing.hulkMove2 = new ImageIcon(getClass().getResource("/data/hulkWalk2.png")).getImage();
-		KaleKing.hulkSwipeDown = new ImageIcon(getClass().getResource("/data/hulkSwipeDown.png")).getImage();
-		KaleKing.hulkSwipeLeft = new ImageIcon(getClass().getResource("/data/hulkSwipeLeft.png")).getImage();
-		KaleKing.hulkSwipeRight = new ImageIcon(getClass().getResource("/data/hulkSwipeRight.png")).getImage();
-		KaleKing.hulkSwipeUp = new ImageIcon(getClass().getResource("/data/hulkSwipeUp.png")).getImage();
-		KaleKing.blinkingSprite = new ImageIcon(getClass().getResource("/data/kalekingMagicAoE.png")).getImage();
-		KaleKing.intermediateDieSprite = new ImageIcon(getClass().getResource("/data/kalekingDying.png")).getImage();
-
-		BazookaBulletExplosion.bazookaexplosionsprite = new ImageIcon(
-				getClass().getResource("/data/bazookaexplosion.png")).getImage();
-		BazookaBulletExplosion.sound = getClass().getResource("/data/explosion.wav");
-		TomatoProjectileExplosion.tomatoexplosionsprite = new ImageIcon(
-				getClass().getResource("/data/sirtomatoprojectileexplosion.png")).getImage();
-		BarrelExplosion.explosionsprite = new ImageIcon(getClass().getResource("/data/barrelexplosion.png")).getImage();
-		BarrelExplosion.sound = getClass().getResource("/data/explosion.wav");
-		
-		ArmorPotion.armorpotionsprite = new ImageIcon(getClass().getResource("/data/armor.png")).getImage();
-		ArmorPotion.armorpotioneffectsprite = new ImageIcon(getClass().getResource("/data/armoreffect.png")).getImage();
-		ArmorPotion.armorpotioneffectsprite2 = new ImageIcon(getClass().getResource("/data/armoreffect_2.png")).getImage();
-		ArmorPotion.armorpotioneffectsprite3 = new ImageIcon(getClass().getResource("/data/armoreffect_3.png")).getImage();
-		ArmorPotion.armorpotioneffectsprite4 = new ImageIcon(getClass().getResource("/data/armoreffect_4.png")).getImage();
-		HealthPotion.healthpotionsprite = new ImageIcon(getClass().getResource("/data/health.png")).getImage();
-		HealthPotion.healthpotioneffectsprite = new ImageIcon(getClass().getResource("/data/healtheffect.png")).getImage();
-		HealthPotion.healthpotioneffectsprite2 = new ImageIcon(getClass().getResource("/data/healtheffect_2.png")).getImage();
-		HealthPotion.healthpotioneffectsprite3 = new ImageIcon(getClass().getResource("/data/healtheffect_3.png")).getImage();
-		HealthPotion.healthpotioneffectsprite4 = new ImageIcon(getClass().getResource("/data/healtheffect_4.png")).getImage();
-		Lava.lavaeffectsprite = new ImageIcon(getClass().getResource("/data/lavaeffect.png")).getImage();
-		BackgroundFactory.waterflow = new ImageIcon(getClass().getResource("/data/waterflow.png")).getImage();
-		WaterFlow.watereffectsprite = new ImageIcon(getClass().getResource("/data/watereffect.png")).getImage();
-		WaterPuddle.sprite = new ImageIcon(getClass().getResource("/data/puddle.png")).getImage();
-		WoodBridge.sprite = new ImageIcon(getClass().getResource("/data/woodbridge.png")).getImage();
-		PizzaBox.pizzaboxsprite = new ImageIcon(getClass().getResource("/data/pizzabox.png")).getImage();
-		//Carpet.sprite = new ImageIcon(getClass().getResource("/data/carpet.png")).getImage();
-		BackgroundFactory.carpet = new ImageIcon(getClass().getResource("/data/carpet.png")).getImage();
-		CrateOpen.sprite = new ImageIcon(getClass().getResource("/data/crateopen.png")).getImage();
-		ReaperBlinkingItem.sprite = new ImageIcon(getClass().getResource("/data/reaperblinkingpos.png")).getImage();
-		ReaperTrap.pizzatrap = new ImageIcon(getClass().getResource("/data/pizzatrap.png")).getImage();
-		ReaperTrap.potiontrap = new ImageIcon(getClass().getResource("/data/potiontrap.png")).getImage();
-		ReaperTrap.potiontrap1 = new ImageIcon(getClass().getResource("/data/potiontrap1.png")).getImage();
-		BackgroundFactory.snow = new ImageIcon(getClass().getResource("/data/snowbank.png")).getImage();
-		SnowBank.snoweffectsprite = new ImageIcon(getClass().getResource("/data/snowbankeffect.png")).getImage();
-		BackgroundFactory.ice = new ImageIcon(getClass().getResource("/data/ice.png")).getImage();
-		BoostCheese.boostsprite = new ImageIcon(getClass().getResource("/data/cheese.png")).getImage();
-		BoostCheese.boosteffectsprite = new ImageIcon(getClass().getResource("/data/cheeseeffect.png")).getImage();
-		BoostBacon.boostsprite = new ImageIcon(getClass().getResource("/data/bacon.png")).getImage();
-		BoostBacon.boosteffectsprite = new ImageIcon(getClass().getResource("/data/baconeffect.png")).getImage();
-		BoostBasil.boostsprite = new ImageIcon(getClass().getResource("/data/basil.png")).getImage();
-		BoostBasil.boosteffectsprite = new ImageIcon(getClass().getResource("/data/basileffect.png")).getImage();
-		BoostGarlic.boostsprite = new ImageIcon(getClass().getResource("/data/garlicbread.png")).getImage();
-		BoostGarlic.boosteffectsprite = new ImageIcon(getClass().getResource("/data/garlicbreadeffect.png")).getImage();
-		LevelExit.sprite = new ImageIcon(getClass().getResource("/data/finishline.png")).getImage();
-		SummonedIce.healingice = new ImageIcon(getClass().getResource("/data/iceheal.png")).getImage();
-		FakeItemForFrozen.frozen = new ImageIcon(getClass().getResource("/data/frozeneffect.png")).getImage();
-		DarkIce.ready  = new ImageIcon(getClass().getResource("/data/darkiceready.png")).getImage();
-		DarkIce.strike  = new ImageIcon(getClass().getResource("/data/darkice.png")).getImage();
-		KaleKingBlinkingItem.sprite = new ImageIcon(getClass().getResource("/data/kingkaleblinking.png")).getImage();
-		
-		HatBaseball.hatsprite = new ImageIcon(getClass().getResource("/data/hatbaseball.png")).getImage();
-		HatBaseball.addSprite = new ImageIcon(getClass().getResource("/data/addhatbaseball.png")).getImage();
-		HatBowler.hatsprite = new ImageIcon(getClass().getResource("/data/hatbowler.png")).getImage();
-		HatBowler.addSprite = new ImageIcon(getClass().getResource("/data/addhatbowler.png")).getImage();
-		HatFedora.hatsprite = new ImageIcon(getClass().getResource("/data/hatfedora.png")).getImage();
-		HatFedora.addSprite = new ImageIcon(getClass().getResource("/data/addhatfedora.png")).getImage();
-		HatPanama.hatsprite = new ImageIcon(getClass().getResource("/data/hatpanama.png")).getImage();
-		HatPanama.addSprite = new ImageIcon(getClass().getResource("/data/addhatpanama.png")).getImage();
-		HatSherlock.hatsprite = new ImageIcon(getClass().getResource("/data/hatsherlock.png")).getImage();
-		HatSherlock.addSprite = new ImageIcon(getClass().getResource("/data/addhatsherlock.png")).getImage();
-		HatTop.hatsprite = new ImageIcon(getClass().getResource("/data/hattop.png")).getImage();
-		HatTop.addSprite = new ImageIcon(getClass().getResource("/data/addhattop.png")).getImage();
-
-		grinningsprite = new ImageIcon(getClass().getResource("/data/grin.png")).getImage();
 		
 		player = new Player();
 		pf = new PathFinder();
@@ -757,13 +506,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 		player.setBackground(bg);
 		bginitx = bg.getCenterX();
 		bginity = bg.getCenterY() - 15;
-
-		player.currentSprite = player.getArmor().getStaySprite();
-		/*
-		 * anim = new Animation(); anim.addFrame(character1, 1250);
-		 * anim.addFrame(character2, 50); currentSprite = anim.getImage();
-		 */
 	}
+	
 	
 	private void settingsUI(){
 		if (null == iconScreen) {
@@ -1392,6 +1136,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 	private void loadMap(String filename) throws IOException {
 		ArrayList<String> lines = new ArrayList<String>();
 		blockmaxheight = 0;
+		
+		player.currentSprite = player.getArmor().getStaySprite();
 		
 		maskminx = -1;
 		maskmaxx = -1;
@@ -2424,6 +2170,8 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
             }
         });
 
+        me.validate();
+        me.repaint();
 	}
 	
 	public void initDeathScreen(){
@@ -3055,158 +2803,6 @@ public class StartingClass extends JFrame implements Runnable, KeyListener {
 
 	public void animate() {
 		anim.update(10);
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_Z:
-			if(azerty)
-				player.moveUp();
-			break;
-			
-		case KeyEvent.VK_W:
-			if(!azerty)
-				player.moveUp();
-			break;
-
-		case KeyEvent.VK_S:
-			player.moveDown();
-			break;
-
-		case KeyEvent.VK_Q:
-			if(azerty){
-				player.moveLeft();
-			}
-			
-			break;
-			
-		case KeyEvent.VK_A:
-			if(!azerty){
-				player.moveLeft();
-			}
-			
-			break;
-
-		case KeyEvent.VK_D:
-			player.moveRight();
-			break;
-
-		case KeyEvent.VK_UP:
-			player.wannashootup = true;
-			break;
-
-		case KeyEvent.VK_DOWN:
-			player.wannashootdown = true;
-			break;
-
-		case KeyEvent.VK_LEFT:
-			player.wannashootleft = true;
-			break;
-
-		case KeyEvent.VK_RIGHT:	
-			player.wannashootright = true;
-			break;
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		switch (e.getKeyCode()) {
-		case KeyEvent.VK_Z:
-			if(azerty)
-				player.stopMovingUp();
-			break;
-		case KeyEvent.VK_W:
-			if(!azerty)
-				player.stopMovingUp();
-			break;
-		case KeyEvent.VK_S:
-			player.stopMovingDown();
-			break;
-		case KeyEvent.VK_Q:
-			if(azerty)
-				player.stopMovingLeft();
-			else{
-				armorindex++;
-				if (armorindex == playerarmor.size())
-					armorindex = 0;
-				player.setArmor(playerarmor.get(armorindex));
-			}
-			break;
-		case KeyEvent.VK_D:
-			player.stopMovingRight();
-			break;
-		case KeyEvent.VK_UP:
-			player.wannashootup = false;
-			break;
-		case KeyEvent.VK_DOWN:
-			player.wannashootdown = false;
-			break;
-		case KeyEvent.VK_LEFT:
-			player.wannashootleft = false;
-			break;
-		case KeyEvent.VK_RIGHT:
-			player.wannashootright = false;
-			break;
-		case KeyEvent.VK_E:
-			gunSoundLoaded = false;
-			weaponindex++;
-			if (weaponindex == playerweapons.size())
-				weaponindex = 0;
-			player.setWeapon(playerweapons.get(weaponindex));
-			break;
-		case KeyEvent.VK_R:
-			gunSoundLoaded = false;
-			weaponindex--;
-			if (weaponindex == -1)
-				weaponindex = playerweapons.size() - 1;
-			player.setWeapon(playerweapons.get(weaponindex));
-			break;
-		case KeyEvent.VK_A:
-			if(azerty){
-				armorindex++;
-				if (armorindex == playerarmor.size())
-					armorindex = 0;
-				player.setArmor(playerarmor.get(armorindex));
-			}else{
-				player.stopMovingLeft();
-			}
-			break;
-		case KeyEvent.VK_H:
-			hatindex++;
-			if (hatindex == playerhats.size())
-				hatindex = 0;
-			player.setHat(playerhats.get(hatindex));
-			break;
-		case KeyEvent.VK_ESCAPE:
-			state = GameState.Exit;
-			System.exit(0);
-			break;
-		case KeyEvent.VK_SPACE:
-			if (state == GameState.Paused) {
-				state = GameState.Running;
-				if (clip != null && playMusic)
-					clip.loop(Clip.LOOP_CONTINUOUSLY);
-			} else if (state == GameState.Running) {
-				state = GameState.Paused;
-				if (clip != null && playMusic)
-					clip.stop();
-			}
-			break;
-		case KeyEvent.VK_C:
-			if (ScrollingMode > 0)
-				centeringOnPlayerRequest = true;
-			break;
-		case KeyEvent.VK_V:
-			if (ScrollingMode > 0)
-				toggleScrollingModeRequest = true;
-			break;
-		}
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
 	}
 
 	public static Background getBg() {
