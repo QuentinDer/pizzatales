@@ -16,28 +16,28 @@ public class Smg extends Firearm {
 	public void shootUp(int x, int y) {
 		setSpriteUp();
 		shootingCounter++;
-		holderprojectiles.add(new SmgBullet(x, y, 0, -1, speed, projectiledmg, range));
+		holderprojectiles.add(new SmgBullet(x+15, y, 0, -1, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootDown(int x, int y) {
 		setSpriteDown();
 		shootingCounter++;
-		holderprojectiles.add(new SmgBullet(x, y, 0, 1, speed, projectiledmg, range));
+		holderprojectiles.add(new SmgBullet(x+15, y, 0, 1, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootLeft(int x, int y) {
 		setSpriteLeft();
 		shootingCounter++;
-		holderprojectiles.add(new SmgBullet(x, y, -1, 0, speed, projectiledmg, range));
+		holderprojectiles.add(new SmgBullet(x-25, y, -1, 0, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootRight(int x, int y) {
 		setSpriteRight();
 		shootingCounter++;
-		holderprojectiles.add(new SmgBullet(x, y, 1, 0, speed, projectiledmg, range));
+		holderprojectiles.add(new SmgBullet(x+30, y, 1, 0, speed, projectiledmg, range));
 	}
 
 	@Override
@@ -64,28 +64,28 @@ public class Smg extends Firearm {
 	public void shootUpLeft(int x, int y) {
 		setSpriteLeftUp();
 		shootingCounter++;
-		holderprojectiles.add(new SmgBullet(x, y, -0.7f, -0.7f, speed, projectiledmg, range));
+		holderprojectiles.add(new SmgBullet(x-25, y-20, -0.7f, -0.7f, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootUpRight(int x, int y) {
 		setSpriteRightUp();
 		shootingCounter++;
-		holderprojectiles.add(new SmgBullet(x, y, 0.7f, -0.7f, speed, projectiledmg, range));
+		holderprojectiles.add(new SmgBullet(x+25, y-20, 0.7f, -0.7f, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootDownLeft(int x, int y) {
 		setSpriteLeftDown();
 		shootingCounter++;
-		holderprojectiles.add(new SmgBullet(x, y, -0.7f, 0.7f, speed, projectiledmg, range));
+		holderprojectiles.add(new SmgBullet(x-25, y+27, -0.7f, 0.7f, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootDownRight(int x, int y) {
 		setSpriteRightDown();
 		shootingCounter++;
-		holderprojectiles.add(new SmgBullet(x, y, 0.7f, 0.7f, speed, projectiledmg, range));
+		holderprojectiles.add(new SmgBullet(x+25, y+27, 0.7f, 0.7f, speed, projectiledmg, range));
 	}
 	
 	@Override

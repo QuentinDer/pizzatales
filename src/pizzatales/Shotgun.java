@@ -29,12 +29,12 @@ public class Shotgun extends Firearm {
 		//holderprojectiles.add(new ShotgunBullet(x, y, -sin22, -cos22));
 		//holderprojectiles.add(new ShotgunBullet(x, y, sin22, -cos22));
 		//holderprojectiles.add(new ShotgunBullet(x, y, 0, -1));
-		holderprojectiles.add(new ShotgunBullet(x, y, xl, -1, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, -xl, -1, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+15, y, xl, -1, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+15, y, -xl, -1, speed, projectiledmg, range));
 		//holderprojectiles.add(new ShotgunBullet(x, y, xm, -1));
 		//holderprojectiles.add(new ShotgunBullet(x, y, -xm, -1));
-		holderprojectiles.add(new ShotgunBullet(x, y, -xs, -1, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, xs, -1, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+15, y, -xs, -1, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+15, y, xs, -1, speed, projectiledmg, range));
 	}
 
 	@Override
@@ -46,12 +46,12 @@ public class Shotgun extends Firearm {
 		//holderprojectiles.add(new ShotgunBullet(x, y, -sin22, cos22));
 		//holderprojectiles.add(new ShotgunBullet(x, y, sin22, cos22));
 		//holderprojectiles.add(new ShotgunBullet(x, y, 0, 1));
-		holderprojectiles.add(new ShotgunBullet(x, y, xl, 1, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, -xl, 1, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+15, y, xl, 1, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+15, y, -xl, 1, speed, projectiledmg, range));
 		//holderprojectiles.add(new ShotgunBullet(x, y, xm, 1));
 		//holderprojectiles.add(new ShotgunBullet(x, y, -xm, 1));
-		holderprojectiles.add(new ShotgunBullet(x, y, -xs, 1, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, xs, 1, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+15, y, -xs, 1, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+15, y, xs, 1, speed, projectiledmg, range));
 	}
 
 	@Override
@@ -63,12 +63,12 @@ public class Shotgun extends Firearm {
 		//holderprojectiles.add(new ShotgunBullet(x, y, -cos22, sin22));
 		//holderprojectiles.add(new ShotgunBullet(x, y, -cos22, -sin22));
 		//holderprojectiles.add(new ShotgunBullet(x, y, -1, 0));
-		holderprojectiles.add(new ShotgunBullet(x, y, -1, xl, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, -1, -xl, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x-25, y, -1, xl, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x-25, y, -1, -xl, speed, projectiledmg, range));
 		//holderprojectiles.add(new ShotgunBullet(x, y, -1, xm));
 		//holderprojectiles.add(new ShotgunBullet(x, y, -1, -xm));
-		holderprojectiles.add(new ShotgunBullet(x, y, -1, xs, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, -1, -xs, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x-25, y, -1, xs, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x-25, y, -1, -xs, speed, projectiledmg, range));
 	}
 
 	@Override
@@ -80,12 +80,12 @@ public class Shotgun extends Firearm {
 		//holderprojectiles.add(new ShotgunBullet(x, y, cos22, sin22));
 		//holderprojectiles.add(new ShotgunBullet(x, y, cos22, -sin22));
 		//holderprojectiles.add(new ShotgunBullet(x, y, 1, 0));
-		holderprojectiles.add(new ShotgunBullet(x, y, 1, xl, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, 1, -xl, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+30, y, 1, xl, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+30, y, 1, -xl, speed, projectiledmg, range));
 		//holderprojectiles.add(new ShotgunBullet(x, y, 1, xm));
 		//holderprojectiles.add(new ShotgunBullet(x, y, 1, -xm));
-		holderprojectiles.add(new ShotgunBullet(x, y, 1, xs, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, 1, -xs, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+30, y, 1, xs, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+30, y, 1, -xs, speed, projectiledmg, range));
 	}
 	
 	@Override
@@ -112,40 +112,40 @@ public class Shotgun extends Firearm {
 	public void shootUpLeft(int x, int y) {
 		setSpriteLeftUp();
 		shootingCounter++;
-		holderprojectiles.add(new ShotgunBullet(x, y, -0.45f, -0.9f, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, -0.6f, -0.8f, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, -0.8f, -0.6f, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, -0.9f, -0.45f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x-25, y-20, -0.45f, -0.9f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x-25, y-20, -0.6f, -0.8f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x-25, y-20, -0.8f, -0.6f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x-25, y-20, -0.9f, -0.45f, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootUpRight(int x, int y) {
 		setSpriteRightUp();
 		shootingCounter++;
-		holderprojectiles.add(new ShotgunBullet(x, y, 0.45f, -0.9f, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, 0.6f, -0.8f, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, 0.8f, -0.6f, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, 0.9f, -0.45f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+25, y-20, 0.45f, -0.9f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+25, y-20, 0.6f, -0.8f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+25, y-20, 0.8f, -0.6f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+25, y-20, 0.9f, -0.45f, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootDownLeft(int x, int y) {
 		setSpriteLeftDown();
 		shootingCounter++;
-		holderprojectiles.add(new ShotgunBullet(x, y, -0.45f, 0.9f, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, -0.6f, 0.8f, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, -0.8f, 0.6f, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, -0.9f, 0.45f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x-25, y+25, -0.45f, 0.9f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x-25, y+25, -0.6f, 0.8f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x-25, y+25, -0.8f, 0.6f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x-25, y+25, -0.9f, 0.45f, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootDownRight(int x, int y) {
 		setSpriteRightDown();
 		shootingCounter++;
-		holderprojectiles.add(new ShotgunBullet(x, y, 0.45f, 0.9f, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, 0.6f, 0.8f, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, 0.8f, 0.6f, speed, projectiledmg, range));
-		holderprojectiles.add(new ShotgunBullet(x, y, 0.9f, 0.45f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+25, y+25, 0.45f, 0.9f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+25, y+25, 0.6f, 0.8f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+25, y+25, 0.8f, 0.6f, speed, projectiledmg, range));
+		holderprojectiles.add(new ShotgunBullet(x+25, y+25, 0.9f, 0.45f, speed, projectiledmg, range));
 	}
 	
 	@Override

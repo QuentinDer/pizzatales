@@ -16,28 +16,28 @@ public class Rocket extends Firearm {
 	public void shootUp(int x, int y) {
 		setSpriteUp();
 		shootingCounter++;
-		holderprojectiles.add(new BazookaBullet(x, y, 0, -1, speed, projectiledmg, range));
+		holderprojectiles.add(new BazookaBullet(x+15, y, 0, -1, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootDown(int x, int y) {
 		setSpriteDown();
 		shootingCounter++;
-		holderprojectiles.add(new BazookaBullet(x, y, 0, 1, speed, projectiledmg, range));
+		holderprojectiles.add(new BazookaBullet(x+15, y, 0, 1, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootLeft(int x, int y) {
 		setSpriteLeft();
 		shootingCounter++;
-		holderprojectiles.add(new BazookaBullet(x, y, -1, 0, speed, projectiledmg, range));
+		holderprojectiles.add(new BazookaBullet(x-35, y, -1, 0, speed, projectiledmg, range));
 	}
 
 	@Override
 	public void shootRight(int x, int y) {
 		setSpriteRight();
 		shootingCounter++;
-		holderprojectiles.add(new BazookaBullet(x, y, 1, 0, speed, projectiledmg, range));
+		holderprojectiles.add(new BazookaBullet(x+35, y, 1, 0, speed, projectiledmg, range));
 	}
 
 	@Override
