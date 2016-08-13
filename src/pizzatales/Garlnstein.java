@@ -6,6 +6,7 @@ public class Garlnstein extends Enemy {
 
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
 	public static Image slashRight, slashLeft, slashUp, slashDown;
+	public static Image slashWindupRight, slashWindupLeft, slashWindupUp, slashWindupDown;
 	public static Image dashRight, dashLeft, dashUp, dashDown, dashBlinking;
 	public static Image cloning1, cloning2, cloning3, intermediateDieSprite;
 	
@@ -32,6 +33,7 @@ public class Garlnstein extends Enemy {
 	private float dashSpeedX;
 	public boolean fake;
 	private boolean cloningenabled, dashingenabled;
+	private int swipewindup, swipewinduptime;
 	
 	public Garlnstein(int centerX, int centerY, boolean fake) {
 		super(centerX, centerY, null, fake?10:65, 3, 31, 31,
@@ -40,12 +42,13 @@ public class Garlnstein extends Enemy {
 		if (fake)
 			dashingenabled = true;
 		this.fake = fake;
+		swipewinduptime = 12;
 		switch(StartingClass.difficultylevel) {
 		case 1:
 			maxInAnimation = 60;
 			dashmaxcd = 600;
 			dashblinkingtime = 90;
-			cloningmaxcd = 1800;
+			cloningmaxcd = 3000;
 			cloningtime = 120;
 			dashspeed = 10;
 			break;
@@ -54,7 +57,7 @@ public class Garlnstein extends Enemy {
 			dashmaxcd = 450;
 			dashblinkingtime = 80;
 			cloningtime = 100;
-			cloningmaxcd = 1500;
+			cloningmaxcd = 2400;
 			dashspeed = 12;
 			break;
 		case 3:
@@ -62,7 +65,7 @@ public class Garlnstein extends Enemy {
 			dashmaxcd = 300;
 			dashblinkingtime = 70;
 			cloningtime = 80;
-			cloningmaxcd = 1200;
+			cloningmaxcd = 1800;
 			dashspeed = 14;
 			break;
 		case 4:
@@ -70,7 +73,7 @@ public class Garlnstein extends Enemy {
 			dashmaxcd = 150;
 			dashblinkingtime = 60;
 			cloningtime = 60;
-			cloningmaxcd = 900;
+			cloningmaxcd = 1200;
 			dashspeed = 16;
 			break;
 		}
@@ -88,6 +91,28 @@ public class Garlnstein extends Enemy {
 				speed = basicspeed;
 				currentSprite = staySprite;
 				slashcd = 30;
+				isSlashing = false;
+			}
+		}
+		if (swipewindup > 0) {
+			swipewindup--;
+			if (swipewindup == 0) {
+				hasSlashed = false;
+				inAnimation = maxInAnimation;
+				switch(slashDirection) {
+				case 1:
+					currentSprite = slashLeft;
+					break;
+				case 2:
+					currentSprite = slashUp;
+					break;
+				case 3:
+					currentSprite = slashRight;
+					break;
+				case 4:
+					currentSprite = slashDown;
+					break;
+				}
 			}
 		}
 		if (dashblinking > 0) {
@@ -172,7 +197,7 @@ public class Garlnstein extends Enemy {
 			dashcd--;
 		if (slashcd > 0)
 			slashcd --;
-		if (inAnimation == 0 && cloning == 0 && dashblinking == 0 && movementTime % 3 == 0) {
+		if (inAnimation == 0 && cloning == 0 && dashblinking == 0 && !isSlashing && movementTime % 3 == 0) {
 			StartingClass.map[player.posx][player.posy] = null;
 			int dirplace = 0;
 			int difPX = 50*posx+25+bg.getCenterX()-StartingClass.bginitx - centerX;
@@ -253,52 +278,52 @@ public class Garlnstein extends Enemy {
 				cloningcd = cloningmaxcd;
 			}
 		}
-		if (!isDashing && inAnimation == 0 && dashblinking == 0 && cloning == 0 && slashcd == 0 && Math.abs(diffx) < 20 && Math.abs(diffy) < 60) {
+		if (!isDashing && inAnimation == 0 && dashblinking == 0 && !isSlashing && cloning == 0 && slashcd == 0 && Math.abs(diffx) < 20 && Math.abs(diffy) < 60) {
 			if (diffy > 0) {
 				stopMoving();
-				hasSlashed = false;
+				hasSlashed = true;
 				isSlashing = true;
-				inAnimation = maxInAnimation;
+				swipewindup = swipewinduptime;
 				halfsizex = 31;
 				halfrsizex = 25;
 				halfsizey = 70;
 				halfrsizey = 60;
-				currentSprite = slashDown;
+				currentSprite = slashWindupDown;
 				slashDirection = 4;
 			} else {
 				stopMoving();
-				hasSlashed = false;
+				hasSlashed = true;
 				isSlashing = true;
-				inAnimation = maxInAnimation;
+				swipewindup = swipewinduptime;
 				halfsizex = 31;
 				halfrsizex = 25;
 				halfsizey = 70;
 				halfrsizey = 60;
-				currentSprite = slashUp;
+				currentSprite = slashWindupUp;
 				slashDirection = 2;
 			}
-		} else if (!isDashing && inAnimation == 0 && dashblinking == 0 && cloning == 0 && slashcd == 0 && Math.abs(diffy) < 20 && Math.abs(diffx) < 60) {
+		} else if (!isDashing && inAnimation == 0 && dashblinking == 0 && !isSlashing && cloning == 0 && slashcd == 0 && Math.abs(diffy) < 20 && Math.abs(diffx) < 60) {
 			if (diffx > 0) {
 				stopMoving();
-				hasSlashed = false;
+				hasSlashed = true;
 				isSlashing = true;
-				inAnimation = maxInAnimation;
+				swipewindup = swipewinduptime;
 				halfsizex = 75;
 				halfrsizex = 65;
 				halfsizey = 31;
 				halfrsizey = 25;
-				currentSprite = slashRight;
+				currentSprite = slashWindupRight;
 				slashDirection = 3;
 			} else {
 				stopMoving();
-				hasSlashed = false;
+				hasSlashed = true;
 				isSlashing = true;
-				inAnimation = maxInAnimation;
+				swipewindup = swipewinduptime;
 				halfsizex = 75;
 				halfrsizex = 65;
 				halfsizey = 31;
 				halfrsizey = 25;
-				currentSprite = slashLeft;
+				currentSprite = slashWindupLeft;
 				slashDirection = 1;
 			}
 		}
@@ -467,7 +492,7 @@ public class Garlnstein extends Enemy {
 	
 	@Override
 	public void animate(){
-		if (isMoving && inAnimation == 0 && dashblinking == 0 && !isDashing) {
+		if (isMoving && inAnimation == 0 && dashblinking == 0 && !isDashing && !isSlashing) {
 			walkCounter++;
 			if (getSpeedX() <= 0) {
 				if (walkCounter == 1000)

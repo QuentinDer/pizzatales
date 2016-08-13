@@ -5,7 +5,7 @@ public class ReaperRingFlame extends FlamerFlame {
 	private boolean forward;
 	
 	public ReaperRingFlame(int startX, int startY, float vectorX,
-			float vectorY, int speed, float dmg, int range) {
+			float vectorY, float speed, float dmg, int range) {
 		super(startX, startY, vectorX, vectorY, speed, dmg, range);
 		forward = true;
 	}

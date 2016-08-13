@@ -84,9 +84,8 @@ public class BazookaBullet extends Projectile {
 	@Override
 	public void doOnCollision(Projectile p) {
 		if (visible) {
-			if (life > 0)
-				life -= p.damage;
-			else {
+			life -= p.damage;
+			if (life <= 0) {
 				visible = false;
 				StartingClass.getExplosions().add(new BazookaBulletExplosion(this.centerX,this.centerY));
 			}
