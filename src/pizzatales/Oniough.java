@@ -202,6 +202,8 @@ public class Oniough extends Enemy {
 		if (firecd == 0 && earthshaking == 0) {
 			float diffx = player.getCenterX() - getCenterX();
 			float diffy = player.getCenterY() - getCenterY();
+			int dirX = 0;
+			int dirY = 0;
 			float dist = (float)Math.sqrt(Math.abs(diffx)*Math.abs(diffx)+Math.abs(diffy)*Math.abs(diffy));
 			
 			switch (firingmode) {
@@ -230,33 +232,49 @@ public class Oniough extends Enemy {
 			switch (angdir) {
 			case 0:
 				currentSprite = onioughShootRight;
+				dirX = 2;
+				dirY = 0;
 				break;
 			case 1:
 				currentSprite = onioughShootRightDown;
+				dirX = 2;
+				dirY = 2;
 				break;
 			case 2:
 				currentSprite = onioughShootDown;
+				dirX = -1;
+				dirY = 0;
 				break;
 			case 3:
 				currentSprite = onioughShootLeftDown;
+				dirX = -2;
+				dirY = 2;
 				break;
 			case 4:
 				currentSprite = onioughShootLeft;
+				dirX = -2;
+				dirY = 0;
 				break;
 			case 5:
 				currentSprite = onioughShootLeftUp;
+				dirX = -2;
+				dirY = -2;
 				break;
 			case 6:
 				currentSprite = onioughShootUp;
+				dirX = +1;
+				dirY = 0;
 				break;
 			case 7:
 				currentSprite = onioughShootRightUp;
+				dirX = 2;
+				dirY = -2;
 				break;
 			}
 			
 			switch(firingmode) {
 			case 0:
-				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,15,500));
+				projectiles.add(new OnioughProjectile(centerX+(15*dirX),centerY+(10*dirY),vectorx,vectory,15,500));
 				firecd = firemaxcd0;
 				break;
 			case 1:
@@ -268,9 +286,9 @@ public class Oniough extends Enemy {
 				double angle = Math.toDegrees(Math.acos(vectorx));
 				if (vectory < 0)
 					angle = 360-angle;
-				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,10,300));
-				projectiles.add(new OnioughProjectile(centerX,centerY,(float)(Math.cos(Math.toRadians(angle+10))),(float)(Math.sin(Math.toRadians(angle+10))),10,300));
-				projectiles.add(new OnioughProjectile(centerX,centerY,(float)(Math.cos(Math.toRadians(angle-10))),(float)(Math.sin(Math.toRadians(angle-10))),10,300));
+				projectiles.add(new OnioughProjectile(centerX+(15*dirX),centerY+(10*dirY),vectorx,vectory,10,300));
+				projectiles.add(new OnioughProjectile(centerX+(15*dirX),centerY+(10*dirY),(float)(Math.cos(Math.toRadians(angle+10))),(float)(Math.sin(Math.toRadians(angle+10))),10,300));
+				projectiles.add(new OnioughProjectile(centerX+(15*dirX),centerY+(10*dirY),(float)(Math.cos(Math.toRadians(angle-10))),(float)(Math.sin(Math.toRadians(angle-10))),10,300));
 				firecd = firemaxcd1;
 				break;
 			case 2:
@@ -281,12 +299,12 @@ public class Oniough extends Enemy {
 				vectory = diffy / dist;
 				OnioughProjectile center = new OnioughProjectile(centerX,centerY,vectorx,vectory,5+StartingClass.difficultylevel,1000);
 				projectiles.add(center);
-				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,5+StartingClass.difficultylevel,0,15+7*StartingClass.difficultylevel));
-				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,5+StartingClass.difficultylevel,60,15+7*StartingClass.difficultylevel));
-				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,5+StartingClass.difficultylevel,120,15+7*StartingClass.difficultylevel));
-				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,5+StartingClass.difficultylevel,180,15+7*StartingClass.difficultylevel));
-				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,5+StartingClass.difficultylevel,240,15+7*StartingClass.difficultylevel));
-				projectiles.add(new OnioughProjectile(centerX,centerY,vectorx,vectory,5+StartingClass.difficultylevel,300,15+7*StartingClass.difficultylevel));
+				projectiles.add(new OnioughProjectile(centerX+(15*dirX),centerY+(10*dirY),vectorx,vectory,5+StartingClass.difficultylevel,0,15+7*StartingClass.difficultylevel));
+				projectiles.add(new OnioughProjectile(centerX+(15*dirX),centerY+(10*dirY),vectorx,vectory,5+StartingClass.difficultylevel,60,15+7*StartingClass.difficultylevel));
+				projectiles.add(new OnioughProjectile(centerX+(15*dirX),centerY+(10*dirY),vectorx,vectory,5+StartingClass.difficultylevel,120,15+7*StartingClass.difficultylevel));
+				projectiles.add(new OnioughProjectile(centerX+(15*dirX),centerY+(10*dirY),vectorx,vectory,5+StartingClass.difficultylevel,180,15+7*StartingClass.difficultylevel));
+				projectiles.add(new OnioughProjectile(centerX+(15*dirX),centerY+(10*dirY),vectorx,vectory,5+StartingClass.difficultylevel,240,15+7*StartingClass.difficultylevel));
+				projectiles.add(new OnioughProjectile(centerX+(15*dirX),centerY+(10*dirY),vectorx,vectory,5+StartingClass.difficultylevel,300,15+7*StartingClass.difficultylevel));
 				firecd = firemaxcd2;
 				break;
 			}
