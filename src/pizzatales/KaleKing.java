@@ -7,12 +7,15 @@ import java.util.Arrays;
 public class KaleKing extends Enemy {
 
 	private static final boolean TRICK = false;
-	//private static float basicspeed = 2.5f;
+	private float basicspeed = 2.5f;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite;
 	public static Image swipeDown, swipeRight, swipeLeft, swipeUp;
-	public static Image boltsfiringsprite, dashSpriteRight, dashSpriteLeft;
+	public static Image boltsfiringsprite, dashSpriteRight, dashSpriteLeft, dashSpriteRightWindup, dashSpriteLeftWindup;
 	public static Image blinkingSprite;
 	public static Image hulkSprite, hulkMove1, hulkMove2, hulkSwipeDown, hulkSwipeRight, hulkSwipeLeft, hulkSwipeUp, intermediateDieSprite;
+	public static Image hulkSwipeDownWindup, hulkSwipeUpWindup, hulkSwipeLeftWindup, hulkSwipeRightWindup;
+	public static Image swipeDownWindup, swipeRightWindup, swipeUpWindup, swipeLeftWindup;
+	public static Image kaleKingStomp1, kaleKingStomp2;
 	public static ArrayList<Image> phaseanim = new ArrayList<Image>();
 	//public static Image phase1, phase2, phase3, phase4, phase5, phase6, phase7, phase8, phase9, phase10, phase11;
 	private boolean darktrail/* = true*/;
@@ -56,7 +59,7 @@ public class KaleKing extends Enemy {
 	private int idarkcircle;
 	private boolean isDashing;
 	private int dashspeed;
-	private float dashSpeedX;
+	private float dashSpeedX, dashSpeedY;
 	private int dashcd, dashmaxcd, dashdmg;
 	private boolean dashenabled;
 	private int iceboltstyle;
@@ -73,10 +76,22 @@ public class KaleKing extends Enemy {
 	private int blinkingcd, blinkingmaxcd, blinking, blinkingduration, blinkingnumber, blinkingfollowingduration;
 	private int fireringrange;
 	private float fireringdmg;
+	private int swipewindup, swipewinduptime;
+	private int dashblinking;
+	private int dashblinkingtime;
+	private int earthshaking;
+	private int earthshakingcd;
+	private int earthshakingmaxcd;
+	private boolean earthshakingenabled;
+	private int earthshakingduration;
+	private int earthshakingtime;
+	private boolean slowlaunched;
+	private int shaking;
 	
 	public KaleKing(int centerX, int centerY, StartingClass applet) {
 		super(centerX, centerY, null, 300, 2.5f, 63, 50,
 				48, 45);
+		swipewinduptime = 12;
 		circles = new int[6];
 		circlex = new int[6][];
 		circley = new int[6][];
@@ -125,7 +140,7 @@ public class KaleKing extends Enemy {
 			darkiceprisonmaxcd = 600;
 			darkiceprisonrate = 25;
 			dashmaxcd = 360;
-			dashspeed = 6;
+			dashspeed = 11;
 			idarkcircle = 2;
 			darkicer = 90;
 			hulkmaxcd = 1200;
@@ -138,6 +153,10 @@ public class KaleKing extends Enemy {
 			blinkingmaxcd = 400;
 			fireringrange = 250;
 			fireringdmg = 0.6f;
+			dashblinkingtime = 50;
+			earthshakingmaxcd = 3300;
+			earthshakingduration = 180;
+			earthshakingtime = 180;
 			break;
 		case 2:
 			waitmin = 100;
@@ -151,7 +170,7 @@ public class KaleKing extends Enemy {
 			darkiceprisonmaxcd = 500;
 			darkiceprisonrate = 20;
 			dashmaxcd = 300;
-			dashspeed = 7;
+			dashspeed = 12;
 			idarkcircle = 3;
 			darkicer = 80;
 			hulkmaxcd = 1000;
@@ -164,6 +183,10 @@ public class KaleKing extends Enemy {
 			blinkingmaxcd = 400;
 			fireringrange = 300;
 			fireringdmg = 0.8f;
+			dashblinkingtime = 40;
+			earthshakingmaxcd = 3000;
+			earthshakingduration = 240;
+			earthshakingtime = 160;
 			break;
 		case 3:
 			waitmin = 80;
@@ -177,7 +200,7 @@ public class KaleKing extends Enemy {
 			darkiceprisonmaxcd = 400;
 			darkiceprisonrate = 15;
 			dashmaxcd = 240;
-			dashspeed = 8;
+			dashspeed = 13;
 			idarkcircle = 4;
 			darkicer = 70;
 			hulkmaxcd = 800;
@@ -190,6 +213,10 @@ public class KaleKing extends Enemy {
 			blinkingmaxcd = 400;
 			fireringrange = 350;
 			fireringdmg = 1.0f;
+			dashblinkingtime = 30;
+			earthshakingmaxcd = 2700;
+			earthshakingduration = 300;
+			earthshakingtime = 140;
 			break;
 		case 4:
 			waitmin = 60;
@@ -203,7 +230,7 @@ public class KaleKing extends Enemy {
 			darkiceprisonmaxcd = 300;
 			darkiceprisonrate = 10;
 			dashmaxcd = 180;
-			dashspeed = 9;
+			dashspeed = 14;
 			idarkcircle = 5;
 			darkicer = 60;
 			hulkmaxcd = 600;
@@ -216,6 +243,10 @@ public class KaleKing extends Enemy {
 			blinkingmaxcd = 400;
 			fireringrange = 400;
 			fireringdmg = 1.2f;
+			dashblinkingtime = 20;
+			earthshakingmaxcd = 2400;
+			earthshakingduration = 360;
+			earthshakingtime = 120;
 			break;
 		}
 		blinkingpos = new KaleKingBlinkingItem[StartingClass.difficultylevel];
@@ -300,7 +331,7 @@ public class KaleKing extends Enemy {
 					j++;
 				}
 				StartingClass.map[player.posx][player.posy] = player;
-				if (StartingClass.difficultylevel<4) {
+				//if (StartingClass.difficultylevel<4) {
 					if (player.getArmor().defense + 1 < player.getArmor().MAXDEF) {
 						player.getArmor().setDefense(player.getArmor().getDefense()+1);
 					} else
@@ -310,7 +341,7 @@ public class KaleKing extends Enemy {
 					} else {
 						player.setHealth(player.getHealth() + 1);
 					} 
-				}
+				//}
 			}
 			if (animcounter % phaseanimrate == 0) {
 				animsprite++;
@@ -376,6 +407,98 @@ public class KaleKing extends Enemy {
 				StartingClass.maskminy = miny;
 				StartingClass.maskmaxx = maxx;
 				StartingClass.maskmaxy = maxy;
+			}
+			if (earthshakingcd > 0)
+				earthshakingcd--;
+			if (earthshaking > 0) {
+				earthshaking--;
+				if (earthshaking == 0) {
+					currentSprite = staySprite;
+				} else {
+					switch(earthshaking*3/earthshakingtime) {
+					case 0:
+						currentSprite = kaleKingStomp2;
+						if (!slowlaunched) {
+							slowlaunched = true;
+							shaking = earthshakingduration;
+							StartingClass.leavingitems.add(new FakeItemForSlow(earthshakingduration,1));
+						}
+						break;
+					case 1:
+						currentSprite = kaleKingStomp1;
+						break;
+					case 2:
+						slowlaunched = false;
+						break;
+					}
+				}
+			}
+			if (shaking > 0) {
+				shaking--;
+				if (shaking == 0) {
+					player.setScrollingSpeedY(0);
+				} else {
+					if (movementTime % 10 < 5)
+						player.setScrollingSpeedY(4);
+					else
+						player.setScrollingSpeedY(-4);
+				}
+			}
+			if (dashblinking > 0) {
+				dashblinking--;
+				if (dashblinking == 0) {
+					float diffx = player.getCenterX() - getCenterX();
+					float diffy = player.getCenterY() - getCenterY();
+					dashSpeedX = diffx * dashspeed / (Math.abs(diffx)+Math.abs(diffy));
+					dashSpeedY = diffy * dashspeed / (Math.abs(diffx)+Math.abs(diffy));
+					/*halfsizex = 75;
+					halfrsizex = 65;
+					halfsizey = 31;
+					halfrsizey = 25;*/
+					if (dashSpeedX > 0)
+						currentSprite = dashSpriteRight;
+					else
+						currentSprite = dashSpriteLeft;
+					fcenterX = centerX;
+					fcenterY = centerY;
+					isDashing = true;
+					paintoverride = true;
+					dashcd = dashmaxcd;
+					incrementWaitingTimes();
+				}
+			}
+			if (swipewindup > 0) {
+				swipewindup--;
+				if (swipewindup == 0) {
+					hasSlashed = false;
+					inAnimation = maxInAnimation;
+					switch(slashDirection) {
+					case 1:
+						if (hulking == 0)
+							currentSprite = swipeLeft;
+						else
+							currentSprite = hulkSwipeLeft;
+						break;
+					case 2:
+						if (hulking == 0)
+							currentSprite = swipeUp;
+						else
+							currentSprite = hulkSwipeUp;
+						break;
+					case 3:
+						if (hulking == 0)
+							currentSprite = swipeRight;
+						else
+							currentSprite = hulkSwipeRight;
+						break;
+					case 4:
+						if (hulking == 0)
+							currentSprite = swipeDown;
+						else
+							currentSprite = hulkSwipeDown;
+						break;
+					}
+				}
 			}
 			if (blinkingcd > 0)
 				blinkingcd--;
@@ -475,11 +598,29 @@ public class KaleKing extends Enemy {
 						ndiffy = diffy  + (float)(Math.random()*boltscirclerange) - boltscirclerange/2;
 						brange = (int)(Math.random()*400)+400;
 						break;
+					case 6:
+						ndiffx = diffx + dist*player.getSpeedX()/iceboltspeed;
+						ndiffy = diffy  + dist*player.getSpeedY()/iceboltspeed;
+						break;
+					case 7:
+						ndiffx = diffx + (float)(Math.random()*boltscirclerange) - boltscirclerange/2;
+						ndiffy = diffy  + (float)(Math.random()*boltscirclerange) - boltscirclerange/2;
+						brange = (int)(Math.random()*400)+400;
+						break;
 					}
 					dist = (float)(Math.sqrt(Math.abs(ndiffx)*Math.abs(ndiffx)+Math.abs(ndiffy)*Math.abs(ndiffy)));
 					float vectorx = ndiffx / dist;
 					float vectory = ndiffy / dist;
-					projectiles.add(new IceBolt(centerX+54,centerY-27,vectorx,vectory,iceboltspeed,iceboltdmg, brange, frozenduration, iceboltstyle, this));
+					if (iceboltstyle == 6) {
+						projectiles.add(new IceBolt(centerX+54,centerY-27,vectorx,vectory,iceboltspeed,iceboltdmg, brange, frozenduration, 1, this));
+						projectiles.add(new IceBolt(centerX+54,centerY-27,vectorx,vectory,iceboltspeed,iceboltdmg,brange, frozenduration, iceboltstyle, 0, 5+7*StartingClass.difficultylevel));
+						projectiles.add(new IceBolt(centerX+54,centerY-27,vectorx,vectory,iceboltspeed,iceboltdmg,brange, frozenduration, iceboltstyle, 60, 5+7*StartingClass.difficultylevel));
+						projectiles.add(new IceBolt(centerX+54,centerY-27,vectorx,vectory,iceboltspeed,iceboltdmg,brange, frozenduration, iceboltstyle, 120, 5+7*StartingClass.difficultylevel));
+						projectiles.add(new IceBolt(centerX+54,centerY-27,vectorx,vectory,iceboltspeed,iceboltdmg,brange, frozenduration, iceboltstyle, 180, 5+7*StartingClass.difficultylevel));
+						projectiles.add(new IceBolt(centerX+54,centerY-27,vectorx,vectory,iceboltspeed,iceboltdmg,brange, frozenduration, iceboltstyle, 240, 5+7*StartingClass.difficultylevel));
+						projectiles.add(new IceBolt(centerX+54,centerY-27,vectorx,vectory,iceboltspeed,iceboltdmg,brange, frozenduration, iceboltstyle, 300, 5+7*StartingClass.difficultylevel));
+					} else
+						projectiles.add(new IceBolt(centerX+54,centerY-27,vectorx,vectory,iceboltspeed,iceboltdmg, brange, frozenduration, iceboltstyle, this));
 				}
 			}
 			if (darkiceprisoncd > 0)
@@ -557,41 +698,21 @@ public class KaleKing extends Enemy {
 					paintoverride = false;
 				}
 			}
-			if (dashenabled && inAnimation == 0 && boltsfiring == 0 && darkiceprison == 0 && dashcd == 0 && blinking == 0 && hulking == 0 && Math.abs(player.getCenterX() - getCenterX()) > 120 && Math.abs(player.posy-posy)<=1) {
-				boolean candash = true;
+			if (dashenabled && inAnimation == 0 && earthshaking == 0 && !isSlashing && boltsfiring == 0 && darkiceprison == 0 && dashcd == 0 && dashblinking == 0 && blinking == 0 && hulking == 0 && Math.abs(player.getCenterX()-getCenterX()) > 180 && Math.abs(player.posy-posy)<=3) {
+				dashblinking = dashblinkingtime;
+				halfsizex = 110;
+				halfsizey = 62;
+				halfrsizex = 100;
+				halfrsizey = 50;
+				R.setBounds((int)(centerX - halfrsizex + speedX), (int)(centerY - halfrsizey + speedY), 2*halfrsizex, 2*halfrsizey);
+				stopMoving();
 				if (player.getCenterX() > getCenterX()) {
-					for (int i = posx+1; i < player.posx; i++)
-						candash = candash && (StartingClass.map[i][posy] == null);
-					if (candash) {
-						currentSprite = dashSpriteRight;
-						moveRight();
-						dashSpeedX = dashspeed;
-					}
+					currentSprite = dashSpriteRightWindup;
 				} else {
-					for (int i = posx-1; i > player.posx; i--)
-						candash = candash && (StartingClass.map[i][posy] == null);
-					if (candash) {
-						currentSprite = dashSpriteLeft;
-						moveLeft();
-						dashSpeedX = -dashspeed;
-					}
-				}
-				if (candash) {
-					speed = dashspeed;
-					halfsizex = 110;
-					halfsizey = 62;
-					halfrsizex = 100;
-					halfrsizey = 50;
-					isDashing = true;
-					paintoverride = true;
-					showHealthBar = false;
-					inAnimation = 50;
-					dashcd = dashmaxcd;
-					incrementWaitingTimes();
-					R.setBounds((int)(centerX - halfrsizex + speedX), (int)(centerY - halfrsizey + speedY), 2*halfrsizex, 2*halfrsizey);
+					currentSprite = dashSpriteLeftWindup;
 				}
 			}
-			if (inAnimation == 0 && boltsfiring == 0 && darkiceprison == 0 && hulking == 0 && blinking == 0) {
+			if (inAnimation == 0 && !isDashing && boltsfiring == 0 && earthshaking == 0 && darkiceprison == 0 && hulking == 0 && blinking == 0 && dashblinking == 0) {
 				if (TRICK) {
 					if (health != maxHealth) {
 						this.startPhaseAnimation();
@@ -610,7 +731,7 @@ public class KaleKing extends Enemy {
 				projectiles.add(new KaleKingBall(centerX+54,centerY-17,0.f,0.f,balldmg,ballrange,this));
 				ballcd = ballmaxcd;
 			}
-			if (inAnimation == 0 && boltsfiring == 0 && darkiceprison == 0 && blinking == 0) {
+			if (inAnimation == 0 && !isSlashing && boltsfiring == 0 && earthshaking == 0 && darkiceprison == 0 && blinking == 0 && dashblinking == 0 ) {
 				if (movementTime % 05 == 0) {
 					StartingClass.map[player.posx][player.posy] = null;
 					int pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 200, canmoveleft, canmoveup, canmoveright, canmovedown, 0, true);
@@ -647,70 +768,76 @@ public class KaleKing extends Enemy {
 				}
 				int diffx = player.getCenterX() - getCenterX();
 				int diffy = player.getCenterY() - getCenterY();
-				if (slashEnabled && boltsfiring == 0 && darkiceprison == 0 && blinking == 0) {
+				if (earthshakingenabled && earthshakingcd == 0&& !isSlashing && boltsfiring == 0 && darkiceprison == 0 && blinking == 0 && dashblinking == 0 ) {
+					stopMoving();
+					earthshaking = earthshakingtime;
+					earthshakingcd = earthshakingmaxcd;
+					incrementWaitingTimes();
+				}
+				if (slashEnabled && !isSlashing && boltsfiring == 0 && darkiceprison == 0 && blinking == 0 && dashblinking == 0 ) {
 					if (slashCd == 0 && Math.abs(diffx) < 40 && Math.abs(diffy) < 96) {
 						if (diffy > 0) {
 							stopMoving();
-							hasSlashed = false;
+							hasSlashed = true;
 							isSlashing = true;
-							inAnimation = maxInAnimation;
+							swipewindup = swipewinduptime;
 							halfsizex = 62;
 							halfrsizex = 75;
 							halfsizey = 55;
 							halfrsizey = 73;
 							if (hulking == 0)
-								currentSprite = swipeDown;
+								currentSprite = swipeDownWindup;
 							else
-								currentSprite = hulkSwipeDown;
+								currentSprite = hulkSwipeDownWindup;
 							slashDirection = 4;
 						} else {
 							stopMoving();
-							hasSlashed = false;
+							hasSlashed = true;
 							isSlashing = true;
-							inAnimation = maxInAnimation;
+							swipewindup = swipewinduptime;
 							halfsizex = 62;
 							halfrsizex = 75;
 							halfsizey = 55;
 							halfrsizey = 73;
 							if (hulking == 0)
-								currentSprite = swipeUp;
+								currentSprite = swipeUpWindup;
 							else
-								currentSprite = hulkSwipeUp;
+								currentSprite = hulkSwipeUpWindup;
 							slashDirection = 2;
 						}
 					} else if (slashCd == 0 && Math.abs(diffy) < 40 && Math.abs(diffx) < 115) {
 						if (diffx > 0) {
 							stopMoving();
-							hasSlashed = false;
+							hasSlashed = true;
 							isSlashing = true;
-							inAnimation = maxInAnimation;
+							swipewindup = swipewinduptime;
 							halfsizex = 91;
 							halfrsizex = 90;
 							halfsizey = 65;
 							halfrsizey = 55;
 							if (hulking == 0)
-								currentSprite = swipeRight;
+								currentSprite = swipeRightWindup;
 							else
-								currentSprite = hulkSwipeRight;
+								currentSprite = hulkSwipeRightWindup;
 							slashDirection = 3;
 						} else {
 							stopMoving();
-							hasSlashed = false;
+							hasSlashed = true;
 							isSlashing = true;
-							inAnimation = maxInAnimation;
+							swipewindup = swipewinduptime;
 							halfsizex = 91;
 							halfrsizex = 90;
 							halfsizey = 65;
 							halfrsizey = 55;
 							if (hulking == 0)
-								currentSprite = swipeLeft;
+								currentSprite = swipeLeftWindup;
 							else
-								currentSprite = hulkSwipeLeft;
+								currentSprite = hulkSwipeLeftWindup;
 							slashDirection = 1;
 						}
 					}
 				}
-				if (inAnimation == 0 && darkiceprisonenabled && darkiceprisoncd == 0 && boltsfiring == 0 && darkiceprison == 0 && blinking == 0) {
+				if (inAnimation == 0 && !isSlashing && darkiceprisonenabled && darkiceprisoncd == 0 && boltsfiring == 0  && dashblinking == 0 && darkiceprison == 0 && blinking == 0) {
 					stopMoving();
 					currentSprite = boltsfiringsprite;
 					darkiceprison = darkiceprisonrate;
@@ -734,24 +861,25 @@ public class KaleKing extends Enemy {
 						darkiceprisoncy = player.posy;
 					}
 				}
-				if (inAnimation == 0 && boltsenabled && boltscd == 0 && boltsfiring == 0 && darkiceprison == 0 && blinking == 0) {
+				if (inAnimation == 0 && !isSlashing && boltsenabled && boltscd == 0 && boltsfiring == 0  && dashblinking == 0 && darkiceprison == 0 && blinking == 0) {
 					stopMoving();
 					initBoltStyle();
 					currentSprite = boltsfiringsprite;
 					boltsfiring = boltsfiringduration;
 				}
-				if (inAnimation == 0 && hulkenabled && hulkcd == 0 && hulking == 0 && boltsfiring == 0 && darkiceprison == 0  && blinking == 0) {
+				if (inAnimation == 0 && !isSlashing && !isDashing && hulkenabled && hulkcd == 0 && hulking == 0  && dashblinking == 0 && boltsfiring == 0 && darkiceprison == 0  && blinking == 0) {
 					stopMoving();
 					boltsenabled = false;
 					darkiceprisonenabled = false;
 					dashenabled = false;
 					blinkingenabled = false;
+					earthshakingenabled = false;
 					setDefaultSpeed(hulkspeed);
 					speed = hulkspeed;
 					currentSprite = hulkSprite;
 					hulking = hulkduration;
 				}
-				if (inAnimation == 0 && blinkingenabled && blinkingcd == 0 && hulking == 0 && boltsfiring == 0 && darkiceprison == 0  && blinking == 0) {
+				if (inAnimation == 0 && !isSlashing && !isDashing && blinkingenabled && blinkingcd == 0  && dashblinking == 0 && hulking == 0 && boltsfiring == 0 && darkiceprison == 0  && blinking == 0) {
 					stopMoving();
 					currentSprite = blinkingSprite;
 					int tmpx; 
@@ -820,7 +948,11 @@ public class KaleKing extends Enemy {
 			}
 			break;
 		case 5:
-			iceboltstyle = 1;
+			if (Math.random()<0.8) {
+				iceboltstyle = 6;
+			} else {
+				iceboltstyle = 7;
+			}
 			break;
 		case 6:
 			iceboltstyle = 1;
@@ -885,6 +1017,20 @@ public class KaleKing extends Enemy {
 			boltsfirerate = boltsbasefirerate;
 			iceboltrange = 400;
 			break;
+		case 6:
+			iceboltdmg = 1;
+			iceboltspeed = StartingClass.difficultylevel+5;
+			boltsfiringduration = 90;
+			boltsfirerate = boltsbasefirerate*2;
+			iceboltrange = 1000;
+			break;
+		case 7:
+			iceboltdmg = 1;
+			iceboltspeed = 6;
+			boltsfiringduration = 75;
+			boltsfirerate = boltsbasefirerate;
+			iceboltrange = 400;
+			break;
 		}
 	}
 	
@@ -904,19 +1050,18 @@ public class KaleKing extends Enemy {
 		speedY = 0;
 		
 		if (isDashing) {
-			if ((dashSpeedX > 0 && !canmoveright) || (dashSpeedX < 0 && !canmoveleft)) {
+			if ((dashSpeedX > 0 && !canmoveright) || (dashSpeedX < 0 && !canmoveleft) || (dashSpeedY > 0 && !canmovedown) || (dashSpeedY < 0 && !canmoveup)) {
 				isDashing = false;
 				paintoverride = false;
-				showHealthBar = true;
 				halfsizex = 68;
 				halfsizey = 50;
 				halfrsizex = 48;
 				halfrsizey = 45;
-				isDashing = false;
+				speed = basicspeed;
 				currentSprite = staySprite;
-				initSpeed();
-				inAnimation = 0;
+				slashCd = 30;
 			} else {
+				speedY = dashSpeedY;
 				speedX = dashSpeedX;
 				fcenterX += speedX - player.getScrollingSpeedX();
 				fcenterY += speedY - player.getScrollingSpeedY();
@@ -1106,7 +1251,7 @@ public class KaleKing extends Enemy {
 	
 	@Override
 	public void animate(){
-		if (isMoving && inAnimation == 0 && !isDashing) {
+		if (isMoving && inAnimation == 0 && !isDashing && !isSlashing) {
 			walkCounter++;
 			if (getSpeedX() <= 0) {
 				if (walkCounter == 1000)
@@ -1200,6 +1345,8 @@ public class KaleKing extends Enemy {
 			hulkcd += getNextWaitingTime();
 		if (blinkingenabled)
 			blinkingcd += getNextWaitingTime();
+		if (earthshakingenabled)
+			earthshakingcd += getNextWaitingTime();
 	}
 
 	private int getNextWaitingTime() {
@@ -1276,6 +1423,7 @@ public class KaleKing extends Enemy {
 			dashenabled = true;
 			setDefaultSpeed(2.5f);
 			speed = 2.5f;
+			basicspeed = 2.5f;
 			hulkenabled = true;
 			break;
 		case 3:
@@ -1283,6 +1431,7 @@ public class KaleKing extends Enemy {
 			darkiceprisonenabled = true;
 			setDefaultSpeed(1.5f);
 			speed = 1.5f;
+			basicspeed = 1.5f;
 			hulkenabled = false;
 			tornadoenabled = true;
 			break;
@@ -1292,6 +1441,7 @@ public class KaleKing extends Enemy {
 			darkiceprisonenabled = false;
 			slashEnabled = true;
 			setDefaultSpeed(3.0f);
+			basicspeed = 3.0f;
 			blinkingenabled = true;
 			speed = 3.0f;
 			tornadoenabled = false;
@@ -1300,17 +1450,26 @@ public class KaleKing extends Enemy {
 			darkiceprisonenabled = true;
 			hulkenabled = false;
 			setDefaultSpeed(1.25f);
+			basicspeed = 1.25f;
 			blinkingenabled = false;
 			speed = 1.25f;
-			slashEnabled = false;
+			earthshakingenabled = true;
+			waitmin = waitmin/2;
+			waitmax = waitmax/2;
+			boltsmaxcd = boltsmaxcd/2;
 			break;
 		case 6:
 			dashenabled = true;
+			boltsenabled = false;
+			darkiceprisonenabled = true;
 			setDefaultSpeed(2.5f);
 			speed = 2.5f;
+			basicspeed = 2.5f;
 			blinkingenabled = true;
+			earthshakingenabled = true;
 			slashEnabled = true;
 			hulkenabled = true;
+			tornadoenabled = true;
 			break;
 		}
 	}

@@ -42,7 +42,7 @@ public class ResourcesManager {
 		MargheritaArmor.movespriteRight1 = new ImageIcon(StartingClass.class.getResource("/data/margheritaRight1.png")).getImage();
 		MargheritaArmor.movespriteRight2 = new ImageIcon(StartingClass.class.getResource("/data/margheritaRight2.png")).getImage();
 		MargheritaArmor.deathSprite = new ImageIcon(StartingClass.class.getResource("/data/margheritaDead.png")).getImage();
-		MargheritaArmor.addSprite = new ImageIcon(StartingClass.class.getResource("/data/margheritaDead.png")).getImage();
+		MargheritaArmor.addSprite = new ImageIcon(StartingClass.class.getResource("/data/addmargherita.png")).getImage();
 		PepperoniArmor.staysprite1 = new ImageIcon(StartingClass.class.getResource("/data/pepperoni1.png")).getImage();
 		PepperoniArmor.staysprite2 = new ImageIcon(StartingClass.class.getResource("/data/pepperoni2.png")).getImage();
 		PepperoniArmor.movespriteLeft1 = new ImageIcon(StartingClass.class.getResource("/data/pepperoniLeft1.png")).getImage();
@@ -266,6 +266,7 @@ public class ResourcesManager {
 		MushroomWizard.summoning = new ImageIcon(StartingClass.class.getResource("/data/mushroomwizardlavasummon.png"))
 				.getImage();
 		MushroomWizard.intermediateDieSprite = new ImageIcon(StartingClass.class.getResource("/data/mushroomwizarddying.png")).getImage();
+		MushroomWizard.swipeWindup = new ImageIcon(StartingClass.class.getResource("/data/mushroomwizardswipewindup.png")).getImage();
 		CarolinaReaper.staySprite = new ImageIcon(StartingClass.class.getResource("/data/reaper.png")).getImage();
 		CarolinaReaper.move1Sprite = new ImageIcon(StartingClass.class.getResource("/data/reaperwalk1.png")).getImage();
 		CarolinaReaper.move2Sprite = new ImageIcon(StartingClass.class.getResource("/data/reaperwalk2.png")).getImage();
@@ -305,7 +306,7 @@ public class ResourcesManager {
 		Garlnstein.slashDown = new ImageIcon(StartingClass.class.getResource("/data/garlnsteinSwipeDown.png")).getImage();
 		Garlnstein.slashUp = new ImageIcon(StartingClass.class.getResource("/data/garlnsteinSwipeUp.png")).getImage();
 		Garlnstein.slashRight = new ImageIcon(StartingClass.class.getResource("/data/garlnsteinSwipeRight.png")).getImage();
-		Garlnstein.slashLeft = new ImageIcon(StartingClass.class.getResource("/data/garlnsteinDashLeft.png")).getImage();
+		Garlnstein.slashLeft = new ImageIcon(StartingClass.class.getResource("/data/garlnsteinSwipeLeft.png")).getImage();
 		Garlnstein.dashDown = new ImageIcon(StartingClass.class.getResource("/data/garlnsteinDashDown.png")).getImage();
 		Garlnstein.dashUp = new ImageIcon(StartingClass.class.getResource("/data/garlnsteinDashUp.png")).getImage();
 		Garlnstein.dashRight = new ImageIcon(StartingClass.class.getResource("/data/garlnsteinDashRight.png")).getImage();
@@ -315,6 +316,10 @@ public class ResourcesManager {
 		Garlnstein.cloning2 = new ImageIcon(StartingClass.class.getResource("/data/garlnsteinCloning2.png")).getImage();
 		Garlnstein.cloning3 = new ImageIcon(StartingClass.class.getResource("/data/garlnsteinCloning3.png")).getImage();
 		Garlnstein.intermediateDieSprite = new ImageIcon(StartingClass.class.getResource("/data/garlnsteinDying.png")).getImage();
+		Garlnstein.slashWindupDown = new ImageIcon(StartingClass.class.getResource("/data/garlnsteinSwipeDownWindUp.png")).getImage();
+		Garlnstein.slashWindupUp = new ImageIcon(StartingClass.class.getResource("/data/garlnsteinSwipeUpWindUp.png")).getImage();
+		Garlnstein.slashWindupRight = new ImageIcon(StartingClass.class.getResource("/data/garlnsteinSwipeRightWindUp.png")).getImage();
+		Garlnstein.slashWindupLeft = new ImageIcon(StartingClass.class.getResource("/data/garlnsteinSwipeLeftWindUp.png")).getImage();
 		KaleKing.staySprite = new ImageIcon(StartingClass.class.getResource("/data/kaleking.png")).getImage();
 		KaleKing.move1Sprite = new ImageIcon(StartingClass.class.getResource("/data/kalekingWalk1.png")).getImage();
 		KaleKing.move2Sprite = new ImageIcon(StartingClass.class.getResource("/data/kalekingWalk2.png")).getImage();
@@ -346,6 +351,18 @@ public class ResourcesManager {
 		KaleKing.hulkSwipeUp = new ImageIcon(StartingClass.class.getResource("/data/hulkSwipeUp.png")).getImage();
 		KaleKing.blinkingSprite = new ImageIcon(StartingClass.class.getResource("/data/kalekingMagicAoE.png")).getImage();
 		KaleKing.intermediateDieSprite = new ImageIcon(StartingClass.class.getResource("/data/kalekingDying.png")).getImage();
+		KaleKing.swipeDownWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingSwipeDownWindup.png")).getImage();
+		KaleKing.swipeLeftWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingSwipeLeftWindup.png")).getImage();
+		KaleKing.swipeRightWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingSwipeRightWindup.png")).getImage();
+		KaleKing.swipeUpWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingSwipeUpWindup.png")).getImage();
+		KaleKing.hulkSwipeDownWindup = new ImageIcon(StartingClass.class.getResource("/data/hulkSwipeDownWindup.png")).getImage();
+		KaleKing.hulkSwipeLeftWindup = new ImageIcon(StartingClass.class.getResource("/data/hulkSwipeLeftWindup.png")).getImage();
+		KaleKing.hulkSwipeRightWindup = new ImageIcon(StartingClass.class.getResource("/data/hulkSwipeRightWindup.png")).getImage();
+		KaleKing.hulkSwipeUpWindup = new ImageIcon(StartingClass.class.getResource("/data/hulkSwipeUpWindup.png")).getImage();
+		KaleKing.dashSpriteLeftWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingThrustLeftWindup.png")).getImage();
+		KaleKing.dashSpriteRightWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingThrustRightWindup.png")).getImage();
+		KaleKing.kaleKingStomp1 = new ImageIcon(StartingClass.class.getResource("/data/kalekingSmashWindUp.png")).getImage();
+		KaleKing.kaleKingStomp2 = new ImageIcon(StartingClass.class.getResource("/data/kalekingSmash.png")).getImage();
 
 		BazookaBulletExplosion.bazookaexplosionsprite = new ImageIcon(
 				StartingClass.class.getResource("/data/bazookaexplosion.png")).getImage();

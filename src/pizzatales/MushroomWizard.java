@@ -7,7 +7,8 @@ public class MushroomWizard extends Enemy {
 
 	private int inAnimation;
 	public static Image staySprite, move1Sprite, move2Sprite, dieSprite, staySpriteRight, 
-		move1SpriteRight, move2SpriteRight, swipeDown, swipeRight, swipeLeft, swipeUp, shooting, summoning, intermediateDieSprite;
+		move1SpriteRight, move2SpriteRight, swipeDown, swipeRight, swipeLeft, swipeUp, shooting, 
+		summoning, intermediateDieSprite, swipeWindup;
 	private int maxInAnimation;
 	private int ballInAnimation;
 	private int maxBallInAnimation;
@@ -23,12 +24,14 @@ public class MushroomWizard extends Enemy {
 	private boolean hasSlashed;
 	private StartingClass applet;
 	private int nextball;
+	private int slashwindup, slashwinduptime;
 	
 	public MushroomWizard(int centerX, int centerY, StartingClass applet) {
 		super(centerX, centerY, new FakeMushroomWeapon(25,-12), 75, (StartingClass.difficultylevel>2)?1:2, 50, 50, 45, 45);
 		movementTime = ((int) (Math.random() * 50));
 		halfbarx = 45;
 		slashdmg = 4;
+		slashwinduptime = 20;
 		this.applet = applet;
 		switch(StartingClass.difficultylevel) {
 		case 1:
@@ -108,6 +111,43 @@ public class MushroomWizard extends Enemy {
 				((FakeMushroomWeapon)weapon).setSpriteBall(nextball);
 			}
 		}
+		if (slashwindup > 0) {
+			slashwindup--;
+			if (slashwindup == 0) {
+				hasSlashed = false;
+				inAnimation = maxInAnimation;
+				switch(slashDirection) {
+				case 1:
+					halfsizex = 100;
+					halfrsizex = 85;
+					halfsizey = 50;
+					halfrsizey = 45;
+					currentSprite = swipeLeft;
+					break;
+				case 2:
+					halfsizex = 50;
+					halfrsizex = 45;
+					halfsizey = 80;
+					halfrsizey = 70;
+					currentSprite = swipeUp;
+					break;
+				case 3:
+					halfsizex = 100;
+					halfrsizex = 85;
+					halfsizey = 50;
+					halfrsizey = 45;
+					currentSprite = swipeRight;
+					break;
+				case 4:
+					halfsizex = 50;
+					halfrsizex = 45;
+					halfsizey = 80;
+					halfrsizey = 70;
+					currentSprite = swipeDown;
+					break;
+				}
+			}
+		}
 		if (inAnimation>0) {
 			inAnimation--;
 			if (inAnimation == 0) {
@@ -124,7 +164,7 @@ public class MushroomWizard extends Enemy {
 			bcd--;
 		if (bcd2 > 0)
 			bcd2--;
-		if (inAnimation == 0) {
+		if (inAnimation == 0 && !isSlashing) {
 			int pathresult = 0;
 			StartingClass.map[player.posx][player.posy] = null;
 			pathresult = pf.getDirection(posx, posy, player.posx, player.posy, 200, canmoveleft, canmoveup, canmoveright, canmovedown, 0, true);
@@ -165,50 +205,34 @@ public class MushroomWizard extends Enemy {
 			if (slashCd == 0 && Math.abs(diffx) < 20 && Math.abs(diffy) < 100) {
 				if (diffy > 0) {
 					stopMoving();
-					hasSlashed = false;
+					hasSlashed = true;
 					isSlashing = true;
-					inAnimation = maxInAnimation;
-					halfsizex = 50;
-					halfrsizex = 45;
-					halfsizey = 80;
-					halfrsizey = 70;
-					currentSprite = swipeDown;
 					slashDirection = 4;
+					slashwindup = slashwinduptime;
+					currentSprite = swipeWindup;
 				} else {
 					stopMoving();
-					hasSlashed = false;
+					hasSlashed = true;
 					isSlashing = true;
-					inAnimation = maxInAnimation;
-					halfsizex = 50;
-					halfrsizex = 45;
-					halfsizey = 80;
-					halfrsizey = 70;
-					currentSprite = swipeUp;
 					slashDirection = 2;
+					slashwindup = slashwinduptime;
+					currentSprite = swipeWindup;
 				}
 			} else if (slashCd == 0 && Math.abs(diffy) < 20 && Math.abs(diffx) < 100) {
 				if (diffx > 0) {
 					stopMoving();
-					hasSlashed = false;
+					hasSlashed = true;
 					isSlashing = true;
-					inAnimation = maxInAnimation;
-					halfsizex = 100;
-					halfrsizex = 85;
-					halfsizey = 50;
-					halfrsizey = 45;
-					currentSprite = swipeRight;
 					slashDirection = 3;
+					slashwindup = slashwinduptime;
+					currentSprite = swipeWindup;
 				} else {
 					stopMoving();
-					hasSlashed = false;
+					hasSlashed = true;
 					isSlashing = true;
-					inAnimation = maxInAnimation;
-					halfsizex = 100;
-					halfrsizex = 85;
-					halfsizey = 50;
-					halfrsizey = 45;
-					currentSprite = swipeLeft;
 					slashDirection = 1;
+					slashwindup = slashwinduptime;
+					currentSprite = swipeWindup;
 				}
 			}//TODO
 			if (bcd == 0 && phase > 2) {
@@ -346,7 +370,7 @@ public class MushroomWizard extends Enemy {
 
 	@Override
 	public void animate(){
-		if (isMoving && inAnimation == 0 && ballInAnimation == 0) {
+		if (isMoving && inAnimation == 0 && ballInAnimation == 0 && !isSlashing) {
 			walkCounter++;
 			if (getSpeedX() <= 0) {
 				if (walkCounter == 1000)

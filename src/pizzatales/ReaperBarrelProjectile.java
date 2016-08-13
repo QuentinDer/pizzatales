@@ -63,9 +63,8 @@ public class ReaperBarrelProjectile extends Projectile {
 	@Override
 	public void doOnCollision(Projectile p) {
 		if (visible) {
-			if (life - p.damage > 0)
-				life -= p.damage;
-			else {
+			life -= p.damage;
+			if (life <= 0) {
 				visible = false;
 				StartingClass.getExplosions().add(new BarrelExplosion(this.centerX,this.centerY));
 			}

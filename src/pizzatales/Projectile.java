@@ -19,7 +19,7 @@ public abstract class Projectile extends Stuff {
 	protected float fcenterY;*/
 	private Background bg = StartingClass.getBg();
 
-	public Projectile(int startX, int startY, float vectorX, float vectorY, int speed, float damage, int size, int halfsize, int range) {
+	public Projectile(int startX, int startY, float vectorX, float vectorY, float speed, float damage, int size, int halfsize, int range) {
 		super(startX, startY);
 		fcenterX = centerX;
 		fcenterY = centerY;

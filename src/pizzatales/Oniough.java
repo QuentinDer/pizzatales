@@ -34,7 +34,7 @@ public class Oniough extends Enemy {
 			firemaxcd0 = 60;
 			firemaxcd1 = 35;
 			firemaxcd2 = 120;
-			earthshakingmaxcd = 3600;
+			earthshakingmaxcd = 3300;
 			earthshakingduration = 180;
 			earthshakingtime = 180;
 			revivedGarlnsteinHealth = 4;
@@ -52,7 +52,7 @@ public class Oniough extends Enemy {
 			firemaxcd0 = 50;
 			firemaxcd1 = 25;
 			firemaxcd2 = 100;
-			earthshakingmaxcd = 2400;
+			earthshakingmaxcd = 2700;
 			earthshakingduration = 300;
 			earthshakingtime = 140;
 			revivedGarlnsteinHealth = 12;
@@ -61,7 +61,7 @@ public class Oniough extends Enemy {
 			firemaxcd0 = 45;
 			firemaxcd1 = 20;
 			firemaxcd2 = 90;
-			earthshakingmaxcd = 1800;
+			earthshakingmaxcd = 2400;
 			earthshakingduration = 360;
 			earthshakingtime = 120;
 			revivedGarlnsteinHealth = 16;
@@ -271,6 +271,11 @@ public class Oniough extends Enemy {
 				dirY = -2;
 				break;
 			}
+			diffx = player.getCenterX()+(15*dirX) - getCenterX();
+			diffy = player.getCenterY()+(10*dirY) - getCenterY();
+			dist = (float)Math.sqrt(Math.abs(diffx)*Math.abs(diffx)+Math.abs(diffy)*Math.abs(diffy));
+			vectorx = diffx / dist;
+			vectory = diffy / dist;
 			
 			switch(firingmode) {
 			case 0:
@@ -292,8 +297,8 @@ public class Oniough extends Enemy {
 				firecd = firemaxcd1;
 				break;
 			case 2:
-				diffx = player.getCenterX() + dist*player.getSpeedX()/(5.f+StartingClass.difficultylevel) - getCenterX();
-				diffy = player.getCenterY() + dist*player.getSpeedY()/(5.f+StartingClass.difficultylevel) - getCenterY();
+				diffx = player.getCenterX()+(15*dirX) + dist*player.getSpeedX()/(5.f+StartingClass.difficultylevel) - getCenterX();
+				diffy = player.getCenterY()+(10*dirY) + dist*player.getSpeedY()/(5.f+StartingClass.difficultylevel) - getCenterY();
 				dist = (float)Math.sqrt(Math.abs(diffx)*Math.abs(diffx)+Math.abs(diffy)*Math.abs(diffy));
 				vectorx = diffx / dist;
 				vectory = diffy / dist;
@@ -354,11 +359,13 @@ public class Oniough extends Enemy {
 	@Override
 	public void die() {
 		super.die();
-		for (Enemy e : StartingClass.enemyarray) {
-			if (Garlnstein.class.isInstance(e) && !e.alive) {
-				e.alive = true;
-				e.setHealth(revivedGarlnsteinHealth);
-				((Garlnstein)e).dashcd = (int)(Math.random()*((Garlnstein)e).dashmaxcd);
+		if (StartingClass.difficultylevel>1) {
+			for (Enemy e : StartingClass.enemyarray) {
+				if (Garlnstein.class.isInstance(e) && !e.alive) {
+					e.alive = true;
+					e.setHealth(revivedGarlnsteinHealth);
+					((Garlnstein)e).dashcd = (int)(Math.random()*((Garlnstein)e).dashmaxcd);
+				}
 			}
 		}
 	}

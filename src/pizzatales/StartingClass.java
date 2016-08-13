@@ -1982,12 +1982,15 @@ public class StartingClass extends JFrame implements Runnable {
 						player.controlledstopMoving();
 						player.setScrollingSpeedY(0);
 						player.setScrollingSpeedX(0);
-						clip.stop();
+						if (clip != null && playMusic)
+							clip.stop();
 					}
 				}
 				if (!endlevelmenuloaded && state == GameState.Menu) {
 					this.clean();
-					clip.stop();
+					//TODO
+					if (clip != null && playMusic)
+						clip.stop();
 					if (currentlevel == currentmaxlevel) {
 						currentmaxlevel = Math.min(maxlevel, currentmaxlevel+1);
 					}
