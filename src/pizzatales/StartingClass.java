@@ -89,6 +89,7 @@ public class StartingClass extends JFrame implements Runnable {
 	public boolean gunSoundLoaded = false;
 	public URL gunSoundurl = null;
 	protected boolean playMusic = true;
+	protected boolean fullscreen = true;
 	boolean showUI = true;
 
 	private Clip clip;
@@ -545,9 +546,18 @@ public class StartingClass extends JFrame implements Runnable {
 		
 		add(musicButton);
 		
+		JButton fullscreenButton = new JButton(new ImageIcon((fullscreen)?(getClass().getResource("/data/buttonSettingsFullscreenRed.png")):(getClass().getResource("/data/buttonSettingsWindowedRed.png"))));
+		fullscreenButton.setRolloverIcon(new ImageIcon((fullscreen)?(getClass().getResource("/data/buttonSettingsFullscreenWhite.png")):(getClass().getResource("/data/buttonSettingsWindowedWhite.png"))));
+		
+		fullscreenButton.setBorderPainted(false);
+		fullscreenButton.setContentAreaFilled(false);
+		
+		add(fullscreenButton);
+		
 		azertyButton.setBounds(500, 15, 150, 75);
 		mainMenuButton.setBounds(150, 15, 150, 75);
-		musicButton.setBounds(800, 15, 150, 75);
+		musicButton.setBounds(750, 15, 150, 75);
+		fullscreenButton.setBounds(1050, 15, 150, 75);
 		
 		JLabel moveUpButton = new JLabel(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsZ.png")):(getClass().getResource("/data/buttonSettingsW.png"))));
 		JLabel moveDownButton = new JLabel(new ImageIcon((azerty)?(getClass().getResource("/data/buttonSettingsS.png")):(getClass().getResource("/data/buttonSettingsS.png"))));
