@@ -11,6 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -29,6 +30,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -49,7 +51,10 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+
+import javafx.stage.Screen;
 
 import java.awt.Container;
 
@@ -62,7 +67,7 @@ public class StartingClass extends JFrame implements Runnable {
 	 */
 	private static final long serialVersionUID = 641656516622083167L;
 
-	static Logger LOGGER = Logger.getLogger(StartingClass.class.getName());
+	//static Logger LOGGER = Logger.getLogger(StartingClass.class.getName());
 	
 	Container contentPane;
 	private boolean endlevelmenuloaded;
@@ -76,6 +81,7 @@ public class StartingClass extends JFrame implements Runnable {
 	public static Image tileTree, /*tileGrass, */tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit,
 			tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel, tileCandelabrum, 
 			tileCrate, tileChest, tileBlack, tileChestOpen, tilePineTree, tileMudWall, tileSnowRock;
+	public static Image cutscene1;
 	private Graphics second;
 	private static Background bg;
 	private static PathFinder pf;
@@ -96,7 +102,6 @@ public class StartingClass extends JFrame implements Runnable {
 	
 	//TODO protected static ArrayList<Clip> gunclips = new ArrayList<Clip>();
 	
-	private boolean fullscreenmode = false;
 	public static final boolean TESTMODE = false;
 	public static int difficultylevel = TESTMODE ? 3 : 1;
 	public static int currentlevel = TESTMODE ? 12: 1;
@@ -124,7 +129,7 @@ public class StartingClass extends JFrame implements Runnable {
 	 */
 
 	enum GameState {
-		Running, Dead, Paused, Menu, Exit
+		Running, Dead, Paused, Menu, Exit, CutScene
 	}
 
 	public static GameState state = GameState.Menu;
@@ -161,6 +166,9 @@ public class StartingClass extends JFrame implements Runnable {
 	private boolean showPlayerHealthBar = false;
 	public static int blockmaxheight;
 	public static StartingClass me;
+	private Cutscene cutscene;
+	private static int WTCUT = 1000;
+	
 	/*
 	 * ScrollingMode : 0 - noscrolling 1 - dynamic 2 - player centered 3 -
 	 * player controlled scrolling //TODO implement ?
@@ -170,9 +178,8 @@ public class StartingClass extends JFrame implements Runnable {
 	public static boolean levelwithyscrolling = true;
 
 	public StartingClass() {
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setResizable(false);
-		initScreen();
+		initGame();
+		//initScreen();
 		ResourcesManager.loadResources();
 		loadGameState();
 		/* TODO
@@ -211,6 +218,7 @@ public class StartingClass extends JFrame implements Runnable {
 		prefs.putInt("DIFFICULTY", difficultylevel);
 		prefs.putInt("LASTLEVEL", currentlevel);
 		prefs.putBoolean("PLAYMUSIC", playMusic);
+		prefs.putBoolean("FULLSCREEN", fullscreen);
 		for (Armor armor : playerarmor)
 			prefs.putBoolean(armor.getID(),true);
 		for (Firearm firearm : playerweapons)
@@ -229,6 +237,7 @@ public class StartingClass extends JFrame implements Runnable {
 			currentlevel = prefs.getInt("LASTLEVEL", 1);
 		}
 		playMusic = prefs.getBoolean("PLAYMUSIC", true);
+		fullscreen = prefs.getBoolean("FULLSCREEN", false);
 		boolean shotgun = prefs.getBoolean("SHOTGUN",false);
 		if (shotgun) {
 			Shotgun sht = new Shotgun();
@@ -300,11 +309,62 @@ public class StartingClass extends JFrame implements Runnable {
 			playerhats.add(new HatTop());
 		}
 	}
+	
+	public void initGame() {
+		player = new Player();
+		pf = new PathFinder();
+		explosions = new ArrayList<Explosion>();
+		playerweapons = new ArrayList<Firearm>();
+		playerweapons.add(new Gun());
+		if (TESTMODE) {
+			playerweapons.add(new Shotgun());
+			playerweapons.add(new Smg());
+			playerweapons.add(new Rifle());
+			playerweapons.add(new Flamer());
+			playerweapons.add(new Rocket());
+		}
+		for (Firearm firearm : playerweapons)
+			firearm.setHolderProjectiles(player.getProjectiles());
+		player.setWeapon(playerweapons.get(weaponindex));
+
+		playerarmor = new ArrayList<Armor>();
+		playerarmor.add(new PepperoniArmor());
+		if (TESTMODE) {
+			playerarmor.add(new CheeseArmor());
+			playerarmor.add(new ChicagoArmor());
+			playerarmor.add(new HawaiiArmor());
+			playerarmor.add(new MargheritaArmor());
+		}
+		player.setArmor(playerarmor.get(armorindex));
+
+		playerhats = new ArrayList<Hat>();
+		playerhats.add(null);
+		if (TESTMODE) {
+			playerhats.add(new HatBaseball());
+			playerhats.add(new HatBowler());
+			playerhats.add(new HatFedora());
+			playerhats.add(new HatPanama());
+			playerhats.add(new HatSherlock());
+			playerhats.add(new HatTop());
+		}
+
+		bg = new Background(0, 0);
+		player.setBackground(bg);
+		bginitx = bg.getCenterX();
+		bginity = bg.getCenterY() - 15;
+	}
 
 	public void initScreen() {
+		
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
+		
 		setSize(1280, 800);
+		
 		setBackground(Color.BLACK);
 		setFocusable(true);
+		
+		
 		addKeyListener(new KeyAdapter() {
 
 			@Override
@@ -443,6 +503,13 @@ public class StartingClass extends JFrame implements Runnable {
 						if (clip != null && playMusic)
 							clip.stop();
 					}
+					if (state == GameState.CutScene) {
+						if (!cutscene.isCutsceneFinished()) {
+							cutscene.pass();
+							if (cutscene.isCutsceneFinished())
+								state = GameState.Running;
+						}
+					}
 					break;
 				case KeyEvent.VK_C:
 					if (ScrollingMode > 0)
@@ -459,54 +526,14 @@ public class StartingClass extends JFrame implements Runnable {
 			public void keyTyped(KeyEvent e) {
 			}
 		});
-		if (fullscreenmode) {
+		if (fullscreen) {
 			 setUndecorated(true);
 			 setAlwaysOnTop(true);
 		} else {
+			setUndecorated(false);
+			setAlwaysOnTop(false);
 			setTitle("Pizza Tales");
 		}
-		
-		player = new Player();
-		pf = new PathFinder();
-		explosions = new ArrayList<Explosion>();
-		playerweapons = new ArrayList<Firearm>();
-		playerweapons.add(new Gun());
-		if (TESTMODE) {
-			playerweapons.add(new Shotgun());
-			playerweapons.add(new Smg());
-			playerweapons.add(new Rifle());
-			playerweapons.add(new Flamer());
-			playerweapons.add(new Rocket());
-		}
-		for (Firearm firearm : playerweapons)
-			firearm.setHolderProjectiles(player.getProjectiles());
-		player.setWeapon(playerweapons.get(weaponindex));
-
-		playerarmor = new ArrayList<Armor>();
-		playerarmor.add(new PepperoniArmor());
-		if (TESTMODE) {
-			playerarmor.add(new CheeseArmor());
-			playerarmor.add(new ChicagoArmor());
-			playerarmor.add(new HawaiiArmor());
-			playerarmor.add(new MargheritaArmor());
-		}
-		player.setArmor(playerarmor.get(armorindex));
-
-		playerhats = new ArrayList<Hat>();
-		playerhats.add(null);
-		if (TESTMODE) {
-			playerhats.add(new HatBaseball());
-			playerhats.add(new HatBowler());
-			playerhats.add(new HatFedora());
-			playerhats.add(new HatPanama());
-			playerhats.add(new HatSherlock());
-			playerhats.add(new HatTop());
-		}
-
-		bg = new Background(0, 0);
-		player.setBackground(bg);
-		bginitx = bg.getCenterX();
-		bginity = bg.getCenterY() - 15;
 	}
 	
 	
@@ -598,6 +625,48 @@ public class StartingClass extends JFrame implements Runnable {
 		hatsButton.setBounds(800, 625, 200, 25);
 		pauseButton.setBounds(800, 675, 200, 25);
 		quitButton.setBounds(800, 725, 200, 25);
+		
+		fullscreenButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				
+				GraphicsEnvironment ge = GraphicsEnvironment.
+						   getLocalGraphicsEnvironment();
+				GraphicsDevice gd = ge.getDefaultScreenDevice();
+				
+				if (fullscreen == true) {
+					fullscreen = false;
+					 dispose();
+					 setUndecorated(false);
+					 setAlwaysOnTop(false);
+					 setVisible(true);
+					 setTitle("Pizza Tales");
+					gd.setFullScreenWindow(null);
+				} else {
+					 DisplayMode dm = new DisplayMode(1280, 800, 32, DisplayMode.REFRESH_RATE_UNKNOWN);
+					 if (gd.isFullScreenSupported()) {
+							dispose();
+							me.setUndecorated(true);
+							me.setAlwaysOnTop(true);
+							setVisible(true);
+						    gd.setFullScreenWindow(me);
+						    if (dm != null && gd.isDisplayChangeSupported()) {
+						    	try{
+					            	gd.setDisplayMode(dm);
+					            	fullscreen = true;
+					            }catch(Exception ex){
+					            	System.out.println(ex.getMessage());
+					            }
+						    } else {
+						    	gd.setFullScreenWindow(null);
+						    }
+				            
+					 }
+				}
+				fullscreenButton.setIcon(new ImageIcon((fullscreen)?(getClass().getResource("/data/buttonSettingsFullscreenRed.png")):(getClass().getResource("/data/buttonSettingsWindowedRed.png"))));
+				fullscreenButton.setRolloverIcon(new ImageIcon((fullscreen)?(getClass().getResource("/data/buttonSettingsFullscreenWhite.png")):(getClass().getResource("/data/buttonSettingsWindowedWhite.png"))));
+			}
+		});
 		
 		azertyButton.addActionListener(new ActionListener() {
 			@Override
@@ -1058,13 +1127,26 @@ public class StartingClass extends JFrame implements Runnable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				
+				if (currentlevel == 1) {
+					cutscene = new Cutscene();
+					String fulltext = "Peace reigned in the Pizza Village. The artifact, the Holy Sauce, brought prosperity to the Pizza people. "
+							+"But everything changed when the Kale King unleashed his vegetable army on the unsuspecting Pizzas, in a mad quest "
+							+"to take the Holy Sauce for himself.\n\n"
+							+"The vegetable army made off with the Holy Sauce, and left the Pizza village in ruin and flame."
+							+" But from these flames a hero emerged. A slice of Pizza determined to take back what was lost, and avenge his people.";
+					Scene intro = new Scene(fulltext,4,"Quest for the Holy Sauce",cutscene1,false,true);
+					cutscene.addScene(intro);
+					WTCUT = 0;
+				}
+				state = GameState.Running;
+				
 				if (!threadstarted) {
 					start();
 				} else {
 					player.setHealth(player.getMaxHealth());
 					player.getArmor().setDefense(player.getArmor().MAXDEF);
 				}
-				state = GameState.Running;
 				deathCountdown = 180;
 				contentPane = getContentPane();
 				contentPane.removeAll();
@@ -1451,9 +1533,16 @@ public class StartingClass extends JFrame implements Runnable {
 				while (state == GameState.Running) {
 					// computationtime += System.nanoTime() - nanoclock;
 					try {
-						Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
+						Thread.sleep(Math.min(17, Math.max(0, 17 - System.currentTimeMillis() + clock)));
 					} catch (InterruptedException e) {
 						e.printStackTrace();
+					}
+					if (currentlevel == 1) {
+						if (WTCUT < 60) {
+							WTCUT++;
+							if (WTCUT == 60)
+								state = GameState.CutScene;
+						}
 					}
 					// nanoclock = System.nanoTime();
 					clock = System.currentTimeMillis();
@@ -1524,7 +1613,7 @@ public class StartingClass extends JFrame implements Runnable {
 					if (isInArena < 0 && activatedentry != null) {
 						int playerposx = (player.getCenterX() - bg.getCenterX() + bginitx) / 50;
 						int playerposy = (player.getCenterY() - bg.getCenterY() + bginity) / 50;
-						LOGGER.info("Player initial position: "+player.getCenterX()+";"+player.getCenterY()+" -> "+playerposx+";"+playerposy);
+						//LOGGER.info("Player initial position: "+player.getCenterX()+";"+player.getCenterY()+" -> "+playerposx+";"+playerposy);
 						for (Tile t : activatedentry.getDoors()) {
 							map[t.posx][t.posy] = null;
 						}
@@ -1557,7 +1646,7 @@ public class StartingClass extends JFrame implements Runnable {
 						if (pf.getDirection(playerposx, playerposy, activatedentry.getOut().getPosX(),
 								activatedentry.getOut().getPosY(), 10, player.canmoveleft, player.canmoveup,
 								player.canmoveright, player.canmovedown, dirplace, true) > 0) {
-							LOGGER.info("Player will move to position: "+activatedentry.getOut().getPosX()+";"+activatedentry.getOut().getPosY());
+							//LOGGER.info("Player will move to position: "+activatedentry.getOut().getPosX()+";"+activatedentry.getOut().getPosY());
 							for (Enemy e : enemyarray) {
 								e.sleep();
 							}
@@ -1589,7 +1678,7 @@ public class StartingClass extends JFrame implements Runnable {
 							int arenacentery = ciy;
 							float arcx = sumx/((float)arenainsidearea.get(isInArena).size());
 							float arcy = sumy/((float)arenainsidearea.get(isInArena).size());
-							LOGGER.info("Arena center position: "+arcx+";"+arcy+" -> "+cix+";"+ciy);
+							//LOGGER.info("Arena center position: "+arcx+";"+arcy+" -> "+cix+";"+ciy);
 							int bgaix = bg.getCenterX();
 							int bgaiy = bg.getCenterY();
 							player.setScrollingSpeedX(0);
@@ -1625,7 +1714,7 @@ public class StartingClass extends JFrame implements Runnable {
 								// computationtime += System.nanoTime() -
 								// nanoclock;
 								try {
-									Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
+									Thread.sleep(Math.min(17, Math.max(0, 17 - System.currentTimeMillis() + clock)));
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
@@ -1901,7 +1990,7 @@ public class StartingClass extends JFrame implements Runnable {
 							repaint();
 							// computationtime += System.nanoTime() - nanoclock;
 							try {
-								Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
+								Thread.sleep(Math.min(17, Math.max(0, 17 - System.currentTimeMillis() + clock)));
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
@@ -2008,6 +2097,10 @@ public class StartingClass extends JFrame implements Runnable {
 					initEndLevelScreen();
 					endlevelmenuloaded = true;
 				}
+				if (state == GameState.CutScene) {
+					if (!cutscene.isCutsceneFinished())
+						cutscene.incrementCutsceneViewing();
+				}
 				if (state == GameState.Dead) {
 
 					int i = 0;
@@ -2076,7 +2169,7 @@ public class StartingClass extends JFrame implements Runnable {
 				repaint();
 				// computationtime += System.nanoTime() - nanoclock;
 				try {
-					Thread.sleep(Math.abs(17 - System.currentTimeMillis() + clock));
+					Thread.sleep(Math.min(17, Math.max(0, 17 - System.currentTimeMillis() + clock)));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -2187,7 +2280,7 @@ public class StartingClass extends JFrame implements Runnable {
         me.repaint();
 	}
 	
-	public void initDeathScreen(){
+	/*public void initDeathScreen(){
 		final JButton replayButton = new JButton("Replay Level");
         final JButton quitButton = new JButton("Quit");
         final JButton menuButton = new JButton("Main Menu");
@@ -2241,7 +2334,7 @@ public class StartingClass extends JFrame implements Runnable {
         createLayout(replayButton);
         createLayout(menuButton);
         createLayout(quitButton);
-	}
+	}*/
 
 	/*
 	 * public void update(Graphics g) { if (image == null) { image =
@@ -2428,13 +2521,46 @@ public class StartingClass extends JFrame implements Runnable {
 			g.drawString("Rng:"+Integer.toString((int) player.getWeapon().getRange()), 450, 60);	
 		}
 		
-		if (TESTMODE && showUI) {
+		/*if (TESTMODE && showUI) {
 			g.setColor(Color.DARK_GRAY);
 			g.fillRect(1200, 37, 20, 20);
 			g.fillRect(1230, 37, 45, 20);
 			g.setColor(Color.WHITE);
 			g.drawString(Integer.toString(fps), 1203, 51);
 			// g.drawString(Integer.toString(cmptime), 1233, 51);
+		}*/
+		if (state == GameState.CutScene && !cutscene.isCutsceneFinished()) {
+			Graphics2D g2d = (Graphics2D) g;
+			Composite c = g2d.getComposite();
+			g2d.setColor(Color.DARK_GRAY);
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
+			g2d.fillRect(0, 0, 1280, 800);
+			g2d.setComposite(c);
+			
+			int style = Font.BOLD | Font.ITALIC;
+			Font font = new Font ("AR DESTINE", style , 45);
+			Font pfont = g2d.getFont();
+			g2d.setFont(font);
+			g2d.setColor(Color.RED);
+			g2d.drawString(cutscene.getTitle(), 640-g2d.getFontMetrics().stringWidth(cutscene.getTitle())/2, 150);
+			
+			Font font2 = new Font ("AR DESTINE", Font.PLAIN , 30);
+			g2d.setFont(font2);
+			
+			g.drawImage(cutscene.getPicture(), 865, 250, this);
+			
+			List<String> renderedlist = StringUtils.wrap(cutscene.getRenderedText(), g2d.getFontMetrics(), 650);
+			int height = g2d.getFontMetrics().getHeight();
+			
+			g2d.setColor(Color.WHITE);
+			
+			int i = 0;
+			for (String ss : renderedlist) {
+				i++;
+				g2d.drawString(ss, 100, 216+i*height);
+			}
+			
+			g2d.setFont(pfont);
 		}
 		if (state == GameState.Paused) {
 			g.setColor(Color.DARK_GRAY);
@@ -2881,38 +3007,48 @@ public class StartingClass extends JFrame implements Runnable {
 
 	public static void main(String[] args) {
 		
-		FileHandler fileHandler;
+		/*FileHandler fileHandler;
 		try {
 			fileHandler = new FileHandler("StartingClass.log");
 			fileHandler.setFormatter(new SimpleFormatter());
 			LOGGER.addHandler(fileHandler);
 		} catch (SecurityException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
+		}*/
 		
 		EventQueue.invokeLater(new Runnable() {
 
 			@Override
 			public void run() {
+				
 				DisplayMode dm = new DisplayMode(1280, 800, 32, DisplayMode.REFRESH_RATE_UNKNOWN);
 				me = new StartingClass();
-				GraphicsEnvironment ge = GraphicsEnvironment.
-						   getLocalGraphicsEnvironment();
-				GraphicsDevice gd = ge.getDefaultScreenDevice();
-				if (gd.isFullScreenSupported()) {
-				     //gd.setFullScreenWindow(me);
-				 }
-				if(dm != null && gd.isDisplayChangeSupported()) {
-		            try{
-		            	gd.setDisplayMode(dm); 
-		            }catch(Exception ex){}
-		        }
+				me.initScreen();
+				
+				if (me.fullscreen) {
+					GraphicsEnvironment ge = GraphicsEnvironment.
+							   getLocalGraphicsEnvironment();
+					GraphicsDevice gd = ge.getDefaultScreenDevice();
+					
+					if (gd.isFullScreenSupported()) {
+					     gd.setFullScreenWindow(me);
+					 }
+					if(dm != null && gd.isDisplayChangeSupported()) {
+			            try{
+			            	gd.setDisplayMode(dm); 
+			            }catch(Exception ex){
+			            	System.out.println(ex.getMessage());
+			            }
+			        }
+				}
+				
+				
+				
 				if (TESTMODE)
 					me.teststart();
 					
 				me.setVisible(true);
+
 				/*
 				 * sc.init(); sc.start();
 				 */

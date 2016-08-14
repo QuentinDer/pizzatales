@@ -1,5 +1,7 @@
 package pizzatales;
 
+import java.awt.Image;
+
 import javax.swing.ImageIcon;
 
 public class ResourcesManager {
@@ -351,16 +353,16 @@ public class ResourcesManager {
 		KaleKing.hulkSwipeUp = new ImageIcon(StartingClass.class.getResource("/data/hulkSwipeUp.png")).getImage();
 		KaleKing.blinkingSprite = new ImageIcon(StartingClass.class.getResource("/data/kalekingMagicAoE.png")).getImage();
 		KaleKing.intermediateDieSprite = new ImageIcon(StartingClass.class.getResource("/data/kalekingDying.png")).getImage();
-		KaleKing.swipeDownWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingSwipeDownWindup.png")).getImage();
-		KaleKing.swipeLeftWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingSwipeLeftWindup.png")).getImage();
-		KaleKing.swipeRightWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingSwipeRightWindup.png")).getImage();
-		KaleKing.swipeUpWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingSwipeUpWindup.png")).getImage();
+		KaleKing.swipeDownWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingSwipeDownWindUp.png")).getImage();
+		KaleKing.swipeLeftWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingSwipeLeftWindUp.png")).getImage();
+		KaleKing.swipeRightWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingSwipeRightWindUp.png")).getImage();
+		KaleKing.swipeUpWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingSwipeUpWindUp.png")).getImage();
 		KaleKing.hulkSwipeDownWindup = new ImageIcon(StartingClass.class.getResource("/data/hulkSwipeDownWindup.png")).getImage();
 		KaleKing.hulkSwipeLeftWindup = new ImageIcon(StartingClass.class.getResource("/data/hulkSwipeLeftWindup.png")).getImage();
 		KaleKing.hulkSwipeRightWindup = new ImageIcon(StartingClass.class.getResource("/data/hulkSwipeRightWindup.png")).getImage();
 		KaleKing.hulkSwipeUpWindup = new ImageIcon(StartingClass.class.getResource("/data/hulkSwipeUpWindup.png")).getImage();
-		KaleKing.dashSpriteLeftWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingThrustLeftWindup.png")).getImage();
-		KaleKing.dashSpriteRightWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingThrustRightWindup.png")).getImage();
+		KaleKing.dashSpriteLeftWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingThrustLeftWindUp.png")).getImage();
+		KaleKing.dashSpriteRightWindup = new ImageIcon(StartingClass.class.getResource("/data/kalekingThrustRightWindUp.png")).getImage();
 		KaleKing.kaleKingStomp1 = new ImageIcon(StartingClass.class.getResource("/data/kalekingSmashWindUp.png")).getImage();
 		KaleKing.kaleKingStomp2 = new ImageIcon(StartingClass.class.getResource("/data/kalekingSmash.png")).getImage();
 
@@ -428,7 +430,7 @@ public class ResourcesManager {
 		HatTop.addSprite = new ImageIcon(StartingClass.class.getResource("/data/addhattop.png")).getImage();
 
 		StartingClass.grinningsprite = new ImageIcon(StartingClass.class.getResource("/data/grin.png")).getImage();
-		
+		StartingClass.cutscene1 = new ImageIcon(StartingClass.class.getResource("/data/Cutscene1.png")).getImage();
 	}
 	
 }
