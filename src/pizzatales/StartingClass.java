@@ -168,6 +168,7 @@ public class StartingClass extends JFrame implements Runnable {
 	public static StartingClass me;
 	public Cutscene cutscene;
 	private static int WTCUT = 1000;
+	public static boolean lastcutscene;
 	
 	/*
 	 * ScrollingMode : 0 - noscrolling 1 - dynamic 2 - player centered 3 -
@@ -507,8 +508,12 @@ public class StartingClass extends JFrame implements Runnable {
 						synchronized(cutscene) {
 							if (!cutscene.isCutsceneFinished()) {
 								cutscene.pass();
-								if (cutscene.isCutsceneFinished())
-									state = GameState.Running;
+								if (cutscene.isCutsceneFinished()) {
+									if (lastcutscene)
+										state = GameState.Menu;
+									else
+										state = GameState.Running;
+								}
 							}
 						}
 					}
@@ -1230,6 +1235,8 @@ public class StartingClass extends JFrame implements Runnable {
 	private void loadMap(String filename) throws IOException {
 		ArrayList<String> lines = new ArrayList<String>();
 		blockmaxheight = 0;
+		
+		lastcutscene = false;
 		
 		player.currentSprite = player.getArmor().getStaySprite();
 		
@@ -2512,14 +2519,15 @@ public class StartingClass extends JFrame implements Runnable {
 			g.setColor(Color.RED);
 			g.fillRect(32, 37, ((int) player.getHealth())*10 , 20);
 			g.setColor(Color.WHITE);
-			g.drawString("HP: "+Integer.toString((int) player.getHealth()), 35, 51);
+			
+			g.drawString("HP: "+Integer.toString((int) Math.ceil(player.getHealth())), 35, 51);
 			
 			g.setColor(Color.DARK_GRAY);
 			g.fillRect(32, 57, ((int) player.getArmor().MAXDEF)*10, 20);
 			g.setColor(Color.BLUE);
 			g.fillRect(32, 57, ((int) player.getArmor().defense)*10, 20);
 			g.setColor(Color.WHITE);
-			g.drawString("Armor: "+Integer.toString((int) player.getArmor().defense), 35, 71);
+			g.drawString("Armor: "+Integer.toString((int)  Math.ceil(player.getArmor().defense)), 35, 71);
 			
 			g.setColor(Color.DARK_GRAY);
 			g.fillRect(247, 42, 295, 25);

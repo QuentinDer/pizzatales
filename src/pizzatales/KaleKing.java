@@ -1388,14 +1388,6 @@ public class KaleKing extends Enemy {
 		StartingClass.maskminy = -1;
 		StartingClass.maskmaxx = -1;
 		StartingClass.maskmaxy = -1;
-		applet.cutscene = new Cutscene();
-		Scene end1 = new Scene("\"The Kale King lay defeated, his army scattered.\"",3,"END",StartingClass.cutsceneboss8,true,true);
-		Scene end2 = new Scene("\"With the Holy Sauce recovered, the Pizza people could rebuild their village.\"",3,"END",StartingClass.cutsceneboss9,false,true);
-		Scene end3 = new Scene("\"Due to his courage and strength, our hero was chosen to become the new Pizza King. And he led his people to a new era of peace.\"",3,"END",StartingClass.cutscene1,false,true);
-		applet.cutscene.addScene(end1);
-		applet.cutscene.addScene(end2);
-		applet.cutscene.addScene(end3);
-		StartingClass.state = GameState.CutScene;
 	}
 
 	@Override
@@ -1726,7 +1718,7 @@ public class KaleKing extends Enemy {
 					nposy--;
 			} else
 				nposy++;
-			HolySauce a1 = new HolySauce(nposx,nposy,0,0,true,0);
+			HolySauce a1 = new HolySauce(nposx,nposy,0,0,true,0,applet);
 			a1.setCenterX(50*nposx+25+bg.getCenterX()-StartingClass.bginitx);
 			a1.setCenterY(50*nposy+25+bg.getCenterY()-StartingClass.bginity);
 			a1.r.setBounds(a1.getCenterX() - 22, a1.getCenterY() - 22, 45, 45);
