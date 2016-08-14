@@ -1,6 +1,9 @@
 package pizzatales;
 
+import java.awt.FontMetrics;
 import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Scene {
 
@@ -9,13 +12,15 @@ public class Scene {
 	private String title;
 	private Image picture;
 	private int i;
-	private String renderedtext;
+	private List<String> renderedlist;
 	private int textsize;
 	private static final float D_ALPHA = 1.f/120.f;
 	private boolean withAlphaTitle;
 	private boolean withAlphaPicture;
 	private float alphatitle;
 	private float alphapicture;
+	private boolean init;
+	private List<String> stringlist;
 	
 	public Scene(String fulltext, int ratetext, String title, Image picture, boolean alphatitle, boolean alphapicture) {
 		this.fulltext = fulltext;
@@ -23,14 +28,21 @@ public class Scene {
 		this.title = title;
 		textsize = fulltext.length();
 		this.picture = picture;
-		renderedtext = "";
+		renderedlist = new ArrayList<String>();
 		i = 0;
 		withAlphaTitle = alphatitle;
 		withAlphaPicture = alphapicture;
 	}
 	
-	public String getRenderedText() {
-		return renderedtext;
+	public void initScene(FontMetrics fm, int maxWidth) {
+		if (!init) {
+			stringlist = StringUtils.wrap(fulltext, fm, maxWidth);
+			init = true;
+		}
+	}
+	
+	public List<String> getRenderedText() {
+		return renderedlist;
 	}
 	
 	public String getTitle() {
@@ -42,13 +54,26 @@ public class Scene {
 	}
 	
 	public void incrementCutsceneViewing() {
-		i++;
-		renderedtext = fulltext.substring(0, Math.min(i/ratetext, textsize));
-		if (withAlphaTitle) {
-			alphatitle = Math.min(1.0f, i*D_ALPHA);
-		}
-		if (withAlphaPicture) {
-			alphapicture = Math.min(1.0f, i*D_ALPHA);
+		if (init) {
+			i++;
+			renderedlist.clear();
+			int j = i/ratetext;
+			int z = 0;
+			while (j >= 0) {
+				if (z < stringlist.size()) {
+					renderedlist.add(stringlist.get(z).substring(0,Math.min(j, stringlist.get(z).length())));
+					j -= stringlist.get(z).length();
+					z++;
+				} else
+					j = -1;
+			}
+			
+			if (withAlphaTitle) {
+				alphatitle = Math.min(1.0f, i*D_ALPHA);
+			}
+			if (withAlphaPicture) {
+				alphapicture = Math.min(1.0f, i*D_ALPHA);
+			}
 		}
 	}
 	
@@ -78,7 +103,9 @@ public class Scene {
 			alphatitle = 1.0f;
 		if (withAlphaPicture)
 			alphapicture = 1.0f;
-		renderedtext = fulltext;
+		renderedlist.clear();
+		for (String ss : stringlist)
+			renderedlist.add(ss);
 	}
 	
 }

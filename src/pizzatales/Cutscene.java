@@ -1,7 +1,9 @@
 package pizzatales;
 
+import java.awt.FontMetrics;
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Cutscene {
 
@@ -24,11 +26,15 @@ public class Cutscene {
 			i++;
 	}
 	
+	public void initScene(FontMetrics fm, int maxWidth) {
+		listScenes.get(i).initScene(fm, maxWidth);
+	}
+	
 	public void incrementCutsceneViewing() {
 		listScenes.get(i).incrementCutsceneViewing();
 	}
 	
-	public String getRenderedText() {
+	public List<String> getRenderedText() {
 		return listScenes.get(i).getRenderedText();
 	}
 	
@@ -42,6 +48,22 @@ public class Cutscene {
 	
 	public String getTitle() {
 		return listScenes.get(i).getTitle();
+	}
+	
+	public boolean hasAlphaTitle() {
+		return listScenes.get(i).hasAlphaTitle();
+	}
+	
+	public boolean hasAlphaPicture() {
+		return listScenes.get(i).hasAlphaPicture();
+	}
+	
+	public float getAlphaTitle() {
+		return listScenes.get(i).getAlphaTitle();
+	}
+	
+	public float getAlphaPicture() {
+		return listScenes.get(i).getAlphaPicture();
 	}
 	
 }

@@ -81,7 +81,7 @@ public class StartingClass extends JFrame implements Runnable {
 	public static Image tileTree, /*tileGrass, */tileWall, tileCave, tileStalag, tileCaveRock, tileGate, tileCaveExit,
 			tileLavaPuddle, tileWaterFlow, tilePikes, tileFlag, tileRock, tileDecoy, tileBarrel, tileCandelabrum, 
 			tileCrate, tileChest, tileBlack, tileChestOpen, tilePineTree, tileMudWall, tileSnowRock;
-	public static Image cutscene1;
+	public static Image cutscene1, cutsceneboss8, cutsceneboss9;
 	private Graphics second;
 	private static Background bg;
 	private static PathFinder pf;
@@ -105,7 +105,7 @@ public class StartingClass extends JFrame implements Runnable {
 	public static final boolean TESTMODE = false;
 	public static int difficultylevel = TESTMODE ? 3 : 1;
 	public static int currentlevel = TESTMODE ? 12: 1;
-	private final int maxlevel = 20;
+	private static final int maxlevel = 20;
 	private int currentmaxlevel = 20;
 
 	public static int maskminx = -1, maskmaxx = -1, maskminy = -1, maskmaxy = -1;
@@ -166,7 +166,7 @@ public class StartingClass extends JFrame implements Runnable {
 	private boolean showPlayerHealthBar = false;
 	public static int blockmaxheight;
 	public static StartingClass me;
-	private Cutscene cutscene;
+	public Cutscene cutscene;
 	private static int WTCUT = 1000;
 	
 	/*
@@ -504,10 +504,12 @@ public class StartingClass extends JFrame implements Runnable {
 							clip.stop();
 					}
 					if (state == GameState.CutScene) {
-						if (!cutscene.isCutsceneFinished()) {
-							cutscene.pass();
-							if (cutscene.isCutsceneFinished())
-								state = GameState.Running;
+						synchronized(cutscene) {
+							if (!cutscene.isCutsceneFinished()) {
+								cutscene.pass();
+								if (cutscene.isCutsceneFinished())
+									state = GameState.Running;
+							}
 						}
 					}
 					break;
@@ -1915,6 +1917,8 @@ public class StartingClass extends JFrame implements Runnable {
 						player.isGrinning = 0;
 						activatedentry = null;
 						ScrollingMode = 0;
+						cutscene = Level.getArenaCutscene(currentlevel);
+						state = GameState.CutScene;
 					}
 					if (isInArena >= 0) {
 						boolean stillgoing = false;
@@ -2098,8 +2102,10 @@ public class StartingClass extends JFrame implements Runnable {
 					endlevelmenuloaded = true;
 				}
 				if (state == GameState.CutScene) {
-					if (!cutscene.isCutsceneFinished())
-						cutscene.incrementCutsceneViewing();
+					synchronized(cutscene) {
+						if (!cutscene.isCutsceneFinished())
+							cutscene.incrementCutsceneViewing();
+					}
 				}
 				if (state == GameState.Dead) {
 
@@ -2530,37 +2536,50 @@ public class StartingClass extends JFrame implements Runnable {
 			// g.drawString(Integer.toString(cmptime), 1233, 51);
 		}*/
 		if (state == GameState.CutScene && !cutscene.isCutsceneFinished()) {
-			Graphics2D g2d = (Graphics2D) g;
-			Composite c = g2d.getComposite();
-			g2d.setColor(Color.DARK_GRAY);
-			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
-			g2d.fillRect(0, 0, 1280, 800);
-			g2d.setComposite(c);
 			
-			int style = Font.BOLD | Font.ITALIC;
-			Font font = new Font ("AR DESTINE", style , 45);
-			Font pfont = g2d.getFont();
-			g2d.setFont(font);
-			g2d.setColor(Color.RED);
-			g2d.drawString(cutscene.getTitle(), 640-g2d.getFontMetrics().stringWidth(cutscene.getTitle())/2, 150);
-			
-			Font font2 = new Font ("AR DESTINE", Font.PLAIN , 30);
-			g2d.setFont(font2);
-			
-			g.drawImage(cutscene.getPicture(), 865, 250, this);
-			
-			List<String> renderedlist = StringUtils.wrap(cutscene.getRenderedText(), g2d.getFontMetrics(), 650);
-			int height = g2d.getFontMetrics().getHeight();
-			
-			g2d.setColor(Color.WHITE);
-			
-			int i = 0;
-			for (String ss : renderedlist) {
-				i++;
-				g2d.drawString(ss, 100, 216+i*height);
+			synchronized(cutscene) {
+				Graphics2D g2d = (Graphics2D) g;
+				Composite c = g2d.getComposite();
+				g2d.setColor(Color.DARK_GRAY);
+				g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.9f));
+				g2d.fillRect(0, 0, 1280, 800);
+				g2d.setComposite(c);
+				
+				int style = Font.BOLD | Font.ITALIC;
+				Font font = new Font ("AR DESTINE", style , 45);
+				Font pfont = g2d.getFont();
+				g2d.setFont(font);
+				g2d.setColor(Color.RED);
+				if (cutscene.hasAlphaTitle()) {
+					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, cutscene.getAlphaTitle()));
+				}
+				g2d.drawString(cutscene.getTitle(), 640-g2d.getFontMetrics().stringWidth(cutscene.getTitle())/2, 150);
+				g2d.setComposite(c);
+				
+				Font font2 = new Font ("AR DESTINE", Font.PLAIN , 30);
+				g2d.setFont(font2);
+				
+				if (cutscene.hasAlphaPicture()) {
+					g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, cutscene.getAlphaPicture()));
+				}
+				g.drawImage(cutscene.getPicture(), 865, 250, this);
+				g2d.setComposite(c);
+				
+				cutscene.initScene(g2d.getFontMetrics(), 650);
+				
+				int height = g2d.getFontMetrics().getHeight();
+				
+				g2d.setColor(Color.WHITE);
+				
+				int i = 0;
+				for (String ss : cutscene.getRenderedText()) {
+					i++;
+					g2d.drawString(ss, 100, 216+i*height);
+				}
+				
+				g2d.setFont(pfont);
 			}
 			
-			g2d.setFont(pfont);
 		}
 		if (state == GameState.Paused) {
 			g.setColor(Color.DARK_GRAY);

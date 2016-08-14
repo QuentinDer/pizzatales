@@ -4,6 +4,8 @@ import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import pizzatales.StartingClass.GameState;
+
 public class KaleKing extends Enemy {
 
 	private static final boolean TRICK = false;
@@ -87,10 +89,12 @@ public class KaleKing extends Enemy {
 	private int earthshakingtime;
 	private boolean slowlaunched;
 	private int shaking;
+	private StartingClass applet;
 	
 	public KaleKing(int centerX, int centerY, StartingClass applet) {
 		super(centerX, centerY, null, 300, 2.5f, 63, 50,
 				48, 45);
+		this.applet = applet;
 		swipewinduptime = 12;
 		circles = new int[6];
 		circlex = new int[6][];
@@ -1384,11 +1388,19 @@ public class KaleKing extends Enemy {
 		StartingClass.maskminy = -1;
 		StartingClass.maskmaxx = -1;
 		StartingClass.maskmaxy = -1;
+		applet.cutscene = new Cutscene();
+		Scene end1 = new Scene("\"The Kale King lay defeated, his army scattered.\"",3,"END",StartingClass.cutsceneboss8,true,true);
+		Scene end2 = new Scene("\"With the Holy Sauce recovered, the Pizza people could rebuild their village.\"",3,"Kale King",StartingClass.cutsceneboss9,true,true);
+		Scene end3 = new Scene("\"Due to his courage and strength, our hero was chosen to become the new Pizza King. And he led his people to a new era of peace.\"",3,"Kale King",StartingClass.cutscene1,true,true);
+		applet.cutscene.addScene(end1);
+		applet.cutscene.addScene(end2);
+		applet.cutscene.addScene(end3);
+		StartingClass.state = GameState.CutScene;
 	}
 
 	@Override
 	public void setGibsSprite() {
-		currentSprite = dieSprite;
+		setDieSprite();
 	}
 
 	@Override

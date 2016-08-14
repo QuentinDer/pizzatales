@@ -431,6 +431,15 @@ public class ResourcesManager {
 
 		StartingClass.grinningsprite = new ImageIcon(StartingClass.class.getResource("/data/grin.png")).getImage();
 		StartingClass.cutscene1 = new ImageIcon(StartingClass.class.getResource("/data/Cutscene1.png")).getImage();
+		Level.cutsceneboss1 = new ImageIcon(StartingClass.class.getResource("/data/Cutscene2.png")).getImage();
+		Level.cutsceneboss2 = new ImageIcon(StartingClass.class.getResource("/data/Cutscene3.png")).getImage();
+		Level.cutsceneboss3 = new ImageIcon(StartingClass.class.getResource("/data/Cutscene4.png")).getImage();
+		Level.cutsceneboss4 = new ImageIcon(StartingClass.class.getResource("/data/Cutscene5.png")).getImage();
+		Level.cutsceneboss5 = new ImageIcon(StartingClass.class.getResource("/data/Cutscene6.png")).getImage();
+		Level.cutsceneboss6 = new ImageIcon(StartingClass.class.getResource("/data/Cutscene7.png")).getImage();
+		Level.cutsceneboss7 = new ImageIcon(StartingClass.class.getResource("/data/Cutscene8.png")).getImage();
+		StartingClass.cutsceneboss8 = new ImageIcon(StartingClass.class.getResource("/data/Cutscene9.png")).getImage();
+		StartingClass.cutsceneboss9 = new ImageIcon(StartingClass.class.getResource("/data/Cutscene10.png")).getImage();
 	}
 	
 }

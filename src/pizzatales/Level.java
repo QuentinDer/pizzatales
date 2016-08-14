@@ -14,6 +14,9 @@ public class Level {
 	public static Image[] brickset = new Image[16];
 	public static Image[] skyset = new Image[16];
 	
+	public static Image cutsceneboss1, cutsceneboss2, cutsceneboss3, cutsceneboss4, cutsceneboss5, cutsceneboss6, 
+		cutsceneboss7;
+	
 	public static String getMapName(int level) {
 		if (level == -1)
 			return "map1.txt";
@@ -302,5 +305,64 @@ public class Level {
 			MapUtil.bitmask(background, mask, BackgroundFactory.ice, BackgroundFactory.snow, iceset,2, minx, maxx, miny, maxy);
 			break;
 		}
+	}
+	
+	public static Cutscene getArenaCutscene(int level) {
+		Cutscene cut = new Cutscene();
+		switch ((level-1)/4+1) {
+		case 1:	
+			Scene sirtomato1 = new Scene("\"Huh?\"",3,"Sir Tomato",cutsceneboss1,true,true);
+			Scene sirtomato2 = new Scene("\"How did you get here, you filth?!\"",3,"Sir Tomato",cutsceneboss1,false,false);
+			Scene sirtomato3 = new Scene("\"Oh, no matter, this will take but a minute, and you’ll join the rest of your kind.\"",3,"Sir Tomato",cutsceneboss1,false,false);
+			cut.addScene(sirtomato1);
+			cut.addScene(sirtomato2);
+			cut.addScene(sirtomato3);
+			break;
+		case 2:
+			Scene mushroomwizard1 = new Scene("\"I have seen your travels, young Pizza. You have fought bravely to get here.\"",3,"Mushroom Wizard",cutsceneboss2,true,true);
+			Scene mushroomwizard2 = new Scene("\"You have caught everyone by surprise, we didn’t expect much of a fight back.\"",3,"Mushroom Wizard",cutsceneboss2,false,false);
+			Scene mushroomwizard3 = new Scene("\"But the surprise is over now. You won’t leave this cave alive.\"",3,"Mushroom Wizard",cutsceneboss2,false,false);
+			cut.addScene(mushroomwizard1);
+			cut.addScene(mushroomwizard2);
+			cut.addScene(mushroomwizard3);
+			break;
+		case 3:
+			Scene reaper1 = new Scene("\"So you’re the one who’s been giving my troops shit, eh?\"",3,"Carolina Reaper",cutsceneboss3,true,true);
+			Scene reaper2 = new Scene("\"Your efforts are about to go up in flames!\"",3,"Carolina Reaper",cutsceneboss4,false,false);
+			Scene reaper3 = new Scene("\"Heh heh heh…\"",3,"Carolina Reaper",cutsceneboss3,false,false);
+			Scene reaper4 = new Scene("\"You get it?\"",3,"Carolina Reaper",cutsceneboss3,false,false);
+			Scene reaper5 = new Scene("\"Cause I’m going to burn you up!\"",3,"Carolina Reaper",cutsceneboss4,false,false);
+			Scene reaper6 = new Scene("\"Heh heh heh…\"",3,"Carolina Reaper",cutsceneboss3,false,false);
+			cut.addScene(reaper1);
+			cut.addScene(reaper2);
+			cut.addScene(reaper3);
+			cut.addScene(reaper4);
+			cut.addScene(reaper5);
+			cut.addScene(reaper6);
+			break;
+		case 4:
+			Scene ongarl = new Scene("\"The King isn’t here young slice, so I guess you’re stuck with us.\"",3,"Garlnstein",cutsceneboss5,true,true);
+			Scene ongar2 = new Scene("\"Yeah, you’ll never find the King in the mountain !\"",3,"Oniough",cutsceneboss6,true,true);
+			Scene ongar3 = new Scene("\"…Oni…\"",3,"Garlnstein",cutsceneboss5,false,false);
+			Scene ongar4 = new Scene("\"Oh, I said it? Ah damn it! Well, let’s just kill the pizza Garlie.\"",3,"Oniough",cutsceneboss6,false,false);
+			Scene ongar5 = new Scene("\"…*sigh* … fine, let’s get this over with.\"",3,"Garlnstein",cutsceneboss5,false,false);
+			cut.addScene(ongarl);
+			cut.addScene(ongar2);
+			cut.addScene(ongar3);
+			cut.addScene(ongar4);
+			cut.addScene(ongar5);
+			break;
+		case 5:
+			Scene king1 = new Scene("\"You are too late, little slice.\"",3,"Kale King",cutsceneboss7,true,true);
+			Scene king2 = new Scene("\"With the artifact I have become immensely powerful.\"",3,"Kale King",cutsceneboss7,false,false);
+			Scene king3 = new Scene("\"You fools! You had no clue of the power emanating from it.\"",3,"Kale King",cutsceneboss7,false,false);
+			Scene king4 = new Scene("\"Now you will witness the power you no longer possess!\"",3,"Kale King",cutsceneboss7,false,false);
+			cut.addScene(king1);
+			cut.addScene(king2);
+			cut.addScene(king3);
+			cut.addScene(king4);
+			break;
+		}
+		return cut;
 	}
 }
