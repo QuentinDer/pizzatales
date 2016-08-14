@@ -440,6 +440,11 @@ public class ResourcesManager {
 		Level.cutsceneboss7 = new ImageIcon(StartingClass.class.getResource("/data/Cutscene8.png")).getImage();
 		StartingClass.cutsceneboss8 = new ImageIcon(StartingClass.class.getResource("/data/Cutscene9.png")).getImage();
 		StartingClass.cutsceneboss9 = new ImageIcon(StartingClass.class.getResource("/data/Cutscene10.png")).getImage();
+		
+		FakeShiningItem.shining1 = new ImageIcon(StartingClass.class.getResource("/data/HolySauceeffectalt4.png")).getImage();
+		FakeShiningItem.shining2 = new ImageIcon(StartingClass.class.getResource("/data/HolySauceeffectalt3.png")).getImage();
+		FakeShiningItem.shining3 = new ImageIcon(StartingClass.class.getResource("/data/HolySauceeffectalt2.png")).getImage();
+		FakeShiningItem.shining4 = new ImageIcon(StartingClass.class.getResource("/data/HolySauceeffectalt.png")).getImage();
 	}
 	
 }

@@ -1390,8 +1390,8 @@ public class KaleKing extends Enemy {
 		StartingClass.maskmaxy = -1;
 		applet.cutscene = new Cutscene();
 		Scene end1 = new Scene("\"The Kale King lay defeated, his army scattered.\"",3,"END",StartingClass.cutsceneboss8,true,true);
-		Scene end2 = new Scene("\"With the Holy Sauce recovered, the Pizza people could rebuild their village.\"",3,"Kale King",StartingClass.cutsceneboss9,true,true);
-		Scene end3 = new Scene("\"Due to his courage and strength, our hero was chosen to become the new Pizza King. And he led his people to a new era of peace.\"",3,"Kale King",StartingClass.cutscene1,true,true);
+		Scene end2 = new Scene("\"With the Holy Sauce recovered, the Pizza people could rebuild their village.\"",3,"END",StartingClass.cutsceneboss9,false,true);
+		Scene end3 = new Scene("\"Due to his courage and strength, our hero was chosen to become the new Pizza King. And he led his people to a new era of peace.\"",3,"END",StartingClass.cutscene1,false,true);
 		applet.cutscene.addScene(end1);
 		applet.cutscene.addScene(end2);
 		applet.cutscene.addScene(end3);
@@ -1732,6 +1732,7 @@ public class KaleKing extends Enemy {
 			a1.r.setBounds(a1.getCenterX() - 22, a1.getCenterY() - 22, 45, 45);
 			StartingClass.items[nposx][nposy][0] = a1;
 			StartingClass.heightitemmap[nposx][nposy] = 0;
+			StartingClass.leavingitems.add(new FakeShiningItem(50*nposx+25+bg.getCenterX()-StartingClass.bginitx,50*nposy+25+bg.getCenterY()-StartingClass.bginity));
 		}
 	}
 

@@ -1419,7 +1419,7 @@ public class StartingClass extends JFrame implements Runnable {
 			for (int j = 0; j < height; j++) {
 				if (charmap[i][j] == 'f') {
 					ArrayList<Integer> nonobstacles = new ArrayList<Integer>();
-					MapUtil.getAccessibleArea(i, j, 100, charmap, nonobstacles, mentrydoors, doors, k);
+					MapUtil.getAccessibleArea(i, j, 10000, charmap, nonobstacles, mentrydoors, doors, k);
 					if (!nonobstacles.isEmpty()) {
 						int l = 0;
 						ArrayList<Enemy> lenemies = new ArrayList<Enemy>();
@@ -2098,7 +2098,10 @@ public class StartingClass extends JFrame implements Runnable {
 						currentmaxlevel = Math.min(maxlevel, currentmaxlevel+1);
 					}
 					saveGameState();
-					initEndLevelScreen();
+					if (currentlevel == maxlevel)
+						initUI();
+					else
+						initEndLevelScreen();
 					endlevelmenuloaded = true;
 				}
 				if (state == GameState.CutScene) {
